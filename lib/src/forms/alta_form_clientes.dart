@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import '../model/data.dart';
 import '../widgets/colors.dart';
+import 'package:http/http.dart' as http;
 
 //Por hacer
 //Seguir agregando los campos para guardar
@@ -79,7 +83,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
             TextFormField(
               controller: _apellidoController,
               decoration: const InputDecoration(
-                  labelText: 'Nombre del Cliente',
+                  labelText: 'Apellidos',
                   border: OutlineInputBorder(),
                   fillColor: Colors.white,
                   filled: true),
@@ -107,10 +111,14 @@ class _AltaClientePageState extends State<AltaClientePage> {
             ),
             SizedBox(height: 16.0),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   String nombreCliente = _nombreController.text;
+                  String apellidoCliente = _apellidoController.text;
+                  String companyCliente = _companyController.text;
                   // Lógica para dar de alta el cliente
+                  postCliente(nombreCliente, apellidoCliente, companyCliente);
                   // Puedes llamar a una función o realizar cualquier otra acción aquí
                   print('Cliente dado de alta: $nombreCliente');
                   Navigator.pop(context);
@@ -122,6 +130,28 @@ class _AltaClientePageState extends State<AltaClientePage> {
         ),
       ),
     );
+  }
+
+  //Future para el post
+  Future<void> postCliente(
+      String nombre, String apellido, String company) async {
+    final url = "https://datafire-production.up.railway.app/api/v1/clientes";
+
+    try {
+      final res = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(
+            {"name": nombre, "last_name": apellido, "company": company}),
+      );
+      if (res.statusCode == 200) {
+        print("Cliente Guardado Exitosamente");
+      } else {
+        print("Error al guardar el cliente");
+      }
+    } catch (err) {
+      print("Error al realizar la solicitud http: $err");
+    }
   }
 
   void crearClienteConProyecto(
