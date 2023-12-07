@@ -20,8 +20,9 @@ class AltaTrabajadores extends StatelessWidget {
         onPressed: () {},
         icon: const Icon(Icons.receipt),
         elevation: 8,
-        label: Row(
-            children: [Text('Agregar Nuevo', style: TextStyle(fontSize: 15))]),
+        label: Row(children: [
+          Text('Agregar Trabajador', style: TextStyle(fontSize: 15))
+        ]),
       ),
       body: Stack(
         children: [

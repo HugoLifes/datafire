@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/colors.dart';
-
-//Vista donde los clientes se van a dar de alta
+import '../forms/alta_form_clientes.dart'; // Reemplaza con la ruta correcta
 
 class AltaClientes extends StatelessWidget {
   const AltaClientes({super.key});
@@ -11,29 +10,40 @@ class AltaClientes extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
+
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          // Al presionar el botón, navegar a la página AltaClientePage
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AltaClientePage(),
+            ),
+          );
+        },
         icon: const Icon(Icons.receipt),
-        elevation: 8,
-        label: Row(
-            children: [Text('Alta Clientes', style: TextStyle(fontSize: 15))]),
+        elevation: 4,
+        label: Row(children: [
+          Text('Agregar Cliente', style: TextStyle(fontSize: 15))
+        ]),
       ),
       body: Stack(
         children: [
           Container(
-              height: 100,
-              decoration: const BoxDecoration(
-                  color: accentCanvasColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomLeft: Radius.circular(20)))),
+            margin: EdgeInsets.only(top: 8.0, right: 12.0),
+            height: 100,
+            decoration: const BoxDecoration(
+                color: accentCanvasColor,
+                borderRadius: BorderRadius.all(Radius.circular(20))),
+          ),
           Container(
-              padding: const EdgeInsets.all(15),
-              child: const Text(
-                'Clientes',
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-              )),
+            padding: const EdgeInsets.all(15),
+            child: const Text(
+              'Clientes',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
+          ),
           Container(
             padding: const EdgeInsets.only(top: 55, left: 10),
             width: size.width > 600 ? size.width * 0.8 : 500,
@@ -45,6 +55,7 @@ class AltaClientes extends StatelessWidget {
     );
   }
 }
+
 
   //funcion de snack bar
         //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(

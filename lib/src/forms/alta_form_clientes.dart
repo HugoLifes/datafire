@@ -16,6 +16,8 @@ class _AltaClientePageState extends State<AltaClientePage> {
   final _nombre = TextEditingController();
   final _apellido = TextEditingController();
   final _nombreController = TextEditingController();
+  final _apellidoController = TextEditingController();
+  final _companyController = TextEditingController();
 
   List<Clientes> clientes = [];
 
@@ -26,12 +28,11 @@ class _AltaClientePageState extends State<AltaClientePage> {
       body: Stack(
         children: [
           Container(
+              margin: EdgeInsets.all(5),
               height: 100,
               decoration: const BoxDecoration(
                   color: accentCanvasColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomLeft: Radius.circular(20)))),
+                  borderRadius: BorderRadius.all(Radius.circular(20)))),
           Container(
               padding: const EdgeInsets.all(15),
               child: const Text(
@@ -42,8 +43,8 @@ class _AltaClientePageState extends State<AltaClientePage> {
             padding: const EdgeInsets.only(top: 55, left: 15),
             width: size.width > 600 ? size.width * 0.8 : 500,
             child: const Text(
-              'Aqui dara de alta sus clientes',
-              style: TextStyle(fontSize: 20),
+              'Complete cada uno de los campos para dar de alta un nuevo cliente',
+              style: TextStyle(fontSize: 16),
             ),
           ),
           formview(context)
@@ -54,7 +55,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
 
   Container formview(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 150, left: 15),
+      padding: const EdgeInsets.only(top: 150, left: 15, right: 20),
       child: Form(
         key: _formKey,
         child: Column(
@@ -62,12 +63,44 @@ class _AltaClientePageState extends State<AltaClientePage> {
           children: [
             TextFormField(
               controller: _nombreController,
-              decoration: InputDecoration(
-                labelText: 'Nombre del Cliente',
-              ),
+              decoration: const InputDecoration(
+                  labelText: 'Nombre del Cliente',
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true),
               validator: (value) {
                 if (value!.isEmpty) {
                   return 'Por favor, ingresa el nombre del cliente';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: _apellidoController,
+              decoration: const InputDecoration(
+                  labelText: 'Nombre del Cliente',
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingresa los apellidos del cliente';
+                }
+                return null;
+              },
+            ),
+            SizedBox(height: 16.0),
+            TextFormField(
+              controller: _companyController,
+              decoration: const InputDecoration(
+                  labelText: 'Compañia',
+                  border: OutlineInputBorder(),
+                  fillColor: Colors.white,
+                  filled: true),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingresa la comapañia a la que pertenece el cliente';
                 }
                 return null;
               },
