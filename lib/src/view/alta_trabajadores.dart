@@ -2,12 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../widgets/colors.dart';
 
-//En esta seccion se hacen alta de proyectos
-
-//hay que levantar un proyecto y casarlo a un cliente
-
-// Seccion de trabajadores
-
 class AltaTrabajadores extends StatelessWidget {
   const AltaTrabajadores({super.key});
 
@@ -20,7 +14,7 @@ class AltaTrabajadores extends StatelessWidget {
         onPressed: () {},
         icon: const Icon(Icons.receipt),
         elevation: 8,
-        label: Row(children: [
+        label: const Row(children: [
           Text('Agregar Trabajador', style: TextStyle(fontSize: 15))
         ]),
       ),
@@ -42,7 +36,7 @@ class AltaTrabajadores extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(top: 55, left: 10),
             width: size.width > 600 ? size.width * 0.8 : 500,
-            child: Text('Da de alta a tus trabajadores'),
+            child: const Text('Da de alta a tus trabajadores'),
           ),
         ],
       ),

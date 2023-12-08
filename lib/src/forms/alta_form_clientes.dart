@@ -1,13 +1,7 @@
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import '../model/data.dart';
-import '../widgets/colors.dart';
-import 'package:http/http.dart' as http;
 
-//Por hacer
-//Seguir agregando los campos para guardar
+import "../services/cliente.servicio.dart";
 
 class AltaClientePage extends StatefulWidget {
   @override
@@ -78,7 +72,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
                 return null;
               },
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _apellidoController,
               decoration: const InputDecoration(
@@ -94,7 +88,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
                 return null;
               },
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _companyController,
               decoration: const InputDecoration(
@@ -110,7 +104,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
                 return null;
               },
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Container(
               width: double.infinity, // Ocupar todo el ancho disponible
               child: ElevatedButton(
@@ -126,35 +120,13 @@ class _AltaClientePageState extends State<AltaClientePage> {
                     Navigator.pop(context);
                   }
                 },
-                child: Text('Guardar'),
+                child: const Text('Guardar'),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  //Future para el post
-  Future<void> postCliente(
-      String nombre, String apellido, String company) async {
-    final url = "https://datafire-production.up.railway.app/api/v1/clientes";
-
-    try {
-      final res = await http.post(
-        Uri.parse(url),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(
-            {"name": nombre, "last_name": apellido, "company": company}),
-      );
-      if (res.statusCode == 200) {
-        print("Cliente Guardado Exitosamente");
-      } else {
-        print("Error al guardar el cliente");
-      }
-    } catch (err) {
-      print("Error al realizar la solicitud http: $err");
-    }
   }
 
   void crearClienteConProyecto(

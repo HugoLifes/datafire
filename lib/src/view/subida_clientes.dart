@@ -1,3 +1,4 @@
+import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/colors.dart';
@@ -24,14 +25,14 @@ class AltaClientes extends StatelessWidget {
         },
         icon: const Icon(Icons.receipt),
         elevation: 4,
-        label: Row(children: [
+        label: const Row(children: [
           Text('Agregar Cliente', style: TextStyle(fontSize: 15))
         ]),
       ),
       body: Stack(
         children: [
           Container(
-            margin: EdgeInsets.only(top: 8.0, right: 12.0),
+            margin: const EdgeInsets.only(top: 8.0, right: 12.0),
             height: 100,
             decoration: const BoxDecoration(
                 color: accentCanvasColor,
