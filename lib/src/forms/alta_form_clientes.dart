@@ -1,3 +1,4 @@
+import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 import '../model/data.dart';
 
@@ -10,9 +11,6 @@ class AltaClientePage extends StatefulWidget {
 
 class _AltaClientePageState extends State<AltaClientePage> {
   final _formKey = GlobalKey<FormState>();
-  final _id = TextEditingController();
-  final _nombre = TextEditingController();
-  final _apellido = TextEditingController();
   final _nombreController = TextEditingController();
   final _apellidoController = TextEditingController();
   final _companyController = TextEditingController();
@@ -118,6 +116,12 @@ class _AltaClientePageState extends State<AltaClientePage> {
                     // Puedes llamar a una función o realizar cualquier otra acción aquí
                     print('Cliente dado de alta: $nombreCliente');
                     Navigator.pop(context);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SuccessfulScreen()),
+                    );
                   }
                 },
                 child: const Text('Guardar'),

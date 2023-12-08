@@ -1,3 +1,6 @@
+import 'package:datafire/src/services/cliente.servicio.dart';
+import 'package:datafire/src/services/trabajadores.servicio.dart';
+import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/colors.dart';
@@ -10,54 +13,38 @@ class AltaTrabajadorPage extends StatefulWidget {
 class _AltaTrabajadorPageState extends State<AltaTrabajadorPage> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
+  final _apellidosController = TextEditingController();
+  final _edadController = TextEditingController();
+  final _posicionController = TextEditingController();
+  final _salarioController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          validation(context);
-        },
-        icon: const Icon(Icons.add),
-        elevation: 8,
-        label: Row(
-            children: [Text('Añadir Nuevo', style: TextStyle(fontSize: 15))]),
-      ),
+      appBar: AppBar(),
       body: Stack(
         children: [
           Container(
-              height: 100,
-              decoration: const BoxDecoration(
-                  color: accentCanvasColor,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      bottomLeft: Radius.circular(20)))),
-          Row(
-            children: [
-              Container(
-                padding: EdgeInsets.only(top: 30),
-                child: BackButton(onPressed: () {
-                  Navigator.pop(context);
-                }),
-              ),
-              Container(
-                  padding: const EdgeInsets.all(15),
-                  child: const Text(
-                    'Trabajadores',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-                  )),
-            ],
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 55, left: 55),
+            padding: const EdgeInsets.only(top: 5, left: 15),
             width: size.width > 600 ? size.width * 0.8 : 500,
-            child: Text(
-              'Aqui dara de alta a sus empleados',
-              style: TextStyle(fontSize: 20),
+            child: const Text(
+              'Agregar nuevo Empleado',
+              style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  fontStyle: FontStyle.italic),
             ),
           ),
-          formview(context)
+          Container(
+            padding: const EdgeInsets.only(top: 45, left: 15),
+            width: size.width > 600 ? size.width * 0.8 : 500,
+            child: const Text(
+              'Complete cada uno de los campos para dar de alta un nuevo trabajador',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            ),
+          ),
+          formview(context),
         ],
       ),
     );
@@ -65,7 +52,7 @@ class _AltaTrabajadorPageState extends State<AltaTrabajadorPage> {
 
   Container formview(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 120, left: 15),
+      padding: const EdgeInsets.only(top: 110, left: 15, right: 20),
       child: Form(
         key: _formKey,
         child: Column(
@@ -73,15 +60,109 @@ class _AltaTrabajadorPageState extends State<AltaTrabajadorPage> {
           children: [
             TextFormField(
               controller: _nombreController,
-              decoration: InputDecoration(
-                labelText: 'Nombre del Empleado',
+              decoration: const InputDecoration(
+                labelText: 'Nombre del trabajador',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa el nombre del cliente';
+                  return 'Por favor, ingresa el nombre del Trabajador';
                 }
                 return null;
               },
+            ),
+            const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _apellidosController,
+              decoration: const InputDecoration(
+                labelText: 'Apellidos',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingresa los apellidos del cliente';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _edadController,
+              decoration: const InputDecoration(
+                labelText: 'Edad',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingresa la edad del empleado';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _posicionController,
+              decoration: const InputDecoration(
+                labelText: 'Posicion',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingresa la posicion del empleado';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _salarioController,
+              decoration: const InputDecoration(
+                labelText: 'Salario',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingrese el salario del empleado';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16.0),
+            Container(
+              width: double.infinity, // Ocupar todo el ancho disponible
+              child: ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    String nombreWorker = _nombreController.text;
+                    String apellidoWorker = _apellidosController.text;
+                    String edadWorker = _edadController.text;
+                    String positionWorker = _posicionController.text;
+                    String salarioWorker = _salarioController.text;
+                    // Lógica para dar de alta el cliente
+                    postTrabajador(nombreWorker, apellidoWorker, edadWorker,
+                        positionWorker, salarioWorker);
+                    // Puedes llamar a una función o realizar cualquier otra acción aquí
+                    Navigator.pop(context);
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SuccessfulScreen()),
+                    );
+                  }
+                },
+                child: const Text('Guardar'),
+              ),
             ),
           ],
         ),
