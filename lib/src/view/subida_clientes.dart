@@ -25,6 +25,25 @@ class _AltaClientesState extends State<AltaClientes> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
+      appBar: AppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Clientes',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            ),
+            Text(
+              'En esta sección se mostrarán sus clientes o poder dar de alta clientes',
+              style: TextStyle(fontSize: 14),
+            ),
+          ],
+        ),
+        backgroundColor: accentCanvasColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+        ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Al presionar el botón, navegar a la página AltaClientePage
@@ -41,61 +60,37 @@ class _AltaClientesState extends State<AltaClientes> {
           Text('Agregar Cliente', style: TextStyle(fontSize: 15))
         ]),
       ),
-      body: Stack(
-        children: [
-          Container(
-            margin: const EdgeInsets.only(top: 8.0, right: 12.0),
-            height: 100,
-            decoration: const BoxDecoration(
-                color: accentCanvasColor,
-                borderRadius: BorderRadius.all(Radius.circular(20))),
-          ),
-          Container(
-            padding: const EdgeInsets.all(15),
-            child: const Text(
-              'Clientes',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 55, left: 10),
-            width: size.width > 600 ? size.width * 0.8 : 500,
-            child: const Text(
-                'En esta sección se mostrarán sus clientes o poder dar de alta clientes'),
-          ),
-          FutureBuilder<List<dynamic>>(
-            future: _clientesFuture,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return const Center(
-                    child: Text('Error al cargar los clientes'));
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Center(child: Text('No hay clientes disponibles'));
-              } else {
-                // Mostrar la lista de clientes en la UI
-                final clientes = snapshot.data as List<dynamic>;
-                return ListView.builder(
-                  itemCount: clientes.length,
-                  itemBuilder: (context, index) {
-                    final cliente = clientes[index];
-                    return ListTile(
-                      leading: const Icon(Icons.edit_outlined),
-                      title: Text(cliente["name"]),
-                      subtitle: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(cliente["last_name"]),
-                            Text(cliente["company"]),
-                          ]),
-                    );
-                  },
+      body: FutureBuilder<List<dynamic>>(
+        future: _clientesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Error al cargar los clientes'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(child: Text('No hay clientes disponibles'));
+          } else {
+            // Mostrar la lista de clientes en la UI
+            final clientes = snapshot.data as List<dynamic>;
+            return ListView.builder(
+              itemCount: clientes.length,
+              itemBuilder: (context, index) {
+                final cliente = clientes[index];
+                return ListTile(
+                  leading: const Icon(Icons.edit_outlined),
+                  title: Text(cliente["name"]),
+                  subtitle: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(cliente["last_name"]),
+                      Text(cliente["company"]),
+                    ],
+                  ),
                 );
-              }
-            },
-          ),
-        ],
+              },
+            );
+          }
+        },
       ),
     );
   }
