@@ -21,3 +21,21 @@ Future<void> postCliente(String nombre, String apellido, String company) async {
     print("Error al realizar la solicitud http: $err");
   }
 }
+
+Future<List<dynamic>> getAllClientes() async {
+  const url = "https://datafire-production.up.railway.app/api/v1/clientes";
+
+  try {
+    final res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      final List<dynamic> clientes = jsonDecode(res.body);
+      return clientes;
+    } else {
+      print("Error al obtener la lista de clientes");
+      return [];
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return [];
+  }
+}
