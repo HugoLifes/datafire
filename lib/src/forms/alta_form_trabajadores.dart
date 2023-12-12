@@ -29,7 +29,7 @@ class _AltaTrabajadorPageState extends State<AltaTrabajadorPage> {
             padding: const EdgeInsets.only(top: 5, left: 15),
             width: size.width > 600 ? size.width * 0.8 : 500,
             child: const Text(
-              'Agregar nuevo Empleado',
+              'Agregar nuevo Trabajador',
               style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,

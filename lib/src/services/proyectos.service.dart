@@ -22,3 +22,21 @@ Future<void> postCliente(
     print("Error al realizar la solicitud http: $err");
   }
 }
+
+Future<List<dynamic>> fetchProjects() async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
+
+  try {
+    final res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      final List<dynamic> proyectos = jsonDecode(res.body);
+      return proyectos;
+    } else {
+      print("Error al obtener la lista de proyectos");
+      return [];
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return [];
+  }
+}

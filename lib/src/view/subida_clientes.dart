@@ -16,7 +16,7 @@ class _AltaClientesState extends State<AltaClientes> {
   @override
   void initState() {
     super.initState();
-    _clientesFuture = getAllClientes();
+    _clientesFuture = fetchProjects();
   }
 
   @override
@@ -26,7 +26,7 @@ class _AltaClientesState extends State<AltaClientes> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Column(
+        title: const Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
@@ -76,15 +76,46 @@ class _AltaClientesState extends State<AltaClientes> {
               itemCount: clientes.length,
               itemBuilder: (context, index) {
                 final cliente = clientes[index];
-                return ListTile(
-                  leading: const Icon(Icons.edit_outlined),
-                  title: Text(cliente["name"]),
-                  subtitle: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(cliente["last_name"]),
-                      Text(cliente["company"]),
-                    ],
+                return Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors
+                            .grey, // Cambia el color del borde según tus necesidades
+                        width:
+                            1.0, // Cambia el ancho del borde según tus necesidades
+                      ),
+                    ),
+                  ),
+                  child: ListTile(
+                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
+                    leading: const Icon(
+                      Icons.edit_outlined,
+                      size: 27,
+                      color: Colors.orange,
+                    ),
+                    subtitle: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              cliente["id"].toString(),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(width: 12),
+                            Text(cliente["name"]),
+                            SizedBox(width: 12),
+                            Text(cliente["last_name"]),
+                            SizedBox(width: 12),
+                            Text(cliente["company"]),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 );
               },
