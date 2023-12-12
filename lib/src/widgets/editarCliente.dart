@@ -1,37 +1,39 @@
+import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 
-class DetallesYAltaProyectoPage extends StatefulWidget {
-  final Map<String, dynamic>? proyecto;
+class DetallesYEditarClientesPage extends StatefulWidget {
+  final Map<String, dynamic>? cliente;
 
-  DetallesYAltaProyectoPage({Key? key, required this.proyecto})
+  DetallesYEditarClientesPage({Key? key, required this.cliente})
       : super(key: key);
 
   @override
-  _DetallesYAltaProyectoPageState createState() =>
-      _DetallesYAltaProyectoPageState();
+  _DetallesYEditarClientesPageState createState() =>
+      _DetallesYEditarClientesPageState();
 }
 
-class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
+class _DetallesYEditarClientesPageState
+    extends State<DetallesYEditarClientesPage> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
-  final _inicioController = TextEditingController();
-  final _finController = TextEditingController();
+  final _apellidosController = TextEditingController();
+  final _empresaController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _nombreController.text = widget.proyecto?['name'] ?? '';
-    _inicioController.text = widget.proyecto?['fecha_inicio'] ?? '';
-    _finController.text = widget.proyecto?['fecha_fin'] ?? '';
+    _nombreController.text = widget.cliente?['name'] ?? '';
+    _apellidosController.text = widget.cliente?['last_name'] ?? '';
+    _empresaController.text = widget.cliente?['company'] ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles y Editar Proyecto'),
+        title: Text('Detalles y Editar Cliente'),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -48,7 +50,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                       DataColumn(label: Text('Campo')),
                       DataColumn(label: Text('Valor')),
                     ],
-                    rows: widget.proyecto?.entries
+                    rows: widget.cliente?.entries
                             .map((entry) => DataRow(
                                   cells: [
                                     DataCell(Text(entry.key)),
@@ -83,46 +85,46 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
             TextFormField(
               controller: _nombreController,
               decoration: const InputDecoration(
-                labelText: 'Nombre del Proyecto',
+                labelText: 'Nombre del Cliente',
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa el nombre del proyecto';
+                  return 'Por favor, ingresa el nombre del Cliente';
                 }
                 return null;
               },
             ),
             const SizedBox(height: 16.0),
             TextFormField(
-              controller: _inicioController,
+              controller: _apellidosController,
               decoration: const InputDecoration(
-                labelText: 'Fecha de inicio',
+                labelText: 'Apellidos',
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa la fecha en la que comenzó el proyecto';
+                  return 'Por favor, ingresa la edad del cliente';
                 }
                 return null;
               },
             ),
             const SizedBox(height: 16.0),
             TextFormField(
-              controller: _finController,
+              controller: _empresaController,
               decoration: const InputDecoration(
-                labelText: 'Fecha de finalización',
+                labelText: 'Compáñia',
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa la fecha en la que finalizó el proyecto';
+                  return 'Por favor, ingresa la compañia del cliente';
                 }
                 return null;
               },
@@ -133,15 +135,15 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
               child: ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    String nombre = _nombreController.text;
-                    String fechaInicio = _inicioController.text;
-                    String fechaFinalizada = _finController.text;
+                    String name = _nombreController.text;
+                    String last_name = _apellidosController.text;
+                    String company = _empresaController.text;
 
                     // Lógica para editar el proyecto existente
                     try {
-                      await updateProyecto(widget.proyecto?['id'], nombre,
-                          fechaInicio, fechaFinalizada);
-                      print('Proyecto actualizado: $nombre');
+                      await updateCliente(
+                          widget.cliente?['id'], name, last_name, company);
+                      print('Cliente actualizado: $name');
                       // Puedes llamar a una función o realizar cualquier otra acción aquí
                       Navigator.pop(context);
                       Navigator.push(
@@ -150,8 +152,10 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                           builder: (context) => const SuccessfulScreen(),
                         ),
                       );
+                      print(
+                          'Datos a enviar para actualizar cliente: $name, $last_name, $company');
                     } catch (error) {
-                      print('Error al actualizar el proyecto: $error');
+                      print('Error al actualizar el cliente: $error');
                       // Puedes mostrar un mensaje de error al usuario si es necesario
                     }
                   }

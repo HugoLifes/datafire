@@ -1,4 +1,5 @@
 import 'package:datafire/src/widgets/colors.dart';
+import 'package:datafire/src/widgets/editarCliente.dart';
 import 'package:flutter/material.dart';
 
 class clienteCard extends StatefulWidget {
@@ -26,6 +27,11 @@ class _clienteCardState extends State<clienteCard> {
         hoverColor: accentCanvasColor,
         onTap: () {
           debugPrint('Cliente ID: ${widget.cliente["id"]} selected!');
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      DetallesYEditarClientesPage(cliente: widget.cliente)));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

@@ -39,3 +39,22 @@ Future<List<dynamic>> fetchClientes() async {
     return [];
   }
 }
+
+Future<void> updateCliente(
+    int id, String nombre, String last_name, String company) async {
+  final url = "https://datafire-production.up.railway.app/api/v1/clientes/$id";
+
+  try {
+    final res = await http.patch(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(
+          {"name": nombre, "last_name": last_name, "company": company}),
+    );
+    if (res.statusCode == 201) {
+      print("Proyecto actualizado exitosamente");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+  }
+}
