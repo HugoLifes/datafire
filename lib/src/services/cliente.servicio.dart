@@ -22,7 +22,7 @@ Future<void> postCliente(String nombre, String apellido, String company) async {
   }
 }
 
-Future<List<dynamic>> fetchProjects() async {
+Future<List<dynamic>> fetchClientes() async {
   const url = "https://datafire-production.up.railway.app/api/v1/clientes";
 
   try {

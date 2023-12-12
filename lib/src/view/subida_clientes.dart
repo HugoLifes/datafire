@@ -16,7 +16,8 @@ class _AltaClientesState extends State<AltaClientes> {
   @override
   void initState() {
     super.initState();
-    _clientesFuture = fetchProjects();
+    _clientesFuture =
+        fetchClientes(); // Adjust this function based on your actual implementation
   }
 
   @override
@@ -72,48 +73,98 @@ class _AltaClientesState extends State<AltaClientes> {
           } else {
             // Mostrar la lista de clientes en la UI
             final clientes = snapshot.data as List<dynamic>;
-            return ListView.builder(
+            return GridView.builder(
+              padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
               itemCount: clientes.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: size.width > 800 ? 2 : 1,
+                childAspectRatio: size.width / (size.width > 800 ? 500 : 255),
+                crossAxisSpacing: 25,
+                mainAxisSpacing: 20,
+              ),
               itemBuilder: (context, index) {
                 final cliente = clientes[index];
                 return Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors
-                            .grey, // Cambia el color del borde según tus necesidades
-                        width:
-                            1.0, // Cambia el ancho del borde según tus necesidades
-                      ),
-                    ),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: canvasColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: const [
+                      BoxShadow(
+                          color: Colors.grey,
+                          blurRadius: 5,
+                          offset: Offset(0, 5)),
+                    ],
                   ),
-                  child: ListTile(
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20),
-                    leading: const Icon(
-                      Icons.edit_outlined,
-                      size: 27,
-                      color: Colors.orange,
-                    ),
-                    subtitle: Row(
+                  child: InkWell(
+                    hoverColor: accentCanvasColor,
+                    onTap: () {
+                      debugPrint('Cliente ID: ${cliente["id"]} selected!');
+                    },
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const Text(
+                              'ID Cliente:',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 12),
                             Text(
                               cliente["id"].toString(),
                               style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(width: 12),
-                            Text(cliente["name"]),
-                            SizedBox(width: 12),
-                            Text(cliente["last_name"]),
-                            SizedBox(width: 12),
-                            Text(cliente["company"]),
+                                  fontSize: 16, fontWeight: FontWeight.w400),
+                            )
                           ],
-                        )
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              'Nombre:',
+                              style: TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              cliente["name"],
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              'Apellido:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              cliente["last_name"],
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text(
+                              'Empresa:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold, fontSize: 16),
+                            ),
+                            const SizedBox(width: 12),
+                            Text(
+                              cliente["company"],
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.w400),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -126,6 +177,7 @@ class _AltaClientesState extends State<AltaClientes> {
     );
   }
 }
+
 
 //funcion de snack bar
 //  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
