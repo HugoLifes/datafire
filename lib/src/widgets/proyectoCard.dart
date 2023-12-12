@@ -1,4 +1,5 @@
 import 'package:datafire/src/widgets/colors.dart';
+import 'package:datafire/src/widgets/editarProyecto.dart';
 import 'package:flutter/material.dart';
 
 class ProyectoCard extends StatefulWidget {
@@ -30,6 +31,13 @@ class _ProyectoCardState extends State<ProyectoCard> {
         hoverColor: accentCanvasColor,
         onTap: () {
           debugPrint('Proyecto ID: ${widget.proyecto["id"]} selected!');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  DetallesYAltaProyectoPage(proyecto: widget.proyecto),
+            ),
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

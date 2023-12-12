@@ -62,7 +62,7 @@ class _trabajadorCardState extends State<trabajadorCard> {
             Row(
               children: [
                 const Text(
-                  'Apellido:',
+                  'Apellidos:',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(width: 12),

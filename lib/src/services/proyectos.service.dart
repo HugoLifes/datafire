@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<void> postCliente(
+Future<void> postProyecto(
     String nombre, String fecha_inicio, String, String fecha_fin) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos";
 
@@ -38,5 +38,29 @@ Future<List<dynamic>> fetchProjects() async {
   } catch (err) {
     print("Error al realizar la solicitud http: $err");
     return [];
+  }
+}
+
+Future<void> updateProyecto(
+    int id, String nombre, String fechaInicio, String fechaFinalizada) async {
+  final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
+
+  try {
+    final res = await http.put(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "name": nombre,
+        "fecha_inicio": fechaInicio,
+        "fecha_fin": fechaFinalizada
+      }),
+    );
+    if (res.statusCode == 200) {
+      print("Proyecto actualizado exitosamente");
+    } else {
+      print("Error al actualizar el proyecto");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
   }
 }
