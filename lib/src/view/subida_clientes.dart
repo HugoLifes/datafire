@@ -1,5 +1,6 @@
 import 'package:datafire/src/forms/alta_form_clientes.dart';
 import 'package:datafire/src/services/cliente.servicio.dart';
+import 'package:datafire/src/widgets/clientesCard.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -84,91 +85,7 @@ class _AltaClientesState extends State<AltaClientes> {
               ),
               itemBuilder: (context, index) {
                 final cliente = clientes[index];
-                return Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: canvasColor,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.grey,
-                          blurRadius: 5,
-                          offset: Offset(0, 5)),
-                    ],
-                  ),
-                  child: InkWell(
-                    hoverColor: accentCanvasColor,
-                    onTap: () {
-                      debugPrint('Cliente ID: ${cliente["id"]} selected!');
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Row(
-                          children: [
-                            const Text(
-                              'ID Cliente:',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              cliente["id"].toString(),
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
-                            )
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              'Nombre:',
-                              style: TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.bold),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              cliente["name"],
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              'Apellido:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              cliente["last_name"],
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text(
-                              'Empresa:',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 16),
-                            ),
-                            const SizedBox(width: 12),
-                            Text(
-                              cliente["company"],
-                              style: const TextStyle(
-                                  fontSize: 16, fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
+                return clienteCard(cliente: cliente);
               },
             );
           }
