@@ -136,13 +136,10 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                     String nombre = _nombreController.text;
                     String fechaInicio = _inicioController.text;
                     String fechaFinalizada = _finController.text;
-
-                    // Lógica para editar el proyecto existente
                     try {
                       await updateProyecto(widget.proyecto?['id'], nombre,
                           fechaInicio, fechaFinalizada);
                       print('Proyecto actualizado: $nombre');
-                      // Puedes llamar a una función o realizar cualquier otra acción aquí
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -152,13 +149,27 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                       );
                     } catch (error) {
                       print('Error al actualizar el proyecto: $error');
-                      // Puedes mostrar un mensaje de error al usuario si es necesario
                     }
                   }
                 },
                 child: const Text('Sobreescribir'),
               ),
             ),
+            const SizedBox(height: 16.0),
+            Container(
+                width: double.infinity,
+                child: IconButton.filled(
+                  icon: Icon(Icons.delete_forever),
+                  onPressed: () async {
+                    try {
+                      await deleteProyecto(widget.proyecto?['id']);
+                      print('Proyecto eliminado');
+                      Navigator.pop(context);
+                    } catch (error) {
+                      print('Error al eliminar el proyecto: $error');
+                    }
+                  },
+                )),
           ],
         ),
       ),

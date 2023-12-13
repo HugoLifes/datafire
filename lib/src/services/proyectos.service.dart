@@ -64,3 +64,21 @@ Future<void> updateProyecto(
     print("Error al realizar la solicitud http: $err");
   }
 }
+
+Future<void> deleteProyecto(int id) async {
+  final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
+
+  try {
+    final res = await http.delete(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (res.statusCode == 200) {
+      print("Proyecto eliminado exitosamente");
+    } else {
+      print("Error al eliminar el proyecto");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+  }
+}

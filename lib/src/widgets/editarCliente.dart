@@ -139,12 +139,11 @@ class _DetallesYEditarClientesPageState
                     String last_name = _apellidosController.text;
                     String company = _empresaController.text;
 
-                    // Lógica para editar el proyecto existente
+                    // Lógica para editar el cleinte
                     try {
                       await updateCliente(
                           widget.cliente?['id'], name, last_name, company);
                       print('Cliente actualizado: $name');
-                      // Puedes llamar a una función o realizar cualquier otra acción aquí
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -156,7 +155,6 @@ class _DetallesYEditarClientesPageState
                           'Datos a enviar para actualizar cliente: $name, $last_name, $company');
                     } catch (error) {
                       print('Error al actualizar el cliente: $error');
-                      // Puedes mostrar un mensaje de error al usuario si es necesario
                     }
                   }
                 },
