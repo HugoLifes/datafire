@@ -1,4 +1,5 @@
 import 'package:datafire/src/widgets/colors.dart';
+import 'package:datafire/src/widgets/editarTrabajadores.dart';
 import 'package:flutter/material.dart';
 
 class trabajadorCard extends StatefulWidget {
@@ -26,6 +27,11 @@ class _trabajadorCardState extends State<trabajadorCard> {
         hoverColor: accentCanvasColor,
         onTap: () {
           debugPrint('Trabajador ID: ${widget.trabajador["id"]} selected!');
+                    Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      DetallesYEditarTrabajadoresPage(trabajador: widget.trabajador)));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
