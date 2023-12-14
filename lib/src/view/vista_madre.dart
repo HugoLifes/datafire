@@ -30,7 +30,7 @@ class MotherView extends StatelessWidget {
             case 4:
             default:
               return Text(
-                'Not Found Page',
+                'Page not found',
                 style: theme.textTheme.headlineSmall,
               );
           }

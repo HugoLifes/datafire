@@ -58,3 +58,20 @@ Future<void> updateCliente(
     print("Error al realizar la solicitud http: $err");
   }
 }
+
+Future<void> deleteCliente(int id) async {
+  final url = "https://datafire-production.up.railway.app/api/v1/clientes/$id";
+  try {
+    final res = await http.delete(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (res.statusCode == 200) {
+      print("Cliente eliminado exitosamente");
+    } else {
+      print("Error al eliminar el Cliente");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+  }
+}

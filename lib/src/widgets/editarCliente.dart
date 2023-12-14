@@ -161,6 +161,49 @@ class _DetallesYEditarClientesPageState
                 child: const Text('Sobreescribir'),
               ),
             ),
+            const SizedBox(height: 16.0),
+            Container(
+              width: double.infinity,
+              child: IconButton.filled(
+                icon: Icon(Icons.delete_forever),
+                onPressed: () async {
+                  // Mostrar un diálogo de confirmación antes de eliminar
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Eliminar Cliente'),
+                        content:
+                            Text('¿Seguro que quieres eliminar este Cliente?'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('Cancelar'),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              try {
+                                Navigator.of(context)
+                                    .pop(); // Cerrar el diálogo antes de la eliminación
+                                await deleteCliente(widget.cliente?['id']);
+                                print('Cliente eliminado');
+                                Navigator.pop(context);
+                                // Puedes agregar más lógica aquí si es necesario
+                              } catch (error) {
+                                print('Error al eliminar el proyecto: $error');
+                              }
+                            },
+                            child: Text('Confirmar'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),

@@ -48,22 +48,38 @@ Future<List<dynamic>> fetchTrabajadores() async {
 
 Future<void> updateTrabajador(
     int id, String nombre, String last_name, String posicion) async {
-  final url = "https://datafire-production.up.railway.app/api/v1/trabajadores/$id";
+  final url =
+      "https://datafire-production.up.railway.app/api/v1/trabajadores/$id";
 
   try {
     final res = await http.put(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "name": nombre,
-        "last_name": last_name,
-        "age": posicion
-      }),
+      body:
+          jsonEncode({"name": nombre, "last_name": last_name, "age": posicion}),
     );
     if (res.statusCode == 200) {
       print("Proyecto actualizado exitosamente");
     } else {
       print("Error al actualizar el proyecto");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+  }
+}
+
+Future<void> deleteTrabajador(int id) async {
+  final url =
+      "https://datafire-production.up.railway.app/api/v1/trabajadores/$id";
+  try {
+    final res = await http.delete(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (res.statusCode == 200) {
+      print("Trabajador eliminado exitosamente");
+    } else {
+      print("Error al eliminar el Cliente");
     }
   } catch (err) {
     print("Error al realizar la solicitud http: $err");
