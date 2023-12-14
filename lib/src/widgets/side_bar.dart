@@ -83,16 +83,16 @@ class _SideBarState extends State<SideBar> {
               debugPrint('Alta Proyectos');
             }),
         SidebarXItem(
-            icon: Icons.person_2,
-            label: 'Alta Clientes ',
+            icon: Icons.group,
+            label: 'Clientes ',
             onTap: () {
-              debugPrint('Alta Clientes');
+              debugPrint('Clientes');
             }),
         SidebarXItem(
-            icon: Icons.flag,
-            label: 'Alta Trabajadores',
+            icon: Icons.assignment_ind,
+            label: 'Trabajadores',
             onTap: () {
-              debugPrint('Control');
+              debugPrint('Trabajadores');
             }),
         SidebarXItem(
             icon: Icons.account_balance,

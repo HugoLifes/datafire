@@ -56,7 +56,7 @@ class _AltaClientesState extends State<AltaClientes> {
             ),
           );
         },
-        icon: const Icon(Icons.receipt),
+        icon: const Icon(Icons.group_add),
         elevation: 4,
         label: const Row(children: [
           Text('Agregar Cliente', style: TextStyle(fontSize: 15))

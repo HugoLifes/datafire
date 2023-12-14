@@ -1,4 +1,4 @@
-import 'package:datafire/src/view/exito_alta.dart';
+import 'package:datafire/src/view/success.dart';
 import 'package:flutter/material.dart';
 import '../model/data.dart';
 

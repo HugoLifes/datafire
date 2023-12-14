@@ -43,8 +43,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                 child: SingleChildScrollView(
                   child: DataTable(
                     columns: [
-                      const DataColumn(label: Text('Campo')),
-                      const DataColumn(label: Text('Valor')),
+                      DataColumn(label: Text('Campo')),
+                      DataColumn(label: Text('Valor')),
                     ],
                     rows: widget.proyecto?.entries
                             .map((entry) => DataRow(

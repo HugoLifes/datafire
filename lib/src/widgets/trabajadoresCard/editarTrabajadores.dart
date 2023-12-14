@@ -1,7 +1,7 @@
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
-import 'package:datafire/src/view/exito_alta.dart';
+import 'package:datafire/src/view/success.dart';
 import 'package:datafire/src/widgets/trabajadoresCard/editar.trabajadores.form.dart';
 import 'package:flutter/material.dart';
 

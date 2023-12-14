@@ -27,23 +27,18 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Trabajadores',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-            ),
-            Text(
-              'Da de alta a tus trabajadores',
-              style: TextStyle(fontSize: 14),
-            ),
-          ],
+        title: const Text("Trabajadores"),
+        titleSpacing: 00.0,
+        centerTitle: true,
+        toolbarHeight: 60.2,
+        toolbarOpacity: 0.8,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+              bottomRight: Radius.circular(25),
+              bottomLeft: Radius.circular(25)),
         ),
-        backgroundColor: accentCanvasColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
+        elevation: 0.00,
+        backgroundColor: Color.fromARGB(255, 255, 248, 248),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

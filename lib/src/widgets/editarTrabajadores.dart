@@ -1,35 +1,79 @@
-import 'package:datafire/src/app.dart';
 import 'package:datafire/src/services/cliente.servicio.dart';
+import 'package:datafire/src/services/proyectos.service.dart';
+import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/success.dart';
-import 'package:datafire/src/view/subida_clientes.dart';
 import 'package:flutter/material.dart';
 
-class editarClienteForm extends StatefulWidget {
-  final Map<String, dynamic>? cliente;
+class DetallesYEditarTrabajadoresPage extends StatefulWidget {
+  final Map<String, dynamic>? trabajador;
 
-  editarClienteForm({Key? key, required this.cliente}) : super(key: key);
+  DetallesYEditarTrabajadoresPage({Key? key, required this.trabajador})
+      : super(key: key);
 
   @override
-  _editarClienteFormState createState() => _editarClienteFormState();
+  _DetallesYEditarTrabajadoresPageState createState() =>
+      _DetallesYEditarTrabajadoresPageState();
 }
 
-class _editarClienteFormState extends State<editarClienteForm> {
+class _DetallesYEditarTrabajadoresPageState
+    extends State<DetallesYEditarTrabajadoresPage> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _apellidosController = TextEditingController();
-  final _empresaController = TextEditingController();
+  final _cargoController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _nombreController.text = widget.cliente?['name'] ?? '';
-    _apellidosController.text = widget.cliente?['last_name'] ?? '';
-    _empresaController.text = widget.cliente?['company'] ?? '';
+    _nombreController.text = widget.trabajador?['name'] ?? '';
+    _apellidosController.text = widget.trabajador?['last_name'] ?? '';
+    _cargoController.text = widget.trabajador?['position'] ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return formview(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Detalles y Editar Cliente'),
+      ),
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          //aqui es donde se convierte en dos columnas o una
+          int columnas = constraints.maxWidth > 600 ? 2 : 1;
+          return GridView.count(
+            crossAxisCount: columnas,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: SingleChildScrollView(
+                  child: DataTable(
+                    columns: [
+                      DataColumn(label: Text('Campo')),
+                      DataColumn(label: Text('Valor')),
+                    ],
+                    rows: widget.trabajador?.entries
+                            .map((entry) => DataRow(
+                                  cells: [
+                                    DataCell(Text(entry.key)),
+                                    DataCell(Text('${entry.value}')),
+                                  ],
+                                ))
+                            .toList() ??
+                        [],
+                  ),
+                ),
+              ),
+
+              // Edición de Proyecto (Formulario)
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                child: formview(context),
+              ),
+            ],
+          );
+        },
+      ),
+    );
   }
 
   Container formview(BuildContext context) {
@@ -72,16 +116,16 @@ class _editarClienteFormState extends State<editarClienteForm> {
             ),
             const SizedBox(height: 16.0),
             TextFormField(
-              controller: _empresaController,
+              controller: _cargoController,
               decoration: const InputDecoration(
-                labelText: 'Empresa',
+                labelText: 'Compáñia',
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa la empresa del cliente';
+                  return 'Por favor, ingresa la compañia del cliente';
                 }
                 return null;
               },
@@ -89,16 +133,19 @@ class _editarClienteFormState extends State<editarClienteForm> {
             const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
-              child: FilledButton(
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 20)),
+              child: ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String name = _nombreController.text;
-                    // Lógica para editar el cliente
+                    String last_name = _apellidosController.text;
+                    String cargo = _cargoController.text;
+
+                    // Lógica para editar el proyecto existente
                     try {
-                      // Llama a la función de actualización de cliente aquí
+                      await updateCliente(
+                          widget.trabajador?['id'], name, last_name, cargo);
                       print('Cliente actualizado: $name');
+                      // Puedes llamar a una función o realizar cualquier otra acción aquí
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -106,56 +153,53 @@ class _editarClienteFormState extends State<editarClienteForm> {
                           builder: (context) => const SuccessfulScreen(),
                         ),
                       );
+                      print(
+                          'Datos a enviar para actualizar cliente: $name, $last_name, $cargo');
                     } catch (error) {
                       print('Error al actualizar el cliente: $error');
+                      // Puedes mostrar un mensaje de error al usuario si es necesario
                     }
                   }
                 },
-                child: const Text(
-                  'Sobreescribir',
-                  style: TextStyle(fontSize: 15),
-                ),
+                child: const Text('Sobreescribir'),
               ),
             ),
-            const SizedBox(height: 6.0),
+            const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
               child: IconButton.filled(
-                icon: const Icon(Icons.delete_forever),
-                style: IconButton.styleFrom(backgroundColor: Colors.red),
+                icon: Icon(Icons.delete_forever),
                 onPressed: () async {
                   // Mostrar un diálogo de confirmación antes de eliminar
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text('Eliminar Cliente'),
-                        content: const Text(
-                            '¿Seguro que quieres eliminar este Cliente?'),
+                        title: Text('Eliminar Cliente'),
+                        content:
+                            Text('¿Seguro que quieres eliminar este Cliente?'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: const Text('Cancelar'),
+                            child: Text('Cancelar'),
                           ),
                           TextButton(
                             onPressed: () async {
                               try {
-                                await deleteCliente(widget.cliente?['id']);
+                                Navigator.of(context)
+                                    .pop(); // Cerrar el diálogo antes de la eliminación
+                                await deleteTrabajador(
+                                    widget.trabajador?['id']);
                                 print('Cliente eliminado');
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const MyApp(),
-                                  ),
-                                );
-                                ;
+                                Navigator.pop(context);
+                                // Puedes agregar más lógica aquí si es necesario
                               } catch (error) {
-                                print('Error al eliminar el cliente: $error');
+                                print('Error al eliminar el proyecto: $error');
                               }
                             },
-                            child: const Text('Confirmar'),
+                            child: Text('Confirmar'),
                           ),
                         ],
                       );
