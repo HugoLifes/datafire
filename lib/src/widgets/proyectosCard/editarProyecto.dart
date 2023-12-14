@@ -1,5 +1,3 @@
-import 'package:datafire/src/services/proyectos.service.dart';
-import 'package:datafire/src/view/exito_alta.dart';
 import 'package:datafire/src/widgets/proyectosCard/editar.Proyecto.form.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +13,6 @@ class DetallesYAltaProyectoPage extends StatefulWidget {
 }
 
 class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
-  final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _inicioController = TextEditingController();
   final _finController = TextEditingController();
@@ -32,7 +29,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles y Editar Proyecto'),
+        title: const Text('Detalles y Editar Proyecto'),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -46,8 +43,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                 child: SingleChildScrollView(
                   child: DataTable(
                     columns: [
-                      DataColumn(label: Text('Campo')),
-                      DataColumn(label: Text('Valor')),
+                      const DataColumn(label: Text('Campo')),
+                      const DataColumn(label: Text('Valor')),
                     ],
                     rows: widget.proyecto?.entries
                             .map((entry) => DataRow(

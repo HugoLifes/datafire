@@ -15,7 +15,7 @@ class _ProyectoCardState extends State<ProyectoCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: canvasColor,
         borderRadius: BorderRadius.circular(20),
@@ -23,7 +23,7 @@ class _ProyectoCardState extends State<ProyectoCard> {
           BoxShadow(
             color: Colors.grey,
             blurRadius: 5,
-            offset: Offset(0, 5),
+            offset: Offset(0, 4),
           ),
         ],
       ),

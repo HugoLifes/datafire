@@ -1,3 +1,5 @@
+import 'package:datafire/src/services/cliente.servicio.dart';
+import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 
@@ -86,14 +88,13 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
             const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
-              child: ElevatedButton(
+              child: FilledButton(
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 20)),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String nombre = _nombreController.text;
-                    String fechaInicio = _inicioController.text;
-                    String fechaFinalizada = _finController.text;
                     try {
-                      // Llama a la función de actualización de proyecto aquí
                       print('Proyecto actualizado: $nombre');
                       Navigator.pop(context);
                       Navigator.push(
@@ -110,11 +111,12 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
                 child: const Text('Sobreescribir'),
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 6.0),
             Container(
               width: double.infinity,
               child: IconButton.filled(
                 icon: Icon(Icons.delete_forever),
+                style: IconButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () async {
                   // Mostrar un diálogo de confirmación antes de eliminar
                   showDialog(
@@ -136,7 +138,7 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
                               try {
                                 Navigator.of(context)
                                     .pop(); // Cerrar el diálogo antes de la eliminación
-                                // Llama a la función de eliminación de proyecto aquí
+                                await deleteProyecto(widget.proyecto?['id']);
                                 print('Proyecto eliminado');
                                 Navigator.pop(context);
                                 // Puedes agregar más lógica aquí si es necesario

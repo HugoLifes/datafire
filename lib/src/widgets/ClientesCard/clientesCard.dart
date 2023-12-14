@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 
 class clienteCard extends StatefulWidget {
   final Map<String, dynamic> cliente;
-
   const clienteCard({Key? key, required this.cliente}) : super(key: key);
-
   @override
   State<clienteCard> createState() => _clienteCardState();
 }
@@ -15,12 +13,12 @@ class _clienteCardState extends State<clienteCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: canvasColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
-          BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(0, 5)),
+          BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(0, 4)),
         ],
       ),
       child: InkWell(
@@ -68,7 +66,7 @@ class _clienteCardState extends State<clienteCard> {
             Row(
               children: [
                 const Text(
-                  'Apellido:',
+                  'Apellidos:',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(width: 12),

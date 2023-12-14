@@ -62,7 +62,7 @@ class _DetallesYEditarClientesPageState
 
               // Edición de Proyecto (Formulario)
               Container(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(18.0),
                 child: editarClienteForm(cliente: widget.cliente),
               ),
             ],

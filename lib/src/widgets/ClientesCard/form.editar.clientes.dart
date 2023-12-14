@@ -1,4 +1,7 @@
+import 'package:datafire/src/app.dart';
+import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/view/exito_alta.dart';
+import 'package:datafire/src/view/subida_clientes.dart';
 import 'package:flutter/material.dart';
 
 class editarClienteForm extends StatefulWidget {
@@ -71,14 +74,14 @@ class _editarClienteFormState extends State<editarClienteForm> {
             TextFormField(
               controller: _empresaController,
               decoration: const InputDecoration(
-                labelText: 'Compáñia',
+                labelText: 'Empresa',
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa la compañia del cliente';
+                  return 'Por favor, ingresa la empresa del cliente';
                 }
                 return null;
               },
@@ -86,13 +89,12 @@ class _editarClienteFormState extends State<editarClienteForm> {
             const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
-              child: ElevatedButton(
+              child: FilledButton(
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 20)),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String name = _nombreController.text;
-                    String last_name = _apellidosController.text;
-                    String company = _empresaController.text;
-
                     // Lógica para editar el cliente
                     try {
                       // Llama a la función de actualización de cliente aquí
@@ -104,51 +106,56 @@ class _editarClienteFormState extends State<editarClienteForm> {
                           builder: (context) => const SuccessfulScreen(),
                         ),
                       );
-                      print(
-                          'Datos a enviar para actualizar cliente: $name, $last_name, $company');
                     } catch (error) {
                       print('Error al actualizar el cliente: $error');
                     }
                   }
                 },
-                child: const Text('Sobreescribir'),
+                child: const Text(
+                  'Sobreescribir',
+                  style: TextStyle(fontSize: 15),
+                ),
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 6.0),
             Container(
               width: double.infinity,
               child: IconButton.filled(
-                icon: Icon(Icons.delete_forever),
+                icon: const Icon(Icons.delete_forever),
+                style: IconButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () async {
                   // Mostrar un diálogo de confirmación antes de eliminar
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Eliminar Cliente'),
-                        content:
-                            Text('¿Seguro que quieres eliminar este Cliente?'),
+                        title: const Text('Eliminar Cliente'),
+                        content: const Text(
+                            '¿Seguro que quieres eliminar este Cliente?'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('Cancelar'),
+                            child: const Text('Cancelar'),
                           ),
                           TextButton(
                             onPressed: () async {
                               try {
-                                Navigator.of(context)
-                                    .pop(); // Cerrar el diálogo antes de la eliminación
-                                // Llama a la función de eliminación de cliente aquí
+                                await deleteCliente(widget.cliente?['id']);
                                 print('Cliente eliminado');
-                                Navigator.pop(context);
-                                // Puedes agregar más lógica aquí si es necesario
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const MyApp(),
+                                  ),
+                                );
+                                ;
                               } catch (error) {
-                                print('Error al eliminar el proyecto: $error');
+                                print('Error al eliminar el cliente: $error');
                               }
                             },
-                            child: Text('Confirmar'),
+                            child: const Text('Confirmar'),
                           ),
                         ],
                       );

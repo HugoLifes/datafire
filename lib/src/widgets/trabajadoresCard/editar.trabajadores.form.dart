@@ -1,3 +1,4 @@
+import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 
@@ -40,14 +41,14 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
             TextFormField(
               controller: _nombreController,
               decoration: const InputDecoration(
-                labelText: 'Nombre del Cliente',
+                labelText: 'Nombre del Trabajador',
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa el nombre del Cliente';
+                  return 'Por favor, ingresa el nombre del Trabajador';
                 }
                 return null;
               },
@@ -63,7 +64,7 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa la edad del cliente';
+                  return 'Por favor, ingresa los apéllidos del trabajador';
                 }
                 return null;
               },
@@ -72,14 +73,14 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
             TextFormField(
               controller: _cargoController,
               decoration: const InputDecoration(
-                labelText: 'Compáñia',
+                labelText: 'Posicion',
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
               ),
               validator: (value) {
                 if (value!.isEmpty) {
-                  return 'Por favor, ingresa la compañia del cliente';
+                  return 'Por favor, ingresa la posicion del trabajador';
                 }
                 return null;
               },
@@ -87,7 +88,9 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
             const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
-              child: ElevatedButton(
+              child: FilledButton(
+                style: ElevatedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(vertical: 20)),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String name = _nombreController.text;
@@ -96,9 +99,7 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
 
                     // Lógica para editar el proyecto existente
                     try {
-                      // Llama a la función de actualización de trabajador aquí
                       print('Trabajador actualizado: $name');
-                      // Puedes llamar a una función o realizar cualquier otra acción aquí
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -110,18 +111,18 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
                           'Datos a enviar para actualizar trabajador: $name, $last_name, $cargo');
                     } catch (error) {
                       print('Error al actualizar el trabajador: $error');
-                      // Puedes mostrar un mensaje de error al usuario si es necesario
                     }
                   }
                 },
                 child: const Text('Sobreescribir'),
               ),
             ),
-            const SizedBox(height: 16.0),
+            const SizedBox(height: 6.0),
             Container(
               width: double.infinity,
               child: IconButton.filled(
                 icon: Icon(Icons.delete_forever),
+                style: IconButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () async {
                   // Mostrar un diálogo de confirmación antes de eliminar
                   showDialog(
@@ -143,7 +144,8 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
                               try {
                                 Navigator.of(context)
                                     .pop(); // Cerrar el diálogo antes de la eliminación
-                                // Llama a la función de eliminación de trabajador aquí
+                                await deleteTrabajador(
+                                    widget.trabajador?['id']);
                                 print('Trabajador eliminado');
                                 Navigator.pop(context);
                                 // Puedes agregar más lógica aquí si es necesario
