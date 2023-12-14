@@ -1,21 +1,16 @@
-import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 
-class DetallesYEditarClientesPage extends StatefulWidget {
+class editarClienteForm extends StatefulWidget {
   final Map<String, dynamic>? cliente;
 
-  DetallesYEditarClientesPage({Key? key, required this.cliente})
-      : super(key: key);
+  editarClienteForm({Key? key, required this.cliente}) : super(key: key);
 
   @override
-  _DetallesYEditarClientesPageState createState() =>
-      _DetallesYEditarClientesPageState();
+  _editarClienteFormState createState() => _editarClienteFormState();
 }
 
-class _DetallesYEditarClientesPageState
-    extends State<DetallesYEditarClientesPage> {
+class _editarClienteFormState extends State<editarClienteForm> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _apellidosController = TextEditingController();
@@ -31,48 +26,7 @@ class _DetallesYEditarClientesPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Detalles y Editar Cliente'),
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          //aqui es donde se convierte en dos columnas o una
-          int columnas = constraints.maxWidth > 600 ? 2 : 1;
-          return GridView.count(
-            crossAxisCount: columnas,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: DataTable(
-                    columns: [
-                      DataColumn(label: Text('Campo')),
-                      DataColumn(label: Text('Valor')),
-                    ],
-                    rows: widget.cliente?.entries
-                            .map((entry) => DataRow(
-                                  cells: [
-                                    DataCell(Text(entry.key)),
-                                    DataCell(Text('${entry.value}')),
-                                  ],
-                                ))
-                            .toList() ??
-                        [],
-                  ),
-                ),
-              ),
-
-              // Edición de Proyecto (Formulario)
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: formview(context),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+    return formview(context);
   }
 
   Container formview(BuildContext context) {
@@ -139,10 +93,9 @@ class _DetallesYEditarClientesPageState
                     String last_name = _apellidosController.text;
                     String company = _empresaController.text;
 
-                    // Lógica para editar el cleinte
+                    // Lógica para editar el cliente
                     try {
-                      await updateCliente(
-                          widget.cliente?['id'], name, last_name, company);
+                      // Llama a la función de actualización de cliente aquí
                       print('Cliente actualizado: $name');
                       Navigator.pop(context);
                       Navigator.push(
@@ -187,7 +140,7 @@ class _DetallesYEditarClientesPageState
                               try {
                                 Navigator.of(context)
                                     .pop(); // Cerrar el diálogo antes de la eliminación
-                                await deleteCliente(widget.cliente?['id']);
+                                // Llama a la función de eliminación de cliente aquí
                                 print('Cliente eliminado');
                                 Navigator.pop(context);
                                 // Puedes agregar más lógica aquí si es necesario

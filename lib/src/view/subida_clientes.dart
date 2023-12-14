@@ -1,6 +1,6 @@
 import 'package:datafire/src/forms/alta_form_clientes.dart';
 import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/widgets/clientesCard.dart';
+import 'package:datafire/src/widgets/ClientesCard/clientesCard.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 

@@ -1,22 +1,17 @@
-import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/services/proyectos.service.dart';
-import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 
-class DetallesYEditarTrabajadoresPage extends StatefulWidget {
+class editarTrabajadoresForm extends StatefulWidget {
   final Map<String, dynamic>? trabajador;
 
-  DetallesYEditarTrabajadoresPage({Key? key, required this.trabajador})
+  editarTrabajadoresForm({Key? key, required this.trabajador})
       : super(key: key);
 
   @override
-  _DetallesYEditarTrabajadoresPageState createState() =>
-      _DetallesYEditarTrabajadoresPageState();
+  _editarTrabajadoresFormState createState() => _editarTrabajadoresFormState();
 }
 
-class _DetallesYEditarTrabajadoresPageState
-    extends State<DetallesYEditarTrabajadoresPage> {
+class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _apellidosController = TextEditingController();
@@ -32,48 +27,7 @@ class _DetallesYEditarTrabajadoresPageState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Detalles y Editar Cliente'),
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          //aqui es donde se convierte en dos columnas o una
-          int columnas = constraints.maxWidth > 600 ? 2 : 1;
-          return GridView.count(
-            crossAxisCount: columnas,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: DataTable(
-                    columns: [
-                      DataColumn(label: Text('Campo')),
-                      DataColumn(label: Text('Valor')),
-                    ],
-                    rows: widget.trabajador?.entries
-                            .map((entry) => DataRow(
-                                  cells: [
-                                    DataCell(Text(entry.key)),
-                                    DataCell(Text('${entry.value}')),
-                                  ],
-                                ))
-                            .toList() ??
-                        [],
-                  ),
-                ),
-              ),
-
-              // Edición de Proyecto (Formulario)
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: formview(context),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+    return formview(context);
   }
 
   Container formview(BuildContext context) {
@@ -142,9 +96,8 @@ class _DetallesYEditarTrabajadoresPageState
 
                     // Lógica para editar el proyecto existente
                     try {
-                      await updateCliente(
-                          widget.trabajador?['id'], name, last_name, cargo);
-                      print('Cliente actualizado: $name');
+                      // Llama a la función de actualización de trabajador aquí
+                      print('Trabajador actualizado: $name');
                       // Puedes llamar a una función o realizar cualquier otra acción aquí
                       Navigator.pop(context);
                       Navigator.push(
@@ -154,9 +107,9 @@ class _DetallesYEditarTrabajadoresPageState
                         ),
                       );
                       print(
-                          'Datos a enviar para actualizar cliente: $name, $last_name, $cargo');
+                          'Datos a enviar para actualizar trabajador: $name, $last_name, $cargo');
                     } catch (error) {
-                      print('Error al actualizar el cliente: $error');
+                      print('Error al actualizar el trabajador: $error');
                       // Puedes mostrar un mensaje de error al usuario si es necesario
                     }
                   }
@@ -175,9 +128,9 @@ class _DetallesYEditarTrabajadoresPageState
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Eliminar Cliente'),
-                        content:
-                            Text('¿Seguro que quieres eliminar este Cliente?'),
+                        title: Text('Eliminar Trabajador'),
+                        content: Text(
+                            '¿Seguro que quieres eliminar este Trabajador?'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -190,13 +143,13 @@ class _DetallesYEditarTrabajadoresPageState
                               try {
                                 Navigator.of(context)
                                     .pop(); // Cerrar el diálogo antes de la eliminación
-                                await deleteTrabajador(
-                                    widget.trabajador?['id']);
-                                print('Cliente eliminado');
+                                // Llama a la función de eliminación de trabajador aquí
+                                print('Trabajador eliminado');
                                 Navigator.pop(context);
                                 // Puedes agregar más lógica aquí si es necesario
                               } catch (error) {
-                                print('Error al eliminar el proyecto: $error');
+                                print(
+                                    'Error al eliminar el trabajador: $error');
                               }
                             },
                             child: Text('Confirmar'),

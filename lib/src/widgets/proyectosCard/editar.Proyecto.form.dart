@@ -1,19 +1,16 @@
-import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/exito_alta.dart';
 import 'package:flutter/material.dart';
 
-class DetallesYAltaProyectoPage extends StatefulWidget {
+class editarProyectosForm extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
 
-  DetallesYAltaProyectoPage({Key? key, required this.proyecto})
-      : super(key: key);
+  editarProyectosForm({Key? key, required this.proyecto}) : super(key: key);
 
   @override
-  _DetallesYAltaProyectoPageState createState() =>
-      _DetallesYAltaProyectoPageState();
+  _editarProyectosFormState createState() => _editarProyectosFormState();
 }
 
-class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
+class _editarProyectosFormState extends State<editarProyectosForm> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _inicioController = TextEditingController();
@@ -29,48 +26,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Detalles y Editar Proyecto'),
-      ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          //aqui es donde se convierte en dos columnas o una
-          int columnas = constraints.maxWidth > 600 ? 2 : 1;
-          return GridView.count(
-            crossAxisCount: columnas,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: DataTable(
-                    columns: [
-                      DataColumn(label: Text('Campo')),
-                      DataColumn(label: Text('Valor')),
-                    ],
-                    rows: widget.proyecto?.entries
-                            .map((entry) => DataRow(
-                                  cells: [
-                                    DataCell(Text(entry.key)),
-                                    DataCell(Text('${entry.value}')),
-                                  ],
-                                ))
-                            .toList() ??
-                        [],
-                  ),
-                ),
-              ),
-
-              // Edición de Proyecto (Formulario)
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: formview(context),
-              ),
-            ],
-          );
-        },
-      ),
-    );
+    return formview(context);
   }
 
   Container formview(BuildContext context) {
@@ -137,8 +93,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                     String fechaInicio = _inicioController.text;
                     String fechaFinalizada = _finController.text;
                     try {
-                      await updateProyecto(widget.proyecto?['id'], nombre,
-                          fechaInicio, fechaFinalizada);
+                      // Llama a la función de actualización de proyecto aquí
                       print('Proyecto actualizado: $nombre');
                       Navigator.pop(context);
                       Navigator.push(
@@ -181,7 +136,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                               try {
                                 Navigator.of(context)
                                     .pop(); // Cerrar el diálogo antes de la eliminación
-                                await deleteProyecto(widget.proyecto?['id']);
+                                // Llama a la función de eliminación de proyecto aquí
                                 print('Proyecto eliminado');
                                 Navigator.pop(context);
                                 // Puedes agregar más lógica aquí si es necesario

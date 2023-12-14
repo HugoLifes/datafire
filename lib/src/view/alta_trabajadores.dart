@@ -1,7 +1,7 @@
 import 'package:datafire/src/forms/alta_form_trabajadores.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/widgets/colors.dart';
-import 'package:datafire/src/widgets/trabajadoresCard.dart';
+import 'package:datafire/src/widgets/trabajadoresCard/trabajadoresCard.dart';
 import 'package:flutter/material.dart';
 
 class AltaTrabajadores extends StatefulWidget {

@@ -1,17 +1,17 @@
 import 'package:datafire/src/widgets/colors.dart';
-import 'package:datafire/src/widgets/editarProyecto.dart';
+import 'package:datafire/src/widgets/ClientesCard/editarCliente.dart';
 import 'package:flutter/material.dart';
 
-class ProyectoCard extends StatefulWidget {
-  final Map<String, dynamic> proyecto;
+class clienteCard extends StatefulWidget {
+  final Map<String, dynamic> cliente;
 
-  const ProyectoCard({Key? key, required this.proyecto}) : super(key: key);
+  const clienteCard({Key? key, required this.cliente}) : super(key: key);
 
   @override
-  _ProyectoCardState createState() => _ProyectoCardState();
+  State<clienteCard> createState() => _clienteCardState();
 }
 
-class _ProyectoCardState extends State<ProyectoCard> {
+class _clienteCardState extends State<clienteCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,24 +20,18 @@ class _ProyectoCardState extends State<ProyectoCard> {
         color: canvasColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 5,
-            offset: Offset(0, 5),
-          ),
+          BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(0, 5)),
         ],
       ),
       child: InkWell(
         hoverColor: accentCanvasColor,
         onTap: () {
-          debugPrint('Proyecto ID: ${widget.proyecto["id"]} selected!');
+          debugPrint('Cliente ID: ${widget.cliente["id"]} selected!');
           Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-                  DetallesYAltaProyectoPage(proyecto: widget.proyecto),
-            ),
-          );
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      DetallesYEditarClientesPage(cliente: widget.cliente)));
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -46,12 +40,12 @@ class _ProyectoCardState extends State<ProyectoCard> {
             Row(
               children: [
                 const Text(
-                  'ID Proyecto:',
+                  'ID Cliente:',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.proyecto["id"].toString(),
+                  widget.cliente["id"].toString(),
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 )
@@ -65,7 +59,7 @@ class _ProyectoCardState extends State<ProyectoCard> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.proyecto["name"],
+                  widget.cliente["name"],
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 ),
@@ -74,12 +68,12 @@ class _ProyectoCardState extends State<ProyectoCard> {
             Row(
               children: [
                 const Text(
-                  'Fecha Inicio:',
+                  'Apellido:',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.proyecto["fecha_inicio"],
+                  widget.cliente["last_name"],
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 ),
@@ -88,12 +82,12 @@ class _ProyectoCardState extends State<ProyectoCard> {
             Row(
               children: [
                 const Text(
-                  'Fecha Fin:',
+                  'Empresa:',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.proyecto["fecha_fin"],
+                  widget.cliente["company"],
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 ),

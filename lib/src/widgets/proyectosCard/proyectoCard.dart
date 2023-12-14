@@ -1,17 +1,17 @@
 import 'package:datafire/src/widgets/colors.dart';
-import 'package:datafire/src/widgets/editarCliente.dart';
+import 'package:datafire/src/widgets/proyectosCard/editarProyecto.dart';
 import 'package:flutter/material.dart';
 
-class clienteCard extends StatefulWidget {
-  final Map<String, dynamic> cliente;
+class ProyectoCard extends StatefulWidget {
+  final Map<String, dynamic> proyecto;
 
-  const clienteCard({Key? key, required this.cliente}) : super(key: key);
+  const ProyectoCard({Key? key, required this.proyecto}) : super(key: key);
 
   @override
-  State<clienteCard> createState() => _clienteCardState();
+  _ProyectoCardState createState() => _ProyectoCardState();
 }
 
-class _clienteCardState extends State<clienteCard> {
+class _ProyectoCardState extends State<ProyectoCard> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -20,18 +20,24 @@ class _clienteCardState extends State<clienteCard> {
         color: canvasColor,
         borderRadius: BorderRadius.circular(20),
         boxShadow: const [
-          BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(0, 5)),
+          BoxShadow(
+            color: Colors.grey,
+            blurRadius: 5,
+            offset: Offset(0, 5),
+          ),
         ],
       ),
       child: InkWell(
         hoverColor: accentCanvasColor,
         onTap: () {
-          debugPrint('Cliente ID: ${widget.cliente["id"]} selected!');
+          debugPrint('Proyecto ID: ${widget.proyecto["id"]} selected!');
           Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      DetallesYEditarClientesPage(cliente: widget.cliente)));
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+                  DetallesYAltaProyectoPage(proyecto: widget.proyecto),
+            ),
+          );
         },
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,12 +46,12 @@ class _clienteCardState extends State<clienteCard> {
             Row(
               children: [
                 const Text(
-                  'ID Cliente:',
+                  'ID Proyecto:',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.cliente["id"].toString(),
+                  widget.proyecto["id"].toString(),
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 )
@@ -59,7 +65,7 @@ class _clienteCardState extends State<clienteCard> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.cliente["name"],
+                  widget.proyecto["name"],
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 ),
@@ -68,12 +74,12 @@ class _clienteCardState extends State<clienteCard> {
             Row(
               children: [
                 const Text(
-                  'Apellido:',
+                  'Fecha Inicio:',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.cliente["last_name"],
+                  widget.proyecto["fecha_inicio"],
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 ),
@@ -82,12 +88,12 @@ class _clienteCardState extends State<clienteCard> {
             Row(
               children: [
                 const Text(
-                  'Empresa:',
+                  'Fecha Fin:',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.cliente["company"],
+                  widget.proyecto["fecha_fin"],
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 ),
