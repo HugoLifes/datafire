@@ -14,7 +14,8 @@ class MotherView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    var size = MediaQuery.of(context).size;
+    //quitar comentario si necesitas usar size
+    // var size = MediaQuery.of(context).size;
     return AnimatedBuilder(
         animation: controller,
         builder: (ctx, child) {
@@ -28,6 +29,7 @@ class MotherView extends StatelessWidget {
             case 3:
               return AltaTrabajadores();
             case 4:
+            //aqui se pueden añadir mas pantallas
             default:
               return Text(
                 'Not Found Page',

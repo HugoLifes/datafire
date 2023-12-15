@@ -1,7 +1,3 @@
-import 'dart:ffi';
-
-import 'package:flutter/material.dart';
-
 //Tiene todas las caracteristicas a tomar en cuenta en un proyecto
 class Proyecto {
   int? id;

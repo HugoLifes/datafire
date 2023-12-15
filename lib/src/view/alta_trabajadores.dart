@@ -13,14 +13,14 @@ class AltaTrabajadores extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         icon: const Icon(Icons.receipt),
         elevation: 8,
-        label: Row(
+        label: const Row(
             children: [Text('Agregar Nuevo', style: TextStyle(fontSize: 15))]),
       ),
       body: Stack(
@@ -41,7 +41,7 @@ class AltaTrabajadores extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(top: 55, left: 10),
             width: size.width > 600 ? size.width * 0.8 : 500,
-            child: Text('Da de alta a tus trabajadores'),
+            child: const Text('Da de alta a tus trabajadores'),
           ),
         ],
       ),

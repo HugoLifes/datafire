@@ -13,6 +13,9 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   final _controller = SidebarXController(selectedIndex: 0);
+
+  ///[_key] se  usa para controlar o escuchar elementos como el sidebar o snackbars
+  // en cualquier pagina que estes, solo hay que pasarla como parametro (no borrar)
   final _key = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -25,9 +28,11 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: Row(
           children: [
+            // la barra lateral y su controller, que sirve para detectar acciones dentro
             SideBar(
               controller: _controller,
             ),
+            //permite adaptar la vista en ciertas ocasiones
             Expanded(
               child: MotherView(
                 controller: _controller,

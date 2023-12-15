@@ -9,14 +9,14 @@ class AltaClientes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         icon: const Icon(Icons.receipt),
         elevation: 8,
-        label: Row(
+        //si se resite a cambios de estilo quitar const
+        label: const Row(
             children: [Text('Alta Clientes', style: TextStyle(fontSize: 15))]),
       ),
       body: Stack(

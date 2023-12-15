@@ -12,6 +12,7 @@ const colorIcon = Color(0xFF1a1c1e);
 const unselectColor = Color(0xFF535f70);
 const selectColor = Color(0xFFdde4ff);
 
+// Letras para tipos de textos
 TextStyle largeText =
     GoogleFonts.montserrat(fontSize: 30, fontWeight: FontWeight.bold);
 

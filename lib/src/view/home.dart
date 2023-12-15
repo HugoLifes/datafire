@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../widgets/colors.dart';
 
+/// [Home] o Dasboard se usara para mostrar las estadisticas principales
+/// como perdida o ganancia, nuevos clientes, proyectos finalizados etc
 class Home extends StatelessWidget {
   const Home({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
     return Scaffold(
       body: Stack(

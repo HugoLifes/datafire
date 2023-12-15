@@ -7,6 +7,7 @@ import 'package:sidebarx/sidebarx.dart';
 import '../../main.dart';
 
 class SideBar extends StatefulWidget {
+  //rquiere el controller para funcionar
   SideBar({super.key, required this.controller});
   SidebarXController controller;
   // List<OrderM>? order = [];
@@ -51,11 +52,15 @@ class _SideBarState extends State<SideBar> {
           height: 80,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
+            //inkwell es un animado para los botones, hacerlos mas esteticos
+            // checar diseños de botones en material
             child: InkWell(
               focusColor: actionColor,
               highlightColor: actionColor,
               splashColor: accentCanvasColor,
               hoverColor: unselectColor.withOpacity(0.10),
+              //cambiar este back button por un perfil button, como es child
+              //puedes meter cualquier tipo de widget
               child: BackButton(
                 onPressed: () {
                   //widget.idmodel = IdModel();
@@ -71,9 +76,9 @@ class _SideBarState extends State<SideBar> {
       items: [
         SidebarXItem(
             icon: Icons.home,
-            label: 'Inicio',
+            label: 'Dashboard',
             onTap: () {
-              debugPrint('Inicio');
+              debugPrint('Dashboard');
             }),
         //const SidebarXItem(icon: Icons.area_chart_outlined, label: 'Estadisticas'),
         SidebarXItem(

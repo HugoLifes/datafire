@@ -13,14 +13,14 @@ class AltaProyectos extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // saber que tamaños de la pantalla
     var size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {},
         icon: const Icon(Icons.receipt),
         elevation: 8,
-        label: Row(
+        label: const Row(
             children: [Text('Alta Proyectos', style: TextStyle(fontSize: 15))]),
       ),
       body: Stack(
@@ -41,7 +41,7 @@ class AltaProyectos extends StatelessWidget {
           Container(
             padding: const EdgeInsets.only(top: 55, left: 10),
             width: size.width > 600 ? size.width * 0.8 : 500,
-            child: Text(
+            child: const Text(
                 'Da de alta proyectos y asignalo a tus clientes y trabajadores'),
           ),
         ],

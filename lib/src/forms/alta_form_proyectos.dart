@@ -42,7 +42,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
           Container(
             padding: const EdgeInsets.only(top: 55, left: 15),
             width: size.width > 600 ? size.width * 0.8 : 500,
-            child: Text(
+            child: const Text(
               'Aqui dara de alta sus proyectos',
               style: TextStyle(fontSize: 20),
             ),
