@@ -33,7 +33,7 @@ class Proyecto {
     this.fechaFinal,
     this.fechaInicio,
     this.divisionPago,
-    this.deuda, // Añadir la deuda al constructor
+    this.deuda,
   });
 
   buscaClienteProyecto() {}
@@ -41,14 +41,13 @@ class Proyecto {
   crearId() async {}
 }
 
-// Clase Clientes con la relación de deuda
 class Clientes {
   int idCliente;
   String? nombreCliente;
   String? apellidoCliente;
   List<Proyecto>? proyectos;
   bool? linkProyecto = false;
-  Deuda? deuda; // Relación con la clase Deuda
+  Deuda? deuda;
 
   Clientes(this.nombreCliente, this.idCliente,
       {this.proyectos, this.linkProyecto, this.apellidoCliente, this.deuda});
@@ -58,7 +57,6 @@ class Clientes {
   }
 }
 
-//Tiene todas las caracteristicas de los trabajadores
 class Trabajadores {
   int idTrabajador;
   String? nombre;

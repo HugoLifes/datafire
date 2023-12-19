@@ -36,7 +36,7 @@ class _AltaProyectosState extends State<AltaProyectos> {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
             ),
             Text(
-              'En esta sección se mostrarán sus clientes o poder dar de alta clientes',
+              'En esta sección se mostrarán sus Proyectos o poder dar de alta Proyectos',
               style: TextStyle(fontSize: 14),
             ),
           ],
