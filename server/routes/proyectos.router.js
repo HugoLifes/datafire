@@ -8,6 +8,7 @@ const {
   createProjectsSchema,
   getProjectSchema,
   updateProjectSchema,
+  addCustomerRESchema,
 } = require('../schemas/proyectos.schema');
 
 router.get('/', async (req, res, next) => {
@@ -46,6 +47,20 @@ router.post(
     }
   },
 );
+
+router.post(
+  "/add-customer",
+  validatorHandler(addCustomerRESchema, "body"),
+  async (req,res,next) => {
+    try {
+      const body = req.body;
+      const newCustomer = await service.addCustomer(body);
+      res.status(201).json(newCustomer)
+    } catch(error) {
+      next(error)
+    }
+  }
+)
 
 router.patch(
   '/:id',

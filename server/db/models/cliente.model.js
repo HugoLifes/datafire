@@ -30,9 +30,14 @@ const CustomerSchema = {
 }
 
 class Customer extends Model {
-  static() {
-    // associate
+  static associate(models) {
+    this.hasMany(models.Project, {
+      as: "projects",
+      foreignKey: "projectId"
+    });
   }
+
+
   static config(sequelize){
     return{
       sequelize,

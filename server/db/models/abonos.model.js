@@ -1,38 +1,41 @@
-const {Model, DataTypes, Sequelize} = require("sequelize")
+const { Model, DataTypes, Sequelize } = require("sequelize");
+const { PROJECT_TABLE } = require("./proyectos.model");
+const { CUSTOMER_TABLE } = require("./cliente.model");
 
-const {CUSTOMER_TABLE} = require("./cliente.model")
+const ABONOS_TABLE = "Abonos";
 
-const PROJECT_TABLE = "proyectos"
-
-const ProjectSchema = {
+const AbonosSchema = {
   id: {
     allowNull: false,
     autoIncrement: true,
     primaryKey: true,
     type: DataTypes.INTEGER
   },
-  name:{
+  monto: {
     allowNull: false,
-    type: DataTypes.STRING
+    type: DataTypes.INTEGER
   },
-  fecha_inicio: {
-    allowNull: false,
-    type: DataTypes.DATE
-  },
-  fecha_fin: {
+  fecha_abono: {
     allowNull: false,
     type: DataTypes.DATE
   },
-  costo:{
+  projectId: {
+    field: "proyecto_id",
     allowNull: false,
     type: DataTypes.INTEGER,
+    references: {
+      model: PROJECT_TABLE,
+      key: "id"
+    },
+    onUpdate: "CASCADE",
+    onDelete: "SET NULL",
     defaultValue: 0
   },
   customerId: {
     field: "customer_id",
-    allowNull:false,
+    allowNull: false,
     type: DataTypes.INTEGER,
-    references:{
+    references: {
       model: CUSTOMER_TABLE,
       key: "id"
     },
@@ -46,30 +49,28 @@ const ProjectSchema = {
     field: "create_at",
     defaultValue: Sequelize.NOW
   }
-}
+};
 
-class Project extends Model {
+class Abonos extends Model {
   static associate(models) {
+    this.belongsTo(models.Project, {
+      as: "project",
+      foreignKey: "projectId"
+    });
     this.belongsTo(models.Customer, {
       as: "customer",
-      through: models.ProjectCustomer,
-      foreignKey: "customerId",
-      otherKey: "projectId",
-    });
-    this.hasMany(models.Abonos, {
-      as: "abonos",
-      foreignKey: "projectId",
+      foreignKey: "customerId"
     });
   }
 
   static config(sequelize) {
     return {
       sequelize,
-      tableName: PROJECT_TABLE,
-      modelname: "project",
+      tableName: ABONOS_TABLE,
+      modelName: "Abonos",
       timestamps: false
-    }
+    };
   }
 }
 
-module.exports = {PROJECT_TABLE, ProjectSchema, Project}
+module.exports = { ABONOS_TABLE, AbonosSchema, Abonos };
