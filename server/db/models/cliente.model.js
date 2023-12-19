@@ -31,21 +31,20 @@ const CustomerSchema = {
 
 class Customer extends Model {
   static associate(models) {
-    this.hasMany(models.Project, {
-      as: "projects",
-      foreignKey: "projectId"
+    this.hasMany(models.ProjectCustomer, {
+      as: "projectCustomers", // Usa el mismo alias que en ProjectCustomer
+      foreignKey: "customer_id"
     });
   }
 
-
-  static config(sequelize){
-    return{
+  static config(sequelize) {
+    return {
       sequelize,
       tableName: CUSTOMER_TABLE,
       modelName: "Customer",
       timestamps: false
-    }
+    };
   }
 }
 
-module.exports = {CUSTOMER_TABLE, CustomerSchema, Customer}
+module.exports = { CUSTOMER_TABLE, CustomerSchema, Customer };

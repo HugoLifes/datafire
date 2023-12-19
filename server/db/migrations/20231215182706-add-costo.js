@@ -11,3 +11,5 @@ module.exports = {
     await queryInterface.removeColumn(PROJECT_TABLE, "costo")
   }
 };
+
+

@@ -18,10 +18,6 @@ const ProjectCustomerSchema = {
     field: "create_at",
     defaultValue: Sequelize.NOW
   },
-  abono: {
-    allowNull: false,
-    type: DataTypes.INTEGER
-  },
   project_id: {
     field: "project_id",
     allowNull: false,
@@ -47,17 +43,31 @@ const ProjectCustomerSchema = {
 }
 
 class ProjectCustomer extends Model {
-  static() {
-    // associate
+  static associate(models) {
+    this.belongsTo(models.Project, {
+      foreignKey: "project_id",
+      onDelete: "SET NULL",
+      onUpdate: "CASCADE",
+    });
+    this.belongsTo(models.Customer, {
+      foreignKey: "customer_id",
+      as: "projectCustomer", // Cambiado el alias a "projectCustomer"
+      onDelete: "SET NULL",
+      onUpdate: "CASCADE",
+    });
   }
-  static config(sequelize){
-    return{
+
+  static config(sequelize) {
+    return {
       sequelize,
       tableName: PROJECT_CUSTOMER_TABLE,
       modelName: "ProjectCustomer",
       timestamps: false
-    }
+    };
   }
 }
+
+module.exports = { PROJECT_CUSTOMER_TABLE, ProjectCustomerSchema, ProjectCustomer };
+
 
 module.exports = {PROJECT_CUSTOMER_TABLE, ProjectCustomerSchema, ProjectCustomer}

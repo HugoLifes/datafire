@@ -13,19 +13,23 @@ class ProjectService {
   }
 
   async findOne(id) {
-    const project = await models.Project.findByPk(id,{
+    const project = await models.Project.findByPk(id, {
       include: [
-        {association:"customer"},
-      "customer",
-      "abonos"
-    ]
-})
+        {
+          model: models.ProjectCustomer,
+          as: 'projectCustomers',
+        },
+        'abonos'
+      ]
+    });
 
     if (!project) {
-      throw boom.notFound("Project not found")
+      throw boom.notFound("Project not found");
     }
-    return project
+
+    return project;
   }
+
 
   async create(data) {
     const newProject = await models.Project.create(data)

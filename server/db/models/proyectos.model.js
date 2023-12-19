@@ -50,17 +50,16 @@ const ProjectSchema = {
 
 class Project extends Model {
   static associate(models) {
-    this.belongsTo(models.Customer, {
-      as: "customer",
-      through: models.ProjectCustomer,
-      foreignKey: "customerId",
-      otherKey: "projectId",
+    this.hasMany(models.ProjectCustomer, {
+      as: "projectCustomers",
+      foreignKey: "project_id",
     });
     this.hasMany(models.Abonos, {
       as: "abonos",
       foreignKey: "projectId",
     });
   }
+
 
   static config(sequelize) {
     return {
