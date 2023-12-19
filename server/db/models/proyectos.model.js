@@ -21,6 +21,11 @@ const ProjectSchema = {
     allowNull: false,
     type: DataTypes.DATE
   },
+  costo: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,

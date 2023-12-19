@@ -14,31 +14,24 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
   final _nombreController = TextEditingController();
   final _inicioController = TextEditingController();
   final _finController = TextEditingController();
+  final _costoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: const Text("Agregar nuevo cliente"),
+      ),
       body: Stack(
         children: [
           Container(
-            padding: const EdgeInsets.only(top: 5, left: 15),
-            width: size.width > 600 ? size.width * 0.8 : 500,
-            child: const Text(
-              'Agregar nuevo cliente',
-              style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  fontStyle: FontStyle.italic),
-            ),
-          ),
-          Container(
-            padding: const EdgeInsets.only(top: 45, left: 15),
+            padding: const EdgeInsets.only(top: 15, left: 15),
             width: size.width > 600 ? size.width * 0.8 : 500,
             child: const Text(
               'Complete cada uno de los campos para dar de alta un nuevo cliente',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: TextStyle(
+                  fontSize: 18, color: Color.fromARGB(255, 45, 45, 45)),
             ),
           ),
           formview(context),
@@ -49,7 +42,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
 
   Container formview(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 110, left: 15, right: 20),
+      padding: const EdgeInsets.only(top: 70, left: 15, right: 20),
       child: Form(
         key: _formKey,
         child: Column(
@@ -103,17 +96,34 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
               },
             ),
             const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _costoController,
+              decoration: const InputDecoration(
+                labelText: 'Costo',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingresa el costo total';
+                }
+                return null;
+              },
+            ),
+            const SizedBox(height: 16.0),
             Container(
               width: double.infinity, // Ocupar todo el ancho disponible
-              child: ElevatedButton(
+              child: FilledButton(
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     String nombre = _nombreController.text;
                     String fechaInicio = _inicioController.text;
                     String fechaFinalizada = _finController.text;
+                    String costo = _costoController.text;
                     // Lógica para dar de alta el cliente
-                    postCliente(nombre, fechaInicio, fechaFinalizada);
-                    // Puedes llamar a una función o realizar cualquier otra acción aquí
+                    postCliente(nombre, fechaInicio, fechaFinalizada, costo);
+
                     print('Cliente dado de alta: $nombre');
                     Navigator.pop(context);
 

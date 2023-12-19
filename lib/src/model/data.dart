@@ -2,18 +2,26 @@ import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 
-//Tiene todas las caracteristicas a tomar en cuenta en un proyecto
+// Clase Deuda para representar la deuda
+class Deuda {
+  double monto;
+
+  Deuda({required this.monto});
+}
+
+// Clase Proyecto con la relación de deuda
 class Proyecto {
   int? id;
   String? nombreProyecto;
   String? descProyecto;
   Clientes? cliente;
-  bool? variosClienter = false;
+  bool? variosClientes = false;
   List<Trabajadores>? trabajadores;
   double? costoProyecto;
   DateTime? fechaInicio;
   DateTime? fechaFinal;
   bool? divisionPago = false;
+  Deuda? deuda; // Relación con la clase Deuda
 
   Proyecto({
     this.id,
@@ -21,11 +29,11 @@ class Proyecto {
     this.descProyecto,
     this.costoProyecto,
     this.cliente,
-    this.trabajadores,
-    this.variosClienter,
+    this.variosClientes,
     this.fechaFinal,
     this.fechaInicio,
     this.divisionPago,
+    this.deuda, // Añadir la deuda al constructor
   });
 
   buscaClienteProyecto() {}
@@ -33,14 +41,14 @@ class Proyecto {
   crearId() async {}
 }
 
-//Tiene todas las caracteristicas de los clientes
+// Clase Clientes con la relación de deuda
 class Clientes {
   int idCliente;
   String? nombreCliente;
   String? apellidoCliente;
   List<Proyecto>? proyectos;
   bool? linkProyecto = false;
-  double? deuda;
+  Deuda? deuda; // Relación con la clase Deuda
 
   Clientes(this.nombreCliente, this.idCliente,
       {this.proyectos, this.linkProyecto, this.apellidoCliente, this.deuda});
