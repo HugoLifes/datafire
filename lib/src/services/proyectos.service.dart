@@ -27,6 +27,36 @@ Future<void> postProyecto(
   }
 }
 
+
+class postCustomerProject {
+  Future<void> addCustomerProject(String projectId, String customerId) async {
+    const url = "https://datafire-production.up.railway.app/api/v1/add-customer";
+
+    try {
+      final res = await http.post(
+        Uri.parse(url),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "project_id": projectId,
+          "customer_id": customerId,
+        }),
+      );
+
+      if (res.statusCode == 201) {
+        print("Cliente agregado exitosamente");
+        // Puedes retornar algún resultado o realizar acciones adicionales aquí
+      } else {
+        print("Error al agregar el cliente: ${res.statusCode}");
+        // Puedes manejar el error de acuerdo a tus necesidades
+      }
+    } catch (err) {
+      print("Error al realizar la solicitud http: $err");
+      // Puedes manejar el error de acuerdo a tus necesidades
+    }
+  }
+}
+
+
 Future<List<dynamic>> fetchProjects() async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
 

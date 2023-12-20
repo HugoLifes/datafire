@@ -29,7 +29,7 @@ Future<List<dynamic>> fetchClientes() async {
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
       final List<dynamic> clientes = jsonDecode(res.body);
-      return clientes;
+      return clientes ?? []; // Asegúrate de manejar el caso de nulo
     } else {
       print("Error al obtener la lista de clientes");
       return [];
@@ -39,6 +39,7 @@ Future<List<dynamic>> fetchClientes() async {
     return [];
   }
 }
+
 
 Future<void> updateCliente(
     int id, String nombre, String last_name, String company) async {

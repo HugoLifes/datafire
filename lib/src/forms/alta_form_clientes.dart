@@ -1,3 +1,4 @@
+import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/success.dart';
 import 'package:flutter/material.dart';
 import '../model/data.dart';
@@ -93,10 +94,15 @@ class _AltaClientePageState extends State<AltaClientePage> {
                 },
               ),
               const SizedBox(height: 16.0),
+              FloatingActionButton(onPressed: () {
+                final apiService = postCustomerProject();
+                   apiService.addCustomerProject("2", "5");
+              }),
               Container(
                 width: double.infinity, // Ocupar todo el ancho disponible
                 child: FilledButton(
                   onPressed: () {
+                                        
                     if (_formKey.currentState!.validate()) {
                       String nombreCliente = _nombreController.text;
                       String apellidoCliente = _apellidoController.text;

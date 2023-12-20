@@ -99,6 +99,13 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 },
               ),
               const SizedBox(height: 16.0),
+              ElevatedButton(
+  onPressed: () {
+    _selectClientsDialog();
+  },
+  child: Text("Seleccionar Clientes"),
+),
+
               Container(
                 width: double.infinity,
                 child: FilledButton(
@@ -131,6 +138,71 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
       ),
     );
   }
+
+  void _selectClientsDialog() async {
+  List<dynamic> clientes = await fetchClientes();
+
+  List<String> clientesSeleccionados = [];
+
+await showDialog(
+  context: context,
+  builder: (BuildContext context) {
+    return AlertDialog(
+      title: Text("Selecciona los clientes"),
+      content: StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+          return SingleChildScrollView(
+            child: Column(
+              children: clientes.map((cliente) {
+                // Asegúrate de que el campo "id" y "nombre" no sea nulo antes de usarlos
+                bool isSelected = clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
+
+                return CheckboxListTile(
+                  title: Text(cliente["name"]?.toString() ?? ""), // Asegúrate de manejar el caso de nulo
+                  value: isSelected,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      print(clientesSeleccionados);
+                      if (value != null) {
+                        if (value) {
+                          // Asegúrate de que "id" no sea nulo antes de agregarlo
+                          clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
+                        } else {
+                          clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
+                        }
+                      }
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+          );
+        },
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text("Cancelar"),
+        ),
+        TextButton(
+          onPressed: () {
+            // Guarda la relación entre el proyecto y los clientes seleccionados
+            clientesSeleccionados.forEach((clienteId) {
+              postCustomerProject().addCustomerProject("ID_DEL_PROYECTO", clienteId);
+            });
+            Navigator.of(context).pop();
+          },
+          child: Text("Guardar"),
+        ),
+      ],
+    );
+  },
+);
+
+}
+
 
   Widget _buildDateTimePicker({
     required String labelText,
