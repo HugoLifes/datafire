@@ -30,7 +30,6 @@ const getProjectSchema = Joi.object({
 });
 
 const addCustomerRESchema = Joi.object({
-  abono: abono.required(),
   project_id: project_id.required(),
   customer_id: customer_id.required()
 })
