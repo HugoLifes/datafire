@@ -20,6 +20,15 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+router.get('/add-customer', async (req, res, next) => {
+  try {
+    const customerProject = await service.findCustomerProject();
+    res.json(customerProject);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get(
   '/:id',
   validatorHandler(getProjectSchema, 'params'),
@@ -49,18 +58,18 @@ router.post(
 );
 
 router.post(
-  "/add-customer",
-  validatorHandler(addCustomerRESchema, "body"),
-  async (req,res,next) => {
+  '/add-customer',
+  validatorHandler(addCustomerRESchema, 'body'),
+  async (req, res, next) => {
     try {
       const body = req.body;
       const newCustomer = await service.addCustomer(body);
-      res.status(201).json(newCustomer)
-    } catch(error) {
-      next(error)
+      res.status(201).json(newCustomer);
+    } catch (error) {
+      next(error);
     }
-  }
-)
+  },
+);
 
 router.patch(
   '/:id',
