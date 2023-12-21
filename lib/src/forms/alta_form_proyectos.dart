@@ -144,6 +144,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
 
   List<String> clientesSeleccionados = [];
 
+
 await showDialog(
   context: context,
   builder: (BuildContext context) {
@@ -154,18 +155,17 @@ await showDialog(
           return SingleChildScrollView(
             child: Column(
               children: clientes.map((cliente) {
-                // Asegúrate de que el campo "id" y "nombre" no sea nulo antes de usarlos
                 bool isSelected = clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
 
                 return CheckboxListTile(
-                  title: Text(cliente["name"]?.toString() ?? ""), // Asegúrate de manejar el caso de nulo
+                  title: Text(cliente["name"]?.toString() ?? ""), 
                   value: isSelected,
                   onChanged: (bool? value) {
                     setState(() {
                       print(clientesSeleccionados);
                       if (value != null) {
                         if (value) {
-                          // Asegúrate de que "id" no sea nulo antes de agregarlo
+
                           clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
                         } else {
                           clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");

@@ -1,9 +1,7 @@
 // cliente_network.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
-Future<void> postProyecto(
-    String nombre, String fecha_inicio, String fecha_fin, String costo) async {
+Future<String?> postProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
 
   try {
@@ -12,41 +10,50 @@ Future<void> postProyecto(
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "name": nombre,
-        "fecha_inicio": fecha_inicio,
-        "fecha_fin": fecha_fin,
-        "costo": costo
+        "fecha_inicio": fechaInicio,
+        "fecha_fin": fechaFinalizada,
+        "costo": costo,
       }),
     );
+
     if (res.statusCode == 200) {
-      print("Cliente Guardado Exitosamente");
+      print("Proyecto dado de alta exitosamente");
+      final Map<String, dynamic> responseData = jsonDecode(res.body);
+      return responseData['id'].toString(); // Devuelve el ID del proyecto
     } else {
-      print("Error al guardar el cliente");
+      print("Error al guardar el proyecto");
+      return null;
     }
   } catch (err) {
     print("Error al realizar la solicitud http: $err");
+    return null;
   }
 }
 
-
 class postCustomerProject {
   Future<void> addCustomerProject(String projectId, String customerId) async {
-    const url = "https://datafire-production.up.railway.app/api/v1/add-customer";
+    final Map<String, dynamic> requestData = {
+      "project_id": projectId,
+      "customer_id": customerId,
+    };
+
+    print("Data enviada a addCustomerProject: $requestData");
+
+    const url = "https://datafire-production.up.railway.app/api/v1/proyectos/add-customer";
 
     try {
       final res = await http.post(
         Uri.parse(url),
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({
-          "project_id": projectId,
-          "customer_id": customerId,
-        }),
+        body: jsonEncode(requestData),
       );
 
       if (res.statusCode == 201) {
         print("Cliente agregado exitosamente");
-        // Puedes retornar algún resultado o realizar acciones adicionales aquí
+   
       } else {
         print("Error al agregar el cliente: ${res.statusCode}");
+        print("Respuesta del servidor: ${res.body}");
         // Puedes manejar el error de acuerdo a tus necesidades
       }
     } catch (err) {
