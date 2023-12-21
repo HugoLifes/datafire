@@ -35,7 +35,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
   Center formview(BuildContext context) {
     return Center(
       child: Container(
-        constraints: BoxConstraints(maxWidth: 600), //este es el max width
+        constraints: BoxConstraints(maxWidth: 600),
         padding: const EdgeInsets.only(top: 70, left: 40, right: 40),
         child: Form(
           key: _formKey,
@@ -99,34 +99,33 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 },
               ),
               const SizedBox(height: 16.0),
-              ElevatedButton(
-  onPressed: () {
-    _selectClientsDialog();
-  },
-  child: Text("Seleccionar Clientes"),
-),
-
               Container(
                 width: double.infinity,
                 child: FilledButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       String nombre = _nombreController.text;
                       String fechaInicio = _inicioDate.toString();
                       String fechaFinalizada = _finDate.toString();
                       String costo = _costoController.text;
 
-                      postProyecto(nombre, fechaInicio, fechaFinalizada, costo);
+                      String? projectId = await obtenerIdProyecto(nombre, fechaInicio, fechaFinalizada, costo);
 
-                      print('Proyecto dado de alta: $nombre');
-                      Navigator.pop(context);
+                      if (projectId != null) {
+                        _selectClientsDialog(projectId);
+                        print('Proyecto dado de alta: $nombre con ID: $projectId');
+                        Navigator.pop(context);
 
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SuccessfulScreen(),
-                        ),
-                      );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SuccessfulScreen(),
+                          ),
+                        );
+                      } else {
+                        print('Error al obtener el ID del proyecto');
+                        // Puedes manejar el error de acuerdo a tus necesidades
+                      }
                     }
                   },
                   child: const Text('Guardar'),
@@ -139,70 +138,65 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
     );
   }
 
-  void _selectClientsDialog() async {
-  List<dynamic> clientes = await fetchClientes();
+  void _selectClientsDialog(String projectId) async {
+    List<dynamic> clientes = await fetchClientes();
+    List<String> clientesSeleccionados = [];
 
-  List<String> clientesSeleccionados = [];
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Selecciona los clientes"),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: clientes.map((cliente) {
+                    bool isSelected = clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
 
-
-await showDialog(
-  context: context,
-  builder: (BuildContext context) {
-    return AlertDialog(
-      title: Text("Selecciona los clientes"),
-      content: StatefulBuilder(
-        builder: (BuildContext context, StateSetter setState) {
-          return SingleChildScrollView(
-            child: Column(
-              children: clientes.map((cliente) {
-                bool isSelected = clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
-
-                return CheckboxListTile(
-                  title: Text(cliente["name"]?.toString() ?? ""), 
-                  value: isSelected,
-                  onChanged: (bool? value) {
-                    setState(() {
-                      print(clientesSeleccionados);
-                      if (value != null) {
-                        if (value) {
-
-                          clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
-                        } else {
-                          clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
-                        }
-                      }
-                    });
-                  },
-                );
-              }).toList(),
+                    return CheckboxListTile(
+                      title: Text(cliente["name"]?.toString() ?? ""),
+                      value: isSelected,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          print(clientesSeleccionados);
+                          if (value != null) {
+                            if (value) {
+                              clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
+                            } else {
+                              clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
+                            }
+                          }
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancelar"),
             ),
-          );
-        },
-      ),
-      actions: <Widget>[
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: Text("Cancelar"),
-        ),
-        TextButton(
-          onPressed: () {
-            // Guarda la relación entre el proyecto y los clientes seleccionados
-            clientesSeleccionados.forEach((clienteId) {
-              postCustomerProject().addCustomerProject("ID_DEL_PROYECTO", clienteId);
-            });
-            Navigator.of(context).pop();
-          },
-          child: Text("Guardar"),
-        ),
-      ],
+            TextButton(
+              onPressed: () {
+                // Guarda la relación entre el proyecto y los clientes seleccionados
+                clientesSeleccionados.forEach((clienteId) {
+                  postCustomerProject().addCustomerProject(projectId, clienteId);
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text("Guardar"),
+            ),
+          ],
+        );
+      },
     );
-  },
-);
-
-}
-
+  }
 
   Widget _buildDateTimePicker({
     required String labelText,
@@ -244,3 +238,4 @@ await showDialog(
     );
   }
 }
+

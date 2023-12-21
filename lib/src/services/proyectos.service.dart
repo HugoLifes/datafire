@@ -1,7 +1,7 @@
 // cliente_network.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-Future<String?> postProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
+Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
 
   try {
@@ -16,12 +16,18 @@ Future<String?> postProyecto(String nombre, String fechaInicio, String fechaFina
       }),
     );
 
-    if (res.statusCode == 200) {
+    if (res.statusCode == 201) {
       print("Proyecto dado de alta exitosamente");
-      final Map<String, dynamic> responseData = jsonDecode(res.body);
-      return responseData['id'].toString(); // Devuelve el ID del proyecto
+      
+      // Generamos nuestro propio ID basado en la información enviada
+      final String idGenerado = "${nombre.hashCode}${fechaInicio.hashCode}${fechaFinalizada.hashCode}${costo.hashCode}";
+      
+      print("ID del proyecto generado: $idGenerado");
+      
+      return idGenerado;
     } else {
-      print("Error al guardar el proyecto");
+      print("Error al guardar el proyecto - Código: ${res.statusCode}");
+      print("Respuesta del servidor: ${res.body}");
       return null;
     }
   } catch (err) {
@@ -29,6 +35,8 @@ Future<String?> postProyecto(String nombre, String fechaInicio, String fechaFina
     return null;
   }
 }
+
+
 
 class postCustomerProject {
   Future<void> addCustomerProject(String projectId, String customerId) async {
@@ -50,7 +58,6 @@ class postCustomerProject {
 
       if (res.statusCode == 201) {
         print("Cliente agregado exitosamente");
-   
       } else {
         print("Error al agregar el cliente: ${res.statusCode}");
         print("Respuesta del servidor: ${res.body}");
