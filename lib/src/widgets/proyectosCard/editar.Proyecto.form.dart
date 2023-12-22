@@ -1,3 +1,4 @@
+import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:flutter/material.dart';
 
 class EditarProyectosForm extends StatefulWidget {
@@ -105,9 +106,8 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
             const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
-              child: ElevatedButton(
+              child: FilledButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue, // Change the color as needed
                   padding: EdgeInsets.symmetric(vertical: 20),
                 ),
                 onPressed: () async {
@@ -118,8 +118,7 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
                     String costo = _costoController.text;
 
                     try {
-                      // Replace the function call with your actual update implementation
-                      // await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada, costo);
+                      await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada, costo);
                       print('Proyecto actualizado: $nombre');
                       Navigator.pop(context);
                       // Add navigation to the success screen here if needed
@@ -134,10 +133,10 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
             const SizedBox(height: 6.0),
             Container(
               width: double.infinity,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
-                  padding: EdgeInsets.symmetric(vertical: 20),
+              child: IconButton.filled(
+                icon: Icon(Icons.delete_forever),
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.red,
                 ),
                 onPressed: () async {
                   // Mostrar un diálogo de confirmación antes de eliminar
@@ -159,8 +158,7 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
                               try {
                                 Navigator.of(context)
                                     .pop(); // Cerrar el diálogo antes de la eliminación
-                                // Replace the function call with your actual delete implementation
-                                // await deleteProyecto(widget.proyecto?['id']);
+                                await deleteProyecto(widget.proyecto?["id"]);
                                 print('Proyecto eliminado');
                                 Navigator.pop(context);
                               } catch (error) {
@@ -174,7 +172,6 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
                     },
                   );
                 },
-                child: const Text('Eliminar Proyecto'),
               ),
             ),
           ],
