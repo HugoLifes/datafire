@@ -32,42 +32,77 @@ class _DetallesYEditarClientesPageState
       appBar: AppBar(
         title: Text('Detalles y Editar Cliente'),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          //aqui es donde se convierte en dos columnas o una
-          int columnas = constraints.maxWidth > 600 ? 2 : 1;
-          return GridView.count(
-            crossAxisCount: columnas,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: DataTable(
-                    columns: [
-                      DataColumn(label: Text('Campo')),
-                      DataColumn(label: Text('Valor')),
+      body: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: DefaultTabController(
+              length: 3,
+              child: Column(
+                children: [
+                  TabBar(
+                    tabs: [
+                      Tab(text: 'Detalles'),
+                      Tab(text: 'Otra Opción'),
+                      Tab(text: 'Otra Más'),
                     ],
-                    rows: widget.cliente?.entries
-                            .map((entry) => DataRow(
-                                  cells: [
-                                    DataCell(Text(entry.key)),
-                                    DataCell(Text('${entry.value}')),
-                                  ],
-                                ))
-                            .toList() ??
-                        [],
                   ),
-                ),
-              ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        // Detalles
+                        Container(
+                          padding: const EdgeInsets.all(16.0),
+                          child: SingleChildScrollView(
+                            child: DataTable(
+                              columns: const [
+                                DataColumn(label: Text('Campo')),
+                                DataColumn(label: Text('Valor')),
+                              ],
+                              rows: widget.cliente?.entries
+                                      .map((entry) => DataRow(
+                                        cells: [
+                                          DataCell(Text(entry.key)),
+                                          DataCell(Text('${entry.value}')),
+                                        ],
+                                      ))
+                                      .toList() ??
+                                  [],
+                            ),
+                          ),
+                        ),
 
-              // Edición de Proyecto (Formulario)
-              Container(
-                padding: const EdgeInsets.all(18.0),
-                child: editarClienteForm(cliente: widget.cliente),
+                        // Contenido para la segunda pestaña
+                        Container(
+                          child: Center(
+                            child: Text('Contenido de la segunda opción'),
+                          ),
+                        ),
+
+                        // Contenido para la tercera pestaña
+                        Container(
+                          child: Center(
+                            child: Text('Contenido de la tercera opción'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          );
-        },
+            ),
+          ),
+
+          // Formulario en el lado derecho
+          Expanded(
+            flex: 1,
+            child: Container(
+              width: 300,
+              padding: const EdgeInsets.all(18.0),
+              child: editarClienteForm(cliente: widget.cliente),
+            ),
+          ),
+        ],
       ),
     );
   }

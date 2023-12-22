@@ -25,7 +25,6 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
     _inicioController.text = widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
     _finController.text = widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finaliacion';
     _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
-
   }
 
   @override
@@ -34,40 +33,77 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
       appBar: AppBar(
         title: const Text('Detalles y Editar Proyecto'),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          //aqui es donde se convierte en dos columnas o una
-          int columnas = constraints.maxWidth > 600 ? 2 : 1;
-          return GridView.count(
-            crossAxisCount: columnas,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: DataTable(
-                    columns:const  [
-                      DataColumn(label: Text('Campo')),
-                      DataColumn(label: Text('Valor')),
+      body: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: DefaultTabController(
+              length: 3,
+              child: Column(
+                children: [
+                  TabBar(
+                    tabs: [
+                      Tab(text: 'Detalles'),
+                      Tab(text: 'Otra Opción'),
+                      Tab(text: 'Otra Más'),
                     ],
-                    rows: widget.proyecto?.entries
-                            .map((entry) => DataRow(
-                                  cells: [
-                                    DataCell(Text(entry.key)),
-                                    DataCell(Text('${entry.value}')),
-                                  ],
-                                ))
-                            .toList() ??
-                        [],
                   ),
-                ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        // Detalles
+                        Container(
+                          padding: const EdgeInsets.all(16.0),
+                          child: SingleChildScrollView(
+                            child: DataTable(
+                              columns: const [
+                                DataColumn(label: Text('Campo')),
+                                DataColumn(label: Text('Valor')),
+                              ],
+                              rows: widget.proyecto?.entries
+                                      .map((entry) => DataRow(
+                                        cells: [
+                                          DataCell(Text(entry.key)),
+                                          DataCell(Text('${entry.value}')),
+                                        ],
+                                      ))
+                                      .toList() ??
+                                  [],
+                            ),
+                          ),
+                        ),
+
+                        // Contenido para la segunda pestaña
+                        Container(
+                          child: Center(
+                            child: Text('Contenido de la segunda opción'),
+                          ),
+                        ),
+
+                        // Contenido para la tercera pestaña
+                        Container(
+                          child: Center(
+                            child: Text('Contenido de la tercera opción'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: EditarProyectosForm(proyecto: widget.proyecto),
-              ),
-            ],
-          );
-        },
+            ),
+          ),
+
+          // Formulario en el lado derecho
+          Expanded(
+            flex: 1,
+            child: Container(
+              width: 300,
+              padding: const EdgeInsets.all(16.0),
+              child: EditarProyectosForm(proyecto: widget.proyecto),
+            ),
+          ),
+        ],
       ),
     );
   }

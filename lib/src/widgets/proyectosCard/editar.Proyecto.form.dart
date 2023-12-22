@@ -33,9 +33,6 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Editar Proyecto"),
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -52,6 +49,7 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _nombreController,
               decoration: const InputDecoration(
