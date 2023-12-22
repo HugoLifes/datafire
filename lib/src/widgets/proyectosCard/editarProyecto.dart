@@ -82,47 +82,58 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
                         // Clientes Asociados
                         Container(
+                          
                           padding: const EdgeInsets.all(16.0),
-                          child: FutureBuilder<List<dynamic>>(
-                            future: fetchCustomerProjects(),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else if (!snapshot.hasData ||
-                                  snapshot.data!.isEmpty) {
-                                return Text('No hay datos disponibles');
-                              } else {
-                                List<dynamic> customerProjects =
-                                    snapshot.data!;
-                                List<String> customerNames = customerProjects
-                                    .where((cp) =>
-                                        cp['project_id'] ==
-                                        widget.proyecto?['id'])
-                                    .map((cp) =>
-                                        cp['customer_name'].toString())
-                                    .toList();
-
-                                return DataTable(
-                                  columns: const [
-                                    DataColumn(label: Text('Clientes')),
-                                  ],
-                                  rows: customerNames
-                                      .map(
-                                        (customerName) => DataRow(
-                                          cells: [
-                                            DataCell(Text(customerName)),
-                                          ],
-                                        ),
-                                      )
-                                      .toList(),
-                                );
-                              }
-                            },
-                          ),
+                          child: 
+                          Column(
+                            children: [
+                              FutureBuilder<List<dynamic>>(
+                                future: fetchCustomerProjects(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else if (!snapshot.hasData ||
+                                      snapshot.data!.isEmpty) {
+                                    return Text('No hay datos disponibles');
+                                  } else {
+                                    List<dynamic> customerProjects =
+                                        snapshot.data!;
+                                    List<String> customerNames = customerProjects
+                                        .where((cp) =>
+                                            cp['project_id'] ==
+                                            widget.proyecto?['id'])
+                                        .map((cp) =>
+                                            cp['customer_name'].toString())
+                                        .toList();
+                              
+                                    return DataTable(
+                                      columns: const [
+                                        DataColumn(label: Text('Clientes')),
+                                      ],
+                                      rows: customerNames
+                                          .map(
+                                            (customerName) => DataRow(
+                                              cells: [
+                                                DataCell(Text(customerName)),
+                                              ],
+                                            ),
+                                          )
+                                          .toList(),
+                                    );
+                                  }
+                                },
+                              ),
+                                                      Container(
+                          child: IconButton.filled(onPressed: (){}, icon: Icon(Icons.edit)),
                         ),
+                            ],
+                          ),
+                          
+                        ),
+
 
                         // Contenido para la tercera pestaña
                         Container(

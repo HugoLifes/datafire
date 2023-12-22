@@ -70,7 +70,7 @@ class postCustomerProject {
 
     print("Data enviada a addCustomerProject: $requestData");
 
-    const url = "https://datafire-production.up.railway.app/api/v1/proyectos/add-customer";
+    const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
 
     try {
       final res = await http.post(
@@ -92,7 +92,7 @@ class postCustomerProject {
 }
 
 Future<List<dynamic>> fetchCustomerProjects() async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/add-customer";
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));
