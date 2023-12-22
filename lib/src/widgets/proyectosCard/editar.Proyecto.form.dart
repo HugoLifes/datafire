@@ -121,7 +121,6 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
                       await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada, costo);
                       print('Proyecto actualizado: $nombre');
                       Navigator.pop(context);
-                      // Add navigation to the success screen here if needed
                     } catch (error) {
                       print('Error al actualizar el proyecto: $error');
                     }
