@@ -16,16 +16,19 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _apellidosController = TextEditingController();
+  final _edadController = TextEditingController();
   final _cargoController = TextEditingController();
+  final _salarioController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _nombreController.text = widget.trabajador?['name'] ?? '';
     _apellidosController.text = widget.trabajador?['last_name'] ?? '';
+    _edadController.text = widget.trabajador?['age'].toString() ?? '';
     _cargoController.text = widget.trabajador?['position'] ?? '';
+    _salarioController.text = widget.trabajador?['salary'].toString() ?? '';
   }
-
   @override
   Widget build(BuildContext context) {
     return formview(context);
@@ -70,6 +73,23 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
               },
             ),
             const SizedBox(height: 16.0),
+TextFormField(
+  controller: _edadController,
+  keyboardType: TextInputType.number,  // Specify keyboard type for numeric input
+  decoration: const InputDecoration(
+    labelText: 'Edad',
+    border: OutlineInputBorder(),
+    fillColor: Colors.white,
+    filled: true,
+  ),
+  validator: (value) {
+    if (value!.isEmpty) {
+      return 'Por favor, ingresa la edad del trabajador';
+    }
+    return null;
+  },
+),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _cargoController,
               decoration: const InputDecoration(
@@ -85,6 +105,22 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
                 return null;
               },
             ),
+                        const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _salarioController,
+              decoration: const InputDecoration(
+                labelText: 'Salario',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingresa la el sueldo del trabajador';
+                }
+                return null;
+              },
+            ),
             const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
@@ -93,12 +129,16 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
                     padding: EdgeInsets.symmetric(vertical: 20)),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
+
                     String name = _nombreController.text;
                     String last_name = _apellidosController.text;
+                    String age = _edadController.text;
                     String cargo = _cargoController.text;
+                    String salary = _salarioController.text;
 
                     // Lógica para editar el proyecto existente
                     try {
+                      updateTrabajador(widget.trabajador?["id"],name, last_name,int.parse(age), cargo, int.parse(salary));
                       print('Trabajador actualizado: $name');
                       Navigator.pop(context);
                       Navigator.push(
@@ -108,7 +148,7 @@ class _editarTrabajadoresFormState extends State<editarTrabajadoresForm> {
                         ),
                       );
                       print(
-                          'Datos a enviar para actualizar trabajador: $name, $last_name, $cargo');
+                          'Datos a enviar para actualizar trabajador: ${widget.trabajador?["id"]} $name, $last_name, $cargo, $salary, $age' );
                     } catch (error) {
                       print('Error al actualizar el trabajador: $error');
                     }

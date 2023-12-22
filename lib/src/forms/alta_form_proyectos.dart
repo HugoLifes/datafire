@@ -124,7 +124,6 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                         );
                       } else {
                         print('Error al obtener el ID del proyecto');
-                        // Puedes manejar el error de acuerdo a tus necesidades
                       }
                     }
                   },

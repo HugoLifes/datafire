@@ -17,6 +17,7 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
   final _nombreController = TextEditingController();
   final _inicioController = TextEditingController();
   final _finController = TextEditingController();
+  final _costoController = TextEditingController();
 
   @override
   void initState() {
@@ -24,6 +25,8 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
     _nombreController.text = widget.proyecto?['name'] ?? '';
     _inicioController.text = widget.proyecto?['fecha_inicio'] ?? '';
     _finController.text = widget.proyecto?['fecha_fin'] ?? '';
+    _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
+
   }
 
   @override
@@ -85,12 +88,28 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
                 return null;
               },
             ),
+                        const SizedBox(height: 16.0),
+            TextFormField(
+              controller: _costoController,
+              decoration: const InputDecoration(
+                labelText: 'costo total del proyecto',
+                border: OutlineInputBorder(),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+              validator: (value) {
+                if (value!.isEmpty) {
+                  return 'Por favor, ingresa el costo del proyecto';
+                }
+                return null;
+              },
+            ),
             const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
               child: FilledButton(
                 style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 20)),
+                padding: EdgeInsets.symmetric(vertical: 20)),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String nombre = _nombreController.text;

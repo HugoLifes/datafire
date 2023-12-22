@@ -16,13 +16,16 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
   final _nombreController = TextEditingController();
   final _inicioController = TextEditingController();
   final _finController = TextEditingController();
+  final _costoController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _nombreController.text = widget.proyecto?['name'] ?? '';
-    _inicioController.text = widget.proyecto?['fecha_inicio'] ?? '';
-    _finController.text = widget.proyecto?['fecha_fin'] ?? '';
+    _nombreController.text = widget.proyecto?['name'] ?? 'Sin nombre';
+    _inicioController.text = widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
+    _finController.text = widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finaliacion';
+    _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
+
   }
 
   @override
@@ -42,7 +45,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                 padding: const EdgeInsets.all(16.0),
                 child: SingleChildScrollView(
                   child: DataTable(
-                    columns: [
+                    columns:const  [
                       DataColumn(label: Text('Campo')),
                       DataColumn(label: Text('Valor')),
                     ],
@@ -58,8 +61,6 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                   ),
                 ),
               ),
-
-              // Edición de Proyecto (Formulario)
               Container(
                 padding: const EdgeInsets.all(16.0),
                 child: editarProyectosForm(proyecto: widget.proyecto),

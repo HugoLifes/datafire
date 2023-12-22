@@ -110,7 +110,7 @@ Future<List<dynamic>> fetchProjects() async {
 }
 
 Future<void> updateProyecto(
-    int id, String nombre, String fechaInicio, String fechaFinalizada) async {
+    int id, String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
 
   try {
@@ -120,7 +120,8 @@ Future<void> updateProyecto(
       body: jsonEncode({
         "name": nombre,
         "fecha_inicio": fechaInicio,
-        "fecha_fin": fechaFinalizada
+        "fecha_fin": fechaFinalizada,
+        "costo": costo
       }),
     );
     if (res.statusCode == 200) {
