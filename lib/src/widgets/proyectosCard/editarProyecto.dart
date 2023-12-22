@@ -63,7 +63,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
               ),
               Container(
                 padding: const EdgeInsets.all(16.0),
-                child: editarProyectosForm(proyecto: widget.proyecto),
+                child: EditarProyectosForm(proyecto: widget.proyecto),
               ),
             ],
           );

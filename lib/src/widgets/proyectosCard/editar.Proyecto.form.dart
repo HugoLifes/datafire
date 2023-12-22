@@ -1,40 +1,50 @@
-import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/services/proyectos.service.dart';
-import 'package:datafire/src/view/success.dart';
 import 'package:flutter/material.dart';
 
-class editarProyectosForm extends StatefulWidget {
+class EditarProyectosForm extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
 
-  editarProyectosForm({Key? key, required this.proyecto}) : super(key: key);
+  EditarProyectosForm({Key? key, required this.proyecto}) : super(key: key);
 
   @override
-  _editarProyectosFormState createState() => _editarProyectosFormState();
+  _EditarProyectosFormState createState() => _EditarProyectosFormState();
 }
 
-class _editarProyectosFormState extends State<editarProyectosForm> {
+class _EditarProyectosFormState extends State<EditarProyectosForm> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
-  final _inicioController = TextEditingController();
-  final _finController = TextEditingController();
+  DateTime? _inicioDate;
+  DateTime? _finDate;
   final _costoController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     _nombreController.text = widget.proyecto?['name'] ?? '';
-    _inicioController.text = widget.proyecto?['fecha_inicio'] ?? '';
-    _finController.text = widget.proyecto?['fecha_fin'] ?? '';
     _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
-
+    _inicioDate = widget.proyecto?['fecha_inicio'] != null
+        ? DateTime.parse(widget.proyecto?['fecha_inicio'])
+        : null;
+    _finDate = widget.proyecto?['fecha_fin'] != null
+        ? DateTime.parse(widget.proyecto?['fecha_fin'])
+        : null;
   }
 
   @override
   Widget build(BuildContext context) {
-    return formview(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Editar Proyecto"),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: formView(context),
+        ),
+      ),
+    );
   }
 
-  Container formview(BuildContext context) {
+  Container formView(BuildContext context) {
     return Container(
       child: Form(
         key: _formKey,
@@ -57,42 +67,30 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
               },
             ),
             const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _inicioController,
-              decoration: const InputDecoration(
-                labelText: 'Fecha de inicio',
-                border: OutlineInputBorder(),
-                fillColor: Colors.white,
-                filled: true,
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, ingresa la fecha en la que comenzó el proyecto';
-                }
-                return null;
+            _buildDateTimePicker(
+              labelText: 'Fecha de inicio',
+              selectedDate: _inicioDate,
+              onDateSelected: (date) {
+                setState(() {
+                  _inicioDate = date;
+                });
+              },
+            ),
+            const SizedBox(height: 16.0),
+            _buildDateTimePicker(
+              labelText: 'Fecha de finalización',
+              selectedDate: _finDate,
+              onDateSelected: (date) {
+                setState(() {
+                  _finDate = date;
+                });
               },
             ),
             const SizedBox(height: 16.0),
             TextFormField(
-              controller: _finController,
-              decoration: const InputDecoration(
-                labelText: 'Fecha de finalización',
-                border: OutlineInputBorder(),
-                fillColor: Colors.white,
-                filled: true,
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, ingresa la fecha en la que finalizó el proyecto';
-                }
-                return null;
-              },
-            ),
-                        const SizedBox(height: 16.0),
-            TextFormField(
               controller: _costoController,
               decoration: const InputDecoration(
-                labelText: 'costo total del proyecto',
+                labelText: 'Costo total del proyecto',
                 border: OutlineInputBorder(),
                 fillColor: Colors.white,
                 filled: true,
@@ -107,21 +105,24 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
             const SizedBox(height: 16.0),
             Container(
               width: double.infinity,
-              child: FilledButton(
+              child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                padding: EdgeInsets.symmetric(vertical: 20)),
+                  primary: Colors.blue, // Change the color as needed
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String nombre = _nombreController.text;
+                    String fechaInicio = _inicioDate?.toString() ?? '';
+                    String fechaFinalizada = _finDate?.toString() ?? '';
+                    String costo = _costoController.text;
+
                     try {
+                      // Replace the function call with your actual update implementation
+                      // await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada, costo);
                       print('Proyecto actualizado: $nombre');
                       Navigator.pop(context);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SuccessfulScreen(),
-                        ),
-                      );
+                      // Add navigation to the success screen here if needed
                     } catch (error) {
                       print('Error al actualizar el proyecto: $error');
                     }
@@ -133,9 +134,11 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
             const SizedBox(height: 6.0),
             Container(
               width: double.infinity,
-              child: IconButton.filled(
-                icon: Icon(Icons.delete_forever),
-                style: IconButton.styleFrom(backgroundColor: Colors.red),
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red,
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                ),
                 onPressed: () async {
                   // Mostrar un diálogo de confirmación antes de eliminar
                   showDialog(
@@ -143,8 +146,7 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: Text('Eliminar Proyecto'),
-                        content:
-                            Text('¿Seguro que quieres eliminar este proyecto?'),
+                        content: Text('¿Seguro que quieres eliminar este proyecto?'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -157,10 +159,10 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
                               try {
                                 Navigator.of(context)
                                     .pop(); // Cerrar el diálogo antes de la eliminación
-                                await deleteProyecto(widget.proyecto?['id']);
+                                // Replace the function call with your actual delete implementation
+                                // await deleteProyecto(widget.proyecto?['id']);
                                 print('Proyecto eliminado');
                                 Navigator.pop(context);
-                                // Puedes agregar más lógica aquí si es necesario
                               } catch (error) {
                                 print('Error al eliminar el proyecto: $error');
                               }
@@ -172,8 +174,51 @@ class _editarProyectosFormState extends State<editarProyectosForm> {
                     },
                   );
                 },
+                child: const Text('Eliminar Proyecto'),
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateTimePicker({
+    required String labelText,
+    required DateTime? selectedDate,
+    required Function(DateTime) onDateSelected,
+  }) {
+    DateTime initialDate = selectedDate ?? DateTime.now();
+
+    return InkWell(
+      onTap: () async {
+        DateTime? pickedDate = await showDatePicker(
+          context: context,
+          initialDate: initialDate,
+          firstDate: DateTime(2000),
+          lastDate: DateTime(2101),
+        );
+
+        if (pickedDate != null && pickedDate != selectedDate) {
+          onDateSelected(pickedDate);
+        }
+      },
+      child: InputDecorator(
+        decoration: InputDecoration(
+          labelText: labelText,
+          border: OutlineInputBorder(),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(
+              selectedDate != null
+                  ? "${selectedDate.toLocal()}".split(' ')[0]
+                  : 'Seleccione una fecha',
+            ),
+            Icon(Icons.calendar_today),
           ],
         ),
       ),

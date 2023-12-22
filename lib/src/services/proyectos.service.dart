@@ -114,7 +114,7 @@ Future<void> updateProyecto(
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
 
   try {
-    final res = await http.put(
+    final res = await http.patch(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
