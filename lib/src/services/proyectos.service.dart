@@ -91,6 +91,24 @@ class postCustomerProject {
   }
 }
 
+Future<List<dynamic>> fetchCustomerProjects() async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/add-customer";
+
+  try {
+    final res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      final List<dynamic> customersProjects = jsonDecode(res.body);
+      return customersProjects;
+    } else {
+      print("Error al obtener la lista de proyectos");
+      return [];
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return [];
+  }
+}
+
 Future<List<dynamic>> fetchProjects() async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
 
