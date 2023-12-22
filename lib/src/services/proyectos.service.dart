@@ -2,11 +2,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
+  const urlCrearProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos";
 
   try {
-    final res = await http.post(
-      Uri.parse(url),
+    final resCrearProyecto = await http.post(
+      Uri.parse(urlCrearProyecto),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "name": nombre,
@@ -16,22 +16,45 @@ Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fech
       }),
     );
 
-    if (res.statusCode == 201) {
-      print("Proyecto dado de alta exitosamente");
-      
-      // Generamos nuestro propio ID basado en la información enviada
-      final String idGenerado = "${nombre.hashCode}${fechaInicio.hashCode}${fechaFinalizada.hashCode}${costo.hashCode}";
-      
-      print("ID del proyecto generado: $idGenerado");
-      
-      return idGenerado;
+    if (resCrearProyecto.statusCode == 201) {
+      //  buscamos su ID por el nombre
+      String? projectId = await buscarIdProyectoPorNombre(nombre);
+
+      if (projectId != null) {
+        return projectId;
+      } else {
+        print('Error al obtener el ID del proyecto por nombre');
+        return null;
+      }
     } else {
-      print("Error al guardar el proyecto - Código: ${res.statusCode}");
-      print("Respuesta del servidor: ${res.body}");
+      print("Error al guardar el proyecto - Código: ${resCrearProyecto.statusCode}");
+      print("Respuesta del servidor: ${resCrearProyecto.body}");
       return null;
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    print("Error al realizar la solicitud http para crear proyecto: $err");
+    return null;
+  }
+}
+
+Future<String?> buscarIdProyectoPorNombre(String nombre) async {
+  const urlBuscarProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos";
+
+  try {
+    final resBuscarProyecto = await http.get(Uri.parse(urlBuscarProyecto));
+    if (resBuscarProyecto.statusCode == 200) {
+      final List<dynamic> proyectos = jsonDecode(resBuscarProyecto.body);
+      // Buscamos el ID del proyecto por el nombre
+      for (var proyecto in proyectos) {
+        if (proyecto["name"] == nombre) {
+          return proyecto["id"]?.toString();
+        }
+      }
+      print("No se encontró el proyecto con nombre: $nombre");
+      return null;
+    } 
+  } catch (err) {
+    print("Error al realizar la solicitud http para buscar proyecto por nombre: $err");
     return null;
   }
 }
@@ -61,15 +84,12 @@ class postCustomerProject {
       } else {
         print("Error al agregar el cliente: ${res.statusCode}");
         print("Respuesta del servidor: ${res.body}");
-        // Puedes manejar el error de acuerdo a tus necesidades
       }
     } catch (err) {
       print("Error al realizar la solicitud http: $err");
-      // Puedes manejar el error de acuerdo a tus necesidades
     }
   }
 }
-
 
 Future<List<dynamic>> fetchProjects() async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
