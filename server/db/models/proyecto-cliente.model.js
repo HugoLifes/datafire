@@ -58,13 +58,13 @@ class ProjectCustomer extends Model {
   static associate(models) {
     this.belongsTo(models.Project, {
       foreignKey: 'project_id',
-      as: 'project', // Cambiado el alias a "project"
+      as: 'project',
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
     });
     this.belongsTo(models.Customer, {
       foreignKey: 'customer_id',
-      as: 'customer', // Cambiado el alias a "customer"
+      as: 'customer',
       onDelete: 'SET NULL',
       onUpdate: 'CASCADE',
     });

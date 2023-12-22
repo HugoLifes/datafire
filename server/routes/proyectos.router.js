@@ -20,14 +20,28 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-router.get('/add-customer', async (req, res, next) => {
+router.get('/projectCustomer', async (req, res, next) => {
   try {
-    const customerProject = await service.findCustomerProject();
+    const customerProject = await service.findCustomersProjects();
     res.json(customerProject);
   } catch (error) {
     next(error);
   }
 });
+
+router.get(
+  '/projectCustomer/:id',
+  validatorHandler(getProjectSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const projectCustomer = await service.findOneProjectCustomer(id);
+      res.json(projectCustomer);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 router.get(
   '/:id',
@@ -58,7 +72,7 @@ router.post(
 );
 
 router.post(
-  '/add-customer',
+  '/projectCustomer',
   validatorHandler(addCustomerRESchema, 'body'),
   async (req, res, next) => {
     try {
@@ -89,6 +103,19 @@ router.patch(
 
 router.delete(
   '/:id',
+  validatorHandler(getProjectSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await service.delete(id);
+      res.status(201).json({ id });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+router.delete(
+  '/projectCustomer/:id',
   validatorHandler(getProjectSchema, 'params'),
   async (req, res, next) => {
     try {

@@ -31,12 +31,22 @@ class ProjectService {
     return project;
   }
 
+  async findOneProjectCustomer(id) {
+    const projectCustomer = await models.ProjectCustomer.findByPk(id, {});
+
+    if (!projectCustomer) {
+      throw boom.notFound('ProjectCustomer not found');
+    }
+
+    return projectCustomer;
+  }
+
   async create(data) {
     const newProject = await models.Project.create(data);
     return newProject;
   }
 
-  async findCustomerProject() {
+  async findCustomersProjects() {
     const rta = await models.ProjectCustomer.findAll();
     return rta;
   }
@@ -72,7 +82,7 @@ class ProjectService {
   }
 
   async delete(id) {
-    const project = await this.findOne(id);
+    const project = await this.findOneProjectCustomer(id);
 
     await project.destroy();
     return { id };
