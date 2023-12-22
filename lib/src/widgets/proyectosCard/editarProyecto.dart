@@ -1,5 +1,9 @@
-import 'package:datafire/src/widgets/proyectosCard/editar.Proyecto.form.dart';
+import 'dart:convert';
+import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'package:datafire/src/widgets/proyectosCard/editar.Proyecto.form.dart';
 
 class DetallesYAltaProyectoPage extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
@@ -21,10 +25,13 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
   @override
   void initState() {
     super.initState();
-    _nombreController.text = widget.proyecto?['name'] ?? 'Sin nombre';
-    _inicioController.text = widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
-    _finController.text = widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finaliacion';
-    _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
+    _nombreController.text = widget.proyecto?['project_name'] ?? 'Sin nombre';
+    _inicioController.text =
+        widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
+    _finController.text =
+        widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finaliacion';
+    _costoController.text =
+        widget.proyecto?["costo"].toString() ?? "Sin costo total";
   }
 
   @override
@@ -44,7 +51,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                   TabBar(
                     tabs: [
                       Tab(text: 'Detalles'),
-                      Tab(text: 'Otra Opción'),
+                      Tab(text: 'Clientes Asociados'),
                       Tab(text: 'Otra Más'),
                     ],
                   ),
@@ -62,21 +69,58 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                               ],
                               rows: widget.proyecto?.entries
                                       .map((entry) => DataRow(
-                                        cells: [
-                                          DataCell(Text(entry.key)),
-                                          DataCell(Text('${entry.value}')),
-                                        ],
-                                      ))
+                                            cells: [
+                                              DataCell(Text(entry.key)),
+                                              DataCell(Text('${entry.value}')),
+                                            ],
+                                          ))
                                       .toList() ??
                                   [],
                             ),
                           ),
                         ),
 
-                        // Contenido para la segunda pestaña
+                        // Clientes Asociados
                         Container(
-                          child: Center(
-                            child: Text('Contenido de la segunda opción'),
+                          padding: const EdgeInsets.all(16.0),
+                          child: FutureBuilder<List<dynamic>>(
+                            future: fetchCustomerProjects(),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return Text('No hay datos disponibles');
+                              } else {
+                                List<dynamic> customerProjects =
+                                    snapshot.data!;
+                                List<String> customerNames = customerProjects
+                                    .where((cp) =>
+                                        cp['project_id'] ==
+                                        widget.proyecto?['id'])
+                                    .map((cp) =>
+                                        cp['customer_name'].toString())
+                                    .toList();
+
+                                return DataTable(
+                                  columns: const [
+                                    DataColumn(label: Text('Clientes')),
+                                  ],
+                                  rows: customerNames
+                                      .map(
+                                        (customerName) => DataRow(
+                                          cells: [
+                                            DataCell(Text(customerName)),
+                                          ],
+                                        ),
+                                      )
+                                      .toList(),
+                                );
+                              }
+                            },
                           ),
                         ),
 
@@ -108,3 +152,6 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
     );
   }
 }
+
+
+
