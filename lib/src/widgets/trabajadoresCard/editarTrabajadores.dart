@@ -1,9 +1,5 @@
-import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/services/proyectos.service.dart';
-import 'package:datafire/src/services/trabajadores.servicio.dart';
-import 'package:datafire/src/view/success.dart';
-import 'package:datafire/src/widgets/trabajadoresCard/editar.trabajadores.form.dart';
 import 'package:flutter/material.dart';
+import 'package:datafire/src/widgets/trabajadoresCard/editar.trabajadores.form.dart';
 
 class DetallesYEditarTrabajadoresPage extends StatefulWidget {
   final Map<String, dynamic>? trabajador;
@@ -37,42 +33,76 @@ class _DetallesYEditarTrabajadoresPageState
       appBar: AppBar(
         title: Text('Detalles y Editar Cliente'),
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          //aqui es donde se convierte en dos columnas o una
-          int columnas = constraints.maxWidth > 600 ? 2 : 1;
-          return GridView.count(
-            crossAxisCount: columnas,
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: SingleChildScrollView(
-                  child: DataTable(
-                    columns: [
-                      DataColumn(label: Text('Campo')),
-                      DataColumn(label: Text('Valor')),
+      body: Row(
+        children: [
+          Expanded(
+            flex: 1, // Ajusta el flex para la mitad de la pantalla
+            child: DefaultTabController(
+              length: 3,
+              child: Column(
+                children: [
+                  TabBar(
+                    tabs: [
+                      Tab(text: 'Detalles'),
+                      Tab(text: 'Otra Opción'),
+                      Tab(text: 'Otra Más'),
                     ],
-                    rows: widget.trabajador?.entries
-                            .map((entry) => DataRow(
-                                  cells: [
-                                    DataCell(Text(entry.key)),
-                                    DataCell(Text('${entry.value}')),
-                                  ],
-                                ))
-                            .toList() ??
-                        [],
                   ),
-                ),
-              ),
+                  Expanded(
+                    child: TabBarView(
+                      children: [
+                        // Detalles
+                        Container(
+                          padding: const EdgeInsets.all(16.0),
+                          child: SingleChildScrollView(
+                            child: DataTable(
+                              columns: [
+                                DataColumn(label: Text('Campo')),
+                                DataColumn(label: Text('Valor')),
+                              ],
+                              rows: widget.trabajador?.entries
+                                      .map((entry) => DataRow(
+                                        cells: [
+                                          DataCell(Text(entry.key)),
+                                          DataCell(Text('${entry.value}')),
+                                        ],
+                                      ))
+                                      .toList() ??
+                                  [],
+                            ),
+                          ),
+                        ),
 
-              // Edición de Proyecto (Formulario)
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                child: editarTrabajadoresForm(trabajador: widget.trabajador),
+                        // Contenido para la segunda pestaña
+                        Container(
+                          child: Center(
+                            child: Text('Contenido de la segunda opción'),
+                          ),
+                        ),
+
+                        // Contenido para la tercera pestaña
+                        Container(
+                          child: Center(
+                            child: Text('Contenido de la tercera opción'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
-          );
-        },
+            ),
+          ),
+//lado derecho jaja
+          Expanded(
+            flex: 1, 
+            child: Container(
+              width: 300, 
+              padding: const EdgeInsets.all(16.0),
+              child: editarTrabajadoresForm(trabajador: widget.trabajador),
+            ),
+          ),
+        ],
       ),
     );
   }
