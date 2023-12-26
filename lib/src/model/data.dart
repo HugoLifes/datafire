@@ -1,5 +1,6 @@
+import 'dart:convert';
 import 'dart:ffi';
-
+import 'package:http/http.dart' as http;
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
@@ -46,27 +47,47 @@ class Proyecto {
   }
 
 class Clientes {
-  int idCliente;
-  String? nombreCliente;
-  String? apellidoCliente;
-  List<Proyecto>? proyectos;
-  bool? linkProyecto = false;
-  Deuda? deuda;
+  String? nombre;
+  String? apellido;
+  String? company;
 
-  Clientes(this.nombreCliente, this.idCliente,
-      {this.proyectos, this.linkProyecto, this.apellidoCliente, this.deuda});
 
-  void agregarProyecto(Proyecto proyecto) {
-    proyectos!.toList().add(proyecto);
+  Clientes({
+    this.nombre,
+    this.apellido,
+    this.company
+  });
+
+  Future<void> nuevoCliente() async {
+    if (nombre != null && apellido != null && company != null) {
+      try {
+        final res = await http.post(
+          Uri.parse("https://datafire-production.up.railway.app/api/v1/clientes"),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            "name": nombre,
+            "last_name": apellido,
+             "company": company
+          }),
+        );
+        if (res.statusCode == 201) {
+          print("Cliente Guardado Exitosamente");
+        } else {
+          print("Error al guardar el cliente");
+        }
+      } catch (err) {
+        print("Error al realizar la solicitud http: $err");
+      }
+    }
   }
 }
 
-    Future<List<dynamic>> obtenerClientes() async {
-    return await fetchClientes();
-  }
+Future<List<dynamic>> obtenerClientes() async {
+  return await fetchClientes();
+}
+
 
 class Trabajadores {
-  int idTrabajador;
   String? nombre;
   String? apellido;
   List<dynamic>? misionesEncargos = [];
@@ -74,18 +95,42 @@ class Trabajadores {
   String? position;
   double? salario;
 
-
   Trabajadores(
-    this.idTrabajador, {
-    this.nombre,
-    this.apellido,
-    this.misionesEncargos,
-    this.edad,
-    this.position,
-    this.salario,
-  });
+       {
+        this.nombre,
+        this.apellido,
+        this.misionesEncargos,
+        this.edad,
+        this.position,
+        this.salario,
+      });
 
+  Future<void> nuevoTrabajador(
+      String nombre, String apellido, String edad, String position, String salario) async {
+    try {
+      final res = await http.post(
+        Uri.parse("https://datafire-production.up.railway.app/api/v1/trabajadores"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "name": nombre,
+          "last_name": apellido,
+          "age": edad,
+          "position": position,
+          "salary": salario
+        }),
+      );
+      if (res.statusCode == 201) {
+        print("Trabajador Guardado Exitosamente");
+      } else {
+        print("Error al guardar el trabajador");
+      }
+    } catch (err) {
+      print("Error al realizar la solicitud http: $err");
+    }
+  }
 }
+
+
 
     Future<List<dynamic>> obtenerTrabajadores() async {
     return await fetchTrabajadores();

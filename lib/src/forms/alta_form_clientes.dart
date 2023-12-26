@@ -17,21 +17,22 @@ class _AltaClientePageState extends State<AltaClientePage> {
   final _companyController = TextEditingController();
 
   List<Clientes> clientes = [];
+  
+  @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Agregar nuevo cliente"),
       ),
       body: Stack(
         children: [
-          formview(context),
+          formView(context),
         ],
       ),
     );
   }
 
-  Center formview(BuildContext context) {
+  Center formView(BuildContext context) {
     return Center(
       child: Container(
         constraints: const BoxConstraints(maxWidth: 600),
@@ -41,7 +42,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-                           const Text(
+              const Text(
                 "Ingresa todos los datos del nuevo cliente",
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
@@ -94,32 +95,10 @@ class _AltaClientePageState extends State<AltaClientePage> {
                 },
               ),
               const SizedBox(height: 16.0),
-              FloatingActionButton(onPressed: () {
-                final apiService = postCustomerProject();
-                   apiService.addCustomerProject("2", "5");
-              }),
               Container(
-                width: double.infinity, // Ocupar todo el ancho disponible
+                width: double.infinity,
                 child: FilledButton(
-                  onPressed: () {
-                                        
-                    if (_formKey.currentState!.validate()) {
-                      String nombreCliente = _nombreController.text;
-                      String apellidoCliente = _apellidoController.text;
-                      String companyCliente = _companyController.text;
-                      // Lógica para dar de alta el cliente
-                      postCliente(nombreCliente, apellidoCliente, companyCliente);
-                      // Puedes llamar a una función o realizar cualquier otra acción aquí
-                      print('Cliente dado de alta: $nombreCliente');
-                      Navigator.pop(context);
-      
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SuccessfulScreen()),
-                      );
-                    }
-                  },
+                  onPressed: _saveCliente,
                   child: const Text('Guardar'),
                 ),
               ),
@@ -130,13 +109,28 @@ class _AltaClientePageState extends State<AltaClientePage> {
     );
   }
 
-  void crearClienteConProyecto(
-      String nombreP, String descripcion, String nombreC) {
-    int id = Proyecto().crearId();
-    var proyecto = Proyecto();
-    var cliente = Clientes(nombreP, id);
-    clientes.add(cliente);
-  }
+void _saveCliente() {
+  if (_formKey.currentState!.validate()) {
+    String nombreCliente = _nombreController.text;
+    String apellidoCliente = _apellidoController.text;
+    String companyCliente = _companyController.text;
 
-  void crearCliente() {}
+    // Create a new Clientes instance
+    Clientes cliente = Clientes(
+      nombre: nombreCliente,
+      apellido: apellidoCliente,
+      company: companyCliente
+    );
+
+    // Lógica para dar de alta el cliente
+    cliente.nuevoCliente();
+
+    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SuccessfulScreen()),
+    );
+  }
+}
+
 }
