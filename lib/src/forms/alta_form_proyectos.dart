@@ -145,7 +145,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Selecciona los clientes"),
+          title: Text("Selecciona clientes"),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(

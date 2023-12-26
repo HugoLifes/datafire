@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -21,15 +22,18 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
   final _inicioController = TextEditingController();
   final _finController = TextEditingController();
   final _costoController = TextEditingController();
+  late final String _idProyecto;
 
   @override
   void initState() {
     super.initState();
+
+    _idProyecto = widget.proyecto?["id"].toString() ?? "";
     _nombreController.text = widget.proyecto?['project_name'] ?? 'Sin nombre';
     _inicioController.text =
         widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
     _finController.text =
-        widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finaliacion';
+        widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finalización';
     _costoController.text =
         widget.proyecto?["costo"].toString() ?? "Sin costo total";
   }
@@ -63,7 +67,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                           padding: const EdgeInsets.all(16.0),
                           child: SingleChildScrollView(
                             child: DataTable(
-                              columns: const [
+                              columns: [
                                 DataColumn(label: Text('Campo')),
                                 DataColumn(label: Text('Valor')),
                               ],
@@ -82,10 +86,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
                         // Clientes Asociados
                         Container(
-                          
                           padding: const EdgeInsets.all(16.0),
-                          child: 
-                          Column(
+                          child: Column(
                             children: [
                               FutureBuilder<List<dynamic>>(
                                 future: fetchCustomerProjects(),
@@ -108,9 +110,9 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                                         .map((cp) =>
                                             cp['customer_name'].toString())
                                         .toList();
-                              
+
                                     return DataTable(
-                                      columns: const [
+                                      columns: [
                                         DataColumn(label: Text('Clientes')),
                                       ],
                                       rows: customerNames
@@ -126,14 +128,17 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                                   }
                                 },
                               ),
-                                                      Container(
-                          child: IconButton.filled(onPressed: (){}, icon: Icon(Icons.edit)),
-                        ),
+                              Container(
+                                child: IconButton.filled(
+                                  onPressed: () {
+                                    _selectClientsDialog(_idProyecto);
+                                  },
+                                  icon: Icon(Icons.edit),
+                                ),
+                              ),
                             ],
                           ),
-                          
                         ),
-
 
                         // Contenido para la tercera pestaña
                         Container(
@@ -162,7 +167,65 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
       ),
     );
   }
+
+  void _selectClientsDialog(String projectId) async {
+    List<dynamic> clientes = await fetchClientes();
+    List<String> clientesSeleccionados = [];
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Selecciona clientes"),
+          content: StatefulBuilder(
+            builder: (BuildContext context, StateSetter setState) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: clientes.map((cliente) {
+                    bool isSelected =
+                        clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
+
+                    return CheckboxListTile(
+                      title: Text(cliente["name"]?.toString() ?? ""),
+                      value: isSelected,
+                      onChanged: (bool? value) {
+                        setState(() {
+                          print(clientesSeleccionados);
+                          if (value != null) {
+                            if (value) {
+                              clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
+                            } else {
+                              clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
+                            }
+                          }
+                        });
+                      },
+                    );
+                  }).toList(),
+                ),
+              );
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Cancelar"),
+            ),
+            TextButton(
+              onPressed: () {
+                // Guarda la relación entre el proyecto y los clientes seleccionados
+                clientesSeleccionados.forEach((clienteId) {
+                  postCustomerProject().addCustomerProject(projectId, clienteId);
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text("Guardar"),
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
-
-
-
