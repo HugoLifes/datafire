@@ -1,5 +1,8 @@
 import 'dart:ffi';
 
+import 'package:datafire/src/services/cliente.servicio.dart';
+import 'package:datafire/src/services/proyectos.service.dart';
+import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:flutter/material.dart';
 
 // Clase Deuda para representar la deuda
@@ -13,7 +16,6 @@ class Deuda {
 class Proyecto {
   int? id;
   String? nombreProyecto;
-  String? descProyecto;
   Clientes? cliente;
   bool? variosClientes = false;
   List<Trabajadores>? trabajadores;
@@ -26,7 +28,6 @@ class Proyecto {
   Proyecto({
     this.id,
     this.nombreProyecto,
-    this.descProyecto,
     this.costoProyecto,
     this.cliente,
     this.variosClientes,
@@ -40,6 +41,9 @@ class Proyecto {
 
   crearId() async {}
 }
+    Future<List<dynamic>> obtenerProyectos() async {
+    return await fetchProjects();
+  }
 
 class Clientes {
   int idCliente;
@@ -57,27 +61,35 @@ class Clientes {
   }
 }
 
+    Future<List<dynamic>> obtenerClientes() async {
+    return await fetchClientes();
+  }
+
 class Trabajadores {
   int idTrabajador;
   String? nombre;
   String? apellido;
-  String? detalles;
   List<dynamic>? misionesEncargos = [];
-  double? pago;
-  DateTime? fechaPago;
-  double? pagoMensual;
+  double? edad;
+  String? position;
+  double? salario;
+
 
   Trabajadores(
     this.idTrabajador, {
     this.nombre,
     this.apellido,
-    this.detalles,
     this.misionesEncargos,
-    this.pago,
-    this.pagoMensual,
-    this.fechaPago,
+    this.edad,
+    this.position,
+    this.salario,
   });
+
 }
+
+    Future<List<dynamic>> obtenerTrabajadores() async {
+    return await fetchTrabajadores();
+  }
 
 //Las Metas que hay que llevar acerca del proyecto
 class MetasProyecto {

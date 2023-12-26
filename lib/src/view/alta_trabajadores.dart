@@ -1,4 +1,5 @@
 import 'package:datafire/src/forms/alta_form_trabajadores.dart';
+import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:datafire/src/widgets/trabajadoresCard/trabajadoresCard.dart';
@@ -17,7 +18,7 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
   @override
   void initState() {
     super.initState();
-    _trabajadoresFuture = fetchTrabajadores();
+    _trabajadoresFuture = obtenerTrabajadores();
   }
 
   @override

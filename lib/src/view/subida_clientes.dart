@@ -1,4 +1,5 @@
 import 'package:datafire/src/forms/alta_form_clientes.dart';
+import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/widgets/ClientesCard/clientesCard.dart';
 import 'package:datafire/src/widgets/colors.dart';
@@ -18,7 +19,7 @@ class _AltaClientesState extends State<AltaClientes> {
   void initState() {
     super.initState();
     _clientesFuture =
-        fetchClientes(); // Adjust this function based on your actual implementation
+        obtenerClientes(); 
   }
 
   @override
