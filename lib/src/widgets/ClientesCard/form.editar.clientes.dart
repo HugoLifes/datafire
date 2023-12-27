@@ -98,6 +98,7 @@ class _editarClienteFormState extends State<editarClienteForm> {
                     // Lógica para editar el cliente
                     try {
                       // Llama a la función de actualización de cliente aquí
+                      
                       print('Cliente actualizado: $name');
                       Navigator.pop(context);
                       Navigator.push(

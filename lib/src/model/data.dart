@@ -58,12 +58,13 @@ class Clientes {
     this.company
   });
 
-    Future<void> actualizarCliente({
+  Future<void> actualizarCliente({
     required int id,
     required String nombre,
     required String apellido,
     required String company,
   }) async {
+    // Llama al método en el servicio correspondiente
     await updateCliente(
       id,
       nombre,
