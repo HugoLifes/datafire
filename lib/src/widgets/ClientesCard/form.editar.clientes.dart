@@ -1,23 +1,27 @@
 import 'package:datafire/src/app.dart';
+import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/view/success.dart';
 import 'package:datafire/src/view/subida_clientes.dart';
 import 'package:flutter/material.dart';
 
-class editarClienteForm extends StatefulWidget {
+class EditarClienteForm extends StatefulWidget {
   final Map<String, dynamic>? cliente;
 
-  editarClienteForm({Key? key, required this.cliente}) : super(key: key);
+  EditarClienteForm({Key? key, required this.cliente}) : super(key: key);
 
   @override
-  _editarClienteFormState createState() => _editarClienteFormState();
+  _EditarClienteFormState createState() => _EditarClienteFormState();
 }
 
-class _editarClienteFormState extends State<editarClienteForm> {
+class _EditarClienteFormState extends State<EditarClienteForm> {
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _apellidosController = TextEditingController();
   final _empresaController = TextEditingController();
+
+  // instancia de clientes
+  Clientes clienteActual = Clientes();
 
   @override
   void initState() {
@@ -29,10 +33,10 @@ class _editarClienteFormState extends State<editarClienteForm> {
 
   @override
   Widget build(BuildContext context) {
-    return formview(context);
+    return formView(context);
   }
 
-  Container formview(BuildContext context) {
+  Container formView(BuildContext context) {
     return Container(
       child: Form(
         key: _formKey,
@@ -90,15 +94,20 @@ class _editarClienteFormState extends State<editarClienteForm> {
             Container(
               width: double.infinity,
               child: FilledButton(
-                style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 20)),
+                style: FilledButton.styleFrom(
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String name = _nombreController.text;
-                    // Lógica para editar el cliente
+                    // Logica para actualizar un cliente
                     try {
-                      // Llama a la función de actualización de cliente aquí
-                      
+                      await clienteActual.actualizarCliente(
+                        id: widget.cliente?['id'],
+                        nombre: _nombreController.text,
+                        apellido: _apellidosController.text,
+                        company: _empresaController.text,
+                      );
                       print('Cliente actualizado: $name');
                       Navigator.pop(context);
                       Navigator.push(
@@ -122,10 +131,11 @@ class _editarClienteFormState extends State<editarClienteForm> {
             Container(
               width: double.infinity,
               child: IconButton.filled(
-                icon: const Icon(Icons.delete_forever),
-                style: IconButton.styleFrom(backgroundColor: Colors.red),
+                icon: Icon(Icons.delete_forever),
+                style: IconButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
                 onPressed: () async {
-                  // Mostrar un diálogo de confirmación antes de eliminar
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -143,7 +153,8 @@ class _editarClienteFormState extends State<editarClienteForm> {
                           TextButton(
                             onPressed: () async {
                               try {
-                                await deleteCliente(widget.cliente?['id']);
+                                await clienteActual.eliminarCliente(
+                                    widget.cliente?['id']);
                                 print('Cliente eliminado');
                                 Navigator.push(
                                   context,
@@ -151,7 +162,6 @@ class _editarClienteFormState extends State<editarClienteForm> {
                                     builder: (context) => const MyApp(),
                                   ),
                                 );
-                                ;
                               } catch (error) {
                                 print('Error al eliminar el cliente: $error');
                               }

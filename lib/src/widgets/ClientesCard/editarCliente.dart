@@ -99,7 +99,7 @@ class _DetallesYEditarClientesPageState
             child: Container(
               width: 300,
               padding: const EdgeInsets.all(18.0),
-              child: editarClienteForm(cliente: widget.cliente),
+              child: EditarClienteForm(cliente: widget.cliente),
             ),
           ),
         ],
