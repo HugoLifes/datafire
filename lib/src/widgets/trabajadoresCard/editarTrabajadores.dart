@@ -99,7 +99,7 @@ class _DetallesYEditarTrabajadoresPageState
             child: Container(
               width: 300, 
               padding: const EdgeInsets.all(16.0),
-              child: editarTrabajadoresForm(trabajador: widget.trabajador),
+              child: EditarTrabajadoresForm(trabajador: widget.trabajador),
             ),
           ),
         ],
