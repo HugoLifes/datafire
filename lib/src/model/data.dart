@@ -58,6 +58,24 @@ class Clientes {
     this.company
   });
 
+    Future<void> actualizarCliente({
+    required int id,
+    required String nombre,
+    required String apellido,
+    required String company,
+  }) async {
+    await updateCliente(
+      id,
+      nombre,
+      apellido,
+      company,
+    );
+  }
+
+  Future<void> eliminarCliente(int id) async {
+    await deleteCliente(id);
+  }
+
   Future<void> nuevoCliente() async {
     if (nombre != null && apellido != null && company != null) {
       try {
@@ -104,6 +122,30 @@ class Trabajadores {
         this.position,
         this.salario,
       });
+
+  Future<void> actualizarTrabajador({
+    required int id,
+    required String nombre,
+    required String apellido,
+    required int edad,
+    required String position,
+    required int salario,
+  }) async {
+    // Llama al método en el servicio correspondiente
+    await updateTrabajador(
+      id,
+      nombre,
+      apellido,
+      edad,
+      position,
+      salario,
+    );
+  }
+
+  Future<void> eliminarTrabajador(int id) async {
+    // Llama al método en el servicio correspondiente
+    await deleteTrabajador(id);
+  }
 
   Future<void> nuevoTrabajador(
       String nombre, String apellido, String edad, String position, String salario) async {

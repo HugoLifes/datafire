@@ -27,7 +27,6 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
   @override
   void initState() {
     super.initState();
-
     _idProyecto = widget.proyecto?["id"].toString() ?? "";
     _nombreController.text = widget.proyecto?['project_name'] ?? 'Sin nombre';
     _inicioController.text =
