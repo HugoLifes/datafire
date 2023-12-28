@@ -9,12 +9,10 @@ import 'package:datafire/src/widgets/proyectosCard/editar.Proyecto.form.dart';
 class DetallesYAltaProyectoPage extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
 
-  DetallesYAltaProyectoPage({Key? key, required this.proyecto})
-      : super(key: key);
+  DetallesYAltaProyectoPage({Key? key, required this.proyecto}) : super(key: key);
 
   @override
-  _DetallesYAltaProyectoPageState createState() =>
-      _DetallesYAltaProyectoPageState();
+  _DetallesYAltaProyectoPageState createState() => _DetallesYAltaProyectoPageState();
 }
 
 class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
@@ -29,12 +27,9 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
     super.initState();
     _idProyecto = widget.proyecto?["id"].toString() ?? "";
     _nombreController.text = widget.proyecto?['project_name'] ?? 'Sin nombre';
-    _inicioController.text =
-        widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
-    _finController.text =
-        widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finalización';
-    _costoController.text =
-        widget.proyecto?["costo"].toString() ?? "Sin costo total";
+    _inicioController.text = widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
+    _finController.text = widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finalización';
+    _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
   }
 
   @override
@@ -91,50 +86,50 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                               FutureBuilder<List<dynamic>>(
                                 future: fetchCustomerProjects(),
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
                                     return CircularProgressIndicator();
                                   } else if (snapshot.hasError) {
                                     return Text('Error: ${snapshot.error}');
-                                  } else if (!snapshot.hasData ||
-                                      snapshot.data!.isEmpty) {
+                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                                     return Text('No hay datos disponibles');
                                   } else {
-                                    List<dynamic> customerProjects =
-                                        snapshot.data!;
-                                    List customerData =
-                                        customerProjects
-                                            .where((cp) =>
-                                                cp['project_id'] ==
-                                                widget.proyecto?['id'])
-                                            .toList();
+                                    List<dynamic> customerProjects = snapshot.data!;
+                                    List customerData = customerProjects
+                                        .where((cp) => cp['project_id'] == widget.proyecto?['id'])
+                                        .toList();
 
                                     return DataTable(
-                                    columns: [
-                                      DataColumn(label: Text('Clientes')),
-                                      DataColumn(
-                                        label: Text('Eliminar'),
-                                        numeric: true,
-                                      ),
-                                    ],
-                                    rows: customerData
-                                        .map((customer) => DataRow(
-                                              cells: [
-                                                DataCell(Text(customer['customer_name'].toString())),
-                                                DataCell(
-                                                  IconButton(
-                                                    icon: Icon(Icons.delete),
-                                                    onPressed: () {
-                                                      deleteCustomerProjectRelation(customer['id']);
-                                                    },
-                                                  ),
+                                      columns: [
+                                        DataColumn(label: Text('Clientes')),
+                                        DataColumn(
+                                          label: Text('Eliminar'),
+                                          numeric: true,
+                                        ),
+                                      ],
+                                      rows: customerData
+                                          .map((customer) => DataRow(
+                                            cells: [
+                                              DataCell(Text(customer['customer_name'].toString())),
+                                              DataCell(
+                                                IconButton(
+                                                  icon: Icon(Icons.delete),
+                                                  onPressed: () {
+                                                    deleteCustomerProjectRelation(customer['id']);
+                                                    // Muestra el Snackbar al eliminar el cliente
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('Cliente eliminado correctamente'),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
-                                              ],
-                                            ))
-                                        .toList(),
-                                  );
-                                }
-                                }
+                                              ),
+                                            ],
+                                          ))
+                                          .toList(),
+                                    );
+                                  }
+                                },
                               ),
                               Container(
                                 child: IconButton.filled(
@@ -190,8 +185,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
               return SingleChildScrollView(
                 child: Column(
                   children: clientes.map((cliente) {
-                    bool isSelected = clientesSeleccionados.contains(
-                        cliente["id"]?.toString() ?? "");
+                    bool isSelected = clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
 
                     return CheckboxListTile(
                       title: Text(cliente["name"]?.toString() ?? ""),
@@ -200,11 +194,9 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         setState(() {
                           if (value != null) {
                             if (value) {
-                              clientesSeleccionados.add(
-                                  cliente["id"]?.toString() ?? "");
+                              clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
                             } else {
-                              clientesSeleccionados.remove(
-                                  cliente["id"]?.toString() ?? "");
+                              clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
                             }
                           }
                         });
@@ -226,8 +218,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
               onPressed: () {
                 // Guarda la relación entre el proyecto y los clientes seleccionados
                 clientesSeleccionados.forEach((clienteId) {
-                  postCustomerProject()
-                      .addCustomerProject(projectId, clienteId);
+                  postCustomerProject().addCustomerProject(projectId, clienteId);
                 });
                 Navigator.of(context).pop();
               },
@@ -238,5 +229,4 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
       },
     );
   }
-
 }
