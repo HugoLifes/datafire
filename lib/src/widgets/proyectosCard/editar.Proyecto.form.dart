@@ -140,43 +140,47 @@ Container(
     style: IconButton.styleFrom(
       backgroundColor: Colors.red,
     ),
-    onPressed: () async {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Eliminar Proyecto'),
-            content: Text('¿Seguro que quieres eliminar este proyecto?'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('Cancelar'),
-              ),
-              TextButton(
-                onPressed: () async {
-                  try {
-                    Navigator.of(context).pop(); 
-                    await deleteProyecto(widget.proyecto?['id']);
-                    print('Proyecto eliminado');
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Proyecto eliminado correctamente'),
-                      ),
-                    );
-                    Navigator.pop(context);
-                  } catch (error) {
-                    print('Error al eliminar el proyecto: $error');
-                  }
-                },
-                child: Text('Confirmar'),
-              ),
-            ],
-          );
-        },
+onPressed: () async {
+  // Mostrar un diálogo de confirmación antes de eliminar
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Eliminar Proyecto'),
+        content: Text('¿Seguro que quieres eliminar este proyecto?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              try {
+                Navigator.of(context).pop();
+
+                // Mostrar un SnackBar 
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Proyecto Eliminado...'),
+                  ),
+                );
+
+                await deleteProyecto(widget.proyecto?["id"]);
+                print('Proyecto eliminado');
+              } catch (error) {
+                print('Error al eliminar el proyecto: $error');
+              }
+            },
+            child: Text('Confirmar'),
+          ),
+        ],
       );
     },
+  );
+},
+
   ),
 ),
 
