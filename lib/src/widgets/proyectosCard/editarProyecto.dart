@@ -216,7 +216,6 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
             ),
             TextButton(
               onPressed: () {
-                // Guarda la relación entre el proyecto y los clientes seleccionados
                 clientesSeleccionados.forEach((clienteId) {
                   postCustomerProject().addCustomerProject(projectId, clienteId);
                 });

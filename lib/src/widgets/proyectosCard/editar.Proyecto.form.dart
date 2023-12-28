@@ -118,7 +118,12 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
                     try {
                       await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada, costo);
                       print('Proyecto actualizado: $nombre');
-                      Navigator.pop(context);
+                      // Muestra el Snackbar al actualizar el proyecto
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Proyecto actualizado correctamente'),
+                        ),
+                      );
                     } catch (error) {
                       print('Error al actualizar el proyecto: $error');
                     }
@@ -128,49 +133,53 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
               ),
             ),
             const SizedBox(height: 6.0),
-            Container(
-              width: double.infinity,
-              child: IconButton.filled(
-                icon: Icon(Icons.delete_forever),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.red,
-                ),
-                onPressed: () async {
-                  // Mostrar un diálogo de confirmación antes de eliminar
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text('Eliminar Proyecto'),
-                        content: Text('¿Seguro que quieres eliminar este proyecto?'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Cancelar'),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              try {
-                                Navigator.of(context)
-                                    .pop(); // Cerrar el diálogo antes de la eliminación
-                                await deleteProyecto(widget.proyecto?["id"]);
-                                print('Proyecto eliminado');
-                                Navigator.pop(context);
-                              } catch (error) {
-                                print('Error al eliminar el proyecto: $error');
-                              }
-                            },
-                            child: Text('Confirmar'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
+Container(
+  width: double.infinity,
+  child: IconButton.filled(
+    icon: Icon(Icons.delete_forever),
+    style: IconButton.styleFrom(
+      backgroundColor: Colors.red,
+    ),
+    onPressed: () async {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Eliminar Proyecto'),
+            content: Text('¿Seguro que quieres eliminar este proyecto?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
                 },
+                child: Text('Cancelar'),
               ),
-            ),
+              TextButton(
+                onPressed: () async {
+                  try {
+                    Navigator.of(context).pop(); 
+                    await deleteProyecto(widget.proyecto?['id']);
+                    print('Proyecto eliminado');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Proyecto eliminado correctamente'),
+                      ),
+                    );
+                    Navigator.pop(context);
+                  } catch (error) {
+                    print('Error al eliminar el proyecto: $error');
+                  }
+                },
+                child: Text('Confirmar'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  ),
+),
+
           ],
         ),
       ),
