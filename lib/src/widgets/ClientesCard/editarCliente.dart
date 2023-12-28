@@ -1,5 +1,10 @@
+// Import necessary libraries
+import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/widgets/ClientesCard/form.editar.clientes.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+// ... (other imports)
 
 class DetallesYEditarClientesPage extends StatefulWidget {
   final Map<String, dynamic>? cliente;
@@ -43,7 +48,7 @@ class _DetallesYEditarClientesPageState
                   TabBar(
                     tabs: [
                       Tab(text: 'Detalles'),
-                      Tab(text: 'Otra Opción'),
+                      Tab(text: 'Proyectos'),
                       Tab(text: 'Otra Más'),
                     ],
                   ),
@@ -72,10 +77,40 @@ class _DetallesYEditarClientesPageState
                           ),
                         ),
 
-                        // Contenido para la segunda pestaña
+                        // Proyectos (second tab)
                         Container(
-                          child: Center(
-                            child: Text('Contenido de la segunda opción'),
+                          padding: const EdgeInsets.all(16.0),
+                          child: FutureBuilder<List<dynamic>>(
+                            future: fetchCustomerProjectsbyId(widget.cliente?['id']),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return Text('El cliente no tiene proyectos asociados');
+                              } else {
+                                List<dynamic> customerProjects = snapshot.data!;
+                                return DataTable(
+                                  columns: [
+                                    DataColumn(label: Text('Proyecto')),
+                                    DataColumn(label: Text('Fecha de Inicio')),
+                                    DataColumn(label: Text('Fecha de Fin')),
+                                  ],
+                                  rows: customerProjects
+                                      .map((project) => DataRow(
+                                            cells: [
+                                              DataCell(Text(project['project_name'].toString())),
+                                              DataCell(Text(project['fecha_inicio'].toString())),
+                                              DataCell(Text(project['fecha_fin'].toString())),
+                                            ],
+                                          ))
+                                      .toList(),
+                                );
+                              }
+                            },
                           ),
                         ),
 
@@ -99,6 +134,7 @@ class _DetallesYEditarClientesPageState
             child: Container(
               width: 300,
               padding: const EdgeInsets.all(18.0),
+              // Assuming you have the EditarClienteForm widget defined
               child: EditarClienteForm(cliente: widget.cliente),
             ),
           ),

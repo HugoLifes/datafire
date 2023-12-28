@@ -50,7 +50,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                     tabs: [
                       Tab(text: 'Detalles'),
                       Tab(text: 'Clientes Asociados'),
-                      Tab(text: 'Otra Más'),
+                      Tab(text: 'Pagos'),
                     ],
                   ),
                   Expanded(

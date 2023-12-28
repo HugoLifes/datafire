@@ -109,6 +109,24 @@ Future<List<dynamic>> fetchCustomerProjects() async {
   }
 }
 
+Future<List<String>> fetchCustomerProjectsforcustomers() async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
+
+  try {
+    final res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      final List<String> customersProjects = jsonDecode(res.body);
+      return customersProjects;
+    } else {
+      print("Error al obtener la lista de proyectos");
+      return [];
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return [];
+  }
+}
+
 Future<List<dynamic>> fetchProjects() async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
 
@@ -186,5 +204,29 @@ void deleteCustomerProjectRelation(int customerProjectId) async {
     }
   } catch (err) {
     print("Error al realizar la solicitud http: $err");
+  }
+}
+
+Future<List<Map<String, dynamic>>> fetchCustomerProjectsbyId(int customerId) async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
+
+  try {
+    final res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      final List<Map<String, dynamic>> allProjects = List<Map<String, dynamic>>.from(jsonDecode(res.body));
+
+      // Filter projects based on customer_id
+      final List<Map<String, dynamic>> customerProjects = allProjects
+          .where((project) => project['customer_id'] == customerId)
+          .toList();
+
+      return customerProjects;
+    } else {
+      print("Error al obtener la lista de proyectos");
+      return [];
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return [];
   }
 }
