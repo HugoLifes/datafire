@@ -107,7 +107,7 @@ router.delete(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      await service.delete(id);
+      await service.deleteProject(id);
       res.status(201).json({ id });
     } catch (error) {
       next(error);
@@ -120,7 +120,7 @@ router.delete(
   async (req, res, next) => {
     try {
       const { id } = req.params;
-      await service.delete(id);
+      await service.deleteProjectCustomer(id);
       res.status(201).json({ id });
     } catch (error) {
       next(error);

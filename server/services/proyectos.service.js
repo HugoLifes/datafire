@@ -81,8 +81,15 @@ class ProjectService {
     return rta;
   }
 
-  async delete(id) {
+  async deleteProjectCustomer(id) {
     const project = await this.findOneProjectCustomer(id);
+
+    await project.destroy();
+    return { id };
+  }
+
+  async deleteProject(id) {
+    const project = await this.findOne(id);
 
     await project.destroy();
     return { id };
