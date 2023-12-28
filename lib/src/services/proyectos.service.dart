@@ -169,3 +169,22 @@ Future<void> deleteProyecto(int id) async {
     print("Error al realizar la solicitud http: $err");
   }
 }
+
+void deleteCustomerProjectRelation(int customerProjectId) async {
+  final url =
+      "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer/$customerProjectId";
+
+  try {
+    final res = await http.delete(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (res.statusCode == 200) {
+      print("Relación eliminada exitosamente");
+    } else {
+      print("Error al eliminar la relación");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+  }
+}

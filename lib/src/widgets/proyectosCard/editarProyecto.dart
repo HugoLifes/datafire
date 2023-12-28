@@ -102,30 +102,39 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                                   } else {
                                     List<dynamic> customerProjects =
                                         snapshot.data!;
-                                    List<String> customerNames = customerProjects
-                                        .where((cp) =>
-                                            cp['project_id'] ==
-                                            widget.proyecto?['id'])
-                                        .map((cp) =>
-                                            cp['customer_name'].toString())
-                                        .toList();
+                                    List customerData =
+                                        customerProjects
+                                            .where((cp) =>
+                                                cp['project_id'] ==
+                                                widget.proyecto?['id'])
+                                            .toList();
 
                                     return DataTable(
-                                      columns: [
-                                        DataColumn(label: Text('Clientes')),
-                                      ],
-                                      rows: customerNames
-                                          .map(
-                                            (customerName) => DataRow(
+                                    columns: [
+                                      DataColumn(label: Text('Clientes')),
+                                      DataColumn(
+                                        label: Text('Eliminar'),
+                                        numeric: true,
+                                      ),
+                                    ],
+                                    rows: customerData
+                                        .map((customer) => DataRow(
                                               cells: [
-                                                DataCell(Text(customerName)),
+                                                DataCell(Text(customer['customer_name'].toString())),
+                                                DataCell(
+                                                  IconButton(
+                                                    icon: Icon(Icons.delete),
+                                                    onPressed: () {
+                                                      deleteCustomerProjectRelation(customer['id']);
+                                                    },
+                                                  ),
+                                                ),
                                               ],
-                                            ),
-                                          )
-                                          .toList(),
-                                    );
-                                  }
-                                },
+                                            ))
+                                        .toList(),
+                                  );
+                                }
+                                }
                               ),
                               Container(
                                 child: IconButton.filled(
@@ -181,20 +190,21 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
               return SingleChildScrollView(
                 child: Column(
                   children: clientes.map((cliente) {
-                    bool isSelected =
-                        clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
+                    bool isSelected = clientesSeleccionados.contains(
+                        cliente["id"]?.toString() ?? "");
 
                     return CheckboxListTile(
                       title: Text(cliente["name"]?.toString() ?? ""),
                       value: isSelected,
                       onChanged: (bool? value) {
                         setState(() {
-                          print(clientesSeleccionados);
                           if (value != null) {
                             if (value) {
-                              clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
+                              clientesSeleccionados.add(
+                                  cliente["id"]?.toString() ?? "");
                             } else {
-                              clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
+                              clientesSeleccionados.remove(
+                                  cliente["id"]?.toString() ?? "");
                             }
                           }
                         });
@@ -216,7 +226,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
               onPressed: () {
                 // Guarda la relación entre el proyecto y los clientes seleccionados
                 clientesSeleccionados.forEach((clienteId) {
-                  postCustomerProject().addCustomerProject(projectId, clienteId);
+                  postCustomerProject()
+                      .addCustomerProject(projectId, clienteId);
                 });
                 Navigator.of(context).pop();
               },
@@ -227,4 +238,5 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
       },
     );
   }
+
 }
