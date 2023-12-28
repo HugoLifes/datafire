@@ -95,16 +95,14 @@ class _DetallesYEditarClientesPageState
                                 List<dynamic> customerProjects = snapshot.data!;
                                 return DataTable(
                                   columns: [
+                                    DataColumn(label: Text("ID")),
                                     DataColumn(label: Text('Proyecto')),
-                                    DataColumn(label: Text('Fecha de Inicio')),
-                                    DataColumn(label: Text('Fecha de Fin')),
                                   ],
                                   rows: customerProjects
                                       .map((project) => DataRow(
                                             cells: [
+                                              DataCell(Text(project["project_id"].toString())),
                                               DataCell(Text(project['project_name'].toString())),
-                                              DataCell(Text(project['fecha_inicio'].toString())),
-                                              DataCell(Text(project['fecha_fin'].toString())),
                                             ],
                                           ))
                                       .toList(),
