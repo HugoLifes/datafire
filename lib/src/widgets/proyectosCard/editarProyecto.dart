@@ -174,18 +174,18 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                                         ),
                                       ],
                                       rows: workerData
-                                          .map((customer) => DataRow(
+                                          .map((worker) => DataRow(
                                             cells: [
-                                              DataCell(Text(customer['worker_name'].toString())),
+                                              DataCell(Text(worker['worker_name'].toString())),
                                               DataCell(
                                                 IconButton(
                                                   icon: Icon(Icons.delete),
                                                   onPressed: () {
-                                                    deleteCustomerProjectRelation(customer['id']);
-                                                    // Muestra el Snackbar al eliminar el cliente
+                                                    deleteProjectWorkers(worker['id']);
+                                                    // Muestra el Snackbar al eliminar el Trabajador
                                                     ScaffoldMessenger.of(context).showSnackBar(
                                                       SnackBar(
-                                                        content: Text('Cliente eliminado correctamente'),
+                                                        content: Text('Trabajador eliminado correctamente'),
                                                       ),
                                                     );
                                                   },
