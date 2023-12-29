@@ -1,3 +1,4 @@
+import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/widgets/trabajadoresCard/editar.trabajadores.form.dart';
 
@@ -31,7 +32,7 @@ class _DetallesYEditarTrabajadoresPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles y Editar Cliente'),
+        title: Text('Detalles y Editar Trabajador'),
       ),
       body: Row(
         children: [
@@ -44,7 +45,7 @@ class _DetallesYEditarTrabajadoresPageState
                   TabBar(
                     tabs: [
                       Tab(text: 'Detalles'),
-                      Tab(text: 'Otra Opción'),
+                      Tab(text: 'Proyectos'),
                       Tab(text: 'Otra Más'),
                     ],
                   ),
@@ -75,8 +76,36 @@ class _DetallesYEditarTrabajadoresPageState
 
                         // Contenido para la segunda pestaña
                         Container(
-                          child: Center(
-                            child: Text('Contenido de la segunda opción'),
+                          padding: const EdgeInsets.all(16.0),
+                          child: FutureBuilder<List<dynamic>>(
+                            future: fetchProjectWorkersbyId(widget.trabajador?['id']),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (snapshot.hasError) {
+                                return Text('Error: ${snapshot.error}');
+                              } else if (!snapshot.hasData ||
+                                  snapshot.data!.isEmpty) {
+                                return Text('El cliente no tiene proyectos asociados');
+                              } else {
+                                List<dynamic> customerProjects = snapshot.data!;
+                                return DataTable(
+                                  columns: [
+                                    DataColumn(label: Text("ID")),
+                                    DataColumn(label: Text('Proyecto')),
+                                  ],
+                                  rows: customerProjects
+                                      .map((project) => DataRow(
+                                            cells: [
+                                              DataCell(Text(project["project_id"].toString())),
+                                              DataCell(Text(project['project_name'].toString())),
+                                            ],
+                                          ))
+                                      .toList(),
+                                );
+                              }
+                            },
                           ),
                         ),
 

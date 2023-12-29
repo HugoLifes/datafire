@@ -49,6 +49,30 @@ class postProjectWorker {
   }
 }
 
+Future<List<Map<String, dynamic>>> fetchProjectWorkersbyId(int workerId) async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker";
+
+  try {
+    final res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      final List<Map<String, dynamic>> allProjects = List<Map<String, dynamic>>.from(jsonDecode(res.body));
+
+      // Filter projects based on customer_id
+      final List<Map<String, dynamic>> workerProjects = allProjects
+          .where((project) => project['worker_id'] == workerId)
+          .toList();
+
+      return workerProjects;
+    } else {
+      print("Error al obtener la lista de proyectos");
+      return [];
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return [];
+  }
+}
+
 void deleteProjectWorkers(int projectWorkersId) async {
   final url =
       "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker/$projectWorkersId";
