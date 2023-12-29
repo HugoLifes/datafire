@@ -50,7 +50,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                     tabs: [
                       Tab(text: 'Detalles'),
                       Tab(text: 'Clientes Asociados'),
-                      Tab(text: 'Pagos'),
+                      Tab(text: 'Trabajadores'),
                     ],
                   ),
                   Expanded(
@@ -144,11 +144,53 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         ),
 
                         // Contenido para la tercera pestaña
-                        Container(
-                          child: Center(
-                            child: Text('Contenido de la tercera opción'),
-                          ),
+ FutureBuilder<List<dynamic>>(
+            future: fetchWorkersForProject(), // Define la función para obtener trabajadores
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Text('No hay trabajadores disponibles');
+              } else {
+                List<dynamic> workers = snapshot.data!;
+
+                return DataTable(
+                  columns: [
+                    DataColumn(label: Text('Trabajadores')),
+                    DataColumn(
+                      label: Text('Eliminar'),
+                      numeric: true,
+                    ),
+                  ],
+                  rows: workers
+                      .map((worker) => DataRow(
+                    cells: [
+                      DataCell(Text(worker['worker_name'].toString())),
+                      DataCell(
+                        IconButton(
+                          icon: Icon(Icons.delete),
+                          onPressed: () {
+                            deleteWorkerFromProject(worker['id']);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Trabajador eliminado correctamente'),
+                              ),
+                            );
+                          },
                         ),
+                      ),
+                    ],
+                  ))
+                      .toList(),
+                );
+              }
+            },
+          ),
+
+
+
                       ],
                     ),
                   ),
