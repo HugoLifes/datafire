@@ -58,6 +58,10 @@ class Project extends Model {
       as: 'abonos',
       foreignKey: 'projectId',
     });
+    this.hasMany(models.ProjectWorker, {
+      as: 'projectWorkers',
+      foreignKey: 'project_id',
+    });
   }
   static config(sequelize) {
     return {

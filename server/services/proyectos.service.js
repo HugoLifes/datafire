@@ -7,7 +7,7 @@ class ProjectService {
   constructor() {
     // this.projects = [], this.generate()
   }
-
+  // -------Project Services! -----
   async find() {
     const rta = await models.Project.findAll();
     return rta;
@@ -31,6 +31,30 @@ class ProjectService {
     return project;
   }
 
+  async update(id, changes) {
+    const project = await this.findOne(id);
+
+    const rta = await project.update(changes);
+    return rta;
+  }
+
+  async deleteProject(id) {
+    const project = await this.findOne(id);
+
+    await project.destroy();
+    return { id };
+  }
+
+  async create(data) {
+    const newProject = await models.Project.create(data);
+    return newProject;
+  }
+  // ---------ProjectCustomers Service!-------
+  async findCustomersProjects() {
+    const rta = await models.ProjectCustomer.findAll();
+    return rta;
+  }
+
   async findOneProjectCustomer(id) {
     const projectCustomer = await models.ProjectCustomer.findByPk(id, {});
 
@@ -39,16 +63,6 @@ class ProjectService {
     }
 
     return projectCustomer;
-  }
-
-  async create(data) {
-    const newProject = await models.Project.create(data);
-    return newProject;
-  }
-
-  async findCustomersProjects() {
-    const rta = await models.ProjectCustomer.findAll();
-    return rta;
   }
 
   async addCustomer(data) {
@@ -74,13 +88,6 @@ class ProjectService {
       throw error;
     }
   }
-  async update(id, changes) {
-    const project = await this.findOne(id);
-
-    const rta = await project.update(changes);
-    return rta;
-  }
-
   async deleteProjectCustomer(id) {
     const project = await this.findOneProjectCustomer(id);
 
@@ -88,11 +95,19 @@ class ProjectService {
     return { id };
   }
 
-  async deleteProject(id) {
-    const project = await this.findOne(id);
+  //----------ProjectWorkers Services!-----
+  async findProjectWorker() {
+    const rta = await models.ProjectWorker.findAll();
+    return rta;
+  }
 
-    await project.destroy();
-    return { id };
+  async findOneProjectWorker(id) {
+    const projectWorker = await models.ProjectCustomer.findByPk(id, {});
+
+    if (!projectWorker) {
+      throw boom.notFound('ProjectWorker not found');
+    }
+    return projectWorker;
   }
 }
 
