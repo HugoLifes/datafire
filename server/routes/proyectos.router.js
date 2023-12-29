@@ -9,6 +9,7 @@ const {
   getProjectSchema,
   updateProjectSchema,
   addCustomerRESchema,
+  addWorkerRESchema,
 } = require('../schemas/proyectos.schema');
 
 router.get('/', async (req, res, next) => {
@@ -24,6 +25,15 @@ router.get('/projectCustomer', async (req, res, next) => {
   try {
     const customerProject = await service.findCustomersProjects();
     res.json(customerProject);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/projectWorker', async (req, res, next) => {
+  try {
+    const projectWorkers = await service.findProjectsWorkers();
+    res.json(projectWorkers);
   } catch (error) {
     next(error);
   }
@@ -129,15 +139,7 @@ router.delete(
 );
 
 //------ProjectWorkers Router
-router.get('/projectWorker', async (req, res, next) => {
-  try {
-    const projectWorker = await service.findProjectWorker();
-    res.json(projectWorker);
-  } catch (error) {
-    next(error);
-  }
-});
-
+// puse el get all arriba por que estaba teniendo problemas de asincronismo
 router.get(
   '/projectWorker/:id',
   validatorHandler(getProjectSchema, 'params'),
@@ -146,6 +148,34 @@ router.get(
       const { id } = req.params;
       const projectWorker = await service.findOneProjectWorker(id);
       res.json(projectWorker);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.post(
+  '/projectWorker',
+  validatorHandler(addWorkerRESchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newCustomer = await service.addProjectWorker(body);
+      res.status(201).json(newCustomer);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.delete(
+  '/projectWorker/:id',
+  validatorHandler(getProjectSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await service.deleteProjectWorker(id);
+      res.status(201).json({ id });
     } catch (error) {
       next(error);
     }

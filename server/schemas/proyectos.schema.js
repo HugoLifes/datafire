@@ -1,19 +1,20 @@
 const Joi = require('joi');
 
-const id = Joi.number().integer()
+const id = Joi.number().integer();
 const name = Joi.string();
 fecha_inicio = Joi.date();
 fecha_fin = Joi.date();
 costo = Joi.number().integer();
-const abono = Joi.number().integer().min(1)
-const project_id = Joi.number().integer()
-const customer_id = Joi.number().integer()
+const abono = Joi.number().integer().min(1);
+const project_id = Joi.number().integer();
+const customer_id = Joi.number().integer();
+const worker_id = Joi.number().integer();
 
 const createProjectsSchema = Joi.object({
   name: name.required(),
   fecha_inicio: fecha_inicio.required(),
   fecha_fin: fecha_fin.required(),
-  costo: costo.required()
+  costo: costo.required(),
 });
 
 const updateProjectSchema = Joi.object({
@@ -22,21 +23,27 @@ const updateProjectSchema = Joi.object({
   fecha_inicio: fecha_inicio,
   fecha_fin: fecha_fin,
   costo: costo,
-  customer_id: customer_id
+  customer_id: customer_id,
 });
 
 const getProjectSchema = Joi.object({
   id: id.required(),
 });
-
+// ----projectCustomer Schemas----
 const addCustomerRESchema = Joi.object({
   project_id: project_id.required(),
-  customer_id: customer_id.required()
-})
+  customer_id: customer_id.required(),
+});
+// ====ProjectWorker Schemas----
+const addWorkerRESchema = Joi.object({
+  project_id: project_id.required(),
+  worker_id: worker_id.required(),
+});
 
 module.exports = {
   createProjectsSchema,
   updateProjectSchema,
   getProjectSchema,
-  addCustomerRESchema
+  addCustomerRESchema,
+  addWorkerRESchema,
 };
