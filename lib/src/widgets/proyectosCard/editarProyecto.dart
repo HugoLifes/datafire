@@ -146,60 +146,69 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         ),
 
                         // Contenido para la tercera pestaña
- FutureBuilder<List<dynamic>>(
-        future: fetchProjectWorkers(), // Define la función para obtener trabajadores
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
-          } else if (snapshot.hasError) {
-            return Text('Error: ${snapshot.error}');
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text('No hay trabajadores disponibles');
-          } else {
-            List<dynamic> workers = snapshot.data!;
+                         Container(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            children: [
+                              FutureBuilder<List<dynamic>>(
+                                future: fetchProjectWorkers(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text('Error: ${snapshot.error}');
+                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                    return Text('No hay datos disponibles');
+                                  } else {
+                                    List<dynamic> workerProjects = snapshot.data!;
+                                    List workerData = workerProjects
+                                        .where((cp) => cp['project_id'] == widget.proyecto?['id'])
+                                        .toList();
 
-            return Column(
-              children: [
-                DataTable(
-                  columns: [
-                    DataColumn(label: Text('Trabajadores')),
-                    DataColumn(
-                      label: Text('Eliminar'),
-                      numeric: true,
-                    ),
-                  ],
-                  rows: workers
-                      .map((worker) => DataRow(
-                    cells: [
-                      DataCell(Text(worker['worker_name'].toString())),
-                      DataCell(
-                        IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () {
-                            deleteProjectWorkers(worker['id']);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Trabajador eliminado correctamente'),
+                                    return DataTable(
+                                      columns: [
+                                        DataColumn(label: Text('Trabajadores')),
+                                        DataColumn(
+                                          label: Text('Eliminar'),
+                                          numeric: true,
+                                        ),
+                                      ],
+                                      rows: workerData
+                                          .map((customer) => DataRow(
+                                            cells: [
+                                              DataCell(Text(customer['worker_name'].toString())),
+                                              DataCell(
+                                                IconButton(
+                                                  icon: Icon(Icons.delete),
+                                                  onPressed: () {
+                                                    deleteCustomerProjectRelation(customer['id']);
+                                                    // Muestra el Snackbar al eliminar el cliente
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      SnackBar(
+                                                        content: Text('Cliente eliminado correctamente'),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ))
+                                          .toList(),
+                                    );
+                                  }
+                                },
                               ),
-                            );
-                          },
+                              Container(
+                                child: IconButton.filled(
+                                  onPressed: () {
+                                    _selectWorkersDialog(_idProyecto);
+                                  },
+                                  icon: Icon(Icons.edit),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
-                  ))
-                      .toList(),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    _selectWorkersDialog(_idProyecto);
-                  },
-                  child: Text('Agregar Trabajadores'),
-                ),
-              ],
-            );
-          }
-        },
-      ),
 
 
 
