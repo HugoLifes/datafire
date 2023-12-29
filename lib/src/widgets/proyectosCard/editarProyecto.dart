@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
+import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
+import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -145,18 +147,20 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
                         // Contenido para la tercera pestaña
  FutureBuilder<List<dynamic>>(
-            future: fetchWorkersForProject(), // Define la función para obtener trabajadores
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Text('No hay trabajadores disponibles');
-              } else {
-                List<dynamic> workers = snapshot.data!;
+        future: fetchProjectWorkers(), // Define la función para obtener trabajadores
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text('Error: ${snapshot.error}');
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return Text('No hay trabajadores disponibles');
+          } else {
+            List<dynamic> workers = snapshot.data!;
 
-                return DataTable(
+            return Column(
+              children: [
+                DataTable(
                   columns: [
                     DataColumn(label: Text('Trabajadores')),
                     DataColumn(
@@ -172,7 +176,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         IconButton(
                           icon: Icon(Icons.delete),
                           onPressed: () {
-                            deleteWorkerFromProject(worker['id']);
+                            deleteProjectWorkers(worker['id']);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content: Text('Trabajador eliminado correctamente'),
@@ -184,10 +188,19 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                     ],
                   ))
                       .toList(),
-                );
-              }
-            },
-          ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    _selectWorkersDialog(_idProyecto);
+                  },
+                  child: Text('Agregar Trabajadores'),
+                ),
+              ],
+            );
+          }
+        },
+      ),
+
 
 
 
@@ -270,4 +283,61 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
       },
     );
   }
+  void _selectWorkersDialog(String projectId) async {
+  List<dynamic> workers = await fetchTrabajadores();
+  List<String> workersSeleccionados = [];
+
+  await showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Selecciona trabajadores"),
+        content: StatefulBuilder(
+          builder: (BuildContext context, StateSetter setState) {
+            return SingleChildScrollView(
+              child: Column(
+                children: workers.map((worker) {
+                  bool isSelected = workersSeleccionados.contains(worker["id"]?.toString() ?? "");
+
+                  return CheckboxListTile(
+                    title: Text(worker["name"]?.toString() ?? ""),
+                    value: isSelected,
+                    onChanged: (bool? value) {
+                      setState(() {
+                        if (value != null) {
+                          if (value) {
+                            workersSeleccionados.add(worker["id"]?.toString() ?? "");
+                          } else {
+                            workersSeleccionados.remove(worker["id"]?.toString() ?? "");
+                          }
+                        }
+                      });
+                    },
+                  );
+                }).toList(),
+              ),
+            );
+          },
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Cancelar"),
+          ),
+          TextButton(
+            onPressed: () {
+              workersSeleccionados.forEach((workerId) {
+                postProjectWorker().addProjectWorker(projectId, workerId);
+              });
+              Navigator.of(context).pop();
+            },
+            child: Text("Guardar"),
+          ),
+        ],
+      );
+    },
+  );
+}
 }

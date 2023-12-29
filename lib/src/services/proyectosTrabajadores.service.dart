@@ -1,16 +1,34 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class postCustomerWorker {
-  Future<void> addProjectCustomer(String projectId, String customerId) async {
+Future<List<dynamic>> fetchProjectWorkers() async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker";
+
+  try {
+    final res = await http.get(Uri.parse(url));
+    if (res.statusCode == 200) {
+      final List<dynamic> projectWorkers = jsonDecode(res.body);
+      return projectWorkers;
+    } else {
+      print("Error al obtener la lista de proyectos");
+      return [];
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return [];
+  }
+}
+
+class postProjectWorker {
+  Future<void> addProjectWorker(String projectId, String workerId) async {
     final Map<String, dynamic> requestData = {
       "project_id": projectId,
-      "worker_id": customerId,
+      "worker_id": workerId,
     };
 
     print("Data enviada a addCustomerProject: $requestData");
 
-    const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
+    const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker";
 
     try {
       final res = await http.post(
@@ -28,5 +46,24 @@ class postCustomerWorker {
     } catch (err) {
       print("Error al realizar la solicitud http: $err");
     }
+  }
+}
+
+void deleteProjectWorkers(int projectWorkersId) async {
+  final url =
+      "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker/$projectWorkersId";
+
+  try {
+    final res = await http.delete(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (res.statusCode == 200) {
+      print("Relación eliminada exitosamente");
+    } else {
+      print("Error al eliminar la relación");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
   }
 }
