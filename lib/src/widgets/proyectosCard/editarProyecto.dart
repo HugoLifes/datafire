@@ -6,6 +6,7 @@ import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window2.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window3.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -48,7 +49,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
           Expanded(
             flex: 1,
             child: DefaultTabController(
-              length: 3,
+              length: 4,
               child: Column(
                 children: [
                   TabBar(
@@ -56,15 +57,16 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                       Tab(text: 'Detalles'),
                       Tab(text: 'Clientes Asociados'),
                       Tab(text: 'Trabajadores'),
+                      Tab(text: "Servicios",)
                     ],
                   ),
                   Expanded(
                     child: TabBarView(
                       children: [
-                        // Detalles
+                        // Detalles (Window 1)
                         window1(proyecto: widget.proyecto),
 
-                        // Clientes Asociados
+                        // Clientes Asociados (window 2)
                         Container(
                           padding: const EdgeInsets.all(16.0),
                           child: window2(proyecto: widget.proyecto, selectClientsDialog: _selectClientsDialog, idProyecto: _idProyecto,)
@@ -73,70 +75,13 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         // Contenido para la tercera pestaña
                          Container(
                           padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              FutureBuilder<List<dynamic>>(
-                                future: fetchProjectWorkers(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                    return Text('No hay datos disponibles');
-                                  } else {
-                                    List<dynamic> workerProjects = snapshot.data!;
-                                    List workerData = workerProjects
-                                        .where((cp) => cp['project_id'] == widget.proyecto?['id'])
-                                        .toList();
-
-                                    return DataTable(
-                                      columns: [
-                                        DataColumn(label: Text('Trabajadores')),
-                                        DataColumn(
-                                          label: Text('Eliminar'),
-                                          numeric: true,
-                                        ),
-                                      ],
-                                      rows: workerData
-                                          .map((worker) => DataRow(
-                                            cells: [
-                                              DataCell(Text(worker['worker_name'].toString())),
-                                              DataCell(
-                                                IconButton(
-                                                  icon: Icon(Icons.delete),
-                                                  onPressed: () {
-                                                    deleteProjectWorkers(worker['id']);
-                                                    // Muestra el Snackbar al eliminar el Trabajador
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text('Trabajador eliminado correctamente'),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ))
-                                          .toList(),
-                                    );
-                                  }
-                                },
-                              ),
-                              Container(
-                                child: IconButton.filled(
-                                  onPressed: () {
-                                    _selectWorkersDialog(_idProyecto);
-                                  },
-                                  icon: Icon(Icons.edit),
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: ThirdTabContent(proyecto: widget.proyecto),
                         ),
 
-
-
+                      // window 4 servicios
+                      Container(
+                        child: Text("Aqui ira lo de servicios"),
+                      )
 
                       ],
                     ),
@@ -217,61 +162,4 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
       },
     );
   }
-  void _selectWorkersDialog(String projectId) async {
-  List<dynamic> workers = await fetchTrabajadores();
-  List<String> workersSeleccionados = [];
-
-  await showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text("Selecciona trabajadores"),
-        content: StatefulBuilder(
-          builder: (BuildContext context, StateSetter setState) {
-            return SingleChildScrollView(
-              child: Column(
-                children: workers.map((worker) {
-                  bool isSelected = workersSeleccionados.contains(worker["id"]?.toString() ?? "");
-
-                  return CheckboxListTile(
-                    title: Text(worker["name"]?.toString() ?? ""),
-                    value: isSelected,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        if (value != null) {
-                          if (value) {
-                            workersSeleccionados.add(worker["id"]?.toString() ?? "");
-                          } else {
-                            workersSeleccionados.remove(worker["id"]?.toString() ?? "");
-                          }
-                        }
-                      });
-                    },
-                  );
-                }).toList(),
-              ),
-            );
-          },
-        ),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text("Cancelar"),
-          ),
-          TextButton(
-            onPressed: () {
-              workersSeleccionados.forEach((workerId) {
-                postProjectWorker().addProjectWorker(projectId, workerId);
-              });
-              Navigator.of(context).pop();
-            },
-            child: Text("Guardar"),
-          ),
-        ],
-      );
-    },
-  );
-}
 }
