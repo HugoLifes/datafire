@@ -2,7 +2,7 @@ import 'package:datafire/src/forms/alta_form_proyectos.dart';
 import 'package:datafire/src/forms/alta_form_trabajadores.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
-import 'package:datafire/src/widgets/proyectosCard/proyectoCard.dart';
+import 'package:datafire/src/widgets/proyectosCard/cardProyecto.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 

@@ -1,6 +1,6 @@
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:flutter/material.dart';
-import 'package:datafire/src/widgets/trabajadoresCard/editar.trabajadores.form.dart';
+import 'package:datafire/src/widgets/trabajadoresCard/form_editarTrabajadores.dart';
 
 class DetallesYEditarTrabajadoresPage extends StatefulWidget {
   final Map<String, dynamic>? trabajador;

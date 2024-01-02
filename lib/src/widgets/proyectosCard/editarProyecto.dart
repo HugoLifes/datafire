@@ -4,10 +4,11 @@ import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:datafire/src/widgets/proyectosCard/editar.Proyecto.form.dart';
+import 'package:datafire/src/widgets/proyectosCard/form_editarProyecto.dart';
 
 class DetallesYAltaProyectoPage extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
@@ -60,26 +61,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                     child: TabBarView(
                       children: [
                         // Detalles
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              columns: [
-                                DataColumn(label: Text('Campo')),
-                                DataColumn(label: Text('Valor')),
-                              ],
-                              rows: widget.proyecto?.entries
-                                      .map((entry) => DataRow(
-                                            cells: [
-                                              DataCell(Text(entry.key)),
-                                              DataCell(Text('${entry.value}')),
-                                            ],
-                                          ))
-                                      .toList() ??
-                                  [],
-                            ),
-                          ),
-                        ),
+                        window1(proyecto: widget.proyecto),
 
                         // Clientes Asociados
                         Container(
