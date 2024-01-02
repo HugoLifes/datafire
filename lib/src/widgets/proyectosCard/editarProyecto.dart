@@ -5,6 +5,7 @@ import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window2.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -66,66 +67,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         // Clientes Asociados
                         Container(
                           padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              FutureBuilder<List<dynamic>>(
-                                future: fetchCustomerProjects(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                    return CircularProgressIndicator();
-                                  } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                    return Text('No hay datos disponibles');
-                                  } else {
-                                    List<dynamic> customerProjects = snapshot.data!;
-                                    List customerData = customerProjects
-                                        .where((cp) => cp['project_id'] == widget.proyecto?['id'])
-                                        .toList();
-
-                                    return DataTable(
-                                      columns: [
-                                        DataColumn(label: Text('Clientes')),
-                                        DataColumn(
-                                          label: Text('Eliminar'),
-                                          numeric: true,
-                                        ),
-                                      ],
-                                      rows: customerData
-                                          .map((customer) => DataRow(
-                                            cells: [
-                                              DataCell(Text(customer['customer_name'].toString())),
-                                              DataCell(
-                                                IconButton(
-                                                  icon: Icon(Icons.delete),
-                                                  onPressed: () {
-                                                    deleteCustomerProjectRelation(customer['id']);
-                                                    // Muestra el Snackbar al eliminar el cliente
-                                                    ScaffoldMessenger.of(context).showSnackBar(
-                                                      SnackBar(
-                                                        content: Text('Cliente eliminado correctamente'),
-                                                      ),
-                                                    );
-                                                  },
-                                                ),
-                                              ),
-                                            ],
-                                          ))
-                                          .toList(),
-                                    );
-                                  }
-                                },
-                              ),
-                              Container(
-                                child: IconButton.filled(
-                                  onPressed: () {
-                                    _selectClientsDialog(_idProyecto);
-                                  },
-                                  icon: Icon(Icons.edit),
-                                ),
-                              ),
-                            ],
-                          ),
+                          child: window2(proyecto: widget.proyecto, selectClientsDialog: _selectClientsDialog, idProyecto: _idProyecto,)
                         ),
 
                         // Contenido para la tercera pestaña
