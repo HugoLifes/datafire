@@ -4,6 +4,7 @@ const boom = require('@hapi/boom');
 const {
   addCustomerRESchema,
   addWorkerRESchema,
+  addServiceSchema,
 } = require('../schemas/proyectos.schema');
 
 class ProjectService {
@@ -23,7 +24,12 @@ class ProjectService {
           model: models.ProjectCustomer,
           as: 'projectCustomers',
         },
+        {
+          model: models.ProjectWorker,
+          as: 'projectWorkers',
+        },
         'abonos',
+        'services',
       ],
     });
 
@@ -139,6 +145,63 @@ class ProjectService {
     const projectWorker = await this.findOneProjectWorker(id);
     await projectWorker.destroy();
     return { id };
+  }
+
+  //----------Costos Services!-----
+  async findServices() {
+    const rta = await models.Service.findAll();
+    return rta;
+  }
+
+  async findOneService(id) {
+    const service = await models.Service.findByPk(id, {});
+
+    if (!service) {
+      throw boom.notFound('Service not found');
+    }
+    return service;
+  }
+
+  async createService(data) {
+    const newService = await models.Service.create(data);
+
+    // Después de crear el servicio, actualiza el costo total del proyecto
+    await this.updateProjectTotalCost(newService.project_id);
+
+    return newService;
+  }
+
+  async deleteService(id) {
+    const service = await this.findOneService(id);
+    const projectId = service.project_id;
+
+    // Antes de eliminar el servicio, obtén el costo del proyecto
+    const project = await models.Project.findByPk(projectId);
+    const initialProjectCost = project.costo;
+
+    await service.destroy();
+
+    // Después de eliminar el servicio, actualiza el costo total del proyecto
+    await this.updateProjectTotalCost(projectId, initialProjectCost);
+
+    return { id };
+  }
+
+  async updateProjectTotalCost(projectId) {
+    const project = await models.Project.findByPk(projectId);
+
+    if (project) {
+      // Calcula la suma total de los costos de los servicios asociados al proyecto
+      const totalCostOfServices = await models.Service.sum('cost', {
+        where: { project_id: projectId },
+      });
+
+      // Si es el primer servicio, agrega el costo inicial del proyecto
+      const totalCost = totalCostOfServices + project.costo;
+
+      // Actualiza el costo total del proyecto
+      await project.update({ costo: totalCost || 0 });
+    }
   }
 }
 

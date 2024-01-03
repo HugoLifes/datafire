@@ -1,12 +1,16 @@
 const express = require('express');
-const cors = require("cors")
+const cors = require('cors');
 const routerApi = require('./routes');
 
-const {logErrors, errorHandler, boomHandler, ormErrorHandler} = require("./middlewares/error.handler")
+const {
+  logErrors,
+  errorHandler,
+  boomHandler,
+  ormErrorHandler,
+} = require('./middlewares/error.handler');
 
 const app = express();
 const port = process.env.PORT || 3000;
-
 
 app.use(express.json());
 
@@ -20,22 +24,20 @@ const options = {
     } else {
       callback(new Error('no permitido'));
     }
-  }
-}
+  },
+};
 app.use(cors(options));
 
 app.get('/', (req, res) => {
   res.send('Hello server');
 });
 
-
-
 routerApi(app);
 
-app.use(logErrors)
-app.use(ormErrorHandler)
-app.use(boomHandler)
-app.use(errorHandler)
+app.use(logErrors);
+app.use(ormErrorHandler);
+app.use(boomHandler);
+app.use(errorHandler);
 
 app.listen(port, () => {
   console.log('My port:' + port);

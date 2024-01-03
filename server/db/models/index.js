@@ -1,6 +1,7 @@
 const { Customer, CustomerSchema } = require('./cliente.model');
 const { Project, ProjectSchema } = require('./proyectos.model');
 const { Worker, WorkerSchema } = require('./trabajadores.model');
+const { Service, ServiceSchema } = require('./servicios.model');
 const {
   ProjectCustomer,
   ProjectCustomerSchema,
@@ -15,7 +16,8 @@ function setupModels(sequelize) {
   Customer.init(CustomerSchema, Customer.config(sequelize)),
     Project.init(ProjectSchema, Project.config(sequelize)),
     Worker.init(WorkerSchema, Worker.config(sequelize)),
-    ProjectWorker.init(ProjectWorkerSchema, ProjectWorker.config(sequelize)),
+    Service.init(ServiceSchema, Service.config(sequelize));
+  ProjectWorker.init(ProjectWorkerSchema, ProjectWorker.config(sequelize)),
     ProjectCustomer.init(
       ProjectCustomerSchema,
       ProjectCustomer.config(sequelize),
