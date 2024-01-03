@@ -80,7 +80,22 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
                       // window 4 servicios
                       Container(
-                        child: Text("Aqui ira lo de servicios"),
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(children: [
+                        Card(
+                            child: Column(
+                              children: <Widget>[
+                                const ListTile(
+                                  leading: Icon(Icons.payments_outlined),
+                                  title: Text("700", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                                  subtitle: Text("Renta de mezcladora"),
+                                )
+                              ],
+                            ),
+                            ),
+                            SizedBox(height: 10,),
+                            IconButton.outlined(onPressed: (){}, icon: Icon(Icons.add))
+                        ]),
                       )
 
                       ],
