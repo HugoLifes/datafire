@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:datafire/src/services/cliente.servicio.dart';
+import 'package:datafire/src/services/costos.servicio.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
@@ -80,23 +81,44 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
                       // window 4 servicios
                       Container(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(children: [
-                        Card(
-                            child: Column(
-                              children: <Widget>[
-                                const ListTile(
-                                  leading: Icon(Icons.payments_outlined),
-                                  title: Text("700", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                                  subtitle: Text("Renta de mezcladora"),
-                                )
-                              ],
-                            ),
-                            ),
-                            SizedBox(height: 10,),
-                            IconButton.outlined(onPressed: (){}, icon: Icon(Icons.add))
-                        ]),
-                      )
+  padding: const EdgeInsets.all(16.0),
+  child: FutureBuilder<List<dynamic>>(
+    future: fetchCostsByProjectId(_idProyecto),
+    builder: (context, snapshot) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return CircularProgressIndicator();
+      } else if (snapshot.hasError) {
+        return Text("Error: ${snapshot.error}");
+      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+        return Text("No hay servicios asociados al proyecto.");
+      } else {
+        // Filtra la lista de servicios para mostrar solo los asociados al proyecto.
+        List<dynamic> serviciosProyecto = snapshot.data!.where((servicio) =>
+          servicio["project_id"].toString() == _idProyecto
+        ).toList();
+
+        // Muestra los servicios en un ListView.
+        return ListView.builder(
+          itemCount: serviciosProyecto.length,
+          itemBuilder: (context, index) {
+            var servicio = serviciosProyecto[index];
+            return Card(
+              child: Column(
+                children: <Widget>[
+                  ListTile(
+                    leading: Icon(Icons.payments_outlined),
+                    title: Text(servicio["cost"]?.toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                    subtitle: Text(servicio["service"]?.toString() ?? ""),
+                  )
+                ],
+              ),
+            );
+          },
+        );
+      }
+    },
+  ),
+),
 
                       ],
                     ),
