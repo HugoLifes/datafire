@@ -163,7 +163,7 @@ void _mostrarDialogo() {
     builder: (BuildContext context) {
       return AlertDialog(
         title: Text("Agregar nuevo costo"),
-        content: TuFormularioCosto(),
+        content: TuFormularioCosto(id_proyecto: _idProyecto),
         actions: [
           TextButton(
             onPressed: () {

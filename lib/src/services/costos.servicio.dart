@@ -20,33 +20,29 @@ Future<List<dynamic>> fetchCosts() async {
 }
 
 class postCosts {
-  Future<void> addCost(String projectId, String workerId) async {
-    final Map<String, dynamic> requestData = {
-      "project_id": projectId,
-      "worker_id": workerId,
-    };
+Future<String?> addCosto(String projectId, String amount, String description, String precio) async {
+  const urlCrearProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos/services";
 
-    print("Data enviada a addCustomerProject: $requestData");
-
-    const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker";
-
-    try {
-      final res = await http.post(
-        Uri.parse(url),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(requestData),
-      );
-
-      if (res.statusCode == 201) {
-        print("Cliente agregado exitosamente");
-      } else {
-        print("Error al agregar el cliente: ${res.statusCode}");
-        print("Respuesta del servidor: ${res.body}");
-      }
-    } catch (err) {
-      print("Error al realizar la solicitud http: $err");
+  try {
+    final resCrearCosto = await http.post(
+      Uri.parse(urlCrearProyecto),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({
+        "project_id": projectId,
+        "amount": amount,
+        "service": description,
+        "cost": precio,
+      }),
+    );
+  
+    if (resCrearCosto.statusCode == 201) {
+      print("Guardado exxitosamente");
     }
+  } catch (err) {
+    print("Error al realizar la solicitud http para crear proyecto: $err");
+    return null;
   }
+}
 }
 
 Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
