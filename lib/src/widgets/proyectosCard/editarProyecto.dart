@@ -5,6 +5,7 @@ import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/form_agregar_costo.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window2.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window3.dart';
@@ -156,13 +157,13 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
     );
   }
 
-  void _mostrarDialogo() {
+void _mostrarDialogo() {
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text("Diálogo de ejemplo"),
-        content: Text("Este es un diálogo de ejemplo."),
+        title: Text("Agregar nuevo costo"),
+        content: TuFormularioCosto(),
         actions: [
           TextButton(
             onPressed: () {
