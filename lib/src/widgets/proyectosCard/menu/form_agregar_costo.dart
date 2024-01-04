@@ -76,7 +76,7 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
             },
           ),
           SizedBox(height: 20),
-          ElevatedButton(
+          FilledButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 String idProyecto = widget.id_proyecto;

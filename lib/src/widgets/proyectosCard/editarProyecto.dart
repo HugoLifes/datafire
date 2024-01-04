@@ -113,19 +113,38 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                       leading: Icon(Icons.payments_outlined),
                       title: Text(servicio["cost"]?.toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
                       subtitle: Text(servicio["service"]?.toString() ?? ""),
-                    )
+                      trailing:  IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                ; // Método para editar el costo
+              },
+            ),
+                    ),
+                          
                   ],
                 ),
               );
             } else {
               // El último ítem es un botón que abre un diálogo.
-              return IconButton.filled(
-                onPressed: () {
-                  _mostrarDialogo();
-                },
-                icon: Icon(Icons.add),
-                
+              return Column(
+                children: [
+                  SizedBox(height: 10),
+                  Center(
+                    child: IconButton.filled(
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                          EdgeInsets.symmetric(horizontal: 24.0),
+                        ),
+                      ),
+                      onPressed: () {
+                        _mostrarDialogo();
+                      },
+                      icon: Icon(Icons.add),
+                    ),
+                  ),
+                ],
               );
+
             }
           },
         );
