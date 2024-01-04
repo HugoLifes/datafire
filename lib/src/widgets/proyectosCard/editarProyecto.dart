@@ -82,6 +82,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                       // window 4 servicios
                       Container(
   padding: const EdgeInsets.all(16.0),
+  child: Container(
+  padding: const EdgeInsets.all(16.0),
   child: FutureBuilder<List<dynamic>>(
     future: fetchCostsByProjectId(_idProyecto),
     builder: (context, snapshot) {
@@ -99,25 +101,37 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
         // Muestra los servicios en un ListView.
         return ListView.builder(
-          itemCount: serviciosProyecto.length,
+          itemCount: serviciosProyecto.length + 1, // Añade uno para el botón.
           itemBuilder: (context, index) {
-            var servicio = serviciosProyecto[index];
-            return Card(
-              child: Column(
-                children: <Widget>[
-                  ListTile(
-                    leading: Icon(Icons.payments_outlined),
-                    title: Text(servicio["cost"]?.toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                    subtitle: Text(servicio["service"]?.toString() ?? ""),
-                  )
-                ],
-              ),
-            );
+            if (index < serviciosProyecto.length) {
+              var servicio = serviciosProyecto[index];
+              return Card(
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.payments_outlined),
+                      title: Text(servicio["cost"]?.toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                      subtitle: Text(servicio["service"]?.toString() ?? ""),
+                    )
+                  ],
+                ),
+              );
+            } else {
+              // El último ítem es un botón que abre un diálogo.
+              return IconButton.filled(
+                onPressed: () {
+                  _mostrarDialogo();
+                },
+                icon: Icon(Icons.add),
+                
+              );
+            }
           },
         );
       }
     },
   ),
+),
 ),
 
                       ],
@@ -141,6 +155,26 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
       ),
     );
   }
+
+  void _mostrarDialogo() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Diálogo de ejemplo"),
+        content: Text("Este es un diálogo de ejemplo."),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text("Cerrar"),
+          ),
+        ],
+      );
+    },
+  );
+}
 
   void _selectClientsDialog(String projectId) async {
     List<dynamic> clientes = await fetchClientes();
