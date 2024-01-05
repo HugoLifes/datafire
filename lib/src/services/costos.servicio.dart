@@ -63,6 +63,25 @@ Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
   }
 }
 
+Future<void> updateCliente(
+    int id, int amount, String service, int cost) async {
+  final url = "https://datafire-production.up.railway.app/api/v1/proyectos/services/$id";
+  try {
+    final res = await http.patch(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(
+          {"amount": amount, "service": service, "cost": cost}),
+    );
+    if (res.statusCode == 200) {
+      print("cliente actualizado exitosamente");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+  }
+}
+
+
 
 void deleteCost(int costId) async {
   final url =

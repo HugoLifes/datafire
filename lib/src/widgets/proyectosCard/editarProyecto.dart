@@ -5,6 +5,7 @@ import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/form_Editar%20_costo.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/form_agregar_costo.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window2.dart';
@@ -81,65 +82,86 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         ),
 
                       // window 4 servicios
-                      Container(
-  padding: const EdgeInsets.all(16.0),
-  child: Container(
-  padding: const EdgeInsets.all(16.0),
-  child: FutureBuilder<List<dynamic>>(
-    future: fetchCostsByProjectId(_idProyecto),
-    builder: (context, snapshot) {
-      if (snapshot.connectionState == ConnectionState.waiting) {
-        return CircularProgressIndicator();
-      } else if (snapshot.hasError) {
-        return Text("Error: ${snapshot.error}");
-      } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-        return Text("No hay servicios asociados al proyecto.");
-      } else {
-        // Filtra la lista de servicios para mostrar solo los asociados al proyecto.
-        List<dynamic> serviciosProyecto = snapshot.data!.where((servicio) =>
-          servicio["project_id"].toString() == _idProyecto
-        ).toList();
+Container(
+    padding: const EdgeInsets.all(16.0),
+    child: FutureBuilder<List<dynamic>>(
+      future: fetchCostsByProjectId(_idProyecto),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return CircularProgressIndicator();
+        } else if (snapshot.hasError) {
+          return Text("Error: ${snapshot.error}");
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return Text("No hay servicios asociados al proyecto.");
+        } else {
+          // Filtra la lista de servicios para mostrar solo los asociados al proyecto.
+          List<dynamic> serviciosProyecto = snapshot.data!.where((servicio) =>
+            servicio["project_id"].toString() == _idProyecto
+          ).toList();
 
-        // Muestra los servicios en un ListView.
-        return ListView.builder(
-          itemCount: serviciosProyecto.length + 1, // Añade uno para el botón.
-          itemBuilder: (context, index) {
-            if (index < serviciosProyecto.length) {
-              var servicio = serviciosProyecto[index];
-              return Card(
-                child: Column(
-                  children: <Widget>[
-                    ListTile(
-                      leading: Icon(Icons.payments_outlined),
-                      title: Text(servicio["cost"]?.toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                      subtitle: Text(servicio["service"]?.toString() ?? ""),
-                      trailing:  IconButton(
-              icon: Icon(Icons.edit),
-              onPressed: () {
-                ; // Método para editar el costo
-              },
-            ),
-                    ),
-                          
-                  ],
-                ),
-              );
-            } else {
-              // El último ítem es un botón que abre un diálogo.
-              return Column(
-                children: [
-                  SizedBox(height: 10),
-                  Center(
-                    child: IconButton.filled(
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                          EdgeInsets.symmetric(horizontal: 24.0),
-                        ),
+          // Muestra los servicios en un ListView.
+          return ListView.builder(
+            itemCount: serviciosProyecto.length + 2, // Añade dos para la bienvenida y el botón.
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                // Primer ítem es la Card de Bienvenida
+                return Card(
+                  color: Colors.green[200],
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: Colors.green, width: 2.0),
+                    borderRadius: BorderRadius.circular(8.0)
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        leading: const  Icon(Icons.payments_outlined),
+                        title:  Text(widget.proyecto?["costo"].toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                        subtitle: const  Text("Costo inicial"),
                       ),
-                      onPressed: () {
-                        _mostrarDialogo();
-                      },
-                      icon: Icon(Icons.add),
+                    ],
+                  ),
+                );
+              } else if (index < serviciosProyecto.length + 1) {
+                var servicio = serviciosProyecto[index - 1];
+                return Card(
+                  child: Column(
+                    children: <Widget>[
+                      ListTile(
+                        leading: Icon(Icons.payments_outlined),
+                        title: Text(servicio["cost"]?.toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                        subtitle: Text(servicio["service"]?.toString() ?? ""),
+                        trailing: IconButton(
+  icon: Icon(Icons.edit),
+  onPressed: () {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return EditarCostoDialog(costo: servicio);
+      },
+    );
+  },
+),
+
+                      ),
+                    ],
+                  ),
+                );
+              } else {
+                // Último ítem es el botón que abre un diálogo.
+                return Column(
+                  children: [
+                    SizedBox(height: 10),
+                    Center(
+                      child: IconButton.filled(
+                        style: ButtonStyle(
+                          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            EdgeInsets.symmetric(horizontal: 24.0),
+                          ),
+                        ),
+                        onPressed: () {
+                          _mostrarDialogo();
+                        },
+                        icon: Icon(Icons.add),
                     ),
                   ),
                 ],
@@ -152,7 +174,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
     },
   ),
 ),
-),
+
+                  
 
                       ],
                     ),
