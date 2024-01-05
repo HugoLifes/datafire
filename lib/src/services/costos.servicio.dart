@@ -63,8 +63,8 @@ Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
   }
 }
 
-Future<void> updateCliente(
-    int id, int amount, String service, int cost) async {
+Future<void> updateCostos(
+    String id, String amount, String service, String cost) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/services/$id";
   try {
     final res = await http.patch(
