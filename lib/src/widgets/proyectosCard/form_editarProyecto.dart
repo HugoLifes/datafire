@@ -183,34 +183,64 @@ onPressed: () async {
 
   ),
 ),
-Container(
-  alignment: Alignment.center,
-  color: Colors.teal,
-  width: 300,
-  child: Column(
-    children: [        ListTile(
-          title: Text("Total: \$2500", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-          subtitle: Row(
-            children: [
-              Column(children: [
-              Text("Total"),
-              Text("\$400")
-            ]
-              ),
-              SizedBox(width: 10,),
-                          Column(children: [
-              Text("Abonado"),
-              Text("\$400")
-            ], ),
-                          SizedBox(width: 10,),
-                         Column(children: [
-              Text("Restante"),
-              Text("\$400")
-            ]
-            ,)],
+Center(
+  child: Row(
+    children: [
+      Container(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+        margin: EdgeInsets.only(top: 30),
+        width: 250,
+        decoration: BoxDecoration(color: Colors.blueGrey[50], borderRadius: BorderRadius.circular(10),
+          boxShadow: [BoxShadow(color: const Color.fromARGB(101, 0, 0, 0), offset: Offset(0, 2), blurRadius: 4.0)]
+        ),
+        child: const Column(
+          children: [        
+            ListTile(
+                title: Text("Total: \$2500", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                subtitle: Row(
+                  children: [
+                  Column(children: [
+                    Text("Abonado", style: TextStyle(fontSize: 20, color: Colors.amber, fontWeight: FontWeight.w500)),
+                    Text("\$400", style: TextStyle(fontSize: 20, color: Colors.amber, fontWeight: FontWeight.w500))
+                  ], ),
+                  SizedBox(width: 10,),
+                  Column(children: [
+                    Text("Restante", style: TextStyle(fontSize: 20, color: Colors.red, fontWeight: FontWeight.w500)),
+                    Text("\$400", style: TextStyle(fontSize: 20, color: Colors.red, fontWeight: FontWeight.w500))
+                  ]
+                  ,)],
+                ),
+              )],
+        )
+      ),
+      Column(
+        children: [
+          IconButton.filled(onPressed: (){}, icon: Icon(Icons.receipt),
+          style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.black),
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0), 
+                    ),
+                  )
           ),
-        )],
-  )
+          ),
+          IconButton.filled(onPressed: (){}, icon: Icon(Icons.add),
+          style: ButtonStyle(
+                  backgroundColor: MaterialStatePropertyAll(Colors.green),       
+                  shape: MaterialStateProperty.all<OutlinedBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(0.0),
+                    ), 
+                  )
+                  ,
+            )
+          )
+        ],
+      )
+    ],
+  ),
 )
 
           ],
