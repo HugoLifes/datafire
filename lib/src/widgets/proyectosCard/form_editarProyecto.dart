@@ -183,6 +183,35 @@ onPressed: () async {
 
   ),
 ),
+Container(
+  alignment: Alignment.center,
+  color: Colors.teal,
+  width: 300,
+  child: Column(
+    children: [        ListTile(
+          title: Text("Total: \$2500", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+          subtitle: Row(
+            children: [
+              Column(children: [
+              Text("Total"),
+              Text("\$400")
+            ]
+              ),
+              SizedBox(width: 10,),
+                          Column(children: [
+              Text("Abonado"),
+              Text("\$400")
+            ], ),
+                          SizedBox(width: 10,),
+                         Column(children: [
+              Text("Restante"),
+              Text("\$400")
+            ]
+            ,)],
+          ),
+        )],
+  )
+)
 
           ],
         ),
