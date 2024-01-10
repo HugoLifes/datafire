@@ -84,9 +84,6 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
                       // window 4 servicios
 Tab4Content(idProyecto: _idProyecto),
-
-                  
-
                       ],
                     ),
                   ),
