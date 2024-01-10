@@ -1,7 +1,6 @@
-import 'package:datafire/src/services/abonos.service.dart';
-import 'package:datafire/src/services/costos.servicio.dart';
-import 'package:datafire/src/services/proyectos-clientes.service.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
+import 'package:datafire/src/services/proyectos-clientes.service.dart';
 
 class addAbonoForm extends StatefulWidget {
   final String id_proyecto;
@@ -18,8 +17,10 @@ class addAbonoForm extends StatefulWidget {
 class _addAbonoFormState extends State<addAbonoForm> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController _amountController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
   int? selectedCustomerId;
   List<Map<String, dynamic>> customerData = [];
+  DateTime selectedDate = DateTime.now();
 
   @override
   void initState() {
@@ -55,6 +56,22 @@ class _addAbonoFormState extends State<addAbonoForm> {
         .toList();
   }
 
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2022),
+      lastDate: DateTime(2025),
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        _dateController.text = DateFormat('yyyy-MM-dd').format(selectedDate);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -78,7 +95,26 @@ class _addAbonoFormState extends State<addAbonoForm> {
             },
           ),
           SizedBox(height: 20),
-
+          TextFormField(
+            controller: _dateController,
+            readOnly: true,
+            onTap: () {
+              _selectDate(context);
+            },
+            decoration: InputDecoration(
+              labelText: 'Fecha',
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(),
+            ),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Por favor, selecciona una fecha';
+              }
+              return null;
+            },
+          ),
+          SizedBox(height: 20),
           DropdownButton<int>(
             value: selectedCustomerId,
             items: buildDropdownMenuItems(),
@@ -89,7 +125,6 @@ class _addAbonoFormState extends State<addAbonoForm> {
             },
             hint: Text('Seleccionar Cliente'),
           ),
-
           SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
@@ -97,10 +132,16 @@ class _addAbonoFormState extends State<addAbonoForm> {
                 String idProyecto = widget.id_proyecto;
                 String amountCosto = _amountController.text;
                 int customerId = selectedCustomerId!;
-                print(selectedCustomerId);
-                
+                String selectedDateString = _dateController.text;
 
-                Navigator.of(context).pop();
+                print('ID Proyecto: $idProyecto');
+                print('Cantidad: $amountCosto');
+                print('ID Cliente: $customerId');
+                print('Fecha Seleccionada: $selectedDateString');
+
+                // Aquí puedes realizar la acción deseada con los datos recolectados.
+
+                Navigator.of(context).pop(); // Cerrar el formulario
               }
             },
             child: Text('Guardar'),
