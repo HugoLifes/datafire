@@ -1,18 +1,13 @@
-import 'dart:convert';
+
 import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/services/costos.servicio.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
-import 'package:datafire/src/services/proyectos.service.dart';
-import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
-import 'package:datafire/src/services/trabajadores.servicio.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/form_Editar%20_costo.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/form_agregar_costo.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window2.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window3.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window4.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window5.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 
 import 'package:datafire/src/widgets/proyectosCard/form_editarProyecto.dart';
 
@@ -53,7 +48,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
           Expanded(
             flex: 1,
             child: DefaultTabController(
-              length: 4,
+              length: 5,
               child: Column(
                 children: [
                   TabBar(
@@ -61,7 +56,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                       Tab(text: 'Detalles'),
                       Tab(text: 'Clientes Asociados'),
                       Tab(text: 'Trabajadores'),
-                      Tab(text: "Servicios",)
+                      Tab(text: "Servicios"),
+                      Tab(text: "Pagos")
                     ],
                   ),
                   Expanded(
@@ -84,6 +80,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
                       // window 4 servicios
 Tab4Content(idProyecto: _idProyecto),
+Tab5Content(idProyecto: _idProyecto)
                       ],
                     ),
                   ),
