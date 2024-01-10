@@ -4,8 +4,8 @@ import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window2.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window3.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window4.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window5.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window4/window4.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window5/window5.dart';
 import 'package:flutter/material.dart';
 
 

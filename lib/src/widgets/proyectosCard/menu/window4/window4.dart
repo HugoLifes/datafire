@@ -1,21 +1,18 @@
 import 'package:datafire/src/services/costos.servicio.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/form_agregar_costo.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window4/form_agregar_costo.dart';
 import 'package:flutter/material.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/form_Editar%20_costo.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window4/form_Editar%20_costo.dart';
 
-import 'package:flutter/material.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/form_Editar%20_costo.dart';
-
-class Tab5Content extends StatefulWidget {
+class Tab4Content extends StatefulWidget {
   final String idProyecto;
 
-  const Tab5Content({Key? key, required this.idProyecto}) : super(key: key);
+  const Tab4Content({Key? key, required this.idProyecto}) : super(key: key);
 
   @override
-  _Tab5ContentState createState() => _Tab5ContentState();
+  _Tab4ContentState createState() => _Tab4ContentState();
 }
 
-class _Tab5ContentState extends State<Tab5Content> {
+class _Tab4ContentState extends State<Tab4Content> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +25,7 @@ class _Tab5ContentState extends State<Tab5Content> {
           } else if (snapshot.hasError) {
             return Text("Error: ${snapshot.error}");
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text("No hay Abonos asociados al proyecto.");
+            return Text("No hay servicios asociados al proyecto.");
           } else {
             List<dynamic> serviciosProyecto = snapshot.data!.where((servicio) =>
               servicio["project_id"].toString() == widget.idProyecto
@@ -111,7 +108,7 @@ class _Tab5ContentState extends State<Tab5Content> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Agregar nuevo Abono"),
+          title: Text("Agregar nuevo costo"),
           content: TuFormularioCosto(id_proyecto: widget.idProyecto),
           actions: [
             TextButton(

@@ -1,21 +1,20 @@
 import 'package:datafire/src/services/costos.servicio.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/form_agregar_costo.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window4/form_agregar_costo.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window5/dialog_edit_abono.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window5/form_agregar_abono.dart';
 import 'package:flutter/material.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/form_Editar%20_costo.dart';
+import 'package:datafire/src/widgets/proyectosCard/menu/window4/form_Editar%20_costo.dart';
 
-import 'package:flutter/material.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/form_Editar%20_costo.dart';
-
-class Tab4Content extends StatefulWidget {
+class Tab5Content extends StatefulWidget {
   final String idProyecto;
 
-  const Tab4Content({Key? key, required this.idProyecto}) : super(key: key);
+  const Tab5Content({Key? key, required this.idProyecto}) : super(key: key);
 
   @override
-  _Tab4ContentState createState() => _Tab4ContentState();
+  _Tab5ContentState createState() => _Tab5ContentState();
 }
 
-class _Tab4ContentState extends State<Tab4Content> {
+class _Tab5ContentState extends State<Tab5Content> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,7 +27,7 @@ class _Tab4ContentState extends State<Tab4Content> {
           } else if (snapshot.hasError) {
             return Text("Error: ${snapshot.error}");
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text("No hay servicios asociados al proyecto.");
+            return Text("No hay Abonos asociados al proyecto.");
           } else {
             List<dynamic> serviciosProyecto = snapshot.data!.where((servicio) =>
               servicio["project_id"].toString() == widget.idProyecto
@@ -41,7 +40,7 @@ class _Tab4ContentState extends State<Tab4Content> {
                   return Card(
                     color: Colors.green[200],
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.green, width: 2.0),
+                      side: BorderSide(color: const Color.fromARGB(255, 192, 253, 194), width: 2.0),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Column(
@@ -69,7 +68,7 @@ class _Tab4ContentState extends State<Tab4Content> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return EditarCostoDialog(costo: servicio);
+                                  return EditAbonoDialog(costo: servicio);
                                 },
                               );
                             },
@@ -111,8 +110,8 @@ class _Tab4ContentState extends State<Tab4Content> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Agregar nuevo costo"),
-          content: TuFormularioCosto(id_proyecto: widget.idProyecto),
+          title: Text("Agregar nuevo Abono"),
+          content: addAbonoForm(id_proyecto: widget.idProyecto),
           actions: [
             TextButton(
               onPressed: () {
