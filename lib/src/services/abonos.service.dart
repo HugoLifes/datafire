@@ -40,6 +40,24 @@ Future<List<dynamic>> fetchAbonos() async {
   }
 }
 
+Future<List<dynamic>> fetchAbonosById(String projectId) async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos";
+
+  try {
+    final res = await http.get(Uri.parse('$url?projecto_id=$projectId'));
+    if (res.statusCode == 200) {
+      final List<dynamic> costs = jsonDecode(res.body);
+      return costs;
+    } else {
+      print("Error al obtener la lista de costos");
+      return [];
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return [];
+  }
+}
+
 
 Future<void> updateAbono(
     int id, String monto, String fecha_abono, String projectId, String customerId) async {

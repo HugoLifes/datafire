@@ -1,3 +1,4 @@
+import 'package:datafire/src/services/abonos.service.dart';
 import 'package:datafire/src/services/costos.servicio.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window4/form_agregar_costo.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window5/dialog_edit_abono.dart';
@@ -20,7 +21,7 @@ class _Tab5ContentState extends State<Tab5Content> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: FutureBuilder<List<dynamic>>(
-        future: fetchCostsByProjectId(widget.idProyecto),
+        future: fetchAbonosById(widget.idProyecto),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
@@ -30,7 +31,7 @@ class _Tab5ContentState extends State<Tab5Content> {
             return Text("No hay Abonos asociados al proyecto.");
           } else {
             List<dynamic> serviciosProyecto = snapshot.data!.where((servicio) =>
-              servicio["project_id"].toString() == widget.idProyecto
+              servicio["projectId"].toString() == widget.idProyecto
             ).toList();
 
             return ListView.builder(
@@ -47,8 +48,8 @@ class _Tab5ContentState extends State<Tab5Content> {
                       children: <Widget>[
                         ListTile(
                           leading: const  Icon(Icons.payments_outlined),
-                          title:  Text("Costo inicial", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                          subtitle: const  Text("Costo inicial"),
+                          title:  Text("\$200", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          subtitle: const  Text("Pago inicial"),
                         ),
                       ],
                     ),
@@ -56,12 +57,13 @@ class _Tab5ContentState extends State<Tab5Content> {
                 } else if (index < serviciosProyecto.length + 1) {
                   var servicio = serviciosProyecto[index - 1];
                   return Card(
+                    color: Colors.yellow[200],
                     child: Column(
                       children: <Widget>[
                         ListTile(
                           leading: Icon(Icons.payments_outlined),
-                          title: Text(servicio["cost"]?.toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                          subtitle: Text(servicio["service"]?.toString() ?? ""),
+                          title: Text("\$${servicio["monto"]?.toString()}" ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          subtitle: Text(servicio["fecha_abono"]?.toString() ?? ""),
                           trailing: IconButton(
                             icon: Icon(Icons.edit),
                             onPressed: () {

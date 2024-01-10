@@ -83,7 +83,7 @@ class _addAbonoFormState extends State<addAbonoForm> {
             controller: _amountController,
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
-              labelText: 'Cantidad',
+              labelText: 'Importe',
               fillColor: Colors.white,
               filled: true,
               border: OutlineInputBorder(),
