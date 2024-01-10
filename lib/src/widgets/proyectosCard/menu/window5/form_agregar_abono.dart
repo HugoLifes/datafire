@@ -1,3 +1,4 @@
+import 'package:datafire/src/services/abonos.service.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
@@ -139,7 +140,7 @@ class _addAbonoFormState extends State<addAbonoForm> {
                 print('ID Cliente: $customerId');
                 print('Fecha Seleccionada: $selectedDateString');
 
-                // Aquí puedes realizar la acción deseada con los datos recolectados.
+                postAbono(amountCosto, selectedDateString, idProyecto, customerId);
 
                 Navigator.of(context).pop(); // Cerrar el formulario
               }

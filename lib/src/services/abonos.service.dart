@@ -2,7 +2,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<void> postAbono(String monto, String fecha_abono, String projectId, String customerId) async {
+Future<void> postAbono(String monto, String fecha_abono, String projectId, int customerId) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos";
 
   try {
@@ -10,12 +10,12 @@ Future<void> postAbono(String monto, String fecha_abono, String projectId, Strin
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(
-          {"monto": monto, "decha_abono": fecha_abono, "projectId": projectId,"customerId": customerId}),
+          {"monto": monto, "fecha_abono": fecha_abono, "projectId": projectId,"customerId": customerId}),
     );
     if (res.statusCode == 200) {
       print("Abono Guardado Exitosamente");
     } else {
-      print("Error al guardar el Abono");
+      print("Error al guardar el Abono ${res.statusCode}");
     }
   } catch (err) {
     print("Error al realizar la solicitud http: $err");
