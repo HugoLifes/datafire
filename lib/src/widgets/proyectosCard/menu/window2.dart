@@ -66,8 +66,8 @@ class _window2State extends State<window2> {
                                   onPressed: () async {
                                     await deleteCustomerProjectRelation(customer['id']);
                                     ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text('Cliente eliminado correctamente'),
+                                      const SnackBar(
+                                        content:  Text('Cliente eliminado correctamente'),
                                       ),
                                     );
                                     // Actualizar la lista después de eliminar un cliente

@@ -90,7 +90,7 @@ Future<bool> deleteCustomerProjectRelation(int customerProjectId) async {
     }
   } catch (err) {
     print("Error al realizar la solicitud http: $err");
-    return false; // Indicar que hubo un error en la solicitud HTTP
+    return false; 
   }
 }
 
@@ -103,7 +103,6 @@ Future<List<Map<String, dynamic>>> fetchCustomerProjectsbyId(int customerId) asy
     if (res.statusCode == 200) {
       final List<Map<String, dynamic>> allProjects = List<Map<String, dynamic>>.from(jsonDecode(res.body));
 
-      // Filter projects based on customer_id
       final List<Map<String, dynamic>> customerProjects = allProjects
           .where((project) => project['customer_id'] == customerId)
           .toList();

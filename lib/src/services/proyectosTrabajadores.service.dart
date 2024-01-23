@@ -73,21 +73,24 @@ Future<List<Map<String, dynamic>>> fetchProjectWorkersbyId(int workerId) async {
   }
 }
 
-void deleteProjectWorkers(int projectWorkersId) async {
-  final url =
-      "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker/$projectWorkersId";
+Future<bool> deleteProjectWorkers(int projectWorkersId) async {
+  final url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker/$projectWorkersId";
 
   try {
-    final res = await http.delete(
+    final response = await http.delete(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
     );
-    if (res.statusCode == 200) {
+
+    if (response.statusCode == 200) {
       print("Relación eliminada exitosamente");
+      return true;
     } else {
-      print("Error al eliminar la relación");
+      print("Error al eliminar la relación. StatusCode: ${response.statusCode}");
+      return false;
     }
-  } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+  } catch (error) {
+    print("Error al realizar la solicitud http: $error");
+    return false;
   }
 }

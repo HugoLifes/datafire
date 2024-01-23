@@ -1,6 +1,5 @@
 import 'package:datafire/src/forms/alta_form_clientes.dart';
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/widgets/ClientesCard/clientesCard.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +42,7 @@ class _AltaClientesState extends State<AltaClientes> {
           ],
         ),
         backgroundColor: accentCanvasColor,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
       ),
@@ -96,15 +95,3 @@ class _AltaClientesState extends State<AltaClientes> {
   }
 }
 
-
-//funcion de snack bar
-//  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-//  content: const Text('Hola!'),
-//  elevation: 6,
-// action: SnackBarAction(
-//  textColor: Colors.white,
-//  label: 'Cerrar',
-//  onPressed: () {
-//    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-//   },
-//  )));

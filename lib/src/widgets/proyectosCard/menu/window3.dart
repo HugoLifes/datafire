@@ -1,19 +1,31 @@
-
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:flutter/material.dart';
 
-class ThirdTabContent extends StatelessWidget {
+class ThirdTabContent extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
 
   ThirdTabContent({required this.proyecto});
+
+  @override
+  _ThirdTabContentState createState() => _ThirdTabContentState();
+}
+
+class _ThirdTabContentState extends State<ThirdTabContent> {
+  late Future<List<dynamic>> futureProjectWorkers;
+
+  @override
+  void initState() {
+    super.initState();
+    futureProjectWorkers = fetchProjectWorkers();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         FutureBuilder<List<dynamic>>(
-          future: fetchProjectWorkers(),
+          future: futureProjectWorkers,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return CircularProgressIndicator();
@@ -24,11 +36,11 @@ class ThirdTabContent extends StatelessWidget {
             } else {
               List<dynamic> workerProjects = snapshot.data!;
               List workerData = workerProjects
-                  .where((cp) => cp['project_id'] == proyecto?['id'])
+                  .where((cp) => cp['project_id'] == widget.proyecto?['id'])
                   .toList();
 
               return DataTable(
-                columns: [
+                columns: const [
                   DataColumn(label: Text('Trabajadores')),
                   DataColumn(
                     label: Text('Eliminar'),
@@ -37,24 +49,26 @@ class ThirdTabContent extends StatelessWidget {
                 ],
                 rows: workerData
                     .map((worker) => DataRow(
-                      cells: [
-                        DataCell(Text(worker['worker_name'].toString())),
-                        DataCell(
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              deleteProjectWorkers(worker['id']);
-                              // Muestra el Snackbar al eliminar el Trabajador
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Trabajador eliminado correctamente'),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ))
+                          cells: [
+                            DataCell(Text(worker['worker_name'].toString())),
+                            DataCell(
+                              IconButton(
+                                icon: Icon(Icons.delete),
+                                onPressed: () async {
+                                  await deleteProjectWorkers(worker['id']);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Trabajador eliminado correctamente'),
+                                    ),
+                                  );
+                                  setState(() {
+                                    futureProjectWorkers = fetchProjectWorkers();
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ))
                     .toList(),
               );
             }
@@ -63,7 +77,7 @@ class ThirdTabContent extends StatelessWidget {
         Container(
           child: IconButton.filled(
             onPressed: () {
-              _selectWorkersDialog(context, proyecto?["id"].toString() ?? "");
+              _selectWorkersDialog(context, widget.proyecto?["id"].toString() ?? "");
             },
             icon: Icon(Icons.edit),
           ),
@@ -116,10 +130,17 @@ class ThirdTabContent extends StatelessWidget {
               child: Text("Cancelar"),
             ),
             TextButton(
-              onPressed: () {
-                workersSeleccionados.forEach((workerId) {
-                  postProjectWorker().addProjectWorker(projectId, workerId);
+              onPressed: () async {
+                await Future.forEach(workersSeleccionados, (workerId) async {
+                  await postProjectWorker().addProjectWorker(projectId, workerId);
                 });
+
+                // Update the list after adding workers
+                setState(() {
+                  futureProjectWorkers = fetchProjectWorkers();
+                });
+
+                // Close the dialog
                 Navigator.of(context).pop();
               },
               child: Text("Guardar"),
