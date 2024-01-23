@@ -69,7 +69,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         // Clientes Asociados (window 2)
                         Container(
                           padding: const EdgeInsets.all(16.0),
-                          child: window2(proyecto: widget.proyecto, selectClientsDialog: _selectClientsDialog, idProyecto: _idProyecto,)
+                          child: window2(proyecto: widget.proyecto, idProyecto: _idProyecto,)
                         ),
 
                         // Contenido para la tercera pestaña
@@ -104,61 +104,5 @@ Tab5Content(idProyecto: _idProyecto)
   }
 
 
-  void _selectClientsDialog(String projectId) async {
-    List<dynamic> clientes = await fetchClientes();
-    List<String> clientesSeleccionados = [];
-
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Selecciona clientes"),
-          content: StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: clientes.map((cliente) {
-                    bool isSelected = clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
-
-                    return CheckboxListTile(
-                      title: Text(cliente["name"]?.toString() ?? ""),
-                      value: isSelected,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          if (value != null) {
-                            if (value) {
-                              clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
-                            } else {
-                              clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
-                            }
-                          }
-                        });
-                      },
-                    );
-                  }).toList(),
-                ),
-              );
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () {
-                clientesSeleccionados.forEach((clienteId) {
-                  postCustomerProject().addCustomerProject(projectId, clienteId);
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text("Guardar"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+ 
 }

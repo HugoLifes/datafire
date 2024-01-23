@@ -12,7 +12,7 @@ Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fech
         "name": nombre,
         "fecha_inicio": fechaInicio,
         "fecha_fin": fechaFinalizada,
-        "costo": costo,
+        "costo_inicial": costo,
       }),
     );
 
@@ -92,7 +92,7 @@ Future<void> updateProyecto(
         "name": nombre,
         "fecha_inicio": fechaInicio,
         "fecha_fin": fechaFinalizada,
-        "costo": costo
+        "costo_inicial": costo
       }),
     );
     if (res.statusCode == 200) {

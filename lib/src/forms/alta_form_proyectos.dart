@@ -16,7 +16,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
   final _nombreController = TextEditingController();
   DateTime? _inicioDate;
   DateTime? _finDate;
-  final _costoController = TextEditingController();
+  final _initialCostController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -85,16 +85,16 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
               ),
               const SizedBox(height: 16.0),
               TextFormField(
-                controller: _costoController,
+                controller: _initialCostController,
                 decoration: const InputDecoration(
-                  labelText: 'Costo',
+                  labelText: 'Costo Inicial',
                   border: OutlineInputBorder(),
                   fillColor: Colors.white,
                   filled: true,
                 ),
                 validator: (value) {
                   if (value!.isEmpty) {
-                    return 'Por favor, ingresa el costo total';
+                    return 'Por favor, ingresa el costo inicial';
                   }
                   return null;
                 },
@@ -108,7 +108,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                       String nombre = _nombreController.text;
                       String fechaInicio = _inicioDate.toString();
                       String fechaFinalizada = _finDate.toString();
-                      String costo = _costoController.text;
+                      String costo = _initialCostController.text;
 
                       String? projectId = await obtenerIdProyecto(nombre, fechaInicio, fechaFinalizada, costo);
 

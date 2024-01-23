@@ -58,9 +58,6 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
         ),
         TextButton(
           onPressed: () {
-            // Realizar la actualización aquí utilizando el servicio
-            // Puedes llamar a la función updateCliente con los nuevos valores
-            // _amountController.text, _serviceController.text, _costController.text
             String id = _id.text;
             String amount = _amountController.text;
             String description = _serviceController.text;
