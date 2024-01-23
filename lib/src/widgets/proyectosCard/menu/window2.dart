@@ -63,8 +63,8 @@ class _window2State extends State<window2> {
                               DataCell(
                                 IconButton(
                                   icon: Icon(Icons.delete),
-                                  onPressed: () {
-                                    deleteCustomerProjectRelation(customer['id']);
+                                  onPressed: () async {
+                                    await deleteCustomerProjectRelation(customer['id']);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         content: Text('Cliente eliminado correctamente'),
@@ -142,16 +142,20 @@ class _window2State extends State<window2> {
               child: Text("Cancelar"),
             ),
             TextButton(
-              onPressed: () {
-                clientesSeleccionados.forEach((clienteId) {
-                  postCustomerProject().addCustomerProject(projectId, clienteId);
-                });
-                Navigator.of(context).pop();
+onPressed: () async {
+  await Future.forEach(clientesSeleccionados, (clienteId) async {
+    await PostCustomerProject().addCustomerProject(projectId, clienteId);
+  });
 
-                                setState(() {
-                  futureCustomerProjects = fetchCustomerProjects();
-                });
-              },
+  // Actualizar la lista después de agregar clientes
+  setState(() {
+    futureCustomerProjects = fetchCustomerProjects();
+  });
+
+  // Cerrar el diálogo
+  Navigator.of(context).pop();
+},
+
               
               child: Text("Guardar"),
             ),

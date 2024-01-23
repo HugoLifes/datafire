@@ -186,7 +186,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
               onPressed: () {
                 // Guarda la relación entre el proyecto y los clientes seleccionados
                 clientesSeleccionados.forEach((clienteId) {
-                  postCustomerProject().addCustomerProject(projectId, clienteId);
+                  PostCustomerProject().addCustomerProject(projectId, clienteId);
                 });
                 Navigator.of(context).pop();
               },

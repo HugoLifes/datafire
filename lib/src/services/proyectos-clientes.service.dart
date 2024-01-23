@@ -37,8 +37,8 @@ Future<List<String>> fetchCustomerProjectsforcustomers() async {
   }
 }
 
-class postCustomerProject {
-  Future<void> addCustomerProject(String projectId, String customerId) async {
+class PostCustomerProject {
+  Future<bool> addCustomerProject(String projectId, String customerId) async {
     final Map<String, dynamic> requestData = {
       "project_id": projectId,
       "customer_id": customerId,
@@ -57,17 +57,21 @@ class postCustomerProject {
 
       if (res.statusCode == 201) {
         print("Cliente agregado exitosamente");
+        return true; // Indicar que la operación fue exitosa
       } else {
         print("Error al agregar el cliente: ${res.statusCode}");
         print("Respuesta del servidor: ${res.body}");
+        return false; // Indicar que hubo un error en la operación
       }
     } catch (err) {
       print("Error al realizar la solicitud http: $err");
+      return false; // Indicar que hubo un error en la solicitud HTTP
     }
   }
 }
 
-void deleteCustomerProjectRelation(int customerProjectId) async {
+
+Future<bool> deleteCustomerProjectRelation(int customerProjectId) async {
   final url =
       "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer/$customerProjectId";
 
@@ -76,15 +80,20 @@ void deleteCustomerProjectRelation(int customerProjectId) async {
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
     );
+
     if (res.statusCode == 200) {
       print("Relación eliminada exitosamente");
+      return true; // Indicar que la eliminación fue exitosa
     } else {
       print("Error al eliminar la relación");
+      return false; // Indicar que hubo un error en la eliminación
     }
   } catch (err) {
     print("Error al realizar la solicitud http: $err");
+    return false; // Indicar que hubo un error en la solicitud HTTP
   }
 }
+
 
 Future<List<Map<String, dynamic>>> fetchCustomerProjectsbyId(int customerId) async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
