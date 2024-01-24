@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 
 class TuFormularioCosto extends StatefulWidget {
   final String id_proyecto;
+  late Future<List<dynamic>> futureCosts;
 
-  const TuFormularioCosto({
+   TuFormularioCosto({
     Key? key,
     required this.id_proyecto,
+    required this.futureCosts
   }) : super(key: key);
 
   @override
-  _TuFormularioCostoState createState() => _TuFormularioCostoState();
+  _TuFormularioCostoState createState() => _TuFormularioCostoState(futureCosts);
 }
 
 class _TuFormularioCostoState extends State<TuFormularioCosto> {
@@ -18,6 +20,9 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
   TextEditingController _amountController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _costoController = TextEditingController();
+  late Future<List<dynamic>> futureCosts;
+
+  _TuFormularioCostoState(this.futureCosts);
 
   @override
   Widget build(BuildContext context) {
@@ -84,9 +89,14 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
                 String descriptionCosto = _descriptionController.text;
                 String priceCosto = _costoController.text;
                 postCosts().addCosto(idProyecto,amountCosto, descriptionCosto, priceCosto);
-
+                print("Hola");
+                setState(() {
+                  futureCosts = fetchCostsByProjectId(idProyecto);
+                });
                 Navigator.of(context).pop();
               }
+
+              
             },
             child: Text('Guardar'),
           ),

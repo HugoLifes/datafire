@@ -13,12 +13,20 @@ class Tab4Content extends StatefulWidget {
 }
 
 class _Tab4ContentState extends State<Tab4Content> {
+  late Future<List<dynamic>> futureCostos;
+
+  @override
+    void initState() {
+      super.initState();
+      futureCostos = fetchCostsByProjectId(widget.idProyecto);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: FutureBuilder<List<dynamic>>(
-        future: fetchCostsByProjectId(widget.idProyecto),
+        future: futureCostos,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return CircularProgressIndicator();
@@ -109,10 +117,13 @@ class _Tab4ContentState extends State<Tab4Content> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text("Agregar nuevo costo"),
-          content: TuFormularioCosto(id_proyecto: widget.idProyecto),
+          content: TuFormularioCosto(id_proyecto: widget.idProyecto, futureCosts: futureCostos),
           actions: [
             TextButton(
               onPressed: () {
+                setState(() {
+                  futureCostos = fetchCostsByProjectId(widget.idProyecto);
+                });
                 Navigator.of(context).pop();
               },
               child: Text("Cerrar"),
