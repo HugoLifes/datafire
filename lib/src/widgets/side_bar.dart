@@ -2,6 +2,7 @@ import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 import '../../main.dart';
@@ -100,7 +101,30 @@ class _SideBarState extends State<SideBar> {
             onTap: () {
               debugPrint('Balance');
             }),
+SidebarXItem(
+  icon: Icons.exit_to_app,
+  label: 'Log Out',
+  onTap: () async {
+    await _performLogout(context);
+  },
+),
+
+
       ],
     );
   }
+_performLogout(BuildContext context) async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+
+    Navigator.of(context).pushReplacementNamed('/login');
+  } catch (e) {
+    print('Error al realizar la navegación: $e');
+  }
 }
+
+
+
+}
+

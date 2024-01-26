@@ -38,6 +38,7 @@ dependencies:
   loader_overlay: ^2.1.0
   odoo: ^0.0.2
   odoo_repository: ^0.5.6
+  shared_preferences: ^2.0.8
   odoo_provider: ^0.0.3
   # starflut: ^0.9.5
   http: ^0.13.5
