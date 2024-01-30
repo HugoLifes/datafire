@@ -1,3 +1,4 @@
+import 'package:datafire/src/view/login/login_view.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -101,30 +102,63 @@ class _SideBarState extends State<SideBar> {
             onTap: () {
               debugPrint('Balance');
             }),
+                    SidebarXItem(
+            icon: Icons.verified_user,
+            label: 'Users',
+            onTap: () {
+              debugPrint('Balance');
+            }),
 SidebarXItem(
   icon: Icons.exit_to_app,
   label: 'Log Out',
   onTap: () async {
-    await _performLogout(context);
+    await _showLogoutConfirmationDialog(context);
   },
 ),
+
 
 
       ],
     );
   }
+}
+
+_showLogoutConfirmationDialog(BuildContext context) async {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: Text('Cerrar Sesión'),
+        content: Text('¿Seguro que quieres cerrar sesión?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Cerrar el diálogo
+            },
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await _performLogout(context);
+            },
+            child: Text('Confirmar'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
 _performLogout(BuildContext context) async {
   try {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
 
-    Navigator.of(context).pushReplacementNamed('/login');
+    Navigator.pushReplacementNamed(context, '/login');
   } catch (e) {
     print('Error al realizar la navegación: $e');
   }
 }
 
 
-
-}
 

@@ -46,7 +46,7 @@ class _LoginViewState extends State<LoginView> {
       // Muestra un mensaje de error en caso de credenciales incorrectas.
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Credenciales incorrectas'),
+          content: Text('Usuario y contraseña incorrecta, verifica los datos'),
           backgroundColor: Colors.red,
         ),
       );
@@ -57,29 +57,133 @@ class _LoginViewState extends State<LoginView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login'),
+        backgroundColor: Colors.blue,
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            TextField(
-              controller: _usernameController,
-              decoration: InputDecoration(labelText: 'Usuario'),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Colors.blue,
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              width: 300,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    blurRadius: 5,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "DATAFIRE",
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontStyle: FontStyle.normal,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.circular(60),
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.build,
+                          size: 60,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    Text(
+                      "Iniciar Sesión",
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    SizedBox(height: 15),
+                    TextField(
+                      controller: _usernameController,
+                      style: TextStyle(color: Colors.blue),
+                      decoration: InputDecoration(
+                        labelText: 'Usuario',
+                        labelStyle: TextStyle(color: Colors.blue),
+                        prefixIcon: Icon(
+                          Icons.person,
+                          color: Colors.blue,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      style: TextStyle(color: Colors.blue),
+                      decoration: InputDecoration(
+                        labelText: 'Contraseña',
+                        labelStyle: TextStyle(color: Colors.blue),
+                        prefixIcon: Icon(
+                          Icons.lock,
+                          color: Colors.blue,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.blue),
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _performLogin,
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.blue,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(5),
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                        child: Text(
+                          'Iniciar Sesión',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            SizedBox(height: 16),
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: InputDecoration(labelText: 'Contraseña'),
-            ),
-            SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: _performLogin,
-              child: Text('Iniciar Sesión'),
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:datafire/src/view/alta_trabajadores.dart';
+import 'package:datafire/src/view/alta_users(admin).dart';
 import 'package:datafire/src/view/subida_clientes.dart';
 import 'package:datafire/src/view/subida_proyectos.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,8 @@ class MotherView extends StatelessWidget {
               return AltaClientes();
             case 3:
               return AltaTrabajadores();
-            case 4:
+            case 5: 
+              return usersView();
             default:
               return Text(
                 'Page not found',
