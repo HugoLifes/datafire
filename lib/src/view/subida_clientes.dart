@@ -17,8 +17,7 @@ class _AltaClientesState extends State<AltaClientes> {
   @override
   void initState() {
     super.initState();
-    _clientesFuture =
-        obtenerClientes(); 
+    _clientesFuture = obtenerClientes();
   }
 
   @override
@@ -65,6 +64,7 @@ class _AltaClientesState extends State<AltaClientes> {
       body: FutureBuilder<List<dynamic>>(
         future: _clientesFuture,
         builder: (context, snapshot) {
+          // funcion case
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {

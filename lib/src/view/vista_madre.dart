@@ -16,6 +16,7 @@ class MotherView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    // se usa para poder trabajar las dimensiones
     var size = MediaQuery.of(context).size;
     return AnimatedBuilder(
         animation: controller,

@@ -2,6 +2,7 @@ import 'package:datafire/src/widgets/colors.dart';
 import 'package:datafire/src/widgets/ClientesCard/editarCliente.dart';
 import 'package:flutter/material.dart';
 
+//nombre de clases la primera mayuscula
 class clienteCard extends StatefulWidget {
   final Map<String, dynamic> cliente;
   const clienteCard({Key? key, required this.cliente}) : super(key: key);
@@ -9,6 +10,7 @@ class clienteCard extends StatefulWidget {
   State<clienteCard> createState() => _clienteCardState();
 }
 
+//nombre de clases la primera mayuscula
 class _clienteCardState extends State<clienteCard> {
   @override
   Widget build(BuildContext context) {
