@@ -4,6 +4,8 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'dart:math';
+
 
 import '../widgets/colors.dart';
 
@@ -17,6 +19,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   late int totalProjects;
   late List<PieChartSectionData> pieChartSections = [];
+  late List<FlSpot> costData = [];
 
   @override
   void initState() {
@@ -24,35 +27,33 @@ class _HomeState extends State<Home> {
     fetchData();
   }
 
-   Future<void> fetchData() async {
+  Future<void> fetchData() async {
     try {
       final response = await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/project-stats'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 
-  List<Color> monthColors = [
-  Colors.blue,
-  Colors.teal,
-  Colors.orange,
-  Colors.purple,
-  Colors.green,
-  Colors.red,
-  Colors.indigo,
-  Colors.amber,
-  Colors.deepPurple,
-  Colors.lime,
-  Colors.cyan,
-  Colors.deepOrange,
-];
+        List<Color> monthColors = [
+          Colors.blue,
+          Colors.teal,
+          Colors.orange,
+          Colors.purple,
+          Colors.green,
+          Colors.red,
+          Colors.indigo,
+          Colors.amber,
+          Colors.deepPurple,
+          Colors.lime,
+          Colors.cyan,
+          Colors.deepOrange,
+        ];
+
         setState(() {
           totalProjects = data['totalProjects'];
 
           pieChartSections = List<PieChartSectionData>.from(data['projectsByMonth'].asMap().entries.map((entry) {
             double projectCount = double.tryParse(entry.value['projectCount'].toString()) ?? 0;
-
             String monthName = DateFormat('MMMM').format(DateTime.parse(entry.value['month']));
-
-            // esto un color diferente a cada mes
             Color monthColor = monthColors[entry.key % monthColors.length];
 
             return PieChartSectionData(
@@ -60,11 +61,16 @@ class _HomeState extends State<Home> {
               value: projectCount,
               title: '$monthName\n${projectCount.toInt()}',
               titleStyle: TextStyle(
-                fontSize: 12, // Tamaño del texto del mes
-                color: Colors.black, // Color del texto del mes
-                fontWeight: FontWeight.bold, // Puedes ajustar el peso de la fuente según tus preferencias
+                fontSize: 12,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
               ),
             );
+          }));
+
+          costData = List<FlSpot>.from(data['CostsByMonth'].asMap().entries.map((entry) {
+            double totalExpense = double.tryParse(entry.value['totalExpense'].toString()) ?? 0;
+            return FlSpot(entry.key.toDouble(), totalExpense);
           }));
         });
       } else {
@@ -126,6 +132,70 @@ class _HomeState extends State<Home> {
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
+                 Container(
+  margin: EdgeInsets.only(top: 10),
+  height: 200,
+  child: LineChart(
+    LineChartData(
+      gridData: FlGridData(show: false),
+      titlesData: FlTitlesData(
+        bottomTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 22,
+            getTextStyles: (BuildContext context, double value) => const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
+          getTitles: (value) {
+            switch (value.toInt()) {
+              case 0:
+                return 'Ene';
+              case 1:
+                return 'Feb';
+              case 2:
+                return 'Mar';
+              case 3:
+                return 'Abr';
+              case 4:
+                return 'May';
+              case 5:
+                return 'Jun';
+              case 6:
+                return 'Jul';
+              case 7:
+                return 'Ago';
+              case 8:
+                return 'Sep';
+              case 9:
+                return 'Oct';
+              case 10:
+                return 'Nov';
+              case 11:
+                return 'Dic';
+              default:
+                return '';
+            }
+          },
+          margin: 8,
+        ),
+      ),
+      borderData: FlBorderData(
+        show: true,
+        border: Border.all(color: Colors.grey),
+      ),
+      minX: 0,
+      maxX: 11,
+      minY: 0,
+      maxY: costData.isNotEmpty ? costData.map((spot) => spot.y).reduce(max) : 1,
+      lineBarsData: [
+        LineChartBarData(
+          spots: costData,
+          isCurved: true,
+          colors: [Colors.blue],
+          belowBarData: BarAreaData(show: false),
+        ),
+      ],
+    ),
+  ),
+),
+
                 ],
               ),
             ),
