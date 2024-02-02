@@ -19,3 +19,21 @@ Future<List<dynamic>> fetchUsers() async {
     return [];
   }
 }
+
+Future<void> deleteUser(int id) async {
+  final url =
+      "http://localhost:3000/Api/v1/users";
+  try {
+    final res = await http.delete(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+    );
+    if (res.statusCode == 200) {
+      print("Usuario eliminado exitosamente");
+    } else {
+      print("Error al eliminar el Usuario");
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+  }
+}

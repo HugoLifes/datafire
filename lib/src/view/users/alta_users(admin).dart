@@ -18,69 +18,92 @@ class _UsersViewState extends State<UsersView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        FutureBuilder<List<dynamic>>(
-          future: futureUsers,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return Center(
-                child: Text('Error: ${snapshot.error}'),
-              );
-            } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(
-                child: Text('No hay usuarios disponibles'),
-              );
-            } else {
-              List<dynamic> users = snapshot.data!;
-
-              return DataTable(
-                columns: const [
-                  DataColumn(label: Text("ID")),
-                  DataColumn(label: Text('Trabajadores')),
-                  DataColumn(label: Text("Correo")),
-                  DataColumn(
-                    label: Text('Eliminar'),
-                    numeric: false,
-                  ),
-                ],
-                rows: users.map((worker) => DataRow(
-                  cells: [
-                    DataCell(Text(worker["id"].toString())),
-                    DataCell(Text(worker['name'].toString())),
-                    DataCell(Text(worker["email"].toString())),
-                    DataCell(
-                      SizedBox(
-                        width: 50, // Ajusta el ancho según tus necesidades
-                        child: IconButton(
-                          icon: Icon(Icons.delete),
-                          onPressed: () async {
-                            // Eliminar trabajadores
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text('Trabajador eliminado correctamente'),
-                              ),
-                            );
-                            // Actualizar la lista después de eliminar el usuario
-                            setState(() {
-                              futureUsers = fetchUsers();
-                            });
-                          },
-                        ),
+    return Scaffold(
+      appBar: AppBar(
+        title: (Text("Alta y baja Usuarios")),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            FutureBuilder<List<dynamic>>(
+              future: futureUsers,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text('Error: ${snapshot.error}'),
+                  );
+                } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Center(
+                    child: Text('No hay usuarios disponibles'),
+                  );
+                } else {
+                  List<dynamic> users = snapshot.data!;
+        
+                  return DataTable(
+                    columns: const [
+                      DataColumn(label: Text("ID")),
+                      DataColumn(label: Text('Trabajadores')),
+                      DataColumn(label: Text("Correo")),
+                      DataColumn(label: Text("Rol")),
+                      DataColumn(
+                        label: Text('Eliminar'),
+                        numeric: false,
                       ),
-                    ),
-                  ],
-                )).toList(),
-              );
-            }
-          },
+                    ],
+                    rows: users.map((worker) => DataRow(
+                      cells: [
+                        DataCell(Text(worker["id"].toString())),
+                        DataCell(Text(worker['name'].toString())),
+                        DataCell(Text(worker["email"].toString())),
+                        DataCell(Text(worker["role"].toString())),
+                        DataCell(
+                          SizedBox(
+                            width: 50, 
+                            child: IconButton(
+                              style: ButtonStyle(),
+                              icon: Icon(Icons.delete),
+                              onPressed: () async {
+                                // Eliminar trabajadores
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Trabajador eliminado correctamente'),
+                                  ),
+                                );
+                                setState(() {
+                                  futureUsers = fetchUsers();
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    )).toList(),
+                  );
+                }
+              },
+            ),
+            Container(
+              width: 115,
+              alignment: Alignment.center,
+              child: IconButton.filled(onPressed: (){},
+              padding: EdgeInsets.all(10),
+               icon: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(Icons.add),
+                  SizedBox(width: 10),
+                  Text("Nuevo", style: TextStyle(color: Colors.white, fontSize: 20),)
+                ],
+              ), ),
+            )
+          ],
         ),
-        // Puedes agregar más widgets aquí según sea necesario
-      ],
+      ),
     );
   }
 }
