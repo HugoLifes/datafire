@@ -89,23 +89,8 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
             },
           ),
           const SizedBox(height: 16.0),
-          TextFormField(
-            controller: _costoController,
-            decoration: const InputDecoration(
-              labelText: 'Costo total del proyecto',
-              border: OutlineInputBorder(),
-              fillColor: Colors.white,
-              filled: true,
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Por favor, ingresa el costo del proyecto';
-              }
-              return null;
-            },
-          ),
           const SizedBox(height: 16.0),
-          Container(
+          SizedBox(
             width: double.infinity,
             child: FilledButton(
               style: ElevatedButton.styleFrom(
@@ -116,15 +101,14 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
                   String nombre = _nombreController.text;
                   String fechaInicio = _inicioDate?.toString() ?? '';
                   String fechaFinalizada = _finDate?.toString() ?? '';
-                  String costo = _costoController.text;
     
                   try {
-                    await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada, costo);
+                    await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada);
                     print('Proyecto actualizado: $nombre');
                     // Muestra el Snackbar al actualizar el proyecto
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Proyecto actualizado correctamente'),
+                      const SnackBar(
+                        content: Text('Proyecto actualizado correctamente'),
                       ),
                     );
                   } catch (error) {
@@ -136,7 +120,7 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
             ),
           ),
           const SizedBox(height: 6.0),
-    Container(
+    SizedBox(
       width: double.infinity,
       child: IconButton.filled(
         icon: const Icon(Icons.delete_forever),
@@ -163,13 +147,12 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
             try {
               Navigator.of(context).pop();
     
-              // Mostrar un SnackBar 
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
                   content: Text('Proyecto Eliminado...'),
                 ),
               );
-    
+
               await deleteProyecto(widget.proyecto?["id"]);
               print('Proyecto eliminado');
             } catch (error) {
@@ -219,7 +202,7 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
           ),
     Text(
       "\$${_costoController.text}",
-      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
     ),
     
         ],
