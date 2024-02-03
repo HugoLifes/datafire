@@ -28,11 +28,11 @@ class _ThirdTabContentState extends State<ThirdTabContent> {
           future: futureProjectWorkers,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return CircularProgressIndicator();
+              return const CircularProgressIndicator();
             } else if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Text('No hay datos disponibles');
+              return const Text('No hay datos disponibles');
             } else {
               List<dynamic> workerProjects = snapshot.data!;
               List workerData = workerProjects
@@ -53,18 +53,19 @@ class _ThirdTabContentState extends State<ThirdTabContent> {
                             DataCell(Text(worker['worker_name'].toString())),
                             DataCell(
                               IconButton(
-                                icon: Icon(Icons.delete),
-                                onPressed: () async {
-                                  await deleteProjectWorkers(worker['id']);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('Trabajador eliminado correctamente'),
-                                    ),
-                                  );
-                                  setState(() {
-                                    futureProjectWorkers = fetchProjectWorkers();
-                                  });
-                                },
+                                icon: const Icon(Icons.delete),
+onPressed: () async {
+  await deleteProjectWorkers(worker['id']);
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(
+      content: Text('Trabajador eliminado correctamente'),
+    ),
+  );
+  setState(() {
+    futureProjectWorkers = fetchProjectWorkers();
+  });
+},
+
                               ),
                             ),
                           ],
@@ -74,13 +75,11 @@ class _ThirdTabContentState extends State<ThirdTabContent> {
             }
           },
         ),
-        Container(
-          child: IconButton.filled(
-            onPressed: () {
-              _selectWorkersDialog(context, widget.proyecto?["id"].toString() ?? "");
-            },
-            icon: Icon(Icons.edit),
-          ),
+        IconButton.filled(
+          onPressed: () {
+            _selectWorkersDialog(context, widget.proyecto?["id"].toString() ?? "");
+          },
+          icon: const Icon(Icons.edit),
         ),
       ],
     );
@@ -94,7 +93,7 @@ class _ThirdTabContentState extends State<ThirdTabContent> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Selecciona trabajadores"),
+          title: const Text("Selecciona trabajadores"),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
@@ -127,7 +126,7 @@ class _ThirdTabContentState extends State<ThirdTabContent> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancelar"),
+              child: const Text("Cancelar"),
             ),
             TextButton(
               onPressed: () async {
@@ -143,7 +142,7 @@ class _ThirdTabContentState extends State<ThirdTabContent> {
                 // Close the dialog
                 Navigator.of(context).pop();
               },
-              child: Text("Guardar"),
+              child: const Text("Guardar"),
             ),
           ],
         );

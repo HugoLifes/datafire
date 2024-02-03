@@ -46,260 +46,258 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
     );
   }
 
-  Container formView(BuildContext context) {
-    return Container(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _nombreController,
-              decoration: const InputDecoration(
-                labelText: 'Nombre del Proyecto',
-                border: OutlineInputBorder(),
-                fillColor: Colors.white,
-                filled: true,
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, ingresa el nombre del proyecto';
-                }
-                return null;
-              },
+  Form formView(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 16.0),
+          TextFormField(
+            controller: _nombreController,
+            decoration: const InputDecoration(
+              labelText: 'Nombre del Proyecto',
+              border: OutlineInputBorder(),
+              fillColor: Colors.white,
+              filled: true,
             ),
-            const SizedBox(height: 16.0),
-            _buildDateTimePicker(
-              labelText: 'Fecha de inicio',
-              selectedDate: _inicioDate,
-              onDateSelected: (date) {
-                setState(() {
-                  _inicioDate = date;
-                });
-              },
-            ),
-            const SizedBox(height: 16.0),
-            _buildDateTimePicker(
-              labelText: 'Fecha de finalización',
-              selectedDate: _finDate,
-              onDateSelected: (date) {
-                setState(() {
-                  _finDate = date;
-                });
-              },
-            ),
-            const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _costoController,
-              decoration: const InputDecoration(
-                labelText: 'Costo total del proyecto',
-                border: OutlineInputBorder(),
-                fillColor: Colors.white,
-                filled: true,
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, ingresa el costo del proyecto';
-                }
-                return null;
-              },
-            ),
-            const SizedBox(height: 16.0),
-            Container(
-              width: double.infinity,
-              child: FilledButton(
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                ),
-                onPressed: () async {
-                  if (_formKey.currentState!.validate()) {
-                    String nombre = _nombreController.text;
-                    String fechaInicio = _inicioDate?.toString() ?? '';
-                    String fechaFinalizada = _finDate?.toString() ?? '';
-                    String costo = _costoController.text;
-
-                    try {
-                      await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada, costo);
-                      print('Proyecto actualizado: $nombre');
-                      // Muestra el Snackbar al actualizar el proyecto
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Proyecto actualizado correctamente'),
-                        ),
-                      );
-                    } catch (error) {
-                      print('Error al actualizar el proyecto: $error');
-                    }
-                  }
-                },
-                child: const Text('Sobreescribir'),
-              ),
-            ),
-            const SizedBox(height: 6.0),
-Container(
-  width: double.infinity,
-  child: IconButton.filled(
-    icon: Icon(Icons.delete_forever),
-    style: IconButton.styleFrom(
-      backgroundColor: Colors.red,
-    ),
-onPressed: () async {
-  // Mostrar un diálogo de confirmación antes de eliminar
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Eliminar Proyecto'),
-        content: Text('¿Seguro que quieres eliminar este proyecto?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text('Cancelar'),
-          ),
-          TextButton(
-            onPressed: () async {
-              try {
-                Navigator.of(context).pop();
-
-                // Mostrar un SnackBar 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Proyecto Eliminado...'),
-                  ),
-                );
-
-                await deleteProyecto(widget.proyecto?["id"]);
-                print('Proyecto eliminado');
-              } catch (error) {
-                print('Error al eliminar el proyecto: $error');
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Por favor, ingresa el nombre del proyecto';
               }
+              return null;
             },
-            child: Text('Confirmar'),
           ),
-        ],
+          const SizedBox(height: 16.0),
+          _buildDateTimePicker(
+            labelText: 'Fecha de inicio',
+            selectedDate: _inicioDate,
+            onDateSelected: (date) {
+              setState(() {
+                _inicioDate = date;
+              });
+            },
+          ),
+          const SizedBox(height: 16.0),
+          _buildDateTimePicker(
+            labelText: 'Fecha de finalización',
+            selectedDate: _finDate,
+            onDateSelected: (date) {
+              setState(() {
+                _finDate = date;
+              });
+            },
+          ),
+          const SizedBox(height: 16.0),
+          TextFormField(
+            controller: _costoController,
+            decoration: const InputDecoration(
+              labelText: 'Costo total del proyecto',
+              border: OutlineInputBorder(),
+              fillColor: Colors.white,
+              filled: true,
+            ),
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Por favor, ingresa el costo del proyecto';
+              }
+              return null;
+            },
+          ),
+          const SizedBox(height: 16.0),
+          Container(
+            width: double.infinity,
+            child: FilledButton(
+              style: ElevatedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 20),
+              ),
+              onPressed: () async {
+                if (_formKey.currentState!.validate()) {
+                  String nombre = _nombreController.text;
+                  String fechaInicio = _inicioDate?.toString() ?? '';
+                  String fechaFinalizada = _finDate?.toString() ?? '';
+                  String costo = _costoController.text;
+    
+                  try {
+                    await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada, costo);
+                    print('Proyecto actualizado: $nombre');
+                    // Muestra el Snackbar al actualizar el proyecto
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: const Text('Proyecto actualizado correctamente'),
+                      ),
+                    );
+                  } catch (error) {
+                    print('Error al actualizar el proyecto: $error');
+                  }
+                }
+              },
+              child: const Text('Sobreescribir'),
+            ),
+          ),
+          const SizedBox(height: 6.0),
+    Container(
+      width: double.infinity,
+      child: IconButton.filled(
+        icon: const Icon(Icons.delete_forever),
+        style: IconButton.styleFrom(
+    backgroundColor: Colors.red,
+        ),
+    onPressed: () async {
+      // Mostrar un diálogo de confirmación antes de eliminar
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+    return AlertDialog(
+      title: const Text('Eliminar Proyecto'),
+      content: const Text('¿Seguro que quieres eliminar este proyecto?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('Cancelar'),
+        ),
+        TextButton(
+          onPressed: () async {
+            try {
+              Navigator.of(context).pop();
+    
+              // Mostrar un SnackBar 
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Proyecto Eliminado...'),
+                ),
+              );
+    
+              await deleteProyecto(widget.proyecto?["id"]);
+              print('Proyecto eliminado');
+            } catch (error) {
+              print('Error al eliminar el proyecto: $error');
+            }
+          },
+          child: const Text('Confirmar'),
+        ),
+      ],
+    );
+        },
       );
     },
-  );
-},
-
-  ),
-),
-SizedBox(height: 10),
-Center(
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Container(
-        width: 150.0,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.lightBlueAccent, Colors.blue],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Text(
-              "Total:",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-Text(
-  "\$${_costoController?.text ?? ''}",
-  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-),
-
-          ],
-        ),
+    
       ),
-      Container(
-        width: 150.0,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.amber, Colors.orange],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+    ),
+    const SizedBox(height: 10),
+    Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+    Container(
+      width: 150.0,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Colors.lightBlueAccent, Colors.blue],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
           ),
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Text(
-              "Abonado:",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            Text(
-  "\$${_abonadoController?.text ?? ''}",
-  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-),
-          ],
-        ),
+        ],
       ),
-      Container(
-        width: 150.0,
-        padding: EdgeInsets.all(10),
-        margin: EdgeInsets.all(10),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.deepOrange, Colors.red],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      child: Column(
+        children: [
+          const Text(
+            "Total:",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
           ),
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 7,
-              offset: Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Text(
-              "Restante:",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-            Text(
-              "\$${_remainingController?.text ?? "0"}",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ],
-        ),
+    Text(
+      "\$${_costoController.text}",
+      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+    ),
+    
+        ],
       ),
-    ],
-  ),
-),
-
-
-
-          ],
+    ),
+    Container(
+      width: 150.0,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Colors.amber, Colors.orange],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          const Text(
+            "Abonado:",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          Text(
+      "\$${_abonadoController.text}",
+      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+    ),
+        ],
+      ),
+    ),
+    Container(
+      width: 150.0,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [Colors.deepOrange, Colors.red],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          const Text(
+            "Restante:",
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          Text(
+            "\$${_remainingController.text}",
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+        ],
+      ),
+    ),
+        ],
+      ),
+    ),
+    
+    
+    
+        ],
       ),
     );
   }
@@ -327,7 +325,7 @@ Text(
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: labelText,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
           fillColor: Colors.white,
           filled: true,
         ),
@@ -339,7 +337,7 @@ Text(
                   ? "${selectedDate.toLocal()}".split(' ')[0]
                   : 'Seleccione una fecha',
             ),
-            Icon(Icons.calendar_today),
+            const Icon(Icons.calendar_today),
           ],
         ),
       ),

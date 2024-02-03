@@ -1,18 +1,13 @@
-import 'package:datafire/src/view/login/login_view.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sidebarx/sidebarx.dart';
 
-import '../../main.dart';
 
 class SideBar extends StatefulWidget {
-  SideBar({super.key, required this.controller});
-  SidebarXController controller;
-  // List<OrderM>? order = [];
-  // IdModel? idmodel;
+  const SideBar({super.key, required this.controller});
+  final SidebarXController controller;
   @override
   State<SideBar> createState() => _SideBarState();
 }
@@ -129,20 +124,20 @@ _showLogoutConfirmationDialog(BuildContext context) async {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: Text('Cerrar Sesión'),
-        content: Text('¿Seguro que quieres cerrar sesión?'),
+        title: const Text('Cerrar Sesión'),
+        content: const Text('¿Seguro que quieres cerrar sesión?'),
         actions: <Widget>[
           TextButton(
             onPressed: () {
               Navigator.of(context).pop(); // Cerrar el diálogo
             },
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () async {
               await _performLogout(context);
             },
-            child: Text('Confirmar'),
+            child: const Text('Confirmar'),
           ),
         ],
       );

@@ -57,6 +57,7 @@ Future<String?> buscarIdProyectoPorNombre(String nombre) async {
     print("Error al realizar la solicitud http para buscar proyecto por nombre: $err");
     return null;
   }
+  return null;
 }
 
 

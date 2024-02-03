@@ -2,15 +2,15 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-Future<void> postAbono(String monto, String fecha_abono, String projectId, int customerId) async {
-  final url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos";
+Future<void> postAbono(String monto, String fechaAbono, String projectId, int customerId) async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos";
 
   try {
     final res = await http.post(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(
-          {"monto": monto, "fecha_abono": fecha_abono, "projectId": projectId,"customerId": customerId}),
+          {"monto": monto, "fecha_abono": fechaAbono, "projectId": projectId,"customerId": customerId}),
     );
     if (res.statusCode == 200) {
       print("Abono Guardado Exitosamente");
@@ -29,7 +29,7 @@ Future<List<dynamic>> fetchAbonos() async {
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
       final List<dynamic> abonos = jsonDecode(res.body);
-      return abonos ?? []; // Asegúrate de manejar el caso de nulo
+      return abonos; 
     } else {
       print("Error al obtener la lista de abonos");
       return [];
@@ -60,14 +60,14 @@ Future<List<dynamic>> fetchAbonosById(String projectId) async {
 
 
 Future<void> updateAbono(
-    int id, String monto, String fecha_abono, String projectId, String customerId) async {
+    int id, String monto, String fechaAbono, String projectId, String customerId) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos/$id";
   try {
     final res = await http.patch(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(
-          {"monto": monto, "fecha_abono": fecha_abono, "projectId": projectId, "customerId": customerId}),
+          {"monto": monto, "fecha_abono": fechaAbono, "projectId": projectId, "customerId": customerId}),
     );
     if (res.statusCode == 200) {
       print("abono actualizado exitosamente");

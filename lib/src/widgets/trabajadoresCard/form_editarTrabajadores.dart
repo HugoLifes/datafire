@@ -1,5 +1,4 @@
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/success.dart';
 import 'package:flutter/material.dart';
 
@@ -131,12 +130,12 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
               width: double.infinity,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String name = _nombreController.text;
-                    String last_name = _apellidosController.text;
+                    String lastName = _apellidosController.text;
                     String age = _edadController.text;
                     String cargo = _cargoController.text;
                     String salary = _salarioController.text;
@@ -145,7 +144,7 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                       await trabajadorInstance.actualizarTrabajador(
                         id: widget.trabajador?["id"],
                         nombre: name,
-                        apellido: last_name,
+                        apellido: lastName,
                         edad: int.parse(age),
                         position: cargo,
                         salario: int.parse(salary),
@@ -160,7 +159,7 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                         ),
                       );
                       print(
-                          'Datos a enviar para actualizar trabajador: ${widget.trabajador?["id"]} $name, $last_name, $cargo, $salary, $age');
+                          'Datos a enviar para actualizar trabajador: ${widget.trabajador?["id"]} $name, $lastName, $cargo, $salary, $age');
                     } catch (error) {
                       print('Error al actualizar el trabajador: $error');
                     }
@@ -173,7 +172,7 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
             Container(
               width: double.infinity,
               child: IconButton.filled(
-                icon: Icon(Icons.delete_forever),
+                icon: const Icon(Icons.delete_forever),
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.red
                 ),
@@ -182,15 +181,15 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Eliminar Trabajador'),
-                        content: Text(
+                        title: const Text('Eliminar Trabajador'),
+                        content: const Text(
                             '¿Seguro que quieres eliminar este Trabajador?'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('Cancelar'),
+                            child: const Text('Cancelar'),
                           ),
                           TextButton(
                             onPressed: () async {
@@ -206,7 +205,7 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                                     'Error al eliminar el trabajador: $error');
                               }
                             },
-                            child: Text('Confirmar'),
+                            child: const Text('Confirmar'),
                           ),
                         ],
                       );

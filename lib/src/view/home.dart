@@ -10,7 +10,7 @@ import 'dart:math';
 import '../widgets/colors.dart';
 
 class Home extends StatefulWidget {
-  Home({Key? key}) : super(key: key);
+  const Home({Key? key}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -60,7 +60,7 @@ class _HomeState extends State<Home> {
               color: monthColor,
               value: projectCount,
               title: '$monthName\n${projectCount.toInt()}',
-              titleStyle: TextStyle(
+              titleStyle: const TextStyle(
                 fontSize: 12,
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -110,11 +110,11 @@ class _HomeState extends State<Home> {
             Container(
               padding: const EdgeInsets.only(top: 55, left: 10),
               width: size.width > 600 ? size.width * 0.8 : 500,
-              child: Text('Revisa tu flujo'),
+              child: const Text('Revisa tu flujo'),
             ),
             Container(
-              margin: EdgeInsets.only(top: 110, left: 20),
-              padding: EdgeInsets.all(10),
+              margin: const EdgeInsets.only(top: 110, left: 20),
+              padding: const EdgeInsets.all(10),
               decoration: CardTempII(blur: 3.0, of1: 0, of2: 3).getCard(),
               width: size.width < 800 ? size.width * 0.89 : size.width * 0.89,
               height: size.height < 800 ? size.height * 0.45 : 350,
@@ -122,18 +122,18 @@ class _HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: 15, top: 6),
-                    child: Text('Total'),
+                    padding: const EdgeInsets.only(left: 15, top: 6),
+                    child: const Text('Total'),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 15, top: 5),
-                    child: Text(
+                    padding: const EdgeInsets.only(left: 15, top: 5),
+                    child: const Text(
                       'Ganancia',
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
                  Container(
-  margin: EdgeInsets.only(top: 10),
+  margin: const EdgeInsets.only(top: 10),
   height: 200,
   child: LineChart(
     LineChartData(
@@ -204,7 +204,7 @@ class _HomeState extends State<Home> {
                 top: size.height < 760 ? size.height * 0.67 : 480,
                 left: size.width > 1000 ? size.width * 0.038 : 20,
               ),
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: CardTempII(blur: 3.0, of1: 0, of2: 3).getCard(),
               width: size.width < 800 ? size.width * 0.45 : size.width * 0.40,
               height: size.height < 800 ? size.height * 0.45 : 350,
@@ -212,12 +212,12 @@ class _HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: 15, top: 6),
-                    child: Text('Nuevos'),
+                    padding: const EdgeInsets.only(left: 15, top: 6),
+                    child: const Text('Nuevos'),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 15, top: 5),
-                    child: Text(
+                    padding: const EdgeInsets.only(left: 15, top: 5),
+                    child: const Text(
                       'Proyectos',
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
@@ -230,7 +230,7 @@ class _HomeState extends State<Home> {
                 top: size.height < 760 ? size.height * 0.67 : 480,
                 left: size.width > 1000 ? size.width * 0.47 : 560,
               ),
-              padding: EdgeInsets.all(10),
+              padding: const EdgeInsets.all(10),
               decoration: CardTempII(blur: 3.0, of1: 0, of2: 3).getCard(),
               width: size.width < 800 ? size.width * 0.45 : size.width * 0.40,
               height: size.height < 800 ? size.height * 0.45 : 350,
@@ -238,12 +238,12 @@ class _HomeState extends State<Home> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.only(left: 15, top: 6),
-                    child: Text('Proyectos de los ultimos 12 meses'),
+                    padding: const EdgeInsets.only(left: 15, top: 6),
+                    child: const Text('Proyectos de los ultimos 12 meses'),
                   ),
                   Container(
-                    padding: EdgeInsets.only(left: 15, top: 5),
-                    child: Text(
+                    padding: const EdgeInsets.only(left: 15, top: 5),
+                    child: const Text(
                       'Proyectos',
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
@@ -257,14 +257,13 @@ class _HomeState extends State<Home> {
                           sectionsSpace: 0,
                           centerSpaceRadius: 40,
                           startDegreeOffset: -90,
-                          borderData: FlBorderData(show: false),
- 
+                          borderData: FlBorderData(show: false), 
                           centerSpaceColor: Colors.transparent,
                         ),
                       ),
                     )
                   else
-                    CircularProgressIndicator(),
+                    const CircularProgressIndicator(),
                 ],
               ),
             ),

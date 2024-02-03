@@ -1,10 +1,6 @@
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/success.dart';
 import 'package:flutter/material.dart';
-
-import '../widgets/colors.dart';
 
 class AltaTrabajadorPage extends StatefulWidget {
   @override

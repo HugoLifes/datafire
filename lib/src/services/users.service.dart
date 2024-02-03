@@ -21,7 +21,7 @@ Future<List<dynamic>> fetchUsers() async {
 }
 
 Future<void> deleteUser(int id) async {
-  final url =
+  const url =
       "http://localhost:3000/Api/v1/users";
   try {
     final res = await http.delete(

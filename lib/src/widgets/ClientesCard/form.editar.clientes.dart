@@ -1,8 +1,6 @@
 import 'package:datafire/src/app.dart';
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/view/success.dart';
-import 'package:datafire/src/view/subida_clientes.dart';
 import 'package:flutter/material.dart';
 
 class EditarClienteForm extends StatefulWidget {
@@ -95,11 +93,10 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
               width: double.infinity,
               child: FilledButton(
                 style: FilledButton.styleFrom(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                 ),
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    String name = _nombreController.text;
                     // Logica para actualizar un cliente
                     try {
                       await clienteActual.actualizarCliente(
@@ -108,7 +105,6 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
                         apellido: _apellidosController.text,
                         company: _empresaController.text,
                       );
-                      print('Cliente actualizado: $name');
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -131,7 +127,7 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
             Container(
               width: double.infinity,
               child: IconButton.filled(
-                icon: Icon(Icons.delete_forever),
+                icon: const Icon(Icons.delete_forever),
                 style: IconButton.styleFrom(
                   backgroundColor: Colors.red,
                 ),

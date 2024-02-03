@@ -1,6 +1,4 @@
 
-import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window2.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window3.dart';
@@ -51,7 +49,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
               length: 5,
               child: Column(
                 children: [
-                  TabBar(
+                  const TabBar(
                     tabs: [
                       Tab(text: 'Detalles'),
                       Tab(text: 'Clientes Asociados'),

@@ -19,7 +19,6 @@ Future<List<dynamic>> fetchCosts() async {
   }
 }
 
-class postCosts {
 Future<String?> addCosto(String projectId, String amount, String description, String precio) async {
   const urlCrearProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos/services";
 
@@ -36,14 +35,19 @@ Future<String?> addCosto(String projectId, String amount, String description, St
     );
   
     if (resCrearCosto.statusCode == 201) {
-      print("Guardado exxitosamente");
+      print("Guardado exitosamente");
+      return "Guardado exitosamente"; // Puedes devolver un valor más significativo aquí
+    } else {
+      print("Error en la solicitud http para crear proyecto. Código: ${resCrearCosto.statusCode}");
+      return null; 
     }
   } catch (err) {
     print("Error al realizar la solicitud http para crear proyecto: $err");
-    return null;
+    return null; // Devuelve null u otro valor significativo según tus necesidades
   }
 }
-}
+
+
 
 Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos/services";

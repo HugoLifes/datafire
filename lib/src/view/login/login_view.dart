@@ -21,7 +21,6 @@ class _LoginViewState extends State<LoginView> {
       'password': _passwordController.text,
     };
 
-    // Realizar la solicitud HTTP POST.
     final response = await http.post(
       Uri.parse('https://datafire-production.up.railway.app/Api/v1/auth/login'),
       headers: {
@@ -45,7 +44,7 @@ class _LoginViewState extends State<LoginView> {
     } else {
       // Muestra un mensaje de error en caso de credenciales incorrectas.
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Usuario y contraseña incorrecta, verifica los datos'),
           backgroundColor: Colors.red,
         ),
@@ -61,7 +60,7 @@ class _LoginViewState extends State<LoginView> {
         elevation: 0,
       ),
       body: Container(
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.blue,
         ),
         child: Center(
@@ -85,7 +84,7 @@ class _LoginViewState extends State<LoginView> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
+                    const Text(
                       "DATAFIRE",
                       style: TextStyle(
                         fontSize: 36,
@@ -94,7 +93,7 @@ class _LoginViewState extends State<LoginView> {
                         color: Colors.blue,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Container(
                       width: 120,
                       height: 120,
@@ -102,7 +101,7 @@ class _LoginViewState extends State<LoginView> {
                         color: Colors.blue,
                         borderRadius: BorderRadius.circular(60),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Icon(
                           Icons.build,
                           size: 60,
@@ -110,8 +109,8 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 15),
-                    Text(
+                    const SizedBox(height: 15),
+                    const Text(
                       "Iniciar Sesión",
                       style: TextStyle(
                         fontSize: 28,
@@ -119,50 +118,50 @@ class _LoginViewState extends State<LoginView> {
                         color: Colors.grey,
                       ),
                     ),
-                    SizedBox(height: 15),
+                    const SizedBox(height: 15),
                     TextField(
                       controller: _usernameController,
-                      style: TextStyle(color: Colors.blue),
+                      style: const TextStyle(color: Colors.blue),
                       decoration: InputDecoration(
                         labelText: 'Usuario',
-                        labelStyle: TextStyle(color: Colors.blue),
-                        prefixIcon: Icon(
+                        labelStyle: const TextStyle(color: Colors.blue),
+                        prefixIcon: const Icon(
                           Icons.person,
                           color: Colors.blue,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                          borderSide: const BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                          borderSide: const BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     TextField(
                       controller: _passwordController,
                       obscureText: true,
-                      style: TextStyle(color: Colors.blue),
+                      style: const TextStyle(color: Colors.blue),
                       decoration: InputDecoration(
                         labelText: 'Contraseña',
-                        labelStyle: TextStyle(color: Colors.blue),
-                        prefixIcon: Icon(
+                        labelStyle: const TextStyle(color: Colors.blue),
+                        prefixIcon: const Icon(
                           Icons.lock,
                           color: Colors.blue,
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                          borderSide: const BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(5),
                         ),
                         focusedBorder: OutlineInputBorder(
-                          borderSide: BorderSide(color: Colors.blue),
+                          borderSide: const BorderSide(color: Colors.blue),
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: _performLogin,
                       style: ElevatedButton.styleFrom(
@@ -171,8 +170,8 @@ class _LoginViewState extends State<LoginView> {
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         child: Text(
                           'Iniciar Sesión',
                           style: TextStyle(fontSize: 18, color: Colors.white),

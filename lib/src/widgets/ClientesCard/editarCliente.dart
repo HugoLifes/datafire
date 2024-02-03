@@ -1,9 +1,6 @@
-// Import necessary libraries
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
-import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/widgets/ClientesCard/form.editar.clientes.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 class DetallesYEditarClientesPage extends StatefulWidget {
   final Map<String, dynamic>? cliente;
@@ -34,7 +31,7 @@ class _DetallesYEditarClientesPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles y Editar Cliente'),
+        title: const Text('Detalles y Editar Cliente'),
       ),
       body: Row(
         children: [
@@ -44,7 +41,7 @@ class _DetallesYEditarClientesPageState
               length: 3,
               child: Column(
                 children: [
-                  TabBar(
+                  const TabBar(
                     tabs: [
                       Tab(text: 'Detalles'),
                       Tab(text: 'Proyectos'),
@@ -84,16 +81,16 @@ class _DetallesYEditarClientesPageState
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return CircularProgressIndicator();
+                                return const CircularProgressIndicator();
                               } else if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
                               } else if (!snapshot.hasData ||
                                   snapshot.data!.isEmpty) {
-                                return Text('El cliente no tiene proyectos asociados');
+                                return const Text('El cliente no tiene proyectos asociados');
                               } else {
                                 List<dynamic> customerProjects = snapshot.data!;
                                 return DataTable(
-                                  columns: [
+                                  columns: const [
                                     DataColumn(label: Text("ID")),
                                     DataColumn(label: Text('Proyecto')),
                                   ],
@@ -112,10 +109,8 @@ class _DetallesYEditarClientesPageState
                         ),
 
                         // Contenido para la tercera pestaña
-                        Container(
-                          child: Center(
-                            child: Text('Contenido de la tercera opción'),
-                          ),
+                        const Center(
+                          child: Text('Contenido de la tercera opción'),
                         ),
                       ],
                     ),
@@ -131,7 +126,6 @@ class _DetallesYEditarClientesPageState
             child: Container(
               width: 300,
               padding: const EdgeInsets.all(18.0),
-              // Assuming you have the EditarClienteForm widget defined
               child: EditarClienteForm(cliente: widget.cliente),
             ),
           ),

@@ -22,7 +22,6 @@ class _AltaClientesState extends State<AltaClientes> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
 
     return Scaffold(

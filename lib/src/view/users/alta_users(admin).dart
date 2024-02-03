@@ -1,4 +1,3 @@
-import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/services/users.service.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +19,7 @@ class _UsersViewState extends State<UsersView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: (Text("Alta y baja Usuarios")),
+        title: (const Text("Alta y baja Usuarios")),
       ),
       body: Center(
         child: Column(
@@ -29,7 +28,7 @@ class _UsersViewState extends State<UsersView> {
               future: futureUsers,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else if (snapshot.hasError) {
@@ -37,7 +36,7 @@ class _UsersViewState extends State<UsersView> {
                     child: Text('Error: ${snapshot.error}'),
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return Center(
+                  return const Center(
                     child: Text('No hay usuarios disponibles'),
                   );
                 } else {
@@ -64,12 +63,12 @@ class _UsersViewState extends State<UsersView> {
                           SizedBox(
                             width: 50, 
                             child: IconButton(
-                              style: ButtonStyle(),
-                              icon: Icon(Icons.delete),
+                              style: const ButtonStyle(),
+                              icon: const Icon(Icons.delete),
                               onPressed: () async {
                                 // Eliminar trabajadores
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                     content: Text('Trabajador eliminado correctamente'),
                                   ),
                                 );
@@ -90,8 +89,8 @@ class _UsersViewState extends State<UsersView> {
               width: 115,
               alignment: Alignment.center,
               child: IconButton.filled(onPressed: (){},
-              padding: EdgeInsets.all(10),
-               icon: Row(
+              padding: const EdgeInsets.all(10),
+               icon: const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
                 children: [

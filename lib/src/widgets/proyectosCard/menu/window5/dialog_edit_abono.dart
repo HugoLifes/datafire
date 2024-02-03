@@ -28,24 +28,24 @@ class _EditAbonoDialogState extends State<EditAbonoDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Editar Costo"),
+      title: const Text("Editar Costo"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
             controller: _amountController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: 'Cantidad'),
+            decoration: const InputDecoration(labelText: 'Cantidad'),
           ),
           TextFormField(
             controller: _serviceController,
             keyboardType: TextInputType.text,
-            decoration: InputDecoration(labelText: 'Servicio'),
+            decoration: const InputDecoration(labelText: 'Servicio'),
           ),
           TextFormField(
             controller: _costController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: 'Costo'),
+            decoration: const InputDecoration(labelText: 'Costo'),
           ),
         ],
       ),
@@ -54,22 +54,18 @@ class _EditAbonoDialogState extends State<EditAbonoDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancelar"),
+          child: const Text("Cancelar"),
         ),
         TextButton(
           onPressed: () {
-            // Realizar la actualización aquí utilizando el servicio
-            // Puedes llamar a la función updateCliente con los nuevos valores
-            // _amountController.text, _serviceController.text, _costController.text
             String id = _id.text;
             String amount = _amountController.text;
             String description = _serviceController.text;
             String cost = _costController.text;
             updateCostos(id, amount, description, cost);
-            print("id, amount, description, cost");
             Navigator.of(context).pop();
           },
-          child: Text("Guardar"),
+          child: const Text("Guardar"),
         ),
       ],
     );

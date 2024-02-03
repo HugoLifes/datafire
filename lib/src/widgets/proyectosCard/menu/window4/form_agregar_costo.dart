@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class TuFormularioCosto extends StatefulWidget {
   final String id_proyecto;
-  late Future<List<dynamic>> futureCosts;
+  final Future<List<dynamic>> futureCosts;
 
    TuFormularioCosto({
     Key? key,
@@ -17,9 +17,9 @@ class TuFormularioCosto extends StatefulWidget {
 
 class _TuFormularioCostoState extends State<TuFormularioCosto> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _amountController = TextEditingController();
-  TextEditingController _descriptionController = TextEditingController();
-  TextEditingController _costoController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _costoController = TextEditingController();
   late Future<List<dynamic>> futureCosts;
 
   _TuFormularioCostoState(this.futureCosts);
@@ -33,7 +33,7 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
           TextFormField(
             controller: _amountController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Cantidad',
               fillColor: Colors.white,
               filled: true,
@@ -46,11 +46,11 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
               return null;
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           TextFormField(
             controller: _descriptionController,
-            keyboardType: TextInputType.text, // Cambiado a TextInputType.text
-            decoration: InputDecoration(
+            keyboardType: TextInputType.text, 
+            decoration: const InputDecoration(
               labelText: 'Servicio',
               fillColor: Colors.white,
               filled: true,
@@ -63,11 +63,11 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
               return null;
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           TextFormField(
             controller: _costoController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Costo',
               fillColor: Colors.white,
               filled: true,
@@ -80,7 +80,7 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
               return null;
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           FilledButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
@@ -88,7 +88,7 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
                 String amountCosto = _amountController.text;
                 String descriptionCosto = _descriptionController.text;
                 String priceCosto = _costoController.text;
-                postCosts().addCosto(idProyecto,amountCosto, descriptionCosto, priceCosto);
+                addCosto(idProyecto,amountCosto, descriptionCosto, priceCosto);
                 print("Hola");
                 setState(() {
                   futureCosts = fetchCostsByProjectId(idProyecto);
@@ -98,7 +98,7 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
 
               
             },
-            child: Text('Guardar'),
+            child: const Text('Guardar'),
           ),
         ],
       ),

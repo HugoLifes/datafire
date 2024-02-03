@@ -1,5 +1,4 @@
 import 'package:datafire/src/services/cliente.servicio.dart';
-import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/success.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +33,7 @@ class _DetallesYEditarTrabajadoresPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles y Editar Cliente'),
+        title: const Text('Detalles y Editar Cliente'),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -47,7 +46,7 @@ class _DetallesYEditarTrabajadoresPageState
                 padding: const EdgeInsets.all(16.0),
                 child: SingleChildScrollView(
                   child: DataTable(
-                    columns: [
+                    columns: const [
                       DataColumn(label: Text('Campo')),
                       DataColumn(label: Text('Valor')),
                     ],
@@ -137,13 +136,13 @@ class _DetallesYEditarTrabajadoresPageState
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     String name = _nombreController.text;
-                    String last_name = _apellidosController.text;
+                    String lastName = _apellidosController.text;
                     String cargo = _cargoController.text;
 
                     // Lógica para editar el proyecto existente
                     try {
                       await updateCliente(
-                          widget.trabajador?['id'], name, last_name, cargo);
+                          widget.trabajador?['id'], name, lastName, cargo);
                       print('Cliente actualizado: $name');
                       // Puedes llamar a una función o realizar cualquier otra acción aquí
                       Navigator.pop(context);
@@ -154,7 +153,7 @@ class _DetallesYEditarTrabajadoresPageState
                         ),
                       );
                       print(
-                          'Datos a enviar para actualizar cliente: $name, $last_name, $cargo');
+                          'Datos a enviar para actualizar cliente: $name, $lastName, $cargo');
                     } catch (error) {
                       print('Error al actualizar el cliente: $error');
                       // Puedes mostrar un mensaje de error al usuario si es necesario
@@ -168,22 +167,22 @@ class _DetallesYEditarTrabajadoresPageState
             Container(
               width: double.infinity,
               child: IconButton.filled(
-                icon: Icon(Icons.delete_forever),
+                icon: const Icon(Icons.delete_forever),
                 onPressed: () async {
                   // Mostrar un diálogo de confirmación antes de eliminar
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Eliminar Cliente'),
+                        title: const Text('Eliminar Cliente'),
                         content:
-                            Text('¿Seguro que quieres eliminar este Cliente?'),
+                            const Text('¿Seguro que quieres eliminar este Cliente?'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('Cancelar'),
+                            child: const Text('Cancelar'),
                           ),
                           TextButton(
                             onPressed: () async {
@@ -199,7 +198,7 @@ class _DetallesYEditarTrabajadoresPageState
                                 print('Error al eliminar el proyecto: $error');
                               }
                             },
-                            child: Text('Confirmar'),
+                            child: const Text('Confirmar'),
                           ),
                         ],
                       );

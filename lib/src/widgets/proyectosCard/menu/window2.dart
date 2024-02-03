@@ -37,11 +37,11 @@ class _window2State extends State<window2> {
             future: futureCustomerProjects,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return CircularProgressIndicator();
+                return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return Text('No hay Clientes disponibles', style: TextStyle(fontSize: 20));
+                return const Text('No hay Clientes disponibles', style: TextStyle(fontSize: 20));
               } else {
                 List<dynamic> customerProjects = snapshot.data!;
                 List customerData = customerProjects
@@ -49,7 +49,7 @@ class _window2State extends State<window2> {
                     .toList();
 
                 return DataTable(
-                  columns: [
+                  columns: const [
                     DataColumn(label: Text('Clientes')),
                     DataColumn(
                       label: Text('Eliminar'),
@@ -62,7 +62,7 @@ class _window2State extends State<window2> {
                               DataCell(Text(customer['customer_name'].toString())),
                               DataCell(
                                 IconButton(
-                                  icon: Icon(Icons.delete),
+                                  icon: const Icon(Icons.delete),
                                   onPressed: () async {
                                     await deleteCustomerProjectRelation(customer['id']);
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -84,14 +84,12 @@ class _window2State extends State<window2> {
               }
             },
           ),
-          SizedBox(height: 20),
-          Container(
-            child: IconButton.filled(
-              onPressed: () {
-                _selectClientsDialog(widget.idProyecto);
-              },
-              icon: Icon(Icons.edit),
-            ),
+          const SizedBox(height: 20),
+          IconButton.filled(
+            onPressed: () {
+              _selectClientsDialog(widget.idProyecto);
+            },
+            icon: const Icon(Icons.edit),
           ),
         ],
       ),
@@ -106,7 +104,7 @@ class _window2State extends State<window2> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Selecciona clientes"),
+          title: const Text("Selecciona clientes"),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
@@ -139,7 +137,7 @@ class _window2State extends State<window2> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancelar"),
+              child: const Text("Cancelar"),
             ),
             TextButton(
 onPressed: () async {
@@ -157,7 +155,7 @@ onPressed: () async {
 },
 
               
-              child: Text("Guardar"),
+              child: const Text("Guardar"),
             ),
           ],
         );

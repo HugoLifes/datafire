@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<void> postCliente(String nombre, String apellido, String company) async {
-  final url = "https://datafire-production.up.railway.app/api/v1/clientes";
+  const url = "https://datafire-production.up.railway.app/api/v1/clientes";
 
   try {
     final res = await http.post(
@@ -29,7 +29,7 @@ Future<List<dynamic>> fetchClientes() async {
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
       final List<dynamic> clientes = jsonDecode(res.body);
-      return clientes ?? []; // Asegúrate de manejar el caso de nulo
+      return clientes; // Asegúrate de manejar el caso de nulo
     } else {
       print("Error al obtener la lista de clientes");
       return [];
@@ -42,14 +42,14 @@ Future<List<dynamic>> fetchClientes() async {
 
 
 Future<void> updateCliente(
-    int id, String nombre, String last_name, String company) async {
+    int id, String nombre, String lastName, String company) async {
   final url = "https://datafire-production.up.railway.app/api/v1/clientes/$id";
   try {
     final res = await http.patch(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
       body: jsonEncode(
-          {"name": nombre, "last_name": last_name, "company": company}),
+          {"name": nombre, "last_name": lastName, "company": company}),
     );
     if (res.statusCode == 200) {
       print("cliente actualizado exitosamente");

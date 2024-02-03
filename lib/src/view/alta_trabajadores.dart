@@ -1,7 +1,5 @@
 import 'package:datafire/src/forms/alta_form_trabajadores.dart';
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/services/trabajadores.servicio.dart';
-import 'package:datafire/src/widgets/colors.dart';
 import 'package:datafire/src/widgets/trabajadoresCard/cardTrabajadores.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +21,6 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -39,7 +36,7 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
               bottomLeft: Radius.circular(25)),
         ),
         elevation: 0.00,
-        backgroundColor: Color.fromARGB(255, 255, 248, 248),
+        backgroundColor: const Color.fromARGB(255, 255, 248, 248),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {

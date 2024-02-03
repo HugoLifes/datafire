@@ -4,8 +4,6 @@ import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/success.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/colors.dart';
-
 class AltaProyectoPage extends StatefulWidget {
   @override
   _AltaProyectoPageState createState() => _AltaProyectoPageState();
@@ -20,7 +18,6 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Agregar nuevo proyecto"),
@@ -36,7 +33,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
   Center formview(BuildContext context) {
     return Center(
       child: Container(
-        constraints: BoxConstraints(maxWidth: 600),
+        constraints: const BoxConstraints(maxWidth: 600),
         padding: const EdgeInsets.only(top: 70, left: 40, right: 40),
         child: Form(
           key: _formKey,
@@ -114,7 +111,6 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
 
                       if (projectId != null) {
                         _selectClientsDialog(projectId);
-                        print('Proyecto dado de alta: $nombre con ID: $projectId');
                         Navigator.pop(context);
 
                         Navigator.push(
@@ -219,7 +215,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
       child: InputDecorator(
         decoration: InputDecoration(
           labelText: labelText,
-          border: OutlineInputBorder(),
+          border: const OutlineInputBorder(),
           fillColor: Colors.white,
           filled: true,
         ),
@@ -231,7 +227,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                   ? "${selectedDate.toLocal()}".split(' ')[0]
                   : 'Seleccione una fecha',
             ),
-            Icon(Icons.calendar_today),
+            const Icon(Icons.calendar_today),
           ],
         ),
       ),

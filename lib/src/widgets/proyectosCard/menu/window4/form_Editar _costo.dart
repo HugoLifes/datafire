@@ -28,24 +28,24 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Editar Costo"),
+      title: const Text("Editar Costo"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           TextFormField(
             controller: _amountController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: 'Cantidad'),
+            decoration: const InputDecoration(labelText: 'Cantidad'),
           ),
           TextFormField(
             controller: _serviceController,
             keyboardType: TextInputType.text,
-            decoration: InputDecoration(labelText: 'Servicio'),
+            decoration: const InputDecoration(labelText: 'Servicio'),
           ),
           TextFormField(
             controller: _costController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(labelText: 'Costo'),
+            decoration: const InputDecoration(labelText: 'Costo'),
           ),
         ],
       ),
@@ -54,7 +54,7 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: Text("Cancelar"),
+          child: const Text("Cancelar"),
         ),
         TextButton(
           onPressed: () {
@@ -66,7 +66,7 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
             print("id, amount, description, cost");
             Navigator.of(context).pop();
           },
-          child: Text("Guardar"),
+          child: const Text("Guardar"),
         ),
       ],
     );

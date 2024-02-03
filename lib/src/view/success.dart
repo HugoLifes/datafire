@@ -51,7 +51,7 @@ class SuccessfulScreen extends StatelessWidget {
               child: FilledButton(
                 style: FilledButton.styleFrom(
                     backgroundColor: greenSuccess,
-                    padding: EdgeInsets.symmetric(vertical: 20)),
+                    padding: const EdgeInsets.symmetric(vertical: 20)),
                 onPressed: () {
                   Navigator.push(
                     context,

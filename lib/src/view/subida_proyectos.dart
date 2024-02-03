@@ -1,7 +1,5 @@
 import 'package:datafire/src/forms/alta_form_proyectos.dart';
-import 'package:datafire/src/forms/alta_form_trabajadores.dart';
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/widgets/proyectosCard/cardProyecto.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +22,6 @@ class _AltaProyectosState extends State<AltaProyectos> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -43,7 +40,7 @@ class _AltaProyectosState extends State<AltaProyectos> {
           ],
         ),
         backgroundColor: accentCanvasColor,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20)),
         ),
       ),

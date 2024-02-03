@@ -11,7 +11,7 @@ class window1 extends StatelessWidget {
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
         child: DataTable(
-          columns: [
+          columns: const [
             DataColumn(label: Text('Campo')),
             DataColumn(label: Text('Valor')),
           ],

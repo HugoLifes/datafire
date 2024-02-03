@@ -15,7 +15,6 @@ class DetallesYEditarTrabajadoresPage extends StatefulWidget {
 
 class _DetallesYEditarTrabajadoresPageState
     extends State<DetallesYEditarTrabajadoresPage> {
-  final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   final _apellidosController = TextEditingController();
   final _cargoController = TextEditingController();
@@ -32,7 +31,7 @@ class _DetallesYEditarTrabajadoresPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles y Editar Trabajador'),
+        title: const Text('Detalles y Editar Trabajador'),
       ),
       body: Row(
         children: [
@@ -42,7 +41,7 @@ class _DetallesYEditarTrabajadoresPageState
               length: 3,
               child: Column(
                 children: [
-                  TabBar(
+                  const TabBar(
                     tabs: [
                       Tab(text: 'Detalles'),
                       Tab(text: 'Proyectos'),
@@ -57,7 +56,7 @@ class _DetallesYEditarTrabajadoresPageState
                           padding: const EdgeInsets.all(16.0),
                           child: SingleChildScrollView(
                             child: DataTable(
-                              columns: [
+                              columns: const [
                                 DataColumn(label: Text('Campo')),
                                 DataColumn(label: Text('Valor')),
                               ],
@@ -82,16 +81,16 @@ class _DetallesYEditarTrabajadoresPageState
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return CircularProgressIndicator();
+                                return const CircularProgressIndicator();
                               } else if (snapshot.hasError) {
                                 return Text('Error: ${snapshot.error}');
                               } else if (!snapshot.hasData ||
                                   snapshot.data!.isEmpty) {
-                                return Text('El cliente no tiene proyectos asociados');
+                                return const Text('El cliente no tiene proyectos asociados');
                               } else {
                                 List<dynamic> customerProjects = snapshot.data!;
                                 return DataTable(
-                                  columns: [
+                                  columns: const [
                                     DataColumn(label: Text("ID")),
                                     DataColumn(label: Text('Proyecto')),
                                   ],
@@ -110,10 +109,8 @@ class _DetallesYEditarTrabajadoresPageState
                         ),
 
                         // Contenido para la tercera pestaña
-                        Container(
-                          child: Center(
-                            child: Text('Contenido de la tercera opción'),
-                          ),
+                        const Center(
+                          child: Text('Contenido de la tercera opción'),
                         ),
                       ],
                     ),

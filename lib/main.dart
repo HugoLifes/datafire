@@ -12,8 +12,8 @@ void main() async {
     debugShowCheckedModeBanner: false,
     initialRoute: token != null ? '/home' : '/login',
     routes: {
-      '/login': (context) => LoginView(),
-      '/home': (context) => MyApp(),
+      '/login': (context) => const LoginView(),
+      '/home': (context) => const MyApp(),
     },
   ));
 }

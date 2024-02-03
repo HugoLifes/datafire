@@ -82,7 +82,7 @@ class _addAbonoFormState extends State<addAbonoForm> {
           TextFormField(
             controller: _amountController,
             keyboardType: TextInputType.number,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Importe',
               fillColor: Colors.white,
               filled: true,
@@ -95,14 +95,14 @@ class _addAbonoFormState extends State<addAbonoForm> {
               return null;
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           TextFormField(
             controller: _dateController,
             readOnly: true,
             onTap: () {
               _selectDate(context);
             },
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'Fecha',
               fillColor: Colors.white,
               filled: true,
@@ -115,7 +115,7 @@ class _addAbonoFormState extends State<addAbonoForm> {
               return null;
             },
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           DropdownButton<int>(
             value: selectedCustomerId,
             items: buildDropdownMenuItems(),
@@ -124,9 +124,9 @@ class _addAbonoFormState extends State<addAbonoForm> {
                 selectedCustomerId = value;
               });
             },
-            hint: Text('Seleccionar Cliente'),
+            hint: const Text('Seleccionar Cliente'),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate() && selectedCustomerId != null) {
@@ -134,18 +134,12 @@ class _addAbonoFormState extends State<addAbonoForm> {
                 String amountCosto = _amountController.text;
                 int customerId = selectedCustomerId!;
                 String selectedDateString = _dateController.text;
-
-                print('ID Proyecto: $idProyecto');
-                print('Cantidad: $amountCosto');
-                print('ID Cliente: $customerId');
-                print('Fecha Seleccionada: $selectedDateString');
-
                 postAbono(amountCosto, selectedDateString, idProyecto, customerId);
 
                 Navigator.of(context).pop(); // Cerrar el formulario
               }
             },
-            child: Text('Guardar'),
+            child: const Text('Guardar'),
           ),
         ],
       ),

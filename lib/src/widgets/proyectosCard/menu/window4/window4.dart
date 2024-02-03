@@ -29,11 +29,11 @@ class _Tab4ContentState extends State<Tab4Content> {
         future: futureCostos,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
             return Text("Error: ${snapshot.error}");
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Text("No hay servicios asociados al proyecto.");
+            return const Text("No hay servicios asociados al proyecto.");
           } else {
             List<dynamic> serviciosProyecto = snapshot.data!.where((servicio) =>
               servicio["project_id"].toString() == widget.idProyecto
@@ -46,15 +46,15 @@ class _Tab4ContentState extends State<Tab4Content> {
                   return Card(
                     color: Colors.green[200],
                     shape: RoundedRectangleBorder(
-                      side: BorderSide(color: Colors.green, width: 2.0),
+                      side: const BorderSide(color: Colors.green, width: 2.0),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: Column(
+                    child: const Column(
                       children: <Widget>[
                         ListTile(
-                          leading: const  Icon(Icons.payments_outlined),
+                          leading: Icon(Icons.payments_outlined),
                           title:  Text("Costo inicial", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                          subtitle: const  Text("Costo inicial"),
+                          subtitle: Text("Costo inicial"),
                         ),
                       ],
                     ),
@@ -65,11 +65,11 @@ class _Tab4ContentState extends State<Tab4Content> {
                     child: Column(
                       children: <Widget>[
                         ListTile(
-                          leading: Icon(Icons.payments_outlined),
-                          title: Text(servicio["cost"]?.toString() ?? "", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          leading: const Icon(Icons.payments_outlined),
+                          title: Text(servicio["cost"]?.toString() ?? "", style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
                           subtitle: Text(servicio["service"]?.toString() ?? ""),
                           trailing: IconButton(
-                            icon: Icon(Icons.edit),
+                            icon: const Icon(Icons.edit),
                             onPressed: () {
                               showDialog(
                                 context: context,
@@ -86,18 +86,18 @@ class _Tab4ContentState extends State<Tab4Content> {
                 } else {
                   return Column(
                     children: [
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Center(
                         child: IconButton.filled(
                           style: ButtonStyle(
                             padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-                              EdgeInsets.symmetric(horizontal: 24.0),
+                              const EdgeInsets.symmetric(horizontal: 24.0),
                             ),
                           ),
                           onPressed: () {
                             _mostrarDialogo();
                           },
-                          icon: Icon(Icons.add),
+                          icon: const Icon(Icons.add),
                         ),
                       ),
                     ],
@@ -116,7 +116,7 @@ class _Tab4ContentState extends State<Tab4Content> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Agregar nuevo costo"),
+          title: const Text("Agregar nuevo costo"),
           content: TuFormularioCosto(id_proyecto: widget.idProyecto, futureCosts: futureCostos),
           actions: [
             TextButton(
@@ -126,7 +126,7 @@ class _Tab4ContentState extends State<Tab4Content> {
                 });
                 Navigator.of(context).pop();
               },
-              child: Text("Cerrar"),
+              child: const Text("Cerrar"),
             ),
           ],
         );
