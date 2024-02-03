@@ -11,6 +11,7 @@ class EditarProyectosForm extends StatefulWidget {
 }
 
 class _EditarProyectosFormState extends State<EditarProyectosForm> {
+   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   final _nombreController = TextEditingController();
   DateTime? _inicioDate;
@@ -36,14 +37,16 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: formView(context),
-        ),
-      ),
-    );
+return Scaffold(
+  key: _scaffoldKey,
+  body: SingleChildScrollView(
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: formView(context),
+    ),
+  ),
+);
+
   }
 
   Form formView(BuildContext context) {
@@ -142,25 +145,31 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
           },
           child: const Text('Cancelar'),
         ),
-        TextButton(
-          onPressed: () async {
-            try {
-              Navigator.of(context).pop();
-    
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Proyecto Eliminado...'),
-                ),
-              );
+TextButton(
+  onPressed: () async {
+    try {
+      deleteProyecto(widget.proyecto?["id"]);
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(
+  const SnackBar(
+    content: Text('Proyecto Eliminado...'),
+  ),
+);
 
-              await deleteProyecto(widget.proyecto?["id"]);
-              print('Proyecto eliminado');
-            } catch (error) {
-              print('Error al eliminar el proyecto: $error');
-            }
-          },
-          child: const Text('Confirmar'),
-        ),
+
+      // Agregar un pequeño retraso para dar tiempo al Snackbar de mostrarse
+      await Future.delayed(const Duration(seconds: 1));
+
+      Navigator.of(context).pop();
+
+      await deleteProyecto(widget.proyecto?["id"]);
+      print('Proyecto eliminado');
+    } catch (error) {
+      print('Error al eliminar el proyecto: $error');
+    }
+  },
+  child: const Text('Confirmar'),
+),
+
       ],
     );
         },

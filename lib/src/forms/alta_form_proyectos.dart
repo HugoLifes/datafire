@@ -142,7 +142,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Selecciona clientes"),
+          title: const Text("Selecciona clientes"),
           content: StatefulBuilder(
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
@@ -176,7 +176,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Cancelar"),
+              child: const Text("Cancelar"),
             ),
             TextButton(
               onPressed: () {
@@ -186,7 +186,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 });
                 Navigator.of(context).pop();
               },
-              child: Text("Guardar"),
+              child: const Text("Guardar"),
             ),
           ],
         );
