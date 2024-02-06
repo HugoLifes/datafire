@@ -1,13 +1,30 @@
 // cliente_network.dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 Future<List<dynamic>> fetchTrabajadores() async {
   const url = "https://datafire-production.up.railway.app/api/v1/trabajadores";
 
   try {
-    final res = await http.get(Uri.parse(url));
+    // Obtener el token almacenado en SharedPreferences
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
+
+    if (token == null) {
+      print("Token no encontrado en SharedPreferences");
+      return [];
+    }
+
+    // Configurar el encabezado de autorización con el token
+    Map<String, String> headers = {
+      'Authorization': 'Bearer $token',
+    };
+
+    // Realizar la solicitud HTTP con el encabezado de autorización
+    final res = await http.get(Uri.parse(url), headers: headers);
+
     if (res.statusCode == 200) {
       final List<dynamic> trabajadores = jsonDecode(res.body);
       return trabajadores;

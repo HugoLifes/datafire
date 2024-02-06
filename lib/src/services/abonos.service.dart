@@ -77,7 +77,7 @@ Future<void> updateAbono(
   }
 }
 
-Future<void> deleteCliente(int id) async {
+Future<void> deleteAbono(int id) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos/$id";
   try {
     final res = await http.delete(

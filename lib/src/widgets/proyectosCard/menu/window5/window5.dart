@@ -1,7 +1,7 @@
 import 'package:datafire/src/services/abonos.service.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window5/dialog_edit_abono.dart';
 import 'package:datafire/src/widgets/proyectosCard/menu/window5/form_agregar_abono.dart';
 import 'package:flutter/material.dart';
+
 
 
 class Tab5Content extends StatefulWidget {
@@ -45,7 +45,7 @@ class _Tab5ContentState extends State<Tab5Content> {
                     child: const Column(
                       children: <Widget>[
                         ListTile(
-                          leading: Icon(Icons.payments_outlined),
+                          leading: const Icon(Icons.payments_outlined),
                           title:  Text("\$200", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
                           subtitle: Text("Pago inicial"),
                         ),
@@ -53,24 +53,19 @@ class _Tab5ContentState extends State<Tab5Content> {
                     ),
                   );
                 } else if (index < serviciosProyecto.length + 1) {
-                  var servicio = serviciosProyecto[index - 1];
+                  var abono = serviciosProyecto[index - 1];
                   return Card(
                     color: Colors.yellow[200],
                     child: Column(
                       children: <Widget>[
                         ListTile(
                           leading: const Icon(Icons.payments_outlined),
-                          title: Text("\$${servicio["monto"]?.toString()}", style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                          subtitle: Text(servicio["fecha_abono"]?.toString() ?? ""),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.edit),
+                          title: Text("\$${abono["monto"]?.toString()}", style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          subtitle: Text(abono["fecha_abono"]?.toString() ?? ""),
+                          trailing:IconButton(
+                            icon:  Icon(Icons.delete),
                             onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return EditAbonoDialog(costo: servicio);
-                                },
-                              );
+                              print([""]);
                             },
                           ),
                         ),
@@ -105,6 +100,8 @@ class _Tab5ContentState extends State<Tab5Content> {
     );
   }
 
+
+
   void _mostrarDialogo() {
     showDialog(
       context: context,
@@ -125,3 +122,4 @@ class _Tab5ContentState extends State<Tab5Content> {
     );
   }
 }
+

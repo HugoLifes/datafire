@@ -191,7 +191,6 @@ class _DetallesYEditarTrabajadoresPageState
                                     .pop(); // Cerrar el diálogo antes de la eliminación
                                 await deleteTrabajador(
                                     widget.trabajador?['id']);
-                                print('Cliente eliminado');
                                 Navigator.pop(context);
                                 // Puedes agregar más lógica aquí si es necesario
                               } catch (error) {
