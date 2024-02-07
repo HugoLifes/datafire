@@ -14,14 +14,3 @@ Future<Map<String, String>> getAuthHeaders() async {
   return {'Authorization': 'Bearer $token'};
 }
 
-Future<Map<String, String>> getAuthHeaderSpecial() async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? token = prefs.getString('token');
-
-  if (token == null) {
-    print("Token no encontrado en SharedPreferences");
-    return {};
-  }
-
-  return {'Authorization': 'Bearer $token'};
-}
