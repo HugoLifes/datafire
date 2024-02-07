@@ -45,7 +45,7 @@ class _Tab5ContentState extends State<Tab5Content> {
                     child: const Column(
                       children: <Widget>[
                         ListTile(
-                          leading: const Icon(Icons.payments_outlined),
+                          leading: Icon(Icons.payments_outlined),
                           title:  Text("\$200", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
                           subtitle: Text("Pago inicial"),
                         ),
@@ -63,7 +63,7 @@ class _Tab5ContentState extends State<Tab5Content> {
                           title: Text("\$${abono["monto"]?.toString()}", style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
                           subtitle: Text(abono["fecha_abono"]?.toString() ?? ""),
                           trailing:IconButton(
-                            icon:  Icon(Icons.delete),
+                            icon:  const Icon(Icons.delete),
                             onPressed: () {
                               print([""]);
                             },

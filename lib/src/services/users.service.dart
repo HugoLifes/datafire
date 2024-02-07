@@ -1,12 +1,14 @@
 // cliente_network.dart
 import 'dart:convert';
+import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchUsers() async {
-  const url = "http://localhost:3000/Api/v1/users";
+  const url = "https://datafire-production.up.railway.app/Api/v1/users";
+Map<String, String> headers = await getAuthHeaders();
 
   try {
-    final res = await http.get(Uri.parse(url));
+    final res = await http.get(Uri.parse(url), headers: headers);
     if (res.statusCode == 200) {
       final List<dynamic> trabajadores = jsonDecode(res.body);
       return trabajadores;

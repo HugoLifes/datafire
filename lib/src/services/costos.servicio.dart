@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchCosts() async {
@@ -21,11 +22,11 @@ Future<List<dynamic>> fetchCosts() async {
 
 Future<String?> addCosto(String projectId, String amount, String description, String precio) async {
   const urlCrearProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos/services";
-
+Map<String, String> headers = await getAuthHeaders();
   try {
     final resCrearCosto = await http.post(
       Uri.parse(urlCrearProyecto),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode({
         "project_id": projectId,
         "amount": amount,
@@ -70,10 +71,11 @@ Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
 Future<void> updateCostos(
     String id, String amount, String service, String cost) async {
   final url = "http://localhost:3000/Api/v1/proyectos/services/$id";
+  Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode(
           {"amount": amount, "service": service, "cost": cost}),
     );
@@ -90,11 +92,11 @@ Future<void> updateCostos(
 void deleteCost(int costId) async {
   final url =
       "https://datafire-production.up.railway.app/api/v1/proyectos/services/$costId";
-
+Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
       print("Relación eliminada exitosamente");

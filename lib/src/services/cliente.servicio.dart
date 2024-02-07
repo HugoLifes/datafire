@@ -1,5 +1,6 @@
 // cliente_network.dart
 import 'dart:convert';
+import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> postCliente(String nombre, String apellido, String company) async {
@@ -24,9 +25,10 @@ Future<void> postCliente(String nombre, String apellido, String company) async {
 
 Future<List<dynamic>> fetchClientes() async {
   const url = "https://datafire-production.up.railway.app/api/v1/clientes";
+Map<String, String> headers = await getAuthHeaders();
 
   try {
-    final res = await http.get(Uri.parse(url));
+    final res = await http.get(Uri.parse(url), headers: headers);
     if (res.statusCode == 200) {
       final List<dynamic> clientes = jsonDecode(res.body);
       return clientes; // Asegúrate de manejar el caso de nulo

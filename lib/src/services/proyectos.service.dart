@@ -1,13 +1,15 @@
 // cliente_network.dart
 import 'dart:convert';
+import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
   const urlCrearProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos";
 
   try {
+    Map<String, String> headers = await getAuthHeaders();
     final resCrearProyecto = await http.post(
       Uri.parse(urlCrearProyecto),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode({
         "name": nombre,
         "fecha_inicio": fechaInicio,
@@ -39,7 +41,7 @@ Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fech
 
 Future<String?> buscarIdProyectoPorNombre(String nombre) async {
   const urlBuscarProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos";
-
+  
   try {
     final resBuscarProyecto = await http.get(Uri.parse(urlBuscarProyecto));
     if (resBuscarProyecto.statusCode == 200) {
@@ -65,9 +67,9 @@ Future<String?> buscarIdProyectoPorNombre(String nombre) async {
 
 Future<List<dynamic>> fetchProjects() async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
-
+Map<String, String> headers = await getAuthHeaders();
   try {
-    final res = await http.get(Uri.parse(url));
+    final res = await http.get(Uri.parse(url), headers: headers);
     if (res.statusCode == 200) {
       final List<dynamic> proyectos = jsonDecode(res.body);
       return proyectos;
@@ -84,11 +86,11 @@ Future<List<dynamic>> fetchProjects() async {
 Future<void> updateProyecto(
     int id, String nombre, String fechaInicio, String fechaFinalizada) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
-
+ Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode({
         "name": nombre,
         "fecha_inicio": fechaInicio,
@@ -107,11 +109,11 @@ Future<void> updateProyecto(
 
 Future<void> deleteProyecto(int id) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
-
+ Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
       print("Proyecto eliminado exitosamente");

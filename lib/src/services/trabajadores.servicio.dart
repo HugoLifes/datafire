@@ -1,30 +1,16 @@
 // cliente_network.dart
 import 'dart:convert';
+import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 Future<List<dynamic>> fetchTrabajadores() async {
   const url = "https://datafire-production.up.railway.app/api/v1/trabajadores";
 
+Map<String, String> headers = await getAuthHeaders();
+
   try {
-    // Obtener el token almacenado en SharedPreferences
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
-
-    if (token == null) {
-      print("Token no encontrado en SharedPreferences");
-      return [];
-    }
-
-    // Configurar el encabezado de autorización con el token
-    Map<String, String> headers = {
-      'Authorization': 'Bearer $token',
-    };
-
-    // Realizar la solicitud HTTP con el encabezado de autorización
     final res = await http.get(Uri.parse(url), headers: headers);
-
     if (res.statusCode == 200) {
       final List<dynamic> trabajadores = jsonDecode(res.body);
       return trabajadores;
@@ -41,11 +27,11 @@ Future<List<dynamic>> fetchTrabajadores() async {
 Future<void> updateTrabajador(
   int id, String nombre, String last_name, int edad, String position, int salary) async {
   final url = "https://datafire-production.up.railway.app/api/v1/trabajadores/$id";
-
+Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode({
         "name": nombre,
         "last_name": last_name,
@@ -74,10 +60,13 @@ Future<void> updateTrabajador(
 Future<void> deleteTrabajador(int id) async {
   final url =
       "https://datafire-production.up.railway.app/api/v1/trabajadores/$id";
+
+Map<String, String> headers = await getAuthHeaders();
+
   try {
     final res = await http.delete(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
       print("Trabajador eliminado exitosamente");

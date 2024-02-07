@@ -1,14 +1,17 @@
 // cliente_network.dart
 import 'dart:convert';
+import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> postAbono(String monto, String fechaAbono, String projectId, int customerId) async {
   const url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos";
 
+Map<String, String> headers = await getAuthHeaders();
+
   try {
     final res = await http.post(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode(
           {"monto": monto, "fecha_abono": fechaAbono, "projectId": projectId,"customerId": customerId}),
     );
@@ -62,10 +65,11 @@ Future<List<dynamic>> fetchAbonosById(String projectId) async {
 Future<void> updateAbono(
     int id, String monto, String fechaAbono, String projectId, String customerId) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos/$id";
+  Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode(
           {"monto": monto, "fecha_abono": fechaAbono, "projectId": projectId, "customerId": customerId}),
     );
@@ -79,10 +83,11 @@ Future<void> updateAbono(
 
 Future<void> deleteAbono(int id) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/abonos/$id";
+  Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(
       Uri.parse(url),
-      headers: {"Content-Type": "application/json"},
+      headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
       print("Abono eliminado exitosamente");
