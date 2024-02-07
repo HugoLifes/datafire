@@ -1,15 +1,14 @@
 import 'package:datafire/src/services/proyectos.service.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/cardTotals.dart';
 import 'package:flutter/material.dart';
 
 class EditarProyectosForm extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
-
   EditarProyectosForm({Key? key, required this.proyecto}) : super(key: key);
 
   @override
   _EditarProyectosFormState createState() => _EditarProyectosFormState();
 }
-
 class _EditarProyectosFormState extends State<EditarProyectosForm> {
    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
@@ -130,7 +129,6 @@ return Scaffold(
     backgroundColor: Colors.red,
         ),
     onPressed: () async {
-      // Mostrar un diálogo de confirmación antes de eliminar
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -153,8 +151,6 @@ TextButton(
     content: Text('Proyecto Eliminado...'),
   ),
 );
-
-
       // Agregar un pequeño retraso para dar tiempo al Snackbar de mostrarse
       await Future.delayed(const Duration(seconds: 1));
 
@@ -168,126 +164,17 @@ TextButton(
   },
   child: const Text('Confirmar'),
 ),
-
       ],
     );
         },
       );
-    },
-    
+    },  
       ),
     ),
     const SizedBox(height: 10),
     Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-    Container(
-      width: 150.0,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Colors.lightBlueAccent, Colors.blue],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Text(
-            "Total:",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-    Text(
-      "\$${_costoController.text}",
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+      child: CardTotals(costoController: _costoController, abonadoController: _abonadoController, remainingController: _remainingController),
     ),
-    
-        ],
-      ),
-    ),
-    Container(
-      width: 150.0,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Colors.amber, Colors.orange],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Text(
-            "Abonado:",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          Text(
-      "\$${_abonadoController.text}",
-      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-    ),
-        ],
-      ),
-    ),
-    Container(
-      width: 150.0,
-      padding: const EdgeInsets.all(10),
-      margin: const EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [Colors.deepOrange, Colors.red],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(10.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 3,
-            blurRadius: 7,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        children: [
-          const Text(
-            "Restante:",
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-          Text(
-            "\$${_remainingController.text}",
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-          ),
-        ],
-      ),
-    ),
-        ],
-      ),
-    ),
-    
-    
-    
         ],
       ),
     );
@@ -335,3 +222,5 @@ TextButton(
     );
   }
 }
+
+

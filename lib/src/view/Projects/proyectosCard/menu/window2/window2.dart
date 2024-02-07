@@ -96,7 +96,7 @@ class _window2State extends State<window2> {
     );
   }
 
-   void _selectClientsDialog(String projectId) async {
+ void _selectClientsDialog(String projectId) async {
     List<dynamic> clientes = await fetchClientes();
     List<String> clientesSeleccionados = [];
 
@@ -162,5 +162,8 @@ onPressed: () async {
       },
     );
   }
+
 }
+
+
 
