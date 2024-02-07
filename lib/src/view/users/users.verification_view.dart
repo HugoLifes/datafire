@@ -51,7 +51,7 @@ class _UserVerificationViewState extends State<UserVerificationView> {
                   if (enteredPassword == 'ultron') {
                     // Contraseña correcta, navegar a UsersView
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => UsersView()),
+                      MaterialPageRoute(builder: (context) => const UsersView()),
                     );
                   } else {
                     // Contraseña incorrecta, mostrar mensaje de error

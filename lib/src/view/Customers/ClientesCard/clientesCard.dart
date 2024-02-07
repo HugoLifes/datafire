@@ -1,17 +1,17 @@
 import 'package:datafire/src/widgets/colors.dart';
-import 'package:datafire/src/widgets/ClientesCard/editarCliente.dart';
+import 'package:datafire/src/view/Customers/ClientesCard/editarCliente.dart';
 import 'package:flutter/material.dart';
 
 //nombre de clases la primera mayuscula
-class clienteCard extends StatefulWidget {
+class ClienteCard extends StatefulWidget {
   final Map<String, dynamic> cliente;
-  const clienteCard({Key? key, required this.cliente}) : super(key: key);
+  const ClienteCard({Key? key, required this.cliente}) : super(key: key);
   @override
-  State<clienteCard> createState() => _clienteCardState();
+  State<ClienteCard> createState() => _ClienteCardState();
 }
 
 //nombre de clases la primera mayuscula
-class _clienteCardState extends State<clienteCard> {
+class _ClienteCardState extends State<ClienteCard> {
   @override
   Widget build(BuildContext context) {
     return Container(

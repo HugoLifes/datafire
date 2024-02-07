@@ -1,8 +1,10 @@
-import 'package:datafire/src/view/success.dart';
+import 'package:datafire/src/view/successScreen.dart';
 import 'package:flutter/material.dart';
 import '../model/data.dart';
 
 class AltaClientePage extends StatefulWidget {
+  const AltaClientePage({super.key});
+
   @override
   _AltaClientePageState createState() => _AltaClientePageState();
 }
@@ -92,7 +94,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
                 },
               ),
               const SizedBox(height: 16.0),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: _saveCliente,

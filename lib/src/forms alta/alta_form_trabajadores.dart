@@ -1,8 +1,10 @@
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/view/success.dart';
+import 'package:datafire/src/view/successScreen.dart';
 import 'package:flutter/material.dart';
 
 class AltaTrabajadorPage extends StatefulWidget {
+  const AltaTrabajadorPage({super.key});
+
   @override
   _AltaTrabajadorPageState createState() => _AltaTrabajadorPageState();
 }
@@ -124,7 +126,7 @@ class _AltaTrabajadorPageState extends State<AltaTrabajadorPage> {
                 },
               ),
               const SizedBox(height: 16.0),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: _saveTrabajador,

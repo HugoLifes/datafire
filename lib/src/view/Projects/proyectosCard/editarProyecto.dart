@@ -1,18 +1,17 @@
-
-import 'package:datafire/src/widgets/proyectosCard/menu/window1.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window2.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window3.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window4/window4.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window5/window5.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window1/window1.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window2/window2.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window3/window3.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/window4.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window5/window5.dart';
 import 'package:flutter/material.dart';
 
 
-import 'package:datafire/src/widgets/proyectosCard/form_editarProyecto.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/form_editarProyecto.dart';
 
 class DetallesYAltaProyectoPage extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
 
-  DetallesYAltaProyectoPage({Key? key, required this.proyecto}) : super(key: key);
+  const DetallesYAltaProyectoPage({Key? key, required this.proyecto}) : super(key: key);
 
   @override
   _DetallesYAltaProyectoPageState createState() => _DetallesYAltaProyectoPageState();
@@ -62,18 +61,18 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                     child: TabBarView(
                       children: [
                         // Detalles (Window 1)
-                        window1(proyecto: widget.proyecto),
+                        Window1(proyecto: widget.proyecto),
 
                         // Clientes Asociados (window 2)
                         Container(
                           padding: const EdgeInsets.all(16.0),
-                          child: window2(proyecto: widget.proyecto, idProyecto: _idProyecto,)
+                          child: Window2(proyecto: widget.proyecto, idProyecto: _idProyecto,)
                         ),
 
                         // Contenido para la tercera pestaña
                          Container(
                           padding: const EdgeInsets.all(16.0),
-                          child: ThirdTabContent(proyecto: widget.proyecto),
+                          child: Window3(proyecto: widget.proyecto),
                         ),
 
                       // window 4 servicios

@@ -1,12 +1,12 @@
 import 'package:datafire/src/app.dart';
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/view/success.dart';
+import 'package:datafire/src/view/successScreen.dart';
 import 'package:flutter/material.dart';
 
 class EditarClienteForm extends StatefulWidget {
   final Map<String, dynamic>? cliente;
 
-  EditarClienteForm({Key? key, required this.cliente}) : super(key: key);
+  const EditarClienteForm({Key? key, required this.cliente}) : super(key: key);
 
   @override
   _EditarClienteFormState createState() => _EditarClienteFormState();
@@ -89,7 +89,7 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
               },
             ),
             const SizedBox(height: 16.0),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: FilledButton(
                 style: FilledButton.styleFrom(

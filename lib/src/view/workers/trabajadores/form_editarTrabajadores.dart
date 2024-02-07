@@ -1,5 +1,5 @@
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/view/success.dart';
+import 'package:datafire/src/view/successScreen.dart';
 import 'package:flutter/material.dart';
 
 class EditarTrabajadoresForm extends StatefulWidget {

@@ -3,22 +3,22 @@ import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
 
-class addAbonoForm extends StatefulWidget {
-  final String id_proyecto;
+class AddAbonoForm extends StatefulWidget {
+  final String idProyecto;
 
-  const addAbonoForm({
+  const AddAbonoForm({
     Key? key,
-    required this.id_proyecto,
+    required this.idProyecto,
   }) : super(key: key);
 
   @override
-  _addAbonoFormState createState() => _addAbonoFormState();
+  _AddAbonoFormState createState() => _AddAbonoFormState();
 }
 
-class _addAbonoFormState extends State<addAbonoForm> {
+class _AddAbonoFormState extends State<AddAbonoForm> {
   final _formKey = GlobalKey<FormState>();
-  TextEditingController _amountController = TextEditingController();
-  TextEditingController _dateController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
   int? selectedCustomerId;
   List<Map<String, dynamic>> customerData = [];
   DateTime selectedDate = DateTime.now();
@@ -29,7 +29,7 @@ class _addAbonoFormState extends State<addAbonoForm> {
     fetchCustomerProjects().then((List<dynamic> result) {
       setState(() {
         customerData = result
-            .where((cp) => cp['project_id'] == int.parse(widget.id_proyecto))
+            .where((cp) => cp['project_id'] == int.parse(widget.idProyecto))
             .map<Map<String, dynamic>>((dynamic item) => item as Map<String, dynamic>)
             .toList();
       });
@@ -130,7 +130,7 @@ class _addAbonoFormState extends State<addAbonoForm> {
           ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate() && selectedCustomerId != null) {
-                String idProyecto = widget.id_proyecto;
+                String idProyecto = widget.idProyecto;
                 String amountCosto = _amountController.text;
                 int customerId = selectedCustomerId!;
                 String selectedDateString = _dateController.text;

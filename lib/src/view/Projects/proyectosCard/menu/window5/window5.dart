@@ -1,5 +1,6 @@
 import 'package:datafire/src/services/abonos.service.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window5/form_agregar_abono.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window5/form_agregar_abono.dart';
+
 import 'package:flutter/material.dart';
 
 
@@ -108,7 +109,7 @@ class _Tab5ContentState extends State<Tab5Content> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Agregar nuevo Abono"),
-          content: addAbonoForm(id_proyecto: widget.idProyecto),
+          content: AddAbonoForm(idProyecto: widget.idProyecto),
           actions: [
             TextButton(
               onPressed: () {

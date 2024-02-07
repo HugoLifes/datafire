@@ -2,6 +2,8 @@ import 'package:datafire/src/services/users.service.dart';
 import 'package:flutter/material.dart';
 
 class UsersView extends StatefulWidget {
+  const UsersView({super.key});
+
   @override
   _UsersViewState createState() => _UsersViewState();
 }
@@ -107,7 +109,7 @@ class _UsersViewState extends State<UsersView> {
                         
                         title: const Text('Ingrese los datos para agregar un nuevo usuario'),
                         content: Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Form(
                             key: _formKey,
                             child: Column(
@@ -165,7 +167,7 @@ class _UsersViewState extends State<UsersView> {
                                                 return null;
                                               },
                                             ),
-                                            SizedBox(height: 10),
+                                            const SizedBox(height: 10),
                                 ElevatedButton(
                                   onPressed: () async {
                                     if (_formKey.currentState!.validate()) {

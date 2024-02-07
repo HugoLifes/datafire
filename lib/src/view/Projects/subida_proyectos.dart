@@ -1,6 +1,6 @@
-import 'package:datafire/src/forms/alta_form_proyectos.dart';
+import 'package:datafire/src/forms%20alta/alta_form_proyectos.dart';
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/widgets/proyectosCard/cardProyecto.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/cardProyecto.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +50,7 @@ class _AltaProyectosState extends State<AltaProyectos> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AltaProyectoPage(),
+              builder: (context) => const AltaProyectoPage(),
             ),
           );
         },

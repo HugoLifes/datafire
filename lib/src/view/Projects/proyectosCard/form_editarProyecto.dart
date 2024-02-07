@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class EditarProyectosForm extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
-  EditarProyectosForm({Key? key, required this.proyecto}) : super(key: key);
+  const EditarProyectosForm({Key? key, required this.proyecto}) : super(key: key);
 
   @override
   _EditarProyectosFormState createState() => _EditarProyectosFormState();

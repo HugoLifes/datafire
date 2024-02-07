@@ -1,5 +1,5 @@
+import 'package:datafire/src/view/Projects/proyectosCard/editarProyecto.dart';
 import 'package:datafire/src/widgets/colors.dart';
-import 'package:datafire/src/widgets/proyectosCard/editarProyecto.dart';
 import 'package:flutter/material.dart';
 
 class ProyectoCard extends StatefulWidget {

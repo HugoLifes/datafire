@@ -1,7 +1,8 @@
 import 'package:datafire/src/services/costos.servicio.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window4/form_agregar_costo.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/form_Editar%20_costo.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/form_agregar_costo.dart';
 import 'package:flutter/material.dart';
-import 'package:datafire/src/widgets/proyectosCard/menu/window4/form_Editar%20_costo.dart';
+
 
 class Tab4Content extends StatefulWidget {
   final String idProyecto;
@@ -117,7 +118,7 @@ class _Tab4ContentState extends State<Tab4Content> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Agregar nuevo costo"),
-          content: TuFormularioCosto(id_proyecto: widget.idProyecto, futureCosts: futureCostos),
+          content: TuFormularioCosto(idProyecto: widget.idProyecto, futureCosts: futureCostos),
           actions: [
             TextButton(
               onPressed: () {

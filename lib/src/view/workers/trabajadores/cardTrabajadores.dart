@@ -1,5 +1,5 @@
+import 'package:datafire/src/view/workers/trabajadores/editarTrabajadores.dart';
 import 'package:datafire/src/widgets/colors.dart';
-import 'package:datafire/src/widgets/trabajadoresCard/editarTrabajadores.dart';
 import 'package:flutter/material.dart';
 
 class trabajadorCard extends StatefulWidget {

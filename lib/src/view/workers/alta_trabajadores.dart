@@ -43,7 +43,7 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AltaTrabajadorPage(),
+              builder: (context) => const AltaTrabajadorPage(),
             ),
           );
         },

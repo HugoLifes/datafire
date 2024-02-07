@@ -1,7 +1,7 @@
-import 'package:datafire/src/view/alta_trabajadores.dart';
-import 'package:datafire/src/view/subida_clientes.dart';
-import 'package:datafire/src/view/subida_proyectos.dart';
+import 'package:datafire/src/view/Customers/subida_clientes.dart';
+import 'package:datafire/src/view/Projects/subida_proyectos.dart';
 import 'package:datafire/src/view/users/users.verification_view.dart';
+import 'package:datafire/src/view/workers/alta_trabajadores.dart';
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 

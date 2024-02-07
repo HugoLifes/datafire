@@ -2,12 +2,12 @@ import 'package:datafire/src/services/costos.servicio.dart';
 import 'package:flutter/material.dart';
 
 class TuFormularioCosto extends StatefulWidget {
-  final String id_proyecto;
+  final String idProyecto;
   final Future<List<dynamic>> futureCosts;
 
-   TuFormularioCosto({
+   const TuFormularioCosto({
     Key? key,
-    required this.id_proyecto,
+    required this.idProyecto,
     required this.futureCosts
   }) : super(key: key);
 
@@ -84,12 +84,11 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
           FilledButton(
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                String idProyecto = widget.id_proyecto;
+                String idProyecto = widget.idProyecto;
                 String amountCosto = _amountController.text;
                 String descriptionCosto = _descriptionController.text;
                 String priceCosto = _costoController.text;
                 addCosto(idProyecto,amountCosto, descriptionCosto, priceCosto);
-                print("Hola");
                 setState(() {
                   futureCosts = fetchCostsByProjectId(idProyecto);
                 });

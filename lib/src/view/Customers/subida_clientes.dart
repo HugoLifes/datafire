@@ -1,6 +1,6 @@
-import 'package:datafire/src/forms/alta_form_clientes.dart';
+import 'package:datafire/src/forms%20alta/alta_form_clientes.dart';
 import 'package:datafire/src/model/data.dart';
-import 'package:datafire/src/widgets/ClientesCard/clientesCard.dart';
+import 'package:datafire/src/view/Customers/ClientesCard/clientesCard.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +50,7 @@ class _AltaClientesState extends State<AltaClientes> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => AltaClientePage(),
+              builder: (context) => const AltaClientePage(),
             ),
           );
         },
@@ -84,7 +84,7 @@ class _AltaClientesState extends State<AltaClientes> {
               ),
               itemBuilder: (context, index) {
                 final cliente = clientes[index];
-                return clienteCard(cliente: cliente);
+                return ClienteCard(cliente: cliente);
               },
             );
           }

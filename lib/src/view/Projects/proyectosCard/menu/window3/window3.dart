@@ -2,16 +2,16 @@ import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:flutter/material.dart';
 
-class ThirdTabContent extends StatefulWidget {
+class Window3 extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
 
-  ThirdTabContent({required this.proyecto});
+  Window3({required this.proyecto});
 
   @override
-  _ThirdTabContentState createState() => _ThirdTabContentState();
+  _Window3State createState() => _Window3State();
 }
 
-class _ThirdTabContentState extends State<ThirdTabContent> {
+class _Window3State extends State<Window3> {
   late Future<List<dynamic>> futureProjectWorkers;
 
   @override

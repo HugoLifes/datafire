@@ -1,10 +1,12 @@
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
-import 'package:datafire/src/view/success.dart';
+import 'package:datafire/src/view/successScreen.dart';
 import 'package:flutter/material.dart';
 
 class AltaProyectoPage extends StatefulWidget {
+  const AltaProyectoPage({super.key});
+
   @override
   _AltaProyectoPageState createState() => _AltaProyectoPageState();
 }
@@ -97,7 +99,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 },
               ),
               const SizedBox(height: 16.0),
-              Container(
+              SizedBox(
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: () async {

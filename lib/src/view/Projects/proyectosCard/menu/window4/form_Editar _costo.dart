@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class EditarCostoDialog extends StatefulWidget {
   final Map<String, dynamic> costo;
 
-  EditarCostoDialog({required this.costo});
+  const EditarCostoDialog({super.key, required this.costo});
 
   @override
   _EditarCostoDialogState createState() => _EditarCostoDialogState();

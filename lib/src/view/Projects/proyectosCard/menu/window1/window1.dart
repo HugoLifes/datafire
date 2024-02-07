@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class window1 extends StatelessWidget {
+class Window1 extends StatelessWidget {
   final Map<String, dynamic>? proyecto;
 
-  window1({required this.proyecto});
+  Window1({required this.proyecto});
 
   @override
   Widget build(BuildContext context) {

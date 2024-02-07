@@ -1,11 +1,11 @@
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
-import 'package:datafire/src/widgets/ClientesCard/form.editar.clientes.dart';
+import 'package:datafire/src/view/Customers/ClientesCard/form.editar.clientes.dart';
 import 'package:flutter/material.dart';
 
 class DetallesYEditarClientesPage extends StatefulWidget {
   final Map<String, dynamic>? cliente;
 
-  DetallesYEditarClientesPage({Key? key, required this.cliente})
+  const DetallesYEditarClientesPage({Key? key, required this.cliente})
       : super(key: key);
 
   @override

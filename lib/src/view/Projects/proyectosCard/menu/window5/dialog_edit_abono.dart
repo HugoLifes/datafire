@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class EditAbonoDialog extends StatefulWidget {
   final Map<String, dynamic> costo;
 
-  EditAbonoDialog({required this.costo});
+  const EditAbonoDialog({super.key, required this.costo});
 
   @override
   _EditAbonoDialogState createState() => _EditAbonoDialogState();

@@ -1,12 +1,12 @@
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
-import 'package:datafire/src/view/success.dart';
+import 'package:datafire/src/view/successScreen.dart';
 import 'package:flutter/material.dart';
 
 class DetallesYEditarTrabajadoresPage extends StatefulWidget {
   final Map<String, dynamic>? trabajador;
 
-  DetallesYEditarTrabajadoresPage({Key? key, required this.trabajador})
+  const DetallesYEditarTrabajadoresPage({Key? key, required this.trabajador})
       : super(key: key);
 
   @override
@@ -130,7 +130,7 @@ class _DetallesYEditarTrabajadoresPageState
               },
             ),
             const SizedBox(height: 16.0),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () async {
@@ -164,7 +164,7 @@ class _DetallesYEditarTrabajadoresPageState
               ),
             ),
             const SizedBox(height: 16.0),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: IconButton.filled(
                 icon: const Icon(Icons.delete_forever),

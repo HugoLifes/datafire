@@ -46,7 +46,7 @@ class SuccessfulScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            Container(
+            SizedBox(
               width: 160,
               child: FilledButton(
                 style: FilledButton.styleFrom(

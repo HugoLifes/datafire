@@ -2,22 +2,22 @@ import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
 
-class window2 extends StatefulWidget {
+class Window2 extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
   final String idProyecto;
 
 
-  const window2({
+  const Window2({
     Key? key,
     required this.proyecto,
     required this.idProyecto,
   }) : super(key: key);
 
   @override
-  _window2State createState() => _window2State();
+  _Window2State createState() => _Window2State();
 }
 
-class _window2State extends State<window2> {
+class _Window2State extends State<Window2> {
   late Future<List<dynamic>> futureCustomerProjects;
 
   @override
