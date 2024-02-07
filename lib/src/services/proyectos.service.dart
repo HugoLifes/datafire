@@ -41,9 +41,9 @@ Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fech
 
 Future<String?> buscarIdProyectoPorNombre(String nombre) async {
   const urlBuscarProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos";
-  
+      Map<String, String> headers = await getAuthHeaders();
   try {
-    final resBuscarProyecto = await http.get(Uri.parse(urlBuscarProyecto));
+    final resBuscarProyecto = await http.get(Uri.parse(urlBuscarProyecto), headers: headers);
     if (resBuscarProyecto.statusCode == 200) {
       final List<dynamic> proyectos = jsonDecode(resBuscarProyecto.body);
       // Buscamos el ID del proyecto por el nombre

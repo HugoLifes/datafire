@@ -62,12 +62,12 @@ class _UsersViewState extends State<UsersView> {
                         numeric: false,
                       ),
                     ],
-                    rows: users.map((worker) => DataRow(
+                    rows: users.map((user) => DataRow(
                       cells: [
-                        DataCell(Text(worker["id"].toString())),
-                        DataCell(Text(worker['name'].toString())),
-                        DataCell(Text(worker["email"].toString())),
-                        DataCell(Text(worker["role"].toString())),
+                        DataCell(Text(user["id"].toString())),
+                        DataCell(Text(user['name'].toString())),
+                        DataCell(Text(user["email"].toString())),
+                        DataCell(Text(user["role"].toString())),
                         DataCell(
                           SizedBox(
                             width: 50,
@@ -76,6 +76,7 @@ class _UsersViewState extends State<UsersView> {
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
                                 // Eliminar trabajadores
+                                deleteUser(user["id"]);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Trabajador eliminado correctamente'),
@@ -103,82 +104,92 @@ class _UsersViewState extends State<UsersView> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: const Text('Nuevo Usuario'),
-                        content: Form(
-                          key: _formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              TextFormField(
-                                controller: nameController,
-                                decoration: const InputDecoration(labelText: 'Nombre'),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Por favor, ingrese el nombre';
-                                  }
-                                  return null;
-                                },
-                              ),
-                              TextFormField(
-                                controller: emailController,
-                                decoration: const InputDecoration(labelText: 'Correo'),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Por favor, ingrese el correo';
-                                  }
-                                  return null;
-                                },
-                              ),
+                        
+                        title: const Text('Ingrese los datos para agregar un nuevo usuario'),
+                        content: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 20),
+                          child: Form(
+                            key: _formKey,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
                                 TextFormField(
-                                controller: passwordController,
-                                decoration: const InputDecoration(labelText: 'Contaseña'),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Por favor, ingrese su contraseña';
-                                  }
-                                  return null;
-                                },
-                              ),
-              DropdownButtonFormField<String>(
-                    value: selectedRole,
-                    items: roles.map((String role) {
-                      return DropdownMenuItem<String>(
-                        value: role,
-                        child: Text(role),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      setState(() {
-                        selectedRole = value!;
-                        roleController.text = value;
-                      });
-                    },
-                    decoration: const InputDecoration(labelText: 'Rol'),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Por favor, seleccione el rol';
-                      }
-                      return null;
-                    },
-                  ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  if (_formKey.currentState!.validate()) {
-                                  postUser(nameController.text, emailController.text, passwordController.text, roleController.text);    
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content: Text('Usuario agregado correctamente'),
-                                      ),
-                                    );
-                                    setState(() {
-                                      futureUsers = fetchUsers();
-                                    });
-                                    Navigator.pop(context); 
-                                  }
-                                },
-                                child: const Text('Agregar Usuario'),
-                              ),
-                            ],
+                                  controller: nameController,
+                                  decoration: const InputDecoration(labelText: 'Nombre'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Por favor, ingrese el nombre';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                TextFormField(
+                                  controller: emailController,
+                                  decoration: const InputDecoration(labelText: 'Correo'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Por favor, ingrese el correo';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                  TextFormField(
+                                  controller: passwordController,
+                                  decoration: const InputDecoration(labelText: 'Contaseña'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Por favor, ingrese su contraseña';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                        DropdownButtonFormField<String>(
+                                              value: selectedRole,
+                                              items: roles.map((String role) {
+                                                return DropdownMenuItem<String>(
+                          value: role,
+                          child: Text(role),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String? value) {
+                                                setState(() {
+                          selectedRole = value!;
+                          roleController.text = value;
+                                                });
+                                              },
+                                              decoration: const InputDecoration(labelText: 'Rol'),
+                                              validator: (value) {
+                                                if (value == null || value.isEmpty) {
+                          return 'Por favor, seleccione el rol';
+                                                }
+                                                return null;
+                                              },
+                                            ),
+                                            SizedBox(height: 10),
+                                ElevatedButton(
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                        try {
+                                      await postUser(nameController.text, emailController.text, passwordController.text, roleController.text);    
+                                                                              ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Usuario agregado correctamente'),
+                                        ),
+                                      );
+                                      setState(() {
+                                        futureUsers = fetchUsers();
+                                      });
+                                      Navigator.pop(context); 
+                                        } catch (err) {
+                                          print("$err");
+                                        }
+
+                                    }
+                                  },
+                                  child: const Text('Agregar Usuario'),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

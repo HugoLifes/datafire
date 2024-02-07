@@ -91,8 +91,7 @@ return Scaffold(
               });
             },
           ),
-          const SizedBox(height: 16.0),
-          const SizedBox(height: 16.0),
+          const SizedBox(height: 32.0),
           SizedBox(
             width: double.infinity,
             child: FilledButton(

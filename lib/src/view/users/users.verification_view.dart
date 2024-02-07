@@ -50,7 +50,7 @@ class _UserVerificationViewState extends State<UserVerificationView> {
                   String enteredPassword = _passwordController.text;
                   if (enteredPassword == 'ultron') {
                     // Contraseña correcta, navegar a UsersView
-                    Navigator.of(context).pushReplacement(
+                    Navigator.of(context).push(
                       MaterialPageRoute(builder: (context) => UsersView()),
                     );
                   } else {

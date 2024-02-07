@@ -72,7 +72,6 @@ class _SideBarState extends State<SideBar> {
             onTap: () {
               debugPrint('Inicio');
             }),
-        //const SidebarXItem(icon: Icons.area_chart_outlined, label: 'Estadisticas'),
         SidebarXItem(
             icon: Icons.assignment,
             label: 'Alta Proyectos',
@@ -149,11 +148,12 @@ _performLogout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('token');
 
-    Navigator.pushReplacementNamed(context, '/login');
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
   } catch (e) {
     print('Error al realizar la navegación: $e');
   }
 }
+
 
 
 

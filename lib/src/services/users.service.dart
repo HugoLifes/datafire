@@ -45,8 +45,8 @@ Map<String, String> headers = await getAuthHeaders();
 }
 
 Future<void> deleteUser(int id) async {
-  const url =
-      "http://localhost:3000/Api/v1/users";
+  final url =
+      "https://datafire-production.up.railway.app/Api/v1/users/$id";
   try {
     final res = await http.delete(
       Uri.parse(url),
