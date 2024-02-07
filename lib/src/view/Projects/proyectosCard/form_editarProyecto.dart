@@ -15,17 +15,12 @@ class _EditarProyectosFormState extends State<EditarProyectosForm> {
   final _nombreController = TextEditingController();
   DateTime? _inicioDate;
   DateTime? _finDate;
-  final _costoController = TextEditingController();
-  final _abonadoController = TextEditingController();
-  final _remainingController = TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
     _nombreController.text = widget.proyecto?['name'] ?? '';
-    _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
-    _abonadoController.text = widget.proyecto?["abonado"].toString() ?? "sin abonos";
-        _remainingController.text = widget.proyecto?["remaining"].toString() ?? "sin abonos";
     _inicioDate = widget.proyecto?['fecha_inicio'] != null
         ? DateTime.parse(widget.proyecto?['fecha_inicio'])
         : null;
@@ -173,8 +168,8 @@ TextButton(
     ),
     const SizedBox(height: 10),
     Center(
-      child: CardTotals(costoController: _costoController, abonadoController: _abonadoController, remainingController: _remainingController),
-    ),
+      child: CardTotals(proyecto: widget.proyecto)
+      ),
         ],
       ),
     );

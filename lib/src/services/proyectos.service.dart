@@ -2,6 +2,31 @@
 import 'dart:convert';
 import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
+
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+
+Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
+  const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
+  Map<String, String> headers = await getAuthHeaders();
+
+  try {
+    final res = await http.get(Uri.parse('$url/$projectId'), headers: headers);
+
+    if (res.statusCode == 200) {
+      final Map<String, dynamic> proyecto = jsonDecode(res.body);
+      return proyecto;
+    } else {
+      print("Error al obtener el proyecto con ID $projectId");
+      return {};
+    }
+  } catch (err) {
+    print("Error al realizar la solicitud http: $err");
+    return {};
+  }
+}
+
+
 Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
   const urlCrearProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos";
 

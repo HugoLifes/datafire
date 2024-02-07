@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class TuFormularioCosto extends StatefulWidget {
   final String idProyecto;
   final Future<List<dynamic>> futureCosts;
+  
 
    const TuFormularioCosto({
     Key? key,
