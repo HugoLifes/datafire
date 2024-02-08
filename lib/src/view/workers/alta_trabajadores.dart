@@ -76,7 +76,7 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
               ),
               itemBuilder: (context, index) {
                 final trabajador = trabajadores[index];
-                return trabajadorCard(trabajador: trabajador);
+                return TrabajadorCard(trabajador: trabajador);
               },
             );
           }

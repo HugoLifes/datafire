@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class EditarTrabajadoresForm extends StatefulWidget {
   final Map<String, dynamic>? trabajador;
 
-  EditarTrabajadoresForm({Key? key, required this.trabajador})
+  const EditarTrabajadoresForm({Key? key, required this.trabajador})
       : super(key: key);
 
   @override
@@ -126,7 +126,7 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
               },
             ),
             const SizedBox(height: 16.0),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: FilledButton(
                 style: FilledButton.styleFrom(
@@ -149,8 +149,6 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                         position: cargo,
                         salario: int.parse(salary),
                       );
-
-                      print('Trabajador actualizado: $name');
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -158,10 +156,8 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                           builder: (context) => const SuccessfulScreen(),
                         ),
                       );
-                      print(
-                          'Datos a enviar para actualizar trabajador: ${widget.trabajador?["id"]} $name, $lastName, $cargo, $salary, $age');
+                    // ignore: empty_catches
                     } catch (error) {
-                      print('Error al actualizar el trabajador: $error');
                     }
                   }
                 },
@@ -169,7 +165,7 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
               ),
             ),
             const SizedBox(height: 6.0),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: IconButton.filled(
                 icon: const Icon(Icons.delete_forever),
@@ -198,11 +194,9 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                                     .pop(); 
                                 await trabajadorInstance.eliminarTrabajador(
                                     widget.trabajador?['id']);
-                                print('Trabajador eliminado');
                                 Navigator.pop(context);
+                              // ignore: empty_catches
                               } catch (error) {
-                                print(
-                                    'Error al eliminar el trabajador: $error');
                               }
                             },
                             child: const Text('Confirmar'),

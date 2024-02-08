@@ -143,8 +143,7 @@ class _DetallesYEditarTrabajadoresPageState
                     try {
                       await updateCliente(
                           widget.trabajador?['id'], name, lastName, cargo);
-                      print('Cliente actualizado: $name');
-                      // Puedes llamar a una función o realizar cualquier otra acción aquí
+                      // Puedes llamar a una función
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -152,11 +151,9 @@ class _DetallesYEditarTrabajadoresPageState
                           builder: (context) => const SuccessfulScreen(),
                         ),
                       );
-                      print(
-                          'Datos a enviar para actualizar cliente: $name, $lastName, $cargo');
+                    // ignore: empty_catches
                     } catch (error) {
-                      print('Error al actualizar el cliente: $error');
-                      // Puedes mostrar un mensaje de error al usuario si es necesario
+                      
                     }
                   }
                 },
@@ -193,8 +190,9 @@ class _DetallesYEditarTrabajadoresPageState
                                     widget.trabajador?['id']);
                                 Navigator.pop(context);
                                 // Puedes agregar más lógica aquí si es necesario
+                              // ignore: empty_catches
                               } catch (error) {
-                                print('Error al eliminar el proyecto: $error');
+                                
                               }
                             },
                             child: const Text('Confirmar'),

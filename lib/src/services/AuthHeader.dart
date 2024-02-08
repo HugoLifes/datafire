@@ -6,7 +6,6 @@ Future<Map<String, String>> getAuthHeaders() async {
   String? token = prefs.getString('token');
 
   if (token == null) {
-    print("Token no encontrado en SharedPreferences");
     return {};
   }
 

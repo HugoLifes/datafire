@@ -1,4 +1,5 @@
-import 'package:datafire/src/services/abonos.service.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+
 import 'package:datafire/src/services/costos.servicio.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/form_Editar%20_costo.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/form_agregar_costo.dart';
@@ -7,8 +8,9 @@ import 'package:flutter/material.dart';
 
 class Tab4Content extends StatefulWidget {
   final String idProyecto;
+  final String costoInicial;
 
-  const Tab4Content({Key? key, required this.idProyecto}) : super(key: key);
+  const Tab4Content({Key? key, required this.idProyecto, required this.costoInicial}) : super(key: key);
 
   @override
   _Tab4ContentState createState() => _Tab4ContentState();
@@ -51,12 +53,12 @@ class _Tab4ContentState extends State<Tab4Content> {
                       side: const BorderSide(color: Colors.green, width: 2.0),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child: const Column(
+                    child:  Column(
                       children: <Widget>[
                         ListTile(
-                          leading: Icon(Icons.payments_outlined),
-                          title:  Text("Costo inicial", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                          subtitle: Text("Costo inicial"),
+                          leading: const Icon(Icons.payments_outlined),
+                          title:  Text("${widget.costoInicial}", style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          subtitle: const Text("Costo inicial"),
                         ),
                       ],
                     ),
@@ -87,7 +89,22 @@ class _Tab4ContentState extends State<Tab4Content> {
                                                             IconButton(
                                 icon: const Icon(Icons.delete_forever),
                                 onPressed: () {
-                                  deleteCost(servicio["id"]);
+      AwesomeDialog(
+    context: context,
+    dialogType: DialogType.warning,
+    animType: AnimType.bottomSlide,
+    title: 'Eliminar costo',
+    desc: '¿Estás seguro de que quieres eliminar este costo?',
+    width: 620,
+    btnCancelOnPress: () {},
+    btnOkOnPress: () {
+              deleteCost(servicio["id"]);
+      setState(() {
+        futureCostos = fetchCostsByProjectId(widget.idProyecto);
+      });
+    },
+  ).show();
+
                                 },
                               ),
                             ],

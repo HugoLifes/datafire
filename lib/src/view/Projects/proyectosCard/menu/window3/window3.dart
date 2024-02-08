@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,7 @@ import 'package:flutter/material.dart';
 class Window3 extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
 
-  Window3({required this.proyecto});
+  const Window3({super.key, required this.proyecto});
 
   @override
   _Window3State createState() => _Window3State();
@@ -55,7 +56,16 @@ class _Window3State extends State<Window3> {
                               IconButton(
                                 icon: const Icon(Icons.delete),
 onPressed: () async {
-  await deleteProjectWorkers(worker['id']);
+                                AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.warning,
+                                animType: AnimType.scale,
+                                title: "Eliminar Trabajador del proyecto",
+                                desc: "¿Estas seguro que quieres eliminar este trabajador?",
+                                width: 620,
+                                btnCancelOnPress: (){},
+                                btnOkOnPress: () async {
+                                    await deleteProjectWorkers(worker['id']);
   ScaffoldMessenger.of(context).showSnackBar(
     const SnackBar(
       content: Text('Trabajador eliminado correctamente'),
@@ -64,6 +74,9 @@ onPressed: () async {
   setState(() {
     futureProjectWorkers = fetchProjectWorkers();
   });
+                                },
+                              ).show();
+
 },
 
                               ),

@@ -13,11 +13,9 @@ Map<String, String> headers = await getAuthHeaders();
       final List<dynamic> trabajadores = jsonDecode(res.body);
       return trabajadores;
     } else {
-      print("Error al obtener la lista de proyectos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -35,12 +33,10 @@ Map<String, String> headers = await getAuthHeaders();
           {"name": name, "email": email, "password": password,"role": role}),
     );
     if (res.statusCode == 200) {
-      print("Usuario Guardado Exitosamente");
     } else {
-      print("Error al guardar el Abono ${res.statusCode}");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
   }
 }
 
@@ -53,11 +49,10 @@ Future<void> deleteUser(int id) async {
       headers: {"Content-Type": "application/json"},
     );
     if (res.statusCode == 200) {
-      print("Usuario eliminado exitosamente");
     } else {
-      print("Error al eliminar el Usuario");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    
   }
 }

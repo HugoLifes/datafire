@@ -100,15 +100,15 @@ return Scaffold(
     
                   try {
                     await updateProyecto(widget.proyecto?["id"], nombre, fechaInicio, fechaFinalizada);
-                    print('Proyecto actualizado: $nombre');
                     // Muestra el Snackbar al actualizar el proyecto
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Proyecto actualizado correctamente'),
                       ),
                     );
+                  // ignore: empty_catches
                   } catch (error) {
-                    print('Error al actualizar el proyecto: $error');
+                   
                   }
                 }
               },
@@ -152,9 +152,9 @@ TextButton(
       Navigator.of(context).pop();
 
       await deleteProyecto(widget.proyecto?["id"]);
-      print('Proyecto eliminado');
+    // ignore: empty_catches
     } catch (error) {
-      print('Error al eliminar el proyecto: $error');
+      
     }
   },
   child: const Text('Confirmar'),

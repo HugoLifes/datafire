@@ -46,8 +46,9 @@ Future<void> actualizarDatos() async {
       remaining = proyecto["remaining"].toString();
     });
 
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al actualizar datos: $err");
+    
   }
 }
 

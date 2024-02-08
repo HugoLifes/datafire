@@ -15,17 +15,15 @@ Map<String, String> headers = await getAuthHeaders();
       final List<dynamic> trabajadores = jsonDecode(res.body);
       return trabajadores;
     } else {
-      print("Error al obtener la lista de proyectos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
 
 Future<void> updateTrabajador(
-  int id, String nombre, String last_name, int edad, String position, int salary) async {
+  int id, String nombre, String lastName, int edad, String position, int salary) async {
   final url = "https://datafire-production.up.railway.app/api/v1/trabajadores/$id";
 Map<String, String> headers = await getAuthHeaders();
   try {
@@ -34,7 +32,7 @@ Map<String, String> headers = await getAuthHeaders();
       headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode({
         "name": nombre,
-        "last_name": last_name,
+        "last_name": lastName,
         "age": edad, 
         "position": position,
         "salary": salary,
@@ -42,15 +40,11 @@ Map<String, String> headers = await getAuthHeaders();
     );
 
     if (res.statusCode == 200) {
-      print("Trabajador actualizado exitosamente");
     } else if (res.statusCode == 404) {
-      print("Error: Trabajador no encontrado. Status code: 404");
     } else {
-      print("Error al actualizar el trabajador. Status code: ${res.statusCode}");
-      print("Response body: ${res.body}");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
   }
 }
 
@@ -69,11 +63,10 @@ Map<String, String> headers = await getAuthHeaders();
       headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
-      print("Trabajador eliminado exitosamente");
     } else {
-      print("Error al eliminar el Cliente");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    
   }
 }

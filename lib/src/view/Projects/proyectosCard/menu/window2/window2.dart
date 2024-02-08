@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
@@ -64,7 +65,16 @@ class _Window2State extends State<Window2> {
                                 IconButton(
                                   icon: const Icon(Icons.delete),
                                   onPressed: () async {
-                                    await deleteCustomerProjectRelation(customer['id']);
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.warning,
+                                animType: AnimType.scale,
+                                title: "Eliminar Cliente del proyecto",
+                                desc: "¿Estas seguro que quieres eliminar este Cliente?",
+                                width: 620,
+                                btnCancelOnPress: (){},
+                                btnOkOnPress: () async {
+                                      await deleteCustomerProjectRelation(customer['id']);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                         content:  Text('Cliente eliminado correctamente'),
@@ -74,6 +84,9 @@ class _Window2State extends State<Window2> {
                                     setState(() {
                                       futureCustomerProjects = fetchCustomerProjects();
                                     });
+                                },
+                              ).show();
+
                                   },
                                 ),
                               ),

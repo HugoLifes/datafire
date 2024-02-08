@@ -74,10 +74,10 @@ class _HomeState extends State<Home> {
           }));
         });
       } else {
-        print('Error en la solicitud: ${response.statusCode}');
+        
       }
+    // ignore: empty_catches
     } catch (error) {
-      print('Error al obtener datos: $error');
     }
   }
 

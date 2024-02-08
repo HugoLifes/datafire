@@ -13,11 +13,9 @@ Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
       final Map<String, dynamic> proyecto = jsonDecode(res.body);
       return proyecto;
     } else {
-      print("Error al obtener el proyecto con ID $projectId");
       return {};
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return {};
   }
 }
@@ -46,16 +44,12 @@ Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fech
       if (projectId != null) {
         return projectId;
       } else {
-        print('Error al obtener el ID del proyecto por nombre');
         return null;
       }
     } else {
-      print("Error al guardar el proyecto - Código: ${resCrearProyecto.statusCode}");
-      print("Respuesta del servidor: ${resCrearProyecto.body}");
       return null;
     }
   } catch (err) {
-    print("Error al realizar la solicitud http para crear proyecto: $err");
     return null;
   }
 }
@@ -73,11 +67,9 @@ Future<String?> buscarIdProyectoPorNombre(String nombre) async {
           return proyecto["id"]?.toString();
         }
       }
-      print("No se encontró el proyecto con nombre: $nombre");
       return null;
     } 
   } catch (err) {
-    print("Error al realizar la solicitud http para buscar proyecto por nombre: $err");
     return null;
   }
   return null;
@@ -95,11 +87,9 @@ Map<String, String> headers = await getAuthHeaders();
       final List<dynamic> proyectos = jsonDecode(res.body);
       return proyectos;
     } else {
-      print("Error al obtener la lista de proyectos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -119,12 +109,11 @@ Future<void> updateProyecto(
       }),
     );
     if (res.statusCode == 200) {
-      print("Proyecto actualizado exitosamente");
     } else {
-      print("Error al actualizar el proyecto");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    
   }
 }
 
@@ -137,12 +126,10 @@ Future<void> deleteProyecto(int id) async {
       headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
-      print("Proyecto eliminado exitosamente");
     } else {
-      print("Error al eliminar el proyecto");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
   }
 }
 

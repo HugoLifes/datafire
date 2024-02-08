@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/abonos.service.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window5/form_agregar_abono.dart';
 
@@ -66,7 +67,18 @@ class _Tab5ContentState extends State<Tab5Content> {
                           trailing:IconButton(
                             icon:  const Icon(Icons.delete),
                             onPressed: () {
-                              deleteAbono(abono["id"]);
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.warning,
+                                animType: AnimType.scale,
+                                title: "Eliminar abono",
+                                desc: "¿Estas seguro que quieres eliminar este Abono?",
+                                width: 620,
+                                btnCancelOnPress: (){},
+                                btnOkOnPress: () {
+                                  deleteAbono(abono["id"]);
+                                },
+                              ).show();
                             },
                           ),
                         ),

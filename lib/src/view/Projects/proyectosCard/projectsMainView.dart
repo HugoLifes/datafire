@@ -22,6 +22,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
   final _inicioController = TextEditingController();
   final _finController = TextEditingController();
   final _costoController = TextEditingController();
+  final _costoInicialController = TextEditingController();
   late final String _idProyecto;
 
   @override
@@ -32,6 +33,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
     _inicioController.text = widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
     _finController.text = widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finalización';
     _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
+    _costoInicialController.text = widget.proyecto?["costo_inicial"].toString() ?? "Sin costo Inicial";
   }
 
   @override
@@ -76,7 +78,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         ),
 
                       // window 4 servicios
-Tab4Content(idProyecto: _idProyecto),
+Tab4Content(idProyecto: _idProyecto, costoInicial: _costoInicialController.text),
 Tab5Content(idProyecto: _idProyecto)
                       ],
                     ),

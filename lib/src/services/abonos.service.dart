@@ -16,12 +16,11 @@ Map<String, String> headers = await getAuthHeaders();
           {"monto": monto, "fecha_abono": fechaAbono, "projectId": projectId,"customerId": customerId}),
     );
     if (res.statusCode == 200) {
-      print("Abono Guardado Exitosamente");
     } else {
-      print("Error al guardar el Abono ${res.statusCode}");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    
   }
 }
 
@@ -34,11 +33,9 @@ Future<List<dynamic>> fetchAbonos() async {
       final List<dynamic> abonos = jsonDecode(res.body);
       return abonos; 
     } else {
-      print("Error al obtener la lista de abonos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -52,11 +49,9 @@ Future<List<dynamic>> fetchAbonosById(String projectId) async {
       final List<dynamic> costs = jsonDecode(res.body);
       return costs;
     } else {
-      print("Error al obtener la lista de costos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -74,10 +69,9 @@ Future<void> updateAbono(
           {"monto": monto, "fecha_abono": fechaAbono, "projectId": projectId, "customerId": customerId}),
     );
     if (res.statusCode == 200) {
-      print("abono actualizado exitosamente");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
   }
 }
 
@@ -90,11 +84,10 @@ Future<void> deleteAbono(int id) async {
       headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
-      print("Abono eliminado exitosamente");
     } else {
-      print("Error al eliminar el Abono ${res.statusCode}");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    
   }
 }

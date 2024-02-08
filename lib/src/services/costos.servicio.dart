@@ -11,11 +11,9 @@ Future<List<dynamic>> fetchCosts() async {
       final List<dynamic> costs = jsonDecode(res.body);
       return costs;
     } else {
-      print("Error al obtener la lista de costos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -36,15 +34,12 @@ Map<String, String> headers = await getAuthHeaders();
     );
   
     if (resCrearCosto.statusCode == 201) {
-      print("Guardado exitosamente");
-      return "Guardado exitosamente"; // Puedes devolver un valor más significativo aquí
+      return "Guardado exitosamente"; 
     } else {
-      print("Error en la solicitud http para crear proyecto. Código: ${resCrearCosto.statusCode}");
       return null; 
     }
   } catch (err) {
-    print("Error al realizar la solicitud http para crear proyecto: $err");
-    return null; // Devuelve null u otro valor significativo según tus necesidades
+    return null; 
   }
 }
 
@@ -59,11 +54,9 @@ Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
       final List<dynamic> costs = jsonDecode(res.body);
       return costs;
     } else {
-      print("Error al obtener la lista de costos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -80,10 +73,10 @@ Future<void> updateCostos(
           {"amount": amount, "service": service, "cost": cost}),
     );
     if (res.statusCode == 200) {
-      print("cliente actualizado exitosamente");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    
   }
 }
 
@@ -99,11 +92,10 @@ Map<String, String> headers = await getAuthHeaders();
       headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
-      print("Relación eliminada exitosamente");
     } else {
-      print("Error al eliminar la relación");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    
   }
 }

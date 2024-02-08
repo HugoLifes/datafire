@@ -59,7 +59,6 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
             String description = _serviceController.text;
             String cost = _costController.text;
             updateCostos(id, amount, description, cost);
-            print("id, amount, description, cost");
             Navigator.of(context).pop();
           },
           child: const Text("Guardar"),

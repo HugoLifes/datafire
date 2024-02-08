@@ -112,8 +112,9 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
                           builder: (context) => const SuccessfulScreen(),
                         ),
                       );
+                    // ignore: empty_catches
                     } catch (error) {
-                      print('Error al actualizar el cliente: $error');
+                      
                     }
                   }
                 },
@@ -124,7 +125,7 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
               ),
             ),
             const SizedBox(height: 6.0),
-            Container(
+            SizedBox(
               width: double.infinity,
               child: IconButton.filled(
                 icon: const Icon(Icons.delete_forever),
@@ -151,15 +152,15 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
                               try {
                                 await clienteActual.eliminarCliente(
                                     widget.cliente?['id']);
-                                print('Cliente eliminado');
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => const MyApp(),
                                   ),
                                 );
+                              // ignore: empty_catches
                               } catch (error) {
-                                print('Error al eliminar el cliente: $error');
+                                
                               }
                             },
                             child: const Text('Confirmar'),

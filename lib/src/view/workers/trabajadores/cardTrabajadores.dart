@@ -2,16 +2,16 @@ import 'package:datafire/src/view/workers/trabajadores/editarTrabajadores.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
-class trabajadorCard extends StatefulWidget {
+class TrabajadorCard extends StatefulWidget {
   final Map<String, dynamic> trabajador;
 
-  const trabajadorCard({Key? key, required this.trabajador});
+  const TrabajadorCard({Key? key, required this.trabajador});
 
   @override
-  State<trabajadorCard> createState() => _trabajadorCardState();
+  State<TrabajadorCard> createState() => _TrabajadorCardState();
 }
 
-class _trabajadorCardState extends State<trabajadorCard> {
+class _TrabajadorCardState extends State<TrabajadorCard> {
   @override
   Widget build(BuildContext context) {
     return Container(

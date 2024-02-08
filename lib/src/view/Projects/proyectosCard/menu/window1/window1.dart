@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class Window1 extends StatelessWidget {
   final Map<String, dynamic>? proyecto;
 
-  Window1({required this.proyecto});
+  const Window1({super.key, required this.proyecto});
 
   @override
   Widget build(BuildContext context) {

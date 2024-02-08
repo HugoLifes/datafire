@@ -69,11 +69,9 @@ Future<void> deleteCliente(int id) async {
       headers: {"Content-Type": "application/json"},
     );
     if (res.statusCode == 200) {
-      print("Cliente eliminado exitosamente");
     } else {
-      print("Error al eliminar el Cliente");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
   }
 }

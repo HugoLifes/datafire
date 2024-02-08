@@ -1,4 +1,4 @@
-import 'package:datafire/src/view/Projects/proyectosCard/editarProyecto.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/projectsMainView.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 

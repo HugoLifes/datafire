@@ -5,7 +5,7 @@ import 'package:datafire/src/view/workers/trabajadores/form_editarTrabajadores.d
 class DetallesYEditarTrabajadoresPage extends StatefulWidget {
   final Map<String, dynamic>? trabajador;
 
-  DetallesYEditarTrabajadoresPage({Key? key, required this.trabajador})
+  const DetallesYEditarTrabajadoresPage({Key? key, required this.trabajador})
       : super(key: key);
 
   @override

@@ -10,11 +10,9 @@ Future<List<dynamic>> fetchProjectWorkers() async {
       final List<dynamic> projectWorkers = jsonDecode(res.body);
       return projectWorkers;
     } else {
-      print("Error al obtener la lista de proyectos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -26,8 +24,6 @@ class postProjectWorker {
       "worker_id": workerId,
     };
 
-    print("Data enviada a addCustomerProject: $requestData");
-
     const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectWorker";
 
     try {
@@ -38,13 +34,10 @@ class postProjectWorker {
       );
 
       if (res.statusCode == 201) {
-        print("Cliente agregado exitosamente");
       } else {
-        print("Error al agregar el cliente: ${res.statusCode}");
-        print("Respuesta del servidor: ${res.body}");
       }
+    // ignore: empty_catches
     } catch (err) {
-      print("Error al realizar la solicitud http: $err");
     }
   }
 }
@@ -64,11 +57,9 @@ Future<List<Map<String, dynamic>>> fetchProjectWorkersbyId(int workerId) async {
 
       return workerProjects;
     } else {
-      print("Error al obtener la lista de proyectos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -83,14 +74,11 @@ Future<bool> deleteProjectWorkers(int projectWorkersId) async {
     );
 
     if (response.statusCode == 200) {
-      print("Relación eliminada exitosamente");
       return true;
     } else {
-      print("Error al eliminar la relación. StatusCode: ${response.statusCode}");
       return false;
     }
   } catch (error) {
-    print("Error al realizar la solicitud http: $error");
     return false;
   }
 }

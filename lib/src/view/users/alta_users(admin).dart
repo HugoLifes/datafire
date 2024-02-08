@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/users.service.dart';
 import 'package:flutter/material.dart';
 
@@ -74,10 +75,19 @@ class _UsersViewState extends State<UsersView> {
                           SizedBox(
                             width: 50,
                             child: IconButton(
-                              style: ButtonStyle(),
+                              style: const ButtonStyle(),
                               icon: const Icon(Icons.delete),
                               onPressed: () async {
-                                // Eliminar trabajadores
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.warning,
+                                animType: AnimType.bottomSlide,
+                                title: 'Eliminar usuario',
+                                desc: '¿Estás seguro de que quieres eliminar este Usuario?',
+                                width: 620,
+                                btnCancelOnPress: () {},
+                                btnOkOnPress: () {
+                                             // Eliminar trabajadores
                                 deleteUser(user["id"]);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
@@ -86,7 +96,8 @@ class _UsersViewState extends State<UsersView> {
                                 );
                                 setState(() {
                                   futureUsers = fetchUsers();
-                                });
+                                });},).show();
+
                               },
                             ),
                           ),
@@ -182,8 +193,9 @@ class _UsersViewState extends State<UsersView> {
                                         futureUsers = fetchUsers();
                                       });
                                       Navigator.pop(context); 
+                                        // ignore: empty_catches
                                         } catch (err) {
-                                          print("$err");
+                                          
                                         }
 
                                     }

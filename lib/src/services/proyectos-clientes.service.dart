@@ -10,11 +10,9 @@ Future<List<dynamic>> fetchCustomerProjects() async {
       final List<dynamic> customersProjects = jsonDecode(res.body);
       return customersProjects;
     } else {
-      print("Error al obtener la lista de proyectos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -28,11 +26,9 @@ Future<List<String>> fetchCustomerProjectsforcustomers() async {
       final List<String> customersProjects = jsonDecode(res.body);
       return customersProjects;
     } else {
-      print("Error al obtener la lista de proyectos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -43,9 +39,6 @@ class PostCustomerProject {
       "project_id": projectId,
       "customer_id": customerId,
     };
-
-    print("Data enviada a addCustomerProject: $requestData");
-
     const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
 
     try {
@@ -56,16 +49,12 @@ class PostCustomerProject {
       );
 
       if (res.statusCode == 201) {
-        print("Cliente agregado exitosamente");
-        return true; // Indicar que la operación fue exitosa
+        return true; 
       } else {
-        print("Error al agregar el cliente: ${res.statusCode}");
-        print("Respuesta del servidor: ${res.body}");
-        return false; // Indicar que hubo un error en la operación
+        return false; 
       }
     } catch (err) {
-      print("Error al realizar la solicitud http: $err");
-      return false; // Indicar que hubo un error en la solicitud HTTP
+      return false; 
     }
   }
 }
@@ -82,14 +71,11 @@ Future<bool> deleteCustomerProjectRelation(int customerProjectId) async {
     );
 
     if (res.statusCode == 200) {
-      print("Relación eliminada exitosamente");
-      return true; // Indicar que la eliminación fue exitosa
+      return true; 
     } else {
-      print("Error al eliminar la relación");
-      return false; // Indicar que hubo un error en la eliminación
+      return false; 
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return false; 
   }
 }
@@ -109,11 +95,9 @@ Future<List<Map<String, dynamic>>> fetchCustomerProjectsbyId(int customerId) asy
 
       return customerProjects;
     } else {
-      print("Error al obtener la lista de proyectos");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
