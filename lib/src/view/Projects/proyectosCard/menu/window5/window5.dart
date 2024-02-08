@@ -66,7 +66,7 @@ class _Tab5ContentState extends State<Tab5Content> {
                           trailing:IconButton(
                             icon:  const Icon(Icons.delete),
                             onPressed: () {
-                              print([""]);
+                              deleteAbono(abono["id"]);
                             },
                           ),
                         ),

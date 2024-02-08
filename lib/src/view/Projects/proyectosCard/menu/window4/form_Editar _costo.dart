@@ -42,11 +42,7 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
             keyboardType: TextInputType.text,
             decoration: const InputDecoration(labelText: 'Servicio'),
           ),
-          TextFormField(
-            controller: _costController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(labelText: 'Costo'),
-          ),
+
         ],
       ),
       actions: [

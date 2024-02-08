@@ -1,3 +1,4 @@
+import 'package:datafire/src/services/abonos.service.dart';
 import 'package:datafire/src/services/costos.servicio.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/form_Editar%20_costo.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/form_agregar_costo.dart';
@@ -69,16 +70,27 @@ class _Tab4ContentState extends State<Tab4Content> {
                           leading: const Icon(Icons.payments_outlined),
                           title: Text(servicio["cost"]?.toString() ?? "", style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
                           subtitle: Text(servicio["service"]?.toString() ?? ""),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.edit),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return EditarCostoDialog(costo: servicio);
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.edit),
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return EditarCostoDialog(costo: servicio);
+                                    },
+                                  );
                                 },
-                              );
-                            },
+                              ),
+                                                            IconButton(
+                                icon: const Icon(Icons.delete_forever),
+                                onPressed: () {
+                                  deleteCost(servicio["id"]);
+                                },
+                              ),
+                            ],
                           ),
                         ),
                       ],

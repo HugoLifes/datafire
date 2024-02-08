@@ -92,7 +92,7 @@ Future<void> deleteAbono(int id) async {
     if (res.statusCode == 200) {
       print("Abono eliminado exitosamente");
     } else {
-      print("Error al eliminar el Abono");
+      print("Error al eliminar el Abono ${res.statusCode}");
     }
   } catch (err) {
     print("Error al realizar la solicitud http: $err");
