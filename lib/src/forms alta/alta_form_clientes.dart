@@ -1,4 +1,5 @@
 import 'package:datafire/src/view/successScreen.dart';
+import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 import '../model/data.dart';
 
@@ -16,97 +17,60 @@ class _AltaClientePageState extends State<AltaClientePage> {
   final _companyController = TextEditingController();
 
   List<Clientes> clientes = [];
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Agregar nuevo cliente"),
       ),
-      body: Stack(
-        children: [
-          formView(context),
-        ],
-      ),
-    );
-  }
-
-  Center formView(BuildContext context) {
-    return Center(
-      child: Container(
-        constraints: const BoxConstraints(maxWidth: 600),
-        padding: const EdgeInsets.only(top: 110, left: 15, right: 20),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Ingresa todos los datos del nuevo cliente",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _nombreController,
-                decoration: const InputDecoration(
+      body: Center(
+        child: Container(
+          constraints: const BoxConstraints(maxWidth: 600),
+          padding: const EdgeInsets.only(top: 110, left: 15, right: 20),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  "Ingresa todos los datos del nuevo cliente",
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                const SizedBox(height: 16.0),
+                CustomTextField(
+                  controller: _nombreController,
                   labelText: 'Nombre del Cliente',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
+                  validationMessage: 'Por favor, ingresa el nombre del cliente',
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa el nombre del cliente';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _apellidoController,
-                decoration: const InputDecoration(
+                const SizedBox(height: 16.0),
+                CustomTextField(
+                  controller: _apellidoController,
                   labelText: 'Apellidos',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
+                  validationMessage: 'Por favor, ingresa los apellidos del cliente',
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa los apellidos del cliente';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              TextFormField(
-                controller: _companyController,
-                decoration: const InputDecoration(
+                const SizedBox(height: 16.0),
+                CustomTextField(
+                  controller: _companyController,
                   labelText: 'Compañia',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
+                  validationMessage: 'Por favor, ingresa la compañía a la que pertenece el cliente',
                 ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa la compañía a la que pertenece el cliente';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(
-                  onPressed: _saveCliente,
-                  child: const Text('Guardar'),
+                const SizedBox(height: 16.0),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton(
+                    onPressed: _saveCliente,
+                    child: const Text('Guardar'),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
+
 
 void _saveCliente() {
   if (_formKey.currentState!.validate()) {

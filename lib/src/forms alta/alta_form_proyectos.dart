@@ -2,6 +2,7 @@ import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/successScreen.dart';
+import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 
 class AltaProyectoPage extends StatefulWidget {
@@ -47,20 +48,10 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
+              CustomTextField(
                 controller: _nombreController,
-                decoration: const InputDecoration(
                   labelText: 'Nombre del Proyecto',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa el nombre del proyecto';
-                  }
-                  return null;
-                },
+                  validationMessage:'Por favor, ingresa el nombre del proyecto'
               ),
               const SizedBox(height: 16.0),
               _buildDateTimePicker(
@@ -83,20 +74,10 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 },
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
+              CustomTextField(
                 controller: _initialCostController,
-                decoration: const InputDecoration(
                   labelText: 'Costo Inicial',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa el costo inicial';
-                  }
-                  return null;
-                },
+                 validationMessage: 'Por favor, ingresa el costo inicial'
               ),
               const SizedBox(height: 16.0),
               SizedBox(

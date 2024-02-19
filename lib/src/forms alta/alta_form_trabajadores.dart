@@ -1,5 +1,6 @@
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/successScreen.dart';
+import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 
 class AltaTrabajadorPage extends StatefulWidget {
@@ -46,84 +47,34 @@ class _AltaTrabajadorPageState extends State<AltaTrabajadorPage> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
+              CustomTextField(
                 controller: _nombreController,
-                decoration: const InputDecoration(
                   labelText: 'Nombre del trabajador',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa el nombre del Trabajador';
-                  }
-                  return null;
-                },
+                  validationMessage:'Por favor, ingresa el nombre del Trabajador'
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
+              CustomTextField(
                 controller: _apellidosController,
-                decoration: const InputDecoration(
                   labelText: 'Apellidos',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa los apellidos del cliente';
-                  }
-                  return null;
-                },
+                  validationMessage:'Por favor, ingresa los apellidos del cliente'
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
+              CustomTextField(
                 controller: _edadController,
-                decoration: const InputDecoration(
-                  labelText: 'Edad',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa la edad del empleado';
-                  }
-                  return null;
-                },
+                labelText: 'Edad',
+                validationMessage: 'Por favor, ingresa la edad del empleado'
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
+              CustomTextField(
                 controller: _posicionController,
-                decoration: const InputDecoration(
                   labelText: 'Posicion',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingresa la posicion del empleado';
-                  }
-                  return null;
-                },
+                  validationMessage: 'Por favor, ingresa la posicion del empleado'
               ),
               const SizedBox(height: 16.0),
-              TextFormField(
+              CustomTextField(
                 controller: _salarioController,
-                decoration: const InputDecoration(
                   labelText: 'Salario',
-                  border: OutlineInputBorder(),
-                  fillColor: Colors.white,
-                  filled: true,
-                ),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Por favor, ingrese el salario del empleado';
-                  }
-                  return null;
-                },
+                  validationMessage: 'Por favor, ingrese el salario del empleado'
               ),
               const SizedBox(height: 16.0),
               SizedBox(

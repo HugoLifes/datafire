@@ -1,5 +1,6 @@
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/cardTotals.dart';
+import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 
 class EditarProyectosForm extends StatefulWidget {
@@ -50,20 +51,10 @@ return Scaffold(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 16.0),
-          TextFormField(
+          CustomTextField(
             controller: _nombreController,
-            decoration: const InputDecoration(
               labelText: 'Nombre del Proyecto',
-              border: OutlineInputBorder(),
-              fillColor: Colors.white,
-              filled: true,
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Por favor, ingresa el nombre del proyecto';
-              }
-              return null;
-            },
+                validationMessage: 'Por favor, ingresa el nombre del proyecto'
           ),
           const SizedBox(height: 16.0),
           _buildDateTimePicker(

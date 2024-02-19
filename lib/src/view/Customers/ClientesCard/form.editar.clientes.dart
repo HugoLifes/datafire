@@ -1,6 +1,7 @@
 import 'package:datafire/src/app.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/successScreen.dart';
+import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 
 class EditarClienteForm extends StatefulWidget {
@@ -41,52 +42,22 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextFormField(
+            CustomTextField(
               controller: _nombreController,
-              decoration: const InputDecoration(
                 labelText: 'Nombre del Cliente',
-                border: OutlineInputBorder(),
-                fillColor: Colors.white,
-                filled: true,
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, ingresa el nombre del Cliente';
-                }
-                return null;
-              },
+                validationMessage: 'Por favor, ingresa el nombre del Cliente'
             ),
             const SizedBox(height: 16.0),
-            TextFormField(
+            CustomTextField(
               controller: _apellidosController,
-              decoration: const InputDecoration(
                 labelText: 'Apellidos',
-                border: OutlineInputBorder(),
-                fillColor: Colors.white,
-                filled: true,
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, ingresa la edad del cliente';
-                }
-                return null;
-              },
+                validationMessage: 'Por favor, ingresa la edad del cliente'
             ),
             const SizedBox(height: 16.0),
-            TextFormField(
+            CustomTextField(
               controller: _empresaController,
-              decoration: const InputDecoration(
                 labelText: 'Empresa',
-                border: OutlineInputBorder(),
-                fillColor: Colors.white,
-                filled: true,
-              ),
-              validator: (value) {
-                if (value!.isEmpty) {
-                  return 'Por favor, ingresa la empresa del cliente';
-                }
-                return null;
-              },
+                validationMessage:'Por favor, ingresa la empresa del cliente'
             ),
             const SizedBox(height: 16.0),
             SizedBox(

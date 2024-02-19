@@ -1,4 +1,5 @@
 import 'package:datafire/src/services/costos.servicio.dart';
+import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -71,55 +72,22 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
             },
           ),
           const SizedBox(height: 20),
-          TextFormField(
+          CustomTextField(
             controller: _amountController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
               labelText: 'Cantidad',
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Por favor, ingresa una cantidad';
-              }
-              return null;
-            },
+              validationMessage: 'Por favor, ingresa una cantidad'
           ),
           const SizedBox(height: 20),
-          TextFormField(
+          CustomTextField(
             controller: _descriptionController,
-            keyboardType: TextInputType.text, 
-            decoration: const InputDecoration(
               labelText: 'Servicio',
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Por favor, ingresa la descripción del costo';
-              }
-              return null;
-            },
+              validationMessage: 'Por favor, ingresa la descripción del costo'
           ),
           const SizedBox(height: 20),
-          TextFormField(
+          CustomTextField(
             controller: _costoController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
               labelText: 'Costo',
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Por favor, ingresa un costo';
-              }
-              return null;
-            },
+              validationMessage: 'Por favor, ingresa un costo'
           ),
           const SizedBox(height: 20),
 FilledButton(

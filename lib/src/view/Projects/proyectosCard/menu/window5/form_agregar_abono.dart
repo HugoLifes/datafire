@@ -1,4 +1,5 @@
 import 'package:datafire/src/services/abonos.service.dart';
+import 'package:datafire/src/widgets/TextField.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
@@ -79,21 +80,10 @@ class _AddAbonoFormState extends State<AddAbonoForm> {
       key: _formKey,
       child: Column(
         children: [
-          TextFormField(
+          CustomTextField(
             controller: _amountController,
-            keyboardType: TextInputType.number,
-            decoration: const InputDecoration(
               labelText: 'Importe',
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(),
-            ),
-            validator: (value) {
-              if (value!.isEmpty) {
-                return 'Por favor, ingresa una cantidad';
-              }
-              return null;
-            },
+              validationMessage:'Por favor, ingresa una cantidad'
           ),
           const SizedBox(height: 20),
           TextFormField(
