@@ -1,6 +1,7 @@
 import 'package:datafire/src/forms%20alta/alta_form_clientes.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/Customers/ClientesCard/clientesCard.dart';
+import 'package:datafire/src/widgets/appBar.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -25,25 +26,10 @@ class _AltaClientesState extends State<AltaClientes> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Clientes',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight),
+              child: AppBarDatafire(title: "Clientes", description: "En esta sección se mostrarán sus clientes o poder dar de alta clientes")
             ),
-            Text(
-              'En esta sección se mostrarán sus clientes o poder dar de alta clientes',
-              style: TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
-        backgroundColor: accentCanvasColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Al presionar el botón, navegar a la página AltaClientePage

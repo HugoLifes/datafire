@@ -1,6 +1,7 @@
 import 'package:datafire/src/forms%20alta/alta_form_trabajadores.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/workers/trabajadores/cardTrabajadores.dart';
+import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
 
 class AltaTrabajadores extends StatefulWidget {
@@ -24,20 +25,10 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Trabajadores"),
-        titleSpacing: 00.0,
-        centerTitle: true,
-        toolbarHeight: 60.2,
-        toolbarOpacity: 0.8,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-              bottomRight: Radius.circular(25),
-              bottomLeft: Radius.circular(25)),
-        ),
-        elevation: 0.00,
-        backgroundColor: const Color.fromARGB(255, 255, 248, 248),
-      ),
+            appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight),
+              child: AppBarDatafire(title: "Trabajadores", description: "Administra y da de alta tu trabajadores")
+            ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(

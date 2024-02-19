@@ -1,6 +1,7 @@
 import 'package:datafire/src/forms%20alta/alta_form_proyectos.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/cardProyecto.dart';
+import 'package:datafire/src/widgets/appBar.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -25,25 +26,10 @@ class _AltaProyectosState extends State<AltaProyectos> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Proyectos',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
-            ),
-            Text(
-              'En esta sección se mostrarán sus Proyectos o poder dar de alta Proyectos',
-              style: TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
-        backgroundColor: accentCanvasColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20)),
-        ),
-      ),
+                  appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(kToolbarHeight),
+              child: AppBarDatafire(title: "Proyectos", description: "En esta sección se mostrarán sus Proyectos o poder dar de alta Proyectos")
+              ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Al presionar el botón, navegar a la página AltaClientePage
