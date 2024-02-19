@@ -14,12 +14,11 @@ Future<void> postCliente(String nombre, String apellido, String company) async {
           {"name": nombre, "last_name": apellido, "company": company}),
     );
     if (res.statusCode == 200) {
-      print("Cliente Guardado Exitosamente");
     } else {
-      print("Error al guardar el cliente");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
+    
   }
 }
 
@@ -31,13 +30,11 @@ Map<String, String> headers = await getAuthHeaders();
     final res = await http.get(Uri.parse(url), headers: headers);
     if (res.statusCode == 200) {
       final List<dynamic> clientes = jsonDecode(res.body);
-      return clientes; // Asegúrate de manejar el caso de nulo
+      return clientes; 
     } else {
-      print("Error al obtener la lista de clientes");
       return [];
     }
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
     return [];
   }
 }
@@ -54,10 +51,9 @@ Future<void> updateCliente(
           {"name": nombre, "last_name": lastName, "company": company}),
     );
     if (res.statusCode == 200) {
-      print("cliente actualizado exitosamente");
     }
+  // ignore: empty_catches
   } catch (err) {
-    print("Error al realizar la solicitud http: $err");
   }
 }
 

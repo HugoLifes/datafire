@@ -180,28 +180,33 @@ class _UsersViewState extends State<UsersView> {
                                             ),
                                             const SizedBox(height: 10),
                                 ElevatedButton(
-                                  onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                        try {
-                                      await postUser(nameController.text, emailController.text, passwordController.text, roleController.text);    
-                                                                              ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Usuario agregado correctamente'),
-                                        ),
-                                      );
-                                      setState(() {
-                                        futureUsers = fetchUsers();
-                                      });
-                                      Navigator.pop(context); 
-                                        // ignore: empty_catches
-                                        } catch (err) {
-                                          
-                                        }
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              try {
+                                await postUser(
+                                  nameController.text,
+                                  emailController.text,
+                                  passwordController.text,
+                                  roleController.text,
+                                );
 
-                                    }
-                                  },
-                                  child: const Text('Agregar Usuario'),
-                                ),
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Usuario agregado correctamente'),
+                                  ),
+                                );
+
+                                setState(() {
+                                  futureUsers = fetchUsers();
+                                });
+                              } finally {
+                                Navigator.pop(context); 
+                              }
+                            }
+                          },
+                          child: const Text('Agregar Usuario'),
+                        ),
+
                               ],
                             ),
                           ),

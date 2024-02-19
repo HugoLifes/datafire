@@ -48,8 +48,8 @@ class _Tab5ContentState extends State<Tab5Content> {
                       children: <Widget>[
                         ListTile(
                           leading: Icon(Icons.payments_outlined),
-                          title:  Text("\$200", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
-                          subtitle: Text("Pago inicial"),
+                          title:  Text("\Abonos dados por el cliente", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          subtitle: Text("Abonos:"),
                         ),
                       ],
                     ),

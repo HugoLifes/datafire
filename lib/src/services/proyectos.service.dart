@@ -3,7 +3,7 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
+  const url = "http://localhost:3000/Api/v1/proyectos";
   Map<String, String> headers = await getAuthHeaders();
 
   try {
@@ -22,7 +22,7 @@ Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
 
 
 Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
-  const urlCrearProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos";
+  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos";
 
   try {
     Map<String, String> headers = await getAuthHeaders();
@@ -55,7 +55,7 @@ Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fech
 }
 
 Future<String?> buscarIdProyectoPorNombre(String nombre) async {
-  const urlBuscarProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos";
+  const urlBuscarProyecto = "http://localhost:3000/Api/v1/proyectos";
       Map<String, String> headers = await getAuthHeaders();
   try {
     final resBuscarProyecto = await http.get(Uri.parse(urlBuscarProyecto), headers: headers);
@@ -79,7 +79,7 @@ Future<String?> buscarIdProyectoPorNombre(String nombre) async {
 
 
 Future<List<dynamic>> fetchProjects() async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos";
+  const url = "http://localhost:3000/Api/v1/proyectos";
 Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.get(Uri.parse(url), headers: headers);
@@ -127,6 +127,7 @@ Future<void> deleteProyecto(int id) async {
     );
     if (res.statusCode == 200) {
     } else {
+      print("Error al eliminar${res.statusCode}");
     }
   // ignore: empty_catches
   } catch (err) {

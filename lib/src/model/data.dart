@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
@@ -72,22 +73,21 @@ class Clientes {
   }
 
   Future<void> nuevoCliente() async {
+    Map<String, String> headers = await getAuthHeaders();
     if (nombre != null && apellido != null && company != null) {
       try {
         final res = await http.post(
           Uri.parse(
               "https://datafire-production.up.railway.app/api/v1/clientes"),
-          headers: {"Content-Type": "application/json"},
+          headers: {"Content-Type": "application/json", ...headers},
           body: jsonEncode(
               {"name": nombre, "last_name": apellido, "company": company}),
         );
         if (res.statusCode == 201) {
-          print("Cliente Guardado Exitosamente");
         } else {
-          print("Error al guardar el cliente");
         }
+      // ignore: empty_catches
       } catch (err) {
-        print("Error al realizar la solicitud http: $err");
       }
     }
   }
@@ -140,11 +140,12 @@ class Trabajadores {
 
   Future<void> nuevoTrabajador(String nombre, String apellido, String edad,
       String position, String salario) async {
+        Map<String, String> headers = await getAuthHeaders();
     try {
       final res = await http.post(
         Uri.parse(
             "https://datafire-production.up.railway.app/api/v1/trabajadores"),
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "application/json", ...headers},
         body: jsonEncode({
           "name": nombre,
           "last_name": apellido,
@@ -154,12 +155,10 @@ class Trabajadores {
         }),
       );
       if (res.statusCode == 201) {
-        print("Trabajador Guardado Exitosamente");
       } else {
-        print("Error al guardar el trabajador");
       }
+    // ignore: empty_catches
     } catch (err) {
-      print("Error al realizar la solicitud http: $err");
     }
   }
 }

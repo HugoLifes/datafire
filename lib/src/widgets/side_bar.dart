@@ -70,7 +70,6 @@ class _SideBarState extends State<SideBar> {
             icon: Icons.home,
             label: 'Inicio',
             onTap: () {
-              debugPrint('Inicio');
             }),
         SidebarXItem(
             icon: Icons.assignment,

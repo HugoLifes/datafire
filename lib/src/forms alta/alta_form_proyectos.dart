@@ -122,7 +122,6 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                           ),
                         );
                       } else {
-                        print('Error al obtener el ID del proyecto');
                       }
                     }
                   },
@@ -157,7 +156,6 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                       value: isSelected,
                       onChanged: (bool? value) {
                         setState(() {
-                          print(clientesSeleccionados);
                           if (value != null) {
                             if (value) {
                               clientesSeleccionados.add(cliente["id"]?.toString() ?? "");

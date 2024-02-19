@@ -3,8 +3,7 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchCosts() async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/services";
-
+  const url = "http://localhost:3000/Api/v1/proyectos/services";
   try {
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
@@ -18,24 +17,24 @@ Future<List<dynamic>> fetchCosts() async {
   }
 }
 
-Future<String?> addCosto(String projectId, String amount, String description, String precio) async {
-  const urlCrearProyecto = "https://datafire-production.up.railway.app/api/v1/proyectos/services";
-Map<String, String> headers = await getAuthHeaders();
+Future<String?> addCosto(String projectId, String amount, String description, String precio, String selecterDate) async {
+  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos/services";
   try {
     final resCrearCosto = await http.post(
       Uri.parse(urlCrearProyecto),
-      headers: {"Content-Type": "application/json", ...headers},
+      headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "project_id": projectId,
         "amount": amount,
         "service": description,
         "cost": precio,
+        "fecha_costo": selecterDate
       }),
     );
-  
     if (resCrearCosto.statusCode == 201) {
       return "Guardado exitosamente"; 
     } else {
+      print("${resCrearCosto.statusCode} ${selecterDate} ");
       return null; 
     }
   } catch (err) {
@@ -46,7 +45,7 @@ Map<String, String> headers = await getAuthHeaders();
 
 
 Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/services";
+  const url = "http://localhost:3000/Api/v1/proyectos/services";
 
   try {
     final res = await http.get(Uri.parse('$url?projectId=$projectId'));
@@ -84,7 +83,7 @@ Future<void> updateCostos(
 
 void deleteCost(int costId) async {
   final url =
-      "https://datafire-production.up.railway.app/api/v1/proyectos/services/$costId";
+      "http://localhost:3000/Api/v1/proyectos/services/$costId";
 Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(

@@ -29,7 +29,7 @@ class _HomeState extends State<Home> {
 
   Future<void> fetchData() async {
     try {
-      final response = await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/project-stats'));
+      final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/api/v1/proyectos/project-stats'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 

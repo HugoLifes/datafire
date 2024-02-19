@@ -57,7 +57,7 @@ class _Tab4ContentState extends State<Tab4Content> {
                       children: <Widget>[
                         ListTile(
                           leading: const Icon(Icons.payments_outlined),
-                          title:  Text("${widget.costoInicial}", style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          title:  Text(widget.costoInicial, style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
                           subtitle: const Text("Costo inicial"),
                         ),
                       ],

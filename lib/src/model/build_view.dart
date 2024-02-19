@@ -32,7 +32,6 @@ GridView buildView(Size size, ThemeData theme, List<dynamic> list) {
           child: InkWell(
             hoverColor: accentCanvasColor,
             onTap: () {
-              debugPrint('Hola!');
             },
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
