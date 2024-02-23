@@ -29,7 +29,7 @@ class MotherView extends StatelessWidget {
             case 3:
               return const AltaTrabajadores();
             case 4:
-              return financesView();
+              return FinancesView();
             case 5: 
               return const UserVerificationView();
             default:
