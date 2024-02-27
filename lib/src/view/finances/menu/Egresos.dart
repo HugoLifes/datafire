@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-class IngresosWidget extends StatelessWidget {
-  final Future<List<dynamic>> fetchDataFuture;
+class EgresosWidget extends StatelessWidget {
+  final Future<List<Map<String, dynamic>>> fetchDataFuture;
 
-  const IngresosWidget({required this.fetchDataFuture});
+  const EgresosWidget({required this.fetchDataFuture});
 
   @override
   Widget build(BuildContext context) {
@@ -41,20 +41,20 @@ class OrderInfoDataSource extends DataGridSource {
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<String>(columnName: 'startDate', value: e['startDate'] ?? ''),
               DataGridCell<String>(columnName: 'endDate', value: e['endDate'] ?? ''),
-              DataGridCell<List<Widget>>(columnName: 'weeklyCost', value: _formatWeeklyCost(e['abonos'])),
-              DataGridCell<double>(columnName: 'totalWeeklyCost', value: (e['totalWeeklyAbonos'] ?? 0.0).toDouble()),
+              DataGridCell<List<Widget>>(columnName: 'weeklyCost', value: _formatWeeklyCost(e['weeklyCost'])),
+              DataGridCell<double>(columnName: 'totalWeeklyCost', value: (e['totalWeeklyCost'] ?? 0.0).toDouble()),
             ]))
         .toList();
   }
 
   late List<DataGridRow> _dataGridRows;
 
-  List<Widget> _formatWeeklyCost(List<dynamic>? abonos) {
-    if (abonos == null) return [];
+  List<Widget> _formatWeeklyCost(List<dynamic>? weeklyCost) {
+    if (weeklyCost == null) return [];
 
-    return abonos.map((entry) {
+    return weeklyCost.map((entry) {
       String projectName = entry['projectName'] ?? '';
-      double cost = entry['amount']?.toDouble() ?? 0.0;
+      double cost = entry['weeklyCost']?.toDouble() ?? 0.0;
       return Text('$projectName: $cost');
     }).toList();
   }
