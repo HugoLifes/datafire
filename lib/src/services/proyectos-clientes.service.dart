@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchCustomerProjects() async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
+  const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -18,7 +18,7 @@ Future<List<dynamic>> fetchCustomerProjects() async {
 }
 
 Future<List<String>> fetchCustomerProjectsforcustomers() async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
+  const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -39,7 +39,7 @@ class PostCustomerProject {
       "project_id": projectId,
       "customer_id": customerId,
     };
-    const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
+    const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
 
     try {
       final res = await http.post(

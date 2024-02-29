@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:datafire/src/view/finances/menu/Egresos.dart' as Egresos;
+import 'package:datafire/src/view/finances/menu/cuentasPorCobrar.dart';
 import 'package:datafire/src/view/finances/menu/ingresos.dart' hide OrderInfoDataSource;
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ class FinancesView extends StatefulWidget {
 class _FinancesViewState extends State<FinancesView> {
   late Future<List<Map<String, dynamic>>> fetchDataFuture;
   late Future<List<Map<String, dynamic>>> fetchIngresosFuture;
+  late Future<List<Map<String, dynamic>>> fetchCobrarData;
   late Egresos.OrderInfoDataSource dataSource;
 
   @override
@@ -24,6 +26,7 @@ class _FinancesViewState extends State<FinancesView> {
     super.initState();
     fetchDataFuture = fetchData();
     fetchIngresosFuture = fetchingresos();
+    fetchCobrarData = fetchCuentasCobrarData();
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
@@ -48,6 +51,17 @@ class _FinancesViewState extends State<FinancesView> {
     }
   }
 
+    Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
+    final response = await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/cuentasCobrar'));
+
+    if (response.statusCode == 200) {
+      debugPrint("Cuentas por cobrar cargado con éxito");
+      return List<Map<String, dynamic>>.from(json.decode(response.body));
+    } else {
+      throw Exception('Error al cargar datos de Ingresos');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,14 +74,15 @@ class _FinancesViewState extends State<FinancesView> {
           Expanded(
             flex: 2,
             child: DefaultTabController(
-              length: 4,
+              length: 5,
               child: Column(
                 children:  [
                   TabBar(tabs: [
                     Tab(text: "egresos"),
                     Tab(text: "nomina"),
                     Tab(text: "ingresos"),
-                    Tab(text: "flujo")
+                    Tab(text: "flujo"),
+                    Tab(text:"  Cuentas por cobrar")
                   ]),
                   Expanded(
                     child: TabBarView(
@@ -76,6 +91,7 @@ class _FinancesViewState extends State<FinancesView> {
                         Placeholder(),
                         IngresosWidget(fetchDataFuture: fetchIngresosFuture),
                         Placeholder(),
+                        CobrarWidget(fetchDataFuture: fetchCobrarData)
                       ],
                     ),
                   ),

@@ -23,7 +23,7 @@ Future<void> postCliente(String nombre, String apellido, String company) async {
 }
 
 Future<List<dynamic>> fetchClientes() async {
-  const url = "https://datafire-production.up.railway.app/api/v1/clientes";
+  const url = "http://localhost:3000/Api/v1/clientes";
 Map<String, String> headers = await getAuthHeaders();
 
   try {
