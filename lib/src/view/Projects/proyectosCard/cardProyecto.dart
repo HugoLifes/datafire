@@ -14,6 +14,8 @@ class ProyectoCard extends StatefulWidget {
 class _ProyectoCardState extends State<ProyectoCard> {
   @override
   Widget build(BuildContext context) {
+    bool isPagado = widget.proyecto["status"];
+
     return Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
@@ -96,6 +98,24 @@ class _ProyectoCardState extends State<ProyectoCard> {
                   widget.proyecto["fecha_fin"],
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                const Text(
+                  'Pagado?',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                ),
+                const SizedBox(width: 12),
+                CircleAvatar(
+                  backgroundColor: isPagado ? Colors.green : Colors.red,
+                  radius: 8,
+                  child: Icon(
+                    isPagado ? Icons.check : Icons.close,
+                    size: 12,
+                    color: Colors.white,
+                  ),
                 ),
               ],
             ),

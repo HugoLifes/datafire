@@ -1,6 +1,7 @@
 import 'package:datafire/src/forms%20alta/alta_form_proyectos.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/cardProyecto.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/projectsMainView.dart';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,29 @@ class AltaProyectos extends StatefulWidget {
 
 class _AltaProyectosState extends State<AltaProyectos> {
   late Future<List<dynamic>> _proyectosFuture;
+  List<dynamic> _proyectos = []; // Lista original de proyectos
 
   @override
   void initState() {
     super.initState();
     _proyectosFuture = obtenerProyectos();
+    _proyectosFuture.then((proyectos) {
+      setState(() {
+        _proyectos = proyectos;
+      });
+    });
+  }
+
+  void _startSearch() async {
+    final dynamic selected = await showSearch(
+      context: context,
+      delegate: ProyectoSearch(proyectos: _proyectos),
+    );
+
+    // Puedes realizar acciones adicionales si es necesario después de la búsqueda
+    if (selected != null) {
+      // Realiza alguna acción con el proyecto seleccionado
+    }
   }
 
   @override
@@ -26,10 +45,18 @@ class _AltaProyectosState extends State<AltaProyectos> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-                  appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
-              child: AppBarDatafire(title: "Proyectos", description: "En esta sección se mostrarán sus Proyectos o poder dar de alta Proyectos")
-              ),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight),
+        child: AppBar(
+          title: Text("Proyectos"),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: _startSearch,
+            ),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Al presionar el botón, navegar a la página AltaClientePage
@@ -60,13 +87,13 @@ class _AltaProyectosState extends State<AltaProyectos> {
             final proyectos = snapshot.data as List<dynamic>;
             return GridView.builder(
               padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
-              itemCount: proyectos.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: size.width > 800 ? 2 : 1,
                 childAspectRatio: size.width / (size.width > 800 ? 500 : 255),
                 crossAxisSpacing: 25,
                 mainAxisSpacing: 20,
               ),
+              itemCount: proyectos.length,
               itemBuilder: (_, int index) {
                 final proyecto = proyectos[index];
                 return ProyectoCard(proyecto: proyecto);
@@ -75,6 +102,78 @@ class _AltaProyectosState extends State<AltaProyectos> {
           }
         },
       ),
+    );
+  }
+}
+
+class ProyectoSearch extends SearchDelegate<dynamic> {
+  final List<dynamic> proyectos;
+
+  ProyectoSearch({required this.proyectos});
+
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final results = proyectos
+        .where((proyecto) =>
+            proyecto["name"].toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return GridView.builder(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2, // Dos cards por fila
+        crossAxisSpacing: 8.0, // Espaciado horizontal entre cards
+        mainAxisSpacing: 8.0, // Espaciado vertical entre cards
+      ),
+      itemCount: results.length,
+      itemBuilder: (context, index) {
+        final proyecto = results[index];
+        return ProyectoCard(proyecto: proyecto);
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    final suggestionList = query.isEmpty
+        ? proyectos
+        : proyectos
+            .where((proyecto) =>
+                proyecto["name"].toLowerCase().contains(query.toLowerCase()))
+            .toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        final suggestion = suggestionList[index];
+        return ListTile(
+          title: ProyectoCard(proyecto: suggestion),
+          onTap: () {
+            close(context, suggestion);
+          },
+        );
+      },
     );
   }
 }
