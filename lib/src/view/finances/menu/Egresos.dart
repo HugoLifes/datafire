@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+import 'package:intl/intl.dart';
 
 class EgresosWidget extends StatelessWidget {
   final Future<List<Map<String, dynamic>>> fetchDataFuture;
@@ -39,8 +40,8 @@ class OrderInfoDataSource extends DataGridSource {
   OrderInfoDataSource(List<Map<String, dynamic>> data) {
     _dataGridRows = data
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'startDate', value: e['startDate'] ?? ''),
-              DataGridCell<String>(columnName: 'endDate', value: e['endDate'] ?? ''),
+              DataGridCell<String>(columnName: 'startDate', value: _formatDate(e['startDate'])),
+              DataGridCell<String>(columnName: 'endDate', value: _formatDate(e['endDate'])),
               DataGridCell<List<Widget>>(columnName: 'weeklyCost', value: _formatWeeklyCost(e['weeklyCost'])),
               DataGridCell<double>(columnName: 'totalWeeklyCost', value: (e['totalWeeklyCost'] ?? 0.0).toDouble()),
             ]))
@@ -48,6 +49,16 @@ class OrderInfoDataSource extends DataGridSource {
   }
 
   late List<DataGridRow> _dataGridRows;
+
+  String _formatDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) {
+      return '';
+    }
+
+    final DateTime date = DateTime.parse(dateStr);
+    final DateFormat formatter = DateFormat('dd-MM-yyyy'); // Ajusta el formato según tus preferencias
+    return formatter.format(date);
+  }
 
   List<Widget> _formatWeeklyCost(List<dynamic>? weeklyCost) {
     if (weeklyCost == null) return [];
@@ -62,40 +73,39 @@ class OrderInfoDataSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-@override
-DataGridRowAdapter buildRow(DataGridRow row) {
-  return DataGridRowAdapter(
-    cells: row.getCells().map<Widget>((e) {
-      if (e.columnName == 'weeklyCost') {
-        List<Widget> weeklyCostWidgets = e.value as List<Widget>;
-        return Container(
-          alignment: getAlignment(e.columnName),
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: weeklyCostWidgets,
-          ),
-        );
-      } else {
-        return Container(
-          alignment: getAlignment(e.columnName),
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            e.value.toString(),
-            textAlign: TextAlign.start,
-          ),
-        );
-      }
-    }).toList(),
-  );
-}
-
+  @override
+  DataGridRowAdapter buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+      cells: row.getCells().map<Widget>((e) {
+        if (e.columnName == 'weeklyCost') {
+          List<Widget> weeklyCostWidgets = e.value as List<Widget>;
+          return Container(
+            alignment: getAlignment(e.columnName),
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: weeklyCostWidgets,
+            ),
+          );
+        } else {
+          return Container(
+            alignment: getAlignment(e.columnName),
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.start,
+            ),
+          );
+        }
+      }).toList(),
+    );
+  }
 
   Alignment getAlignment(String columnName) {
     if (columnName == 'startDate' || columnName == 'endDate') {
-      return Alignment.centerRight;
+      return Alignment.center;
     } else {
-      return Alignment.centerLeft;
+      return Alignment.center;
     }
   }
 }
