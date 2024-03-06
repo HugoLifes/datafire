@@ -1,9 +1,6 @@
 import 'package:datafire/src/forms%20alta/alta_form_proyectos.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/cardProyecto.dart';
-import 'package:datafire/src/view/Projects/proyectosCard/projectsMainView.dart';
-import 'package:datafire/src/widgets/appBar.dart';
-import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class AltaProyectos extends StatefulWidget {
@@ -13,9 +10,10 @@ class AltaProyectos extends StatefulWidget {
   _AltaProyectosState createState() => _AltaProyectosState();
 }
 
-class _AltaProyectosState extends State<AltaProyectos> {
+class _AltaProyectosState extends State<AltaProyectos> with SingleTickerProviderStateMixin {
   late Future<List<dynamic>> _proyectosFuture;
   List<dynamic> _proyectos = []; // Lista original de proyectos
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -26,6 +24,8 @@ class _AltaProyectosState extends State<AltaProyectos> {
         _proyectos = proyectos;
       });
     });
+
+    _tabController = TabController(vsync: this, length: 2); // Dos pestañas: Terminados y No Terminados
   }
 
   void _startSearch() async {
@@ -42,19 +42,25 @@ class _AltaProyectosState extends State<AltaProyectos> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
-          title: Text("Proyectos"),
+          title: const Text("Proyectos"),
           actions: [
             IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: _startSearch,
             ),
           ],
+          bottom: TabBar(
+            controller: _tabController,
+            tabs: const [
+              Tab(text: 'Terminados'),
+              Tab(text: 'No Terminados'),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
@@ -73,35 +79,52 @@ class _AltaProyectosState extends State<AltaProyectos> {
           Text('Agregar Proyecto', style: TextStyle(fontSize: 15))
         ]),
       ),
-      body: FutureBuilder<List<dynamic>>(
-        future: _proyectosFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return const Center(child: Text('Error al cargar los clientes'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No hay clientes disponibles'));
-          } else {
-            // Mostrar la lista de clientes en la UI
-            final proyectos = snapshot.data as List<dynamic>;
-            return GridView.builder(
-              padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: size.width > 800 ? 2 : 1,
-                childAspectRatio: size.width / (size.width > 800 ? 500 : 255),
-                crossAxisSpacing: 25,
-                mainAxisSpacing: 20,
-              ),
-              itemCount: proyectos.length,
-              itemBuilder: (_, int index) {
-                final proyecto = proyectos[index];
-                return ProyectoCard(proyecto: proyecto);
-              },
-            );
-          }
-        },
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          // Pestaña de Proyectos Terminados
+          _buildProyectosView(terminados: true),
+
+          // Pestaña de Proyectos No Terminados
+          _buildProyectosView(terminados: false),
+        ],
       ),
+    );
+  }
+
+  Widget _buildProyectosView({required bool terminados}) {
+    final proyectosToShow = _proyectos.where((proyecto) => proyecto["terminado"] == terminados).toList();
+
+    return FutureBuilder<List<dynamic>>(
+      // Utiliza la lista filtrada de proyectos según su estado de terminación
+      future: Future.value(proyectosToShow),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return const Center(child: Text('Error al cargar los proyectos'));
+        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No hay proyectos disponibles'));
+        } else {
+          // Mostrar la lista de proyectos en la UI
+          final proyectos = snapshot.data as List<dynamic>;
+          var size;
+          return GridView.builder(
+            padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: size.width > 800 ? 2 : 1,
+              childAspectRatio: size.width / (size.width > 800 ? 500 : 255),
+              crossAxisSpacing: 25,
+              mainAxisSpacing: 20,
+            ),
+            itemCount: proyectos.length,
+            itemBuilder: (_, int index) {
+              final proyecto = proyectos[index];
+              return ProyectoCard(proyecto: proyecto);
+            },
+          );
+        }
+      },
     );
   }
 }
@@ -115,7 +138,7 @@ class ProyectoSearch extends SearchDelegate<dynamic> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -126,7 +149,7 @@ class ProyectoSearch extends SearchDelegate<dynamic> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -141,7 +164,7 @@ class ProyectoSearch extends SearchDelegate<dynamic> {
         .toList();
 
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Dos cards por fila
         crossAxisSpacing: 8.0, // Espaciado horizontal entre cards
         mainAxisSpacing: 8.0, // Espaciado vertical entre cards

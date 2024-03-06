@@ -2,7 +2,6 @@ import 'package:datafire/src/forms%20alta/alta_form_clientes.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/Customers/ClientesCard/clientesCard.dart';
 import 'package:datafire/src/widgets/appBar.dart';
-import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class AltaClientes extends StatefulWidget {
@@ -26,8 +25,8 @@ class _AltaClientesState extends State<AltaClientes> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
+            appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(kToolbarHeight),
               child: AppBarDatafire(title: "Clientes", description: "En esta sección se mostrarán sus clientes o poder dar de alta clientes")
             ),
       floatingActionButton: FloatingActionButton.extended(

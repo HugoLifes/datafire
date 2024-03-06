@@ -12,7 +12,7 @@ class CobrarWidget extends StatelessWidget {
       future: fetchDataFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
@@ -20,9 +20,9 @@ class CobrarWidget extends StatelessWidget {
           return SfDataGrid(
             source: dataSource,
             columns: [
-              GridColumn(columnName: 'name', label: Text('Project Name', textAlign: TextAlign.center)),
-              GridColumn(columnName: 'remaining', label: Text('Remaining', textAlign: TextAlign.center)),
-              GridColumn(columnName: 'projectCustomers', label: Text('Project Customers', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'name', label: const Text('                               Nombre del proyecto', textAlign: TextAlign.end)),
+              GridColumn(columnName: 'remaining', label: const Text('                                  Remaining', textAlign: TextAlign.start)),
+              GridColumn(columnName: 'projectCustomers', label: const Text('                          Clientes al que pertenece', textAlign: TextAlign.center)),
             ],
             allowSorting: true,
             allowFiltering: true,
@@ -66,13 +66,13 @@ class ProjectInfoDataSource extends DataGridSource {
         if (e.columnName == 'projectCustomers') {
           List<Widget> customerWidgets = e.value as List<Widget>;
           return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: customerWidgets,
           );
         } else {
           return Container(
             alignment: getAlignment(e.columnName),
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               e.value.toString(),
               textAlign: TextAlign.center,
@@ -85,9 +85,9 @@ class ProjectInfoDataSource extends DataGridSource {
 
   Alignment getAlignment(String columnName) {
     if (columnName == 'remaining') {
-      return Alignment.centerRight;
+      return Alignment.center;
     } else {
-      return Alignment.centerLeft;
+      return Alignment.center;
     }
   }
 }

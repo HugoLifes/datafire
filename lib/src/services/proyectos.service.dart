@@ -87,7 +87,8 @@ Map<String, String> headers = await getAuthHeaders();
       final List<dynamic> proyectos = jsonDecode(res.body);
       return proyectos;
     } else {
-      return [];
+      return []
+      ;
     }
   } catch (err) {
     return [];
@@ -127,7 +128,6 @@ Future<void> deleteProyecto(int id) async {
     );
     if (res.statusCode == 200) {
     } else {
-      print("Error al eliminar${res.statusCode}");
     }
   // ignore: empty_catches
   } catch (err) {

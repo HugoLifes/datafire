@@ -12,7 +12,7 @@ class IngresosWidget extends StatelessWidget {
       future: fetchDataFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
@@ -20,10 +20,10 @@ class IngresosWidget extends StatelessWidget {
           return SfDataGrid(
             source: dataSource,
             columns: [
-              GridColumn(columnName: 'startDate', label: Text('Inicio de semana', textAlign: TextAlign.center)),
-              GridColumn(columnName: 'endDate', label: Text('Fin de semana', textAlign: TextAlign.center)),
-              GridColumn(columnName: 'weeklyCost', label: Text('Costo Semanal', textAlign: TextAlign.center)),
-              GridColumn(columnName: 'totalWeeklyCost', label: Text('Total Semanal', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'startDate', label: const Text('                               Inicio de semana', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'endDate', label: const Text('                                 Fin de semana', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'weeklyCost', label: const Text('               Costo Semanal', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'totalWeeklyCost', label: const Text('Total Semanal', textAlign: TextAlign.center)),
             ],
             allowSorting: true,
             allowFiltering: true,
@@ -75,7 +75,7 @@ class OrderInfoDataSource extends DataGridSource {
         } else {
           return Container(
             alignment: getAlignment(e.columnName),
-            padding: EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Text(
               e.value.toString(),
               textAlign: TextAlign.center,

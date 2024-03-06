@@ -7,9 +7,6 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'dart:math';
 
-
-import '../widgets/colors.dart';
-
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -88,8 +85,8 @@ class _HomeState extends State<Home> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-                        appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
+                        appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(kToolbarHeight),
               child: AppBarDatafire(title: "Gestion", description: "Mantente al dia de tus proyectos")
               ),
       body: SingleChildScrollView(

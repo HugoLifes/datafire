@@ -34,7 +34,7 @@ Future<String?> addCosto(String projectId, String amount, String description, St
     if (resCrearCosto.statusCode == 201) {
       return "Guardado exitosamente"; 
     } else {
-      print("${resCrearCosto.statusCode} ${selecterDate} ");
+  
       return null; 
     }
   } catch (err) {

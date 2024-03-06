@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:datafire/src/view/finances/menu/Egresos.dart' as Egresos;
+import 'package:datafire/src/view/finances/menu/Flujo.dart';
 import 'package:datafire/src/view/finances/menu/cuentasPorCobrar.dart';
 import 'package:datafire/src/view/finances/menu/ingresos.dart' hide OrderInfoDataSource;
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 class FinancesView extends StatefulWidget {
   const FinancesView({Key? key}) : super(key: key);
@@ -19,6 +19,7 @@ class _FinancesViewState extends State<FinancesView> {
   late Future<List<Map<String, dynamic>>> fetchDataFuture;
   late Future<List<Map<String, dynamic>>> fetchIngresosFuture;
   late Future<List<Map<String, dynamic>>> fetchCobrarData;
+  late Future<List<Map<String, dynamic>>> fetchFlujData;
   late Egresos.OrderInfoDataSource dataSource;
 
   @override
@@ -27,6 +28,7 @@ class _FinancesViewState extends State<FinancesView> {
     fetchDataFuture = fetchData();
     fetchIngresosFuture = fetchingresos();
     fetchCobrarData = fetchCuentasCobrarData();
+    fetchFlujData = fetchFlujoData();
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
@@ -62,11 +64,22 @@ class _FinancesViewState extends State<FinancesView> {
     }
   }
 
+      Future<List<Map<String, dynamic>>> fetchFlujoData() async {
+    final response = await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/flujo'));
+
+    if (response.statusCode == 200) {
+      debugPrint("Cuentas por cobrar cargado con éxito");
+      return List<Map<String, dynamic>>.from(json.decode(response.body));
+    } else {
+      throw Exception('Error al cargar datos de Ingresos');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
         child: AppBarDatafire(title: "Finanzas", description: "Aquí tendrás acceso a todas las finanzas de los proyectos"),
       ),
       body: Row(
@@ -77,7 +90,7 @@ class _FinancesViewState extends State<FinancesView> {
               length: 5,
               child: Column(
                 children:  [
-                  TabBar(tabs: [
+                  const TabBar(tabs: [
                     Tab(text: "egresos"),
                     Tab(text: "nomina"),
                     Tab(text: "ingresos"),
@@ -88,9 +101,9 @@ class _FinancesViewState extends State<FinancesView> {
                     child: TabBarView(
                       children: [
                         Egresos.EgresosWidget(fetchDataFuture: fetchDataFuture),
-                        Placeholder(),
+                        const Placeholder(),
                         IngresosWidget(fetchDataFuture: fetchIngresosFuture),
-                        Placeholder(),
+                        FlujoWidget(fetchDataFuture: fetchFlujData),
                         CobrarWidget(fetchDataFuture: fetchCobrarData)
                       ],
                     ),

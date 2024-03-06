@@ -5,7 +5,7 @@ class AppBarDatafire extends StatelessWidget {
   final String title;
   final String description;
 
-  AppBarDatafire({required this.title, required this.description});
+  const AppBarDatafire({super.key, required this.title, required this.description});
 
   
 
