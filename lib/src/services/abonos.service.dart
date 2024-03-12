@@ -4,7 +4,7 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> postAbono(String monto, String fechaAbono, String projectId, int customerId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/abonos";
+  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/abonos";
 
 Map<String, String> headers = await getAuthHeaders();
 
@@ -25,7 +25,7 @@ Map<String, String> headers = await getAuthHeaders();
 }
 
 Future<List<dynamic>> fetchAbonos() async {
-  const url = "http://localhost:3000/Api/v1/proyectos/abonos";
+  const url = "https://datafire-production.up.railway.app//Api/v1/proyectos/abonos";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -41,7 +41,7 @@ Future<List<dynamic>> fetchAbonos() async {
 }
 
 Future<List<dynamic>> fetchAbonosById(String projectId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/abonos";
+  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/abonos";
 
   try {
     final res = await http.get(Uri.parse('$url?projecto_id=$projectId'));

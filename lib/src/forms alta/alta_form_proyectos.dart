@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
@@ -84,7 +85,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
+                    if (_formKey.currentState!.validate()  || _initialCostController.text == '0') {
                       String nombre = _nombreController.text;
                       String fechaInicio = _inicioDate.toString();
                       String fechaFinalizada = _finDate.toString();
@@ -161,11 +162,13 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
             ),
             TextButton(
               onPressed: () {
+               Navigator.of(context).pop();
                 // Guarda la relación entre el proyecto y los clientes seleccionados
                 clientesSeleccionados.forEach((clienteId) {
                   PostCustomerProject().addCustomerProject(projectId, clienteId);
                 });
-                Navigator.of(context).pop();
+
+                
               },
               child: const Text("Guardar"),
             ),

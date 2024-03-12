@@ -3,7 +3,7 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos";
+  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos";
   Map<String, String> headers = await getAuthHeaders();
 
   try {
@@ -22,7 +22,7 @@ Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
 
 
 Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
-  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos";
+  const urlCrearProyecto = "https://datafire-production.up.railway.app/Api/v1/proyectos";
 
   try {
     Map<String, String> headers = await getAuthHeaders();
@@ -55,7 +55,7 @@ Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fech
 }
 
 Future<String?> buscarIdProyectoPorNombre(String nombre) async {
-  const urlBuscarProyecto = "http://localhost:3000/Api/v1/proyectos";
+  const urlBuscarProyecto = "https://datafire-production.up.railway.app/Api/v1/proyectos";
       Map<String, String> headers = await getAuthHeaders();
   try {
     final resBuscarProyecto = await http.get(Uri.parse(urlBuscarProyecto), headers: headers);
@@ -79,7 +79,7 @@ Future<String?> buscarIdProyectoPorNombre(String nombre) async {
 
 
 Future<List<dynamic>> fetchProjects() async {
-  const url = "http://localhost:3000/Api/v1/proyectos";
+  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos";
 Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.get(Uri.parse(url), headers: headers);
@@ -130,6 +130,25 @@ Future<void> deleteProyecto(int id) async {
     }
   // ignore: empty_catches
   } catch (err) {
+  }
+}
+
+Future<void> postProyecto(String datePrestamo, String amountPaid,) async {
+  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/prestamos";
+
+  try {
+    final res = await http.post(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(
+          {"date_prestamo": datePrestamo, "amount_paid": amountPaid}),
+    );
+    if (res.statusCode == 200) {
+    } else {
+    }
+  // ignore: empty_catches
+  } catch (err) {
+    
   }
 }
 

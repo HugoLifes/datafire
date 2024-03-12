@@ -93,7 +93,7 @@ class _HomeState extends State<Home> {
         child: Stack(
           children: [
             Container(
-              margin: const EdgeInsets.only(top: 15, left: 20),
+              margin: const EdgeInsets.only(top: 35, left: 20),
               padding: const EdgeInsets.all(10),
               decoration: CardTempII(blur: 3.0, of1: 0, of2: 3).getCard(),
               width: size.width < 800 ? size.width * 0.89 : size.width * 0.89,
@@ -181,7 +181,7 @@ class _HomeState extends State<Home> {
             ),
             Container(
               margin: EdgeInsets.only(
-                top: size.height < 760 ? size.height * 0.50 : 480,
+                top: size.height < 760 ? size.height * 0.53 : 480,
                 left: size.width > 1000 ? size.width * 0.038 : 20,
               ),
               padding: const EdgeInsets.all(10),
@@ -207,7 +207,7 @@ class _HomeState extends State<Home> {
             ),
             Container(
               margin: EdgeInsets.only(
-                top: size.height < 760 ? size.height * 0.50 : 480,
+                top: size.height < 760 ? size.height * 0.53                   : 480,
                 left: size.width > 1000 ? size.width * 0.47 : 560,
               ),
               padding: const EdgeInsets.all(10),

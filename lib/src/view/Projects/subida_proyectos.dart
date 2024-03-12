@@ -33,7 +33,7 @@ class _AltaProyectosState extends State<AltaProyectos> {
 
     // Filtrar proyectos pagados
     if (!_showPagados) {
-      proyectosFiltrados = proyectosFiltrados.where((proyecto) => proyecto['pagado'] == false).toList();
+      proyectosFiltrados = proyectosFiltrados.where((proyecto) => proyecto['status'] == true).toList();
     }
 
     return proyectosFiltrados;

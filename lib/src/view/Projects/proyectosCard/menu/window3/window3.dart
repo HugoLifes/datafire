@@ -1,7 +1,7 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:flutter/material.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';  // Asegúrate de tener esta importación
 
 class Window3 extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
@@ -14,6 +14,7 @@ class Window3 extends StatefulWidget {
 
 class _Window3State extends State<Window3> {
   late Future<List<dynamic>> futureProjectWorkers;
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -55,30 +56,37 @@ class _Window3State extends State<Window3> {
                             DataCell(
                               IconButton(
                                 icon: const Icon(Icons.delete),
-onPressed: () async {
-                                AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.warning,
-                                animType: AnimType.scale,
-                                title: "Eliminar Trabajador del proyecto",
-                                desc: "¿Estas seguro que quieres eliminar este trabajador?",
-                                width: 620,
-                                btnCancelOnPress: (){},
-                                btnOkOnPress: () async {
-                                    await deleteProjectWorkers(worker['id']);
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(
-      content: Text('Trabajador eliminado correctamente'),
-    ),
-  );
-  setState(() {
-    futureProjectWorkers = fetchProjectWorkers();
-  });
+                                onPressed: () async {
+                                  // Activar la pantalla de carga
+                                  setState(() {
+                                    isLoading = true;
+                                  });
+
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.warning,
+                                    animType: AnimType.scale,
+                                    title: "Eliminar Trabajador del proyecto",
+                                    desc: "¿Estas seguro que quieres eliminar este trabajador?",
+                                    width: 620,
+                                    btnCancelOnPress: (){},
+                                    btnOkOnPress: () async {
+                                      await deleteProjectWorkers(worker['id']);
+
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                          content: Text('Trabajador eliminado correctamente'),
+                                        ),
+                                      );
+
+                                      // Desactivar la pantalla de carga
+                                      setState(() {
+                                        futureProjectWorkers = fetchProjectWorkers();
+                                        isLoading = false;
+                                      });
+                                    },
+                                  ).show();
                                 },
-                              ).show();
-
-},
-
                               ),
                             ),
                           ],
@@ -88,12 +96,14 @@ onPressed: () async {
             }
           },
         ),
-        IconButton.filled(
-          onPressed: () {
-            _selectWorkersDialog(context, widget.proyecto?["id"].toString() ?? "");
-          },
-          icon: const Icon(Icons.edit),
-        ),
+        // Mostrar el botón de edición solo si no está cargando
+        if (!isLoading)
+          IconButton.filled(
+            onPressed: () {
+              _selectWorkersDialog(context, widget.proyecto?["id"].toString() ?? "");
+            },
+            icon: const Icon(Icons.edit),
+          ),
       ],
     );
   }
@@ -142,21 +152,21 @@ onPressed: () async {
               child: const Text("Cancelar"),
             ),
             TextButton(
-              onPressed: () async {
-                await Future.forEach(workersSeleccionados, (workerId) async {
-                  await postProjectWorker().addProjectWorker(projectId, workerId);
-                });
+  onPressed: () async {
+    Navigator.of(context).pop();
 
-                // Update the list after adding workers
-                setState(() {
-                  futureProjectWorkers = fetchProjectWorkers();
-                });
+    await Future.forEach(workersSeleccionados, (workerId) async {
+      await postProjectWorker().addProjectWorker(projectId, workerId);
+    });
 
-                // Close the dialog
-                Navigator.of(context).pop();
-              },
-              child: const Text("Guardar"),
-            ),
+    setState(() {
+      futureProjectWorkers = fetchProjectWorkers();
+    });
+  },
+  child: const Text("Guardar"),
+),
+
+
           ],
         );
       },

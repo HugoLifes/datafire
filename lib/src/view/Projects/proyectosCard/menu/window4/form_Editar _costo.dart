@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class EditarCostoDialog extends StatefulWidget {
   final Map<String, dynamic> costo;
 
-  const EditarCostoDialog({super.key, required this.costo});
+  const EditarCostoDialog({Key? key, required this.costo}) : super(key: key);
 
   @override
   _EditarCostoDialogState createState() => _EditarCostoDialogState();
@@ -15,6 +15,7 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
   final _amountController = TextEditingController();
   final _serviceController = TextEditingController();
   final _costController = TextEditingController();
+  final _fechaCostoController = TextEditingController(); // Nuevo controlador para la fecha
 
   @override
   void initState() {
@@ -23,6 +24,7 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
     _amountController.text = widget.costo['amount'].toString();
     _serviceController.text = widget.costo['service'] ?? '';
     _costController.text = widget.costo['cost'].toString();
+    _fechaCostoController.text = widget.costo['fecha_costo'].toString(); // Inicializa el campo de fecha
   }
 
   @override
@@ -42,7 +44,11 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
             keyboardType: TextInputType.text,
             decoration: const InputDecoration(labelText: 'Servicio'),
           ),
-
+          TextFormField(
+            controller: _fechaCostoController, // Usa el nuevo controlador para la fecha
+            keyboardType: TextInputType.datetime,
+            decoration: const InputDecoration(labelText: 'Fecha del costo'),
+          ),
         ],
       ),
       actions: [
@@ -58,7 +64,8 @@ class _EditarCostoDialogState extends State<EditarCostoDialog> {
             String amount = _amountController.text;
             String description = _serviceController.text;
             String cost = _costController.text;
-            updateCostos(id, amount, description, cost);
+            String fechaCosto = _fechaCostoController.text; // Obtiene el valor del campo de fecha
+            updateCostos(id, amount, description, cost, fechaCosto); // Actualiza el costo con la nueva fecha
             Navigator.of(context).pop();
           },
           child: const Text("Guardar"),

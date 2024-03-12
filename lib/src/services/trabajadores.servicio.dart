@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 
 Future<List<dynamic>> fetchTrabajadores() async {
-  const url = "http://localhost:3000/Api/v1/trabajadores";
+  const url = "https://datafire-production.up.railway.app/Api/v1/trabajadores";
 
 Map<String, String> headers = await getAuthHeaders();
 

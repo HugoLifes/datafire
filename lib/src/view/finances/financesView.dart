@@ -32,7 +32,7 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
-    final response = await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/egresos'));
+    final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/Api/v1/proyectos/egresos'));
 
     if (response.statusCode == 200) {
       debugPrint("cargado con éxito");
@@ -43,7 +43,7 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future<List<Map<String, dynamic>>> fetchingresos() async {
-    final response = await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/weeklyAbonos'));
+    final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/Api/v1/proyectos/weeklyAbonos'));
 
     if (response.statusCode == 200) {
       debugPrint("cargado con éxito");
@@ -53,8 +53,8 @@ class _FinancesViewState extends State<FinancesView> {
     }
   }
 
-    Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
-    final response = await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/cuentasCobrar'));
+  Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
+    final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/Api/v1/proyectos/cuentasCobrar'));
 
     if (response.statusCode == 200) {
       debugPrint("Cuentas por cobrar cargado con éxito");
@@ -64,8 +64,8 @@ class _FinancesViewState extends State<FinancesView> {
     }
   }
 
-      Future<List<Map<String, dynamic>>> fetchFlujoData() async {
-    final response = await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/flujo'));
+  Future<List<Map<String, dynamic>>> fetchFlujoData() async {
+    final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/Api/v1/proyectos/flujo'));
 
     if (response.statusCode == 200) {
       debugPrint("Cuentas por cobrar cargado con éxito");
@@ -74,6 +74,7 @@ class _FinancesViewState extends State<FinancesView> {
       throw Exception('Error al cargar datos de Ingresos');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -92,8 +93,8 @@ class _FinancesViewState extends State<FinancesView> {
                 children:  [
                   const TabBar(tabs: [
                     Tab(text: "egresos"),
-                    Tab(text: "nomina"),
                     Tab(text: "ingresos"),
+                    Tab(text: "Noominas"),
                     Tab(text: "flujo"),
                     Tab(text:"  Cuentas por cobrar")
                   ]),
@@ -101,8 +102,8 @@ class _FinancesViewState extends State<FinancesView> {
                     child: TabBarView(
                       children: [
                         Egresos.EgresosWidget(fetchDataFuture: fetchDataFuture),
-                        const Placeholder(),
                         IngresosWidget(fetchDataFuture: fetchIngresosFuture),
+                        
                         FlujoWidget(fetchDataFuture: fetchFlujData),
                         CobrarWidget(fetchDataFuture: fetchCobrarData)
                       ],

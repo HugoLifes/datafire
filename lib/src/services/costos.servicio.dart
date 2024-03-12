@@ -3,7 +3,7 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchCosts() async {
-  const url = "http://localhost:3000/Api/v1/proyectos/services";
+  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
   try {
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
@@ -18,7 +18,7 @@ Future<List<dynamic>> fetchCosts() async {
 }
 
 Future<String?> addCosto(String projectId, String amount, String description, String precio, String selecterDate) async {
-  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos/services";
+  const urlCrearProyecto = "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
   try {
     final resCrearCosto = await http.post(
       Uri.parse(urlCrearProyecto),
@@ -45,7 +45,7 @@ Future<String?> addCosto(String projectId, String amount, String description, St
 
 
 Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/services";
+  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
 
   try {
     final res = await http.get(Uri.parse('$url?projectId=$projectId'));
@@ -61,15 +61,15 @@ Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
 }
 
 Future<void> updateCostos(
-    String id, String amount, String service, String cost) async {
-  final url = "http://localhost:3000/Api/v1/proyectos/services/$id";
+    String id, String amount, String service, String cost, fecha_costo) async {
+  final url = "https://datafire-production.up.railway.app/Api/v1/proyectos/services/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
       Uri.parse(url),
       headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode(
-          {"amount": amount, "service": service, "cost": cost}),
+          {"amount": amount, "service": service, "cost": cost, fecha_costo: "fecha_costo"}),
     );
     if (res.statusCode == 200) {
     }
@@ -83,7 +83,7 @@ Future<void> updateCostos(
 
 void deleteCost(int costId) async {
   final url =
-      "http://localhost:3000/Api/v1/proyectos/services/$costId";
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/services/$costId";
 Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(

@@ -21,10 +21,10 @@ class EgresosWidget extends StatelessWidget {
           return SfDataGrid(
             source: dataSource,
             columns: [
-              GridColumn(columnName: 'startDate', label: const Text('                               Inicio de semana', textAlign: TextAlign.center)),
-              GridColumn(columnName: 'endDate', label: const Text('                                     Fin de semana', textAlign: TextAlign.center)),
-              GridColumn(columnName: 'weeklyCost', label: const Text('            Costo Semanal', textAlign: TextAlign.center)),
-              GridColumn(columnName: 'totalWeeklyCost', label: const Text('      Total Semanal', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'startDate', label: const Text('Inicio de semana', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'endDate', label: const Text('Fin de semana', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'weeklyCost', label: const Text('Costo Semanal', textAlign: TextAlign.center)),
+              GridColumn(columnName: 'totalWeeklyCost', label: const Text('Total Semanal', textAlign: TextAlign.center)),
             ],
             allowSorting: true,
             allowFiltering: true,
@@ -56,7 +56,7 @@ class OrderInfoDataSource extends DataGridSource {
     }
 
     final DateTime date = DateTime.parse(dateStr);
-    final DateFormat formatter = DateFormat('dd-MM-yyyy'); // Ajusta el formato según tus preferencias
+    final DateFormat formatter = DateFormat('dd-MM-yyyy');
     return formatter.format(date);
   }
 
@@ -66,7 +66,12 @@ class OrderInfoDataSource extends DataGridSource {
     return weeklyCost.map((entry) {
       String projectName = entry['projectName'] ?? '';
       double cost = entry['weeklyCost']?.toDouble() ?? 0.0;
-      return Text('$projectName: $cost');
+      return Flexible(
+        child: Text(
+          '$projectName: \$${cost.toStringAsFixed(2)}', // Agrega el signo de pesos y formatea el número a dos decimales
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+      );
     }).toList();
   }
 
@@ -82,9 +87,22 @@ class OrderInfoDataSource extends DataGridSource {
           return Container(
             alignment: getAlignment(e.columnName),
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: weeklyCostWidgets,
+            child: SizedBox(
+              height: 60.0,
+              child: ListView(
+                scrollDirection: Axis.vertical,
+                children: weeklyCostWidgets,
+              ),
+            ),
+          );
+        } else if (e.columnName == 'totalWeeklyCost') {
+          return Container(
+            alignment: getAlignment(e.columnName),
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '\$${e.value.toStringAsFixed(2)}', // Agrega el signo de pesos y formatea el número a dos decimales
+              textAlign: TextAlign.start,
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
           );
         } else {

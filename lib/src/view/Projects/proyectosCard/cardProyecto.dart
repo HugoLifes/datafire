@@ -1,6 +1,7 @@
 import 'package:datafire/src/view/Projects/proyectosCard/projectsMainView.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProyectoCard extends StatefulWidget {
   final Map<String, dynamic> proyecto;
@@ -12,6 +13,11 @@ class ProyectoCard extends StatefulWidget {
 }
 
 class _ProyectoCardState extends State<ProyectoCard> {
+  String formatDateTime(String dateTimeString) {
+    DateTime dateTime = DateTime.parse(dateTimeString);
+    return DateFormat('yyyy-MM-dd').format(dateTime);
+  }
+
   @override
   Widget build(BuildContext context) {
     bool isPagado = widget.proyecto["status"];
@@ -48,20 +54,6 @@ class _ProyectoCardState extends State<ProyectoCard> {
             Row(
               children: [
                 const Text(
-                  'ID Proyecto:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  widget.proyecto["id"].toString(),
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w400),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
                   'Nombre:',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
@@ -81,7 +73,7 @@ class _ProyectoCardState extends State<ProyectoCard> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.proyecto["fecha_inicio"],
+                  formatDateTime(widget.proyecto["fecha_inicio"]),
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 ),
@@ -95,7 +87,7 @@ class _ProyectoCardState extends State<ProyectoCard> {
                 ),
                 const SizedBox(width: 12),
                 Text(
-                  widget.proyecto["fecha_fin"],
+                  formatDateTime(widget.proyecto["fecha_fin"]),
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.w400),
                 ),
