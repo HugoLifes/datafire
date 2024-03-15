@@ -1,4 +1,6 @@
 import 'package:datafire/src/view/Customers/subida_clientes.dart';
+import 'package:datafire/src/view/NominasView/NominasMain.dart';
+import 'package:datafire/src/view/NominasView/NominasView.dart';
 import 'package:datafire/src/view/Projects/subida_proyectos.dart';
 import 'package:datafire/src/view/finances/financesView.dart';
 import 'package:datafire/src/view/users/users.verification_view.dart';
@@ -30,7 +32,9 @@ class MotherView extends StatelessWidget {
               return const AltaTrabajadores();
             case 4:
               return FinancesView();
-            case 5: 
+            case 5:
+              return NominasMain(); 
+            case 6: 
               return const UserVerificationView();
             default:
               return Text(

@@ -96,6 +96,12 @@ class _SideBarState extends State<SideBar> {
               debugPrint('Balance');
             }),
                     SidebarXItem(
+            icon: Icons.local_play_rounded,
+            label: 'Nominas',
+            onTap: () {
+              debugPrint('Nominas');
+            }),
+                    SidebarXItem(
             icon: Icons.verified_user,
             label: 'Users',
             onTap: () {
