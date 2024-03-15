@@ -47,6 +47,8 @@ class _SideBarState extends State<SideBar> {
           height: 80,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
+            //inkwell es un animado para los botones, hacerlos mas esteticos
+            // checar diseños de botones en material
             child: InkWell(
               focusColor: actionColor,
               highlightColor: actionColor,
@@ -68,7 +70,7 @@ class _SideBarState extends State<SideBar> {
       items: [
         SidebarXItem(
             icon: Icons.home,
-            label: 'Inicio',
+            label: 'Dashboard',
             onTap: () {
             }),
         SidebarXItem(

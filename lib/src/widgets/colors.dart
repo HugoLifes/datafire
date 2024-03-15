@@ -13,6 +13,7 @@ const unselectColor = Color(0xFF535f70);
 const selectColor = Color(0xFFdde4ff);
 const greenSuccess = Color(0xFF35d187);
 
+// Letras para tipos de textos
 TextStyle largeText =
     GoogleFonts.montserrat(fontSize: 30, fontWeight: FontWeight.bold);
 

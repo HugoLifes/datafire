@@ -24,9 +24,11 @@ class _MyAppState extends State<MyApp> {
       home: Scaffold(
         body: Row(
           children: [
+            // la barra lateral y su controller, que sirve para detectar acciones dentro
             SideBar(
               controller: _controller,
             ),
+            //permite adaptar la vista en ciertas ocasiones
             Expanded(
               child: MotherView(
                 controller: _controller,
