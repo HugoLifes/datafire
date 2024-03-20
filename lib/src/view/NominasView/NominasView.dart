@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +7,7 @@ class NominasView extends StatefulWidget {
   const NominasView({Key? key}) : super(key: key);
 
   @override
-  _NominasViewState createState() => _NominasViewState();
+  State<NominasView> createState() => _NominasViewState();
 }
 
 class _NominasViewState extends State<NominasView> {
@@ -29,13 +27,11 @@ class _NominasViewState extends State<NominasView> {
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
-         print("Response body: ${response.body}"); // Añade esto para depurar
         final data = json.decode(response.body);
         setState(() {
+          trabajadores = data.map<String>((trabajador) => "${trabajador["id"]} ${trabajador['name']} ${trabajador['last_name']}   ${trabajador['salary_hour']}").toList();
           for (var trabajador in data) {
-            String key = trabajador["id"].toString();
-            trabajadores.add("${trabajador["id"]} ${trabajador['name']} ${trabajador['last_name']}   ${trabajador['salary_hour']}");
-            trabajadoresDatos[key] = {
+            trabajadoresDatos[trabajador["id"].toString()] = {
               'completado': false,
               'horasTrabajadas': 0,
               'horasExtra': 0,
@@ -58,7 +54,7 @@ class _NominasViewState extends State<NominasView> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null && picked != fechaInicioSemana) {
+    if (picked != null) {
       setState(() {
         if (esFechaInicio) {
           fechaInicioSemana = picked;
@@ -85,21 +81,22 @@ class _NominasViewState extends State<NominasView> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Ingresar Nómina para $trabajadorSeleccionado'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Text('Semana del ${DateFormat('dd/MM/yyyy').format(fechaInicioSemana!)} al ${DateFormat('dd/MM/yyyy').format(fechaFinSemana!)}'),
-              TextField(
-                controller: _horasTrabajadasController,
-                decoration: const InputDecoration(labelText: 'Horas trabajadas'),
-                keyboardType: TextInputType.number,
-              ),
-              TextField(
-                controller: _horasExtraController,
-                decoration: const InputDecoration(labelText: 'Horas extra'),
-                keyboardType: TextInputType.number,
-              ),
-            ],
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text('Semana del ${DateFormat('dd/MM/yyyy').format(fechaInicioSemana!)} al ${DateFormat('dd/MM/yyyy').format(fechaFinSemana!)}'),
+                TextField(
+                  controller: _horasTrabajadasController,
+                  decoration: const InputDecoration(labelText: 'Horas trabajadas'),
+                  keyboardType: TextInputType.number,
+                ),
+                TextField(
+                  controller: _horasExtraController,
+                  decoration: const InputDecoration(labelText: 'Horas extra'),
+                  keyboardType: TextInputType.number,
+                ),
+              ],
+            ),
           ),
           actions: <Widget>[
             TextButton(
@@ -109,11 +106,13 @@ class _NominasViewState extends State<NominasView> {
             TextButton(
               child: const Text('Guardar'),
               onPressed: () {
+                final int horasTrabajadas = int.tryParse(_horasTrabajadasController.text) ?? 0;
+                final int horasExtra = int.tryParse(_horasExtraController.text) ?? 0;
                 setState(() {
                   trabajadoresDatos[trabajadorSeleccionado] = {
                     'completado': true,
-                    'horasTrabajadas': int.tryParse(_horasTrabajadasController.text) ?? 0,
-                    'horasExtra': int.tryParse(_horasExtraController.text) ?? 0,
+                    'horasTrabajadas': horasTrabajadas,
+                    'horasExtra': horasExtra,
                   };
                 });
                 Navigator.of(context).pop();
@@ -125,7 +124,7 @@ class _NominasViewState extends State<NominasView> {
     );
   }
 
-  void _generarNomina() async {
+  void _generarNomina() {
     if (fechaInicioSemana == null || fechaFinSemana == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Por favor, selecciona las fechas de inicio y fin de la semana."),
@@ -138,6 +137,7 @@ class _NominasViewState extends State<NominasView> {
       ));
       return;
     }
+
 
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
     String fechaInicio = formatter.format(fechaInicioSemana!);
@@ -184,7 +184,7 @@ class _NominasViewState extends State<NominasView> {
     }
   }
 
-  @override
+ @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -218,15 +218,20 @@ class _NominasViewState extends State<NominasView> {
               itemBuilder: (context, index) {
                 final trabajador = trabajadores[index];
                 final trabajadorDatos = trabajadoresDatos[trabajador.split(" ")[0]]!;
-                return Card(
-                  color: trabajadorDatos['completado'] ? Colors.green : null,
-                  child: ListTile(
-                    title: Text(trabajador),
-                    trailing: trabajadorDatos['completado']
-                        ? Icon(Icons.check, color: Colors.white)
-                        : null,
-                    onTap: () => _mostrarDialogoNomina(trabajador.split(" ")[0]),
+                return ListTileTheme(
+                  selectedColor: Colors.white,
+                  child: Card(
+                    color: trabajadorDatos['completado'] ? Colors.green[400] : Colors.white,
+                    elevation: 4,
+                    margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                    child: ListTile(
+                      title: Text(trabajador, style: TextStyle(color: trabajadorDatos['completado'] ? Colors.white : Colors.black)),
+                      trailing: trabajadorDatos['completado']
+                          ? const Icon(Icons.check_circle_outline, color: Colors.white)
+                          : const Icon(Icons.radio_button_unchecked, color: Colors.grey),
+                      onTap: () => _mostrarDialogoNomina(trabajador.split(" ")[0]),
                   ),
+                  )
                 );
               },
             ),
