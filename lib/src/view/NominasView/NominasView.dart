@@ -1,4 +1,8 @@
+
+
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class NominasView extends StatefulWidget {
@@ -12,28 +16,49 @@ class _NominasViewState extends State<NominasView> {
   DateTime? fechaInicioSemana;
   DateTime? fechaFinSemana;
   Map<String, Map<String, dynamic>> trabajadoresDatos = {};
+  List<String> trabajadores = [];
 
   @override
   void initState() {
     super.initState();
-    // Inicializar los datos de los trabajadores como no completados y con horas a 0
-    for (var trabajador in trabajadores) {
-      trabajadoresDatos[trabajador] = {
-        'completado': false,
-        'horasTrabajadas': 0,
-        'horasExtra': 0,
-      };
+    fetchTrabajadores();
+  }
+
+  Future<void> fetchTrabajadores() async {
+    const url = "http://localhost:3000/Api/v1/trabajadores";
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+         print("Response body: ${response.body}"); // Añade esto para depurar
+        final data = json.decode(response.body);
+        setState(() {
+          for (var trabajador in data) {
+            String key = trabajador["id"].toString();
+            trabajadores.add("${trabajador["id"]} ${trabajador['name']} ${trabajador['last_name']}   ${trabajador['salary_hour']}");
+            trabajadoresDatos[key] = {
+              'completado': false,
+              'horasTrabajadas': 0,
+              'horasExtra': 0,
+              'salary_hour': trabajador['salary_hour'],
+            };
+          }
+        });
+      } else {
+        throw Exception('Failed to load trabajadores');
+      }
+    } catch (e) {
+      throw Exception('Failed to load trabajadores: $e');
     }
   }
 
   Future<void> _seleccionarFecha(BuildContext context, bool esFechaInicio) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: fechaInicioSemana ?? DateTime.now(),
+      initialDate: esFechaInicio ? DateTime.now() : DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null) {
+    if (picked != null && picked != fechaInicioSemana) {
       setState(() {
         if (esFechaInicio) {
           fechaInicioSemana = picked;
@@ -100,27 +125,63 @@ class _NominasViewState extends State<NominasView> {
     );
   }
 
-  void _generarNomina() {
+  void _generarNomina() async {
+    if (fechaInicioSemana == null || fechaFinSemana == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Por favor, selecciona las fechas de inicio y fin de la semana."),
+      ));
+      return;
+    }
     if (trabajadoresDatos.values.any((datos) => !datos['completado'])) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("No todos los trabajadores están completados."),
       ));
       return;
     }
-    // Mostrar diálogo de éxito
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text("Nómina Generada"),
-        content: const Text("Todos los datos han sido enviados para la generación de la nómina."),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text("OK"),
-          ),
-        ],
-      ),
-    );
+
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    String fechaInicio = formatter.format(fechaInicioSemana!);
+    String fechaFin = formatter.format(fechaFinSemana!);
+
+    trabajadoresDatos.forEach((idTrabajador, trabajadorDatos) {
+      if (!trabajadorDatos['completado']) {
+        print("Faltan datos para el trabajador con ID: $idTrabajador");
+        return;
+      }
+
+      final Map<String, dynamic> nominaData = {
+        "fecha_inicio_semana": fechaInicio,
+        "fecha_fin_semana": fechaFin,
+        "worker_id": int.parse(idTrabajador),
+        "nombre": trabajadores.firstWhere((nombre) => nombre.startsWith(idTrabajador)).split(" ").sublist(1).join(" "),
+        "salary_hour": trabajadorDatos['salary_hour'],
+        "horas_trabajadas": trabajadorDatos['horasTrabajadas'],
+        "horas_extra": trabajadorDatos['horasExtra'],
+      };
+
+      _enviarDatosNomina(nominaData);
+    });
+  }
+
+  void _enviarDatosNomina(Map<String, dynamic> nominaData) async {
+    try {
+      final response = await http.post(
+        Uri.parse("http://localhost:3000/Api/v1/nominasSemanales"),
+          headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: jsonEncode(nominaData),
+      );
+
+      if (response.statusCode == 200) {
+        // Manejar la respuesta exitosa aquí
+        print("Datos enviados correctamente para el trabajador ID: ${nominaData['worker_id']}");
+      } else {
+        print("Error en la solicitud: ${response.statusCode}, ${response.body}");
+      }
+    } catch (e) {
+      print("Error al enviar datos: $e");
+    }
   }
 
   @override
@@ -156,15 +217,15 @@ class _NominasViewState extends State<NominasView> {
               itemCount: trabajadores.length,
               itemBuilder: (context, index) {
                 final trabajador = trabajadores[index];
-                final datosTrabajador = trabajadoresDatos[trabajador]!;
+                final trabajadorDatos = trabajadoresDatos[trabajador.split(" ")[0]]!;
                 return Card(
-                  color: datosTrabajador['completado'] ? Colors.green : null, // Cambio de color basado en completitud
+                  color: trabajadorDatos['completado'] ? Colors.green : null,
                   child: ListTile(
                     title: Text(trabajador),
-                    trailing: datosTrabajador['completado']
-                        ? Icon(Icons.check, color: Colors.white) // Icono de completitud
+                    trailing: trabajadorDatos['completado']
+                        ? Icon(Icons.check, color: Colors.white)
                         : null,
-                    onTap: () => _mostrarDialogoNomina(trabajador),
+                    onTap: () => _mostrarDialogoNomina(trabajador.split(" ")[0]),
                   ),
                 );
               },
@@ -180,6 +241,3 @@ class _NominasViewState extends State<NominasView> {
     );
   }
 }
-
-// Datos ficticios de trabajadores
-final List<String> trabajadores = ['Juan Pérez', 'María López', 'Carlos Sánchez'];

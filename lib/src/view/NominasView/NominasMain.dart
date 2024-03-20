@@ -59,7 +59,7 @@ class _NominasMainState extends State<NominasMain> {
               onPressed: (){
                 Navigator.push(context, 
                 MaterialPageRoute(
-              builder: (context) => const NominasView(),
+              builder: (context) =>  NominasView(),
             ),);
               },
               icon: const Icon(Icons.group_add),
