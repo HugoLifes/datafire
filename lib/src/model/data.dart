@@ -1,27 +1,40 @@
-//Tiene todas las caracteristicas a tomar en cuenta en un proyecto
+import 'dart:convert';
+import 'package:datafire/src/services/AuthHeader.dart';
+import 'package:http/http.dart' as http;
+import 'package:datafire/src/services/cliente.servicio.dart';
+import 'package:datafire/src/services/proyectos.service.dart';
+import 'package:datafire/src/services/trabajadores.servicio.dart';
+
+// Clase Deuda para representar la deuda
+class Deuda {
+  double monto;
+
+  Deuda({required this.monto});
+}
+
+// Clase Proyecto con la relación de deuda
 class Proyecto {
   int? id;
   String? nombreProyecto;
-  String? descProyecto;
   Clientes? cliente;
-  bool? variosClienter = false;
+  bool? variosClientes = false;
   List<Trabajadores>? trabajadores;
   double? costoProyecto;
   DateTime? fechaInicio;
   DateTime? fechaFinal;
   bool? divisionPago = false;
+  Deuda? deuda; // Relación con la clase Deuda
 
   Proyecto({
     this.id,
     this.nombreProyecto,
-    this.descProyecto,
     this.costoProyecto,
     this.cliente,
-    this.trabajadores,
-    this.variosClienter,
+    this.variosClientes,
     this.fechaFinal,
     this.fechaInicio,
     this.divisionPago,
+    this.deuda,
   });
 
   buscaClienteProyecto() {}
@@ -29,44 +42,128 @@ class Proyecto {
   crearId() async {}
 }
 
-//Tiene todas las caracteristicas de los clientes
+Future<List<dynamic>> obtenerProyectos() async {
+  return await fetchProjects();
+}
+
 class Clientes {
-  int idCliente;
-  String? nombreCliente;
-  String? apellidoCliente;
-  List<Proyecto>? proyectos;
-  bool? linkProyecto = false;
-  double? deuda;
+  String? nombre;
+  String? apellido;
+  String? company;
 
-  Clientes(this.nombreCliente, this.idCliente,
-      {this.proyectos, this.linkProyecto, this.apellidoCliente, this.deuda});
+  Clientes({this.nombre, this.apellido, this.company});
 
-  void agregarProyecto(Proyecto proyecto) {
-    proyectos!.toList().add(proyecto);
+  Future<void> actualizarCliente({
+    required int id,
+    required String nombre,
+    required String apellido,
+    required String company,
+  }) async {
+    // Llama al método en el servicio correspondiente
+    await updateCliente(
+      id,
+      nombre,
+      apellido,
+      company,
+    );
+  }
+
+  Future<void> eliminarCliente(int id) async {
+    await deleteCliente(id);
+  }
+
+  Future<void> nuevoCliente() async {
+    Map<String, String> headers = await getAuthHeaders();
+    if (nombre != null && apellido != null && company != null) {
+      try {
+        final res = await http.post(
+          Uri.parse(
+              "https://datafire-production.up.railway.app/api/v1/clientes"),
+          headers: {"Content-Type": "application/json", ...headers},
+          body: jsonEncode(
+              {"name": nombre, "last_name": apellido, "company": company}),
+        );
+        if (res.statusCode == 201) {
+        } else {}
+        // ignore: empty_catches
+      } catch (err) {}
+    }
   }
 }
 
-//Tiene todas las caracteristicas de los trabajadores
+Future<List<dynamic>> obtenerClientes() async {
+  return await fetchClientes();
+}
+
 class Trabajadores {
-  int idTrabajador;
   String? nombre;
   String? apellido;
-  String? detalles;
   List<dynamic>? misionesEncargos = [];
-  double? pago;
-  DateTime? fechaPago;
-  double? pagoMensual;
+  double? edad;
+  String? position;
+  double? salario;
+  double? semanalHours;
 
   Trabajadores(
-    this.idTrabajador, {
-    this.nombre,
-    this.apellido,
-    this.detalles,
-    this.misionesEncargos,
-    this.pago,
-    this.pagoMensual,
-    this.fechaPago,
-  });
+      {this.nombre,
+      this.apellido,
+      this.misionesEncargos,
+      this.edad,
+      this.position,
+      this.salario,
+      this.semanalHours});
+
+  Future<void> actualizarTrabajador({
+    required int id,
+    required String nombre,
+    required String apellido,
+    required int edad,
+    required String position,
+    required int salario,
+  }) async {
+    // Llama al método en el servicio correspondiente
+    await updateTrabajador(
+      id,
+      nombre,
+      apellido,
+      edad,
+      position,
+      salario,
+    );
+  }
+
+  Future<void> eliminarTrabajador(int id) async {
+    // Llama al método en el servicio correspondiente
+    await deleteTrabajador(id);
+  }
+
+  Future<void> nuevoTrabajador(String nombre, String apellido, String edad,
+      String position, String salario, String semanalHours) async {
+    Map<String, String> headers = await getAuthHeaders();
+    try {
+      final res = await http.post(
+        Uri.parse("http://localhost:3000/api/v1/trabajadores"),
+        headers: {"Content-Type": "application/json", ...headers},
+        body: jsonEncode({
+          "name": nombre,
+          "last_name": apellido,
+          "age": edad,
+          "position": position,
+          "salary_hour": salario,
+          "semanal_hours": semanalHours
+        }),
+      );
+      if (res.statusCode == 201) {
+      } else {
+        print("${res.statusCode}");
+      }
+      // ignore: empty_catches
+    } catch (err) {}
+  }
+}
+
+Future<List<dynamic>> obtenerTrabajadores() async {
+  return await fetchTrabajadores();
 }
 
 //Las Metas que hay que llevar acerca del proyecto

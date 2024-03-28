@@ -1,23 +1,27 @@
-const express = require("express")
+const express = require('express');
+
+const routerApi = require('./routes');
+const {logErrors, errorHandler, boomHandler, ormErrorHandler} = require("./middlewares/error.handler")
+
 const app = express();
 const port = 3001;
-const routerApi = require("./routes")
 
-app.get ("/", (req,res) =>{
-  res.send("Hello server")
-})
+console.clear();
 
-app.listen(port, ()=> {
-  console.log("My port:" + port)
-})
-
-app.get("/clientes", (req,res)=>{
-  res.send("clientes")
-})
-
-app.get("/trabajadores", (req,res)=>{
-  res.send("trabajadores")
-})
+app.get('/', (req, res) => {
+  res.send('Hello server');
+});
 
 
-routerApi(app)
+app.use(express.json());
+
+routerApi(app);
+
+app.use(logErrors)
+app.use(ormErrorHandler)
+app.use(boomHandler)
+app.use(errorHandler)
+
+app.listen(port, () => {
+  console.log('My port:' + port);
+});

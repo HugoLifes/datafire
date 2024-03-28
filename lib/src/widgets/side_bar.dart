@@ -1,17 +1,12 @@
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sidebarx/sidebarx.dart';
 
-import '../../main.dart';
 
 class SideBar extends StatefulWidget {
-  //rquiere el controller para funcionar
-  SideBar({super.key, required this.controller});
-  SidebarXController controller;
-  // List<OrderM>? order = [];
-  // IdModel? idmodel;
+  const SideBar({super.key, required this.controller});
+  final SidebarXController controller;
   @override
   State<SideBar> createState() => _SideBarState();
 }
@@ -59,8 +54,7 @@ class _SideBarState extends State<SideBar> {
               highlightColor: actionColor,
               splashColor: accentCanvasColor,
               hoverColor: unselectColor.withOpacity(0.10),
-              //cambiar este back button por un perfil button, como es child
-              //puedes meter cualquier tipo de widget
+              //cambiar Boton Perfil
               child: BackButton(
                 onPressed: () {
                   //widget.idmodel = IdModel();
@@ -78,9 +72,7 @@ class _SideBarState extends State<SideBar> {
             icon: Icons.home,
             label: 'Dashboard',
             onTap: () {
-              debugPrint('Dashboard');
             }),
-        //const SidebarXItem(icon: Icons.area_chart_outlined, label: 'Estadisticas'),
         SidebarXItem(
             icon: Icons.assignment,
             label: 'Alta Proyectos',
@@ -88,16 +80,16 @@ class _SideBarState extends State<SideBar> {
               debugPrint('Alta Proyectos');
             }),
         SidebarXItem(
-            icon: Icons.person_2,
-            label: 'Alta Clientes ',
+            icon: Icons.group,
+            label: 'Clientes ',
             onTap: () {
-              debugPrint('Alta Clientes');
+              debugPrint('Clientes');
             }),
         SidebarXItem(
-            icon: Icons.flag,
-            label: 'Alta Trabajadores',
+            icon: Icons.assignment_ind,
+            label: 'Trabajadores',
             onTap: () {
-              debugPrint('Control');
+              debugPrint('Trabajadores');
             }),
         SidebarXItem(
             icon: Icons.account_balance,
@@ -105,7 +97,70 @@ class _SideBarState extends State<SideBar> {
             onTap: () {
               debugPrint('Balance');
             }),
+                    SidebarXItem(
+            icon: Icons.local_play_rounded,
+            label: 'Nominas',
+            onTap: () {
+              debugPrint('Nominas');
+            }),
+                    SidebarXItem(
+            icon: Icons.verified_user,
+            label: 'Users',
+            onTap: () {
+              debugPrint('Balance');
+            }),
+SidebarXItem(
+  icon: Icons.exit_to_app,
+  label: 'Log Out',
+  onTap: () async {
+    await _showLogoutConfirmationDialog(context);
+  },
+),
+
+
+
       ],
     );
   }
 }
+
+_showLogoutConfirmationDialog(BuildContext context) async {
+  return showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title: const Text('Cerrar Sesión'),
+        content: const Text('¿Seguro que quieres cerrar sesión?'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Cerrar el diálogo
+            },
+            child: const Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await _performLogout(context);
+            },
+            child: const Text('Confirmar'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+_performLogout(BuildContext context) async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('token');
+
+    Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+  } catch (e) {
+    print('Error al realizar la navegación: $e');
+  }
+}
+
+
+
+

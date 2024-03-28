@@ -1,45 +1,80 @@
-const express = require("express")
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
+const ProjectService = require('../services/proyectos.service');
+const service = new ProjectService();
 
-router.get("/", (req,res)=>{
-  res.send("Proyectos")
-})
+const validatorHandler = require('../middlewares/validator.handler');
+const {
+  createProjectsSchema,
+  getProjectSchema,
+  updateProjectSchema,
+} = require('../schemas/proyectos.schema');
 
+router.get('/', async (req, res, next) => {
+  try {
+    const projects = await service.find();
+    res.json(projects);
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.get("/:id", (req,res) => {
-  const {id} = req.params;
-  res.json({
-    id,
-    name: "proyecto 1",
-    fecha_inicio: "11/23/2023",
-    fecha_fin:"11/24/2023"
-  })
-})
+router.get(
+  '/:id',
+  validatorHandler(getProjectSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      const project = await service.findOne(id);
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-router.post("/", (req,res) => {
-  const body = req.body;
-  res.json({
-    message:"created",
-    data: body
-  })
-})
+router.post(
+  '/',
+  validatorHandler(createProjectsSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const newProject = service.create(body);
+      res.status(201).json(newProject);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-router.patch("/:id", (req,res) => {
-  const body = req.body;
-  const {id} = req.params;
-  res.json({
-    message: "updated",
-    data: body,
-    id
-  })
-})
+router.patch(
+  '/:id',
+  validatorHandler(getProjectSchema, 'params'),
+  validatorHandler(updateProjectSchema, 'body'),
+  async (req, res, next) => {
+    try {
+      const body = req.body;
+      const { id } = req.params;
+      const project = service.update(id, body);
+      res.json(project);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
-router.delete("/:id", (req, res) =>{
-  const {id} = req.params;
-  res.json({
-    message:"deleted",
-    id
-  })
-})
+router.delete(
+  '/:id',
+  validatorHandler(getProjectSchema, 'params'),
+  async (req, res, next) => {
+    try {
+      const { id } = req.params;
+      await service.delete(id);
+      res.status(201).json({ id });
+    } catch (error) {
+      next(error);
+    }
+  },
+);
 
 module.exports = router;

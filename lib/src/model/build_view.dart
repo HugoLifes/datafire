@@ -21,7 +21,7 @@ GridView buildView(Size size, ThemeData theme, List<dynamic> list) {
       ),
       itemBuilder: (_, int data) {
         return Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
               color: canvasColor,
               borderRadius: BorderRadius.circular(20),
@@ -32,7 +32,6 @@ GridView buildView(Size size, ThemeData theme, List<dynamic> list) {
           child: InkWell(
             hoverColor: accentCanvasColor,
             onTap: () {
-              debugPrint('Hola!');
             },
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

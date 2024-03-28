@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:13
+    environment:
+      - POSTGRES_DB=ultron
+      - POSTGRES_USER=dani
+      - POSTGRES_PASSWORD=daniadmin123
+    ports:
+      - 5432:5432
+    volumes:
+    - ./postgres_data:/var/lib/postgres/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=dani@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=root
+    ports:
+     - 5050:80
+
+  mysql:
+    image: mysql:5
+    environment:
+      - MYSQL_DATABASE=ultron
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=daniadmin123
+      - MYSQL_PORT=3306
+    ports:
+      - 3306:3306
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - MYSQL_ROOT_PASSWORD=daniadmin123
+      - PMA_HOST=mysql
+    ports:
+      - 8080:80
+
