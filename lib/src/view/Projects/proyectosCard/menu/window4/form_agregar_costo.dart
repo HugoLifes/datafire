@@ -3,16 +3,14 @@ import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 class TuFormularioCosto extends StatefulWidget {
   final String idProyecto;
   final Future<List<dynamic>> futureCosts;
-  
 
-   const TuFormularioCosto({
+  const TuFormularioCosto({
     Key? key,
     required this.idProyecto,
-    required this.futureCosts
+    required this.futureCosts,
   }) : super(key: key);
 
   @override
@@ -21,23 +19,22 @@ class TuFormularioCosto extends StatefulWidget {
 
 class _TuFormularioCostoState extends State<TuFormularioCosto> {
   final _formKey = GlobalKey<FormState>();
-  final TextEditingController _amountController = TextEditingController();
+  int _selectedAmount = 1; // Valor predeterminado para la cantidad
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _costoController = TextEditingController();
-   final TextEditingController _dateController = TextEditingController();
-     DateTime selectedDate = DateTime.now();
+  final TextEditingController _dateController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
   late Future<List<dynamic>> futureCosts;
 
   _TuFormularioCostoState(this.futureCosts);
 
-    Future<void> _selectDate(BuildContext context) async {
+  Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2022),
       lastDate: DateTime(2025),
     );
-
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
@@ -52,7 +49,7 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
       key: _formKey,
       child: Column(
         children: [
-                    TextFormField(
+          TextFormField(
             controller: _dateController,
             readOnly: true,
             onTap: () {
@@ -72,47 +69,67 @@ class _TuFormularioCostoState extends State<TuFormularioCosto> {
             },
           ),
           const SizedBox(height: 20),
-          CustomTextField(
-            controller: _amountController,
+          DropdownButtonFormField<int>(
+            value: _selectedAmount,
+            decoration: const InputDecoration(
               labelText: 'Cantidad',
-              validationMessage: 'Por favor, ingresa una cantidad'
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(),
+            ),
+            items: List.generate(10, (index) => index + 1)
+                .map<DropdownMenuItem<int>>((int value) {
+              return DropdownMenuItem<int>(
+                value: value,
+                child: Text(value.toString()),
+              );
+            }).toList(),
+            onChanged: (int? newValue) {
+              setState(() {
+                _selectedAmount = newValue!;
+              });
+            },
+            validator: (value) {
+              if (value == null) {
+                return 'Por favor, selecciona una cantidad';
+              }
+              return null;
+            },
           ),
           const SizedBox(height: 20),
           CustomTextField(
-            controller: _descriptionController,
+              controller: _descriptionController,
               labelText: 'Servicio',
-              validationMessage: 'Por favor, ingresa la descripción del costo'
-          ),
+              validationMessage: 'Por favor, ingresa la descripción del costo'),
           const SizedBox(height: 20),
           CustomTextField(
-            controller: _costoController,
+              controller: _costoController,
               labelText: 'Costo',
-              validationMessage: 'Por favor, ingresa un costo'
-          ),
+              validationMessage: 'Por favor, ingresa un costo'),
           const SizedBox(height: 20),
-FilledButton(
-  onPressed: () {
-    if (_formKey.currentState!.validate()) {
-      String idProyecto = widget.idProyecto;
-      String amountCosto = _amountController.text;
-      String descriptionCosto = _descriptionController.text;
-      String priceCosto = _costoController.text;
-      String selectedDateString = _dateController.text;
+          FilledButton(
+            onPressed: () {
+              if (_formKey.currentState!.validate()) {
+                String idProyecto = widget.idProyecto;
+                int amountCosto = _selectedAmount;
+                String descriptionCosto = _descriptionController.text;
+                String priceCosto = _costoController.text;
+                String selectedDateString = _dateController.text;
 
-      addCosto(idProyecto, amountCosto, descriptionCosto, priceCosto, selectedDateString)
-        .then((_) {
-          setState(() {
-            futureCosts = fetchCostsByProjectId(idProyecto);
-          });
-          Navigator.of(context).pop();
-        })
-        .catchError((error) {
-          // Handle error if necessary
-        });
-    }
-  },
-  child: const Text('Guardar'),
-),
+                addCosto(idProyecto, amountCosto.toString(), descriptionCosto,
+                        priceCosto, selectedDateString)
+                    .then((_) {
+                  setState(() {
+                    futureCosts = fetchCostsByProjectId(idProyecto);
+                  });
+                  Navigator.of(context).pop();
+                }).catchError((error) {
+                  // Handle error if necessary
+                });
+              }
+            },
+            child: const Text('Guardar'),
+          ),
         ],
       ),
     );

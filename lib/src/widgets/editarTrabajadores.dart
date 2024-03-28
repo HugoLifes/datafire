@@ -138,12 +138,10 @@ class _DetallesYEditarTrabajadoresPageState
                     String name = _nombreController.text;
                     String lastName = _apellidosController.text;
                     String cargo = _cargoController.text;
-
-                    // Lógica para editar el proyecto existente
                     try {
                       await updateCliente(
                           widget.trabajador?['id'], name, lastName, cargo);
-                      // Puedes llamar a una función
+
                       Navigator.pop(context);
                       Navigator.push(
                         context,
@@ -151,10 +149,8 @@ class _DetallesYEditarTrabajadoresPageState
                           builder: (context) => const SuccessfulScreen(),
                         ),
                       );
-                    // ignore: empty_catches
-                    } catch (error) {
-                      
-                    }
+                      // ignore: empty_catches
+                    } catch (error) {}
                   }
                 },
                 child: const Text('Sobreescribir'),
@@ -172,8 +168,8 @@ class _DetallesYEditarTrabajadoresPageState
                     builder: (BuildContext context) {
                       return AlertDialog(
                         title: const Text('Eliminar Cliente'),
-                        content:
-                            const Text('¿Seguro que quieres eliminar este Cliente?'),
+                        content: const Text(
+                            '¿Seguro que quieres eliminar este Cliente?'),
                         actions: <Widget>[
                           TextButton(
                             onPressed: () {
@@ -189,11 +185,7 @@ class _DetallesYEditarTrabajadoresPageState
                                 await deleteTrabajador(
                                     widget.trabajador?['id']);
                                 Navigator.pop(context);
-                                // Puedes agregar más lógica aquí si es necesario
-                              // ignore: empty_catches
-                              } catch (error) {
-                                
-                              }
+                              } catch (error) {}
                             },
                             child: const Text('Confirmar'),
                           ),

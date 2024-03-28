@@ -22,12 +22,14 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showWelcomeMessage());
     fetchData();
   }
 
   Future<void> fetchData() async {
     try {
-      final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/api/v1/proyectos/project-stats'));
+      final response = await http.get(Uri.parse(
+          'https://datafire-production.up.railway.app/api/v1/proyectos/project-stats'));
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
 
@@ -49,9 +51,12 @@ class _HomeState extends State<Home> {
         setState(() {
           totalProjects = data['totalProjects'];
 
-          pieChartSections = List<PieChartSectionData>.from(data['projectsByMonth'].asMap().entries.map((entry) {
-            double projectCount = double.tryParse(entry.value['projectCount'].toString()) ?? 0;
-            String monthName = DateFormat('MMMM').format(DateTime.parse(entry.value['month']));
+          pieChartSections = List<PieChartSectionData>.from(
+              data['projectsByMonth'].asMap().entries.map((entry) {
+            double projectCount =
+                double.tryParse(entry.value['projectCount'].toString()) ?? 0;
+            String monthName =
+                DateFormat('MMMM').format(DateTime.parse(entry.value['month']));
             Color monthColor = monthColors[entry.key % monthColors.length];
 
             return PieChartSectionData(
@@ -66,29 +71,38 @@ class _HomeState extends State<Home> {
             );
           }));
 
-          costData = List<FlSpot>.from(data['CostsByMonth'].asMap().entries.map((entry) {
-            double totalExpense = double.tryParse(entry.value['totalExpense'].toString()) ?? 0;
+          costData = List<FlSpot>.from(
+              data['CostsByMonth'].asMap().entries.map((entry) {
+            double totalExpense =
+                double.tryParse(entry.value['totalExpense'].toString()) ?? 0;
             return FlSpot(entry.key.toDouble(), totalExpense);
           }));
         });
-      } else {
-        
       }
-    // ignore: empty_catches
     } catch (error) {
+      // Error handling can be improved depending on requirements.
     }
   }
 
+  void _showWelcomeMessage() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Bienvenido a la gestión de tus proyectos!'),
+        duration: Duration(seconds: 3),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-                        appBar: const PreferredSize(
-              preferredSize: Size.fromHeight(kToolbarHeight),
-              child: AppBarDatafire(title: "Gestion", description: "Mantente al dia de tus proyectos")
-              ),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: AppBarDatafire(
+              title: "Gestion",
+              description: "Mantente al dia de tus proyectos")),
       body: SingleChildScrollView(
         child: Stack(
           children: [
@@ -109,73 +123,80 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.only(left: 15, top: 5),
                     child: const Text(
                       'Ganancia',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
-                 Container(
-  margin: const EdgeInsets.only(top: 10),
-  height: 200,
-  child: LineChart(
-    LineChartData(
-      gridData: FlGridData(show: false),
-      titlesData: FlTitlesData(
-        bottomTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-            getTextStyles: (BuildContext context, double value) => const TextStyle(color: Color(0xff68737d), fontWeight: FontWeight.bold, fontSize: 16),
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 0:
-                return 'Ene';
-              case 1:
-                return 'Feb';
-              case 2:
-                return 'Mar';
-              case 3:
-                return 'Abr';
-              case 4:
-                return 'May';
-              case 5:
-                return 'Jun';
-              case 6:
-                return 'Jul';
-              case 7:
-                return 'Ago';
-              case 8:
-                return 'Sep';
-              case 9:
-                return 'Oct';
-              case 10:
-                return 'Nov';
-              case 11:
-                return 'Dic';
-              default:
-                return '';
-            }
-          },
-          margin: 8,
-        ),
-      ),
-      borderData: FlBorderData(
-        show: true,
-        border: Border.all(color: Colors.grey),
-      ),
-      minX: 0,
-      maxX: 11,
-      minY: 0,
-      maxY: costData.isNotEmpty ? costData.map((spot) => spot.y).reduce(max) : 1,
-      lineBarsData: [
-        LineChartBarData(
-          spots: costData,
-          isCurved: true,
-          colors: [Colors.blue],
-          belowBarData: BarAreaData(show: false),
-        ),
-      ],
-    ),
-  ),
-),
-
+                  Container(
+                    margin: const EdgeInsets.only(top: 10),
+                    height: 200,
+                    child: LineChart(
+                      LineChartData(
+                        gridData: FlGridData(show: false),
+                        titlesData: FlTitlesData(
+                          bottomTitles: SideTitles(
+                            showTitles: true,
+                            reservedSize: 22,
+                            getTextStyles:
+                                (BuildContext context, double value) =>
+                                    const TextStyle(
+                                        color: Color(0xff68737d),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                            getTitles: (value) {
+                              switch (value.toInt()) {
+                                case 0:
+                                  return 'Ene';
+                                case 1:
+                                  return 'Feb';
+                                case 2:
+                                  return 'Mar';
+                                case 3:
+                                  return 'Abr';
+                                case 4:
+                                  return 'May';
+                                case 5:
+                                  return 'Jun';
+                                case 6:
+                                  return 'Jul';
+                                case 7:
+                                  return 'Ago';
+                                case 8:
+                                  return 'Sep';
+                                case 9:
+                                  return 'Oct';
+                                case 10:
+                                  return 'Nov';
+                                case 11:
+                                  return 'Dic';
+                                default:
+                                  return '';
+                              }
+                            },
+                            margin: 8,
+                          ),
+                        ),
+                        borderData: FlBorderData(
+                          show: true,
+                          border: Border.all(color: Colors.grey),
+                        ),
+                        minX: 0,
+                        maxX: 11,
+                        minY: 0,
+                        maxY: costData.isNotEmpty
+                            ? costData.map((spot) => spot.y).reduce(max)
+                            : 1,
+                        lineBarsData: [
+                          LineChartBarData(
+                            spots: costData,
+                            isCurved: true,
+                            colors: [Colors.blue],
+                            belowBarData: BarAreaData(show: false),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -199,7 +220,8 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.only(left: 15, top: 5),
                     child: const Text(
                       'Proyectos',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
@@ -207,7 +229,7 @@ class _HomeState extends State<Home> {
             ),
             Container(
               margin: EdgeInsets.only(
-                top: size.height < 760 ? size.height * 0.53                   : 480,
+                top: size.height < 760 ? size.height * 0.53 : 480,
                 left: size.width > 1000 ? size.width * 0.47 : 560,
               ),
               padding: const EdgeInsets.all(10),
@@ -225,7 +247,8 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.only(left: 15, top: 5),
                     child: const Text(
                       'Proyectos',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                   ),
                   if (pieChartSections.isNotEmpty)
@@ -237,7 +260,7 @@ class _HomeState extends State<Home> {
                           sectionsSpace: 0,
                           centerSpaceRadius: 40,
                           startDegreeOffset: -90,
-                          borderData: FlBorderData(show: false), 
+                          borderData: FlBorderData(show: false),
                           centerSpaceColor: Colors.transparent,
                         ),
                       ),

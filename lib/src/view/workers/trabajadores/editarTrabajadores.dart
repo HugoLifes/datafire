@@ -1,4 +1,5 @@
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
+import 'package:datafire/src/view/workers/trabajadores/menu/WorkerCosts.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/view/workers/trabajadores/form_editarTrabajadores.dart';
 
@@ -45,7 +46,7 @@ class _DetallesYEditarTrabajadoresPageState
                     tabs: [
                       Tab(text: 'Detalles'),
                       Tab(text: 'Proyectos'),
-                      Tab(text: 'Otra Más'),
+                      Tab(text: 'Costo Empresa semanal'),
                     ],
                   ),
                   Expanded(
@@ -62,11 +63,11 @@ class _DetallesYEditarTrabajadoresPageState
                               ],
                               rows: widget.trabajador?.entries
                                       .map((entry) => DataRow(
-                                        cells: [
-                                          DataCell(Text(entry.key)),
-                                          DataCell(Text('${entry.value}')),
-                                        ],
-                                      ))
+                                            cells: [
+                                              DataCell(Text(entry.key)),
+                                              DataCell(Text('${entry.value}')),
+                                            ],
+                                          ))
                                       .toList() ??
                                   [],
                             ),
@@ -77,7 +78,8 @@ class _DetallesYEditarTrabajadoresPageState
                         Container(
                           padding: const EdgeInsets.all(16.0),
                           child: FutureBuilder<List<dynamic>>(
-                            future: fetchProjectWorkersbyId(widget.trabajador?['id']),
+                            future: fetchProjectWorkersbyId(
+                                widget.trabajador?['id']),
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
@@ -86,7 +88,8 @@ class _DetallesYEditarTrabajadoresPageState
                                 return Text('Error: ${snapshot.error}');
                               } else if (!snapshot.hasData ||
                                   snapshot.data!.isEmpty) {
-                                return const Text('El cliente no tiene proyectos asociados');
+                                return const Text(
+                                    'El cliente no tiene proyectos asociados');
                               } else {
                                 List<dynamic> customerProjects = snapshot.data!;
                                 return DataTable(
@@ -97,8 +100,12 @@ class _DetallesYEditarTrabajadoresPageState
                                   rows: customerProjects
                                       .map((project) => DataRow(
                                             cells: [
-                                              DataCell(Text(project["project_id"].toString())),
-                                              DataCell(Text(project['project_name'].toString())),
+                                              DataCell(Text(
+                                                  project["project_id"]
+                                                      .toString())),
+                                              DataCell(Text(
+                                                  project['project_name']
+                                                      .toString())),
                                             ],
                                           ))
                                       .toList(),
@@ -109,9 +116,10 @@ class _DetallesYEditarTrabajadoresPageState
                         ),
 
                         // Contenido para la tercera pestaña
-                        const Center(
-                          child: Text('Contenido de la tercera opción'),
-                        ),
+                        WorkerCostsTab(
+                          idProyecto: widget.trabajador!["id"].toString(),
+                          salary: widget.trabajador!["salary"],
+                        )
                       ],
                     ),
                   ),
@@ -121,9 +129,9 @@ class _DetallesYEditarTrabajadoresPageState
           ),
 //lado derecho jaja
           Expanded(
-            flex: 1, 
+            flex: 1,
             child: Container(
-              width: 300, 
+              width: 300,
               padding: const EdgeInsets.all(16.0),
               child: EditarTrabajadoresForm(trabajador: widget.trabajador),
             ),

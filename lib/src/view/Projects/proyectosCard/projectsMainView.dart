@@ -5,16 +5,17 @@ import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/window4.da
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window5/window5.dart';
 import 'package:flutter/material.dart';
 
-
 import 'package:datafire/src/view/Projects/proyectosCard/form_editarProyecto.dart';
 
 class DetallesYAltaProyectoPage extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
 
-  const DetallesYAltaProyectoPage({Key? key, required this.proyecto}) : super(key: key);
+  const DetallesYAltaProyectoPage({Key? key, required this.proyecto})
+      : super(key: key);
 
   @override
-  _DetallesYAltaProyectoPageState createState() => _DetallesYAltaProyectoPageState();
+  _DetallesYAltaProyectoPageState createState() =>
+      _DetallesYAltaProyectoPageState();
 }
 
 class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
@@ -30,10 +31,14 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
     super.initState();
     _idProyecto = widget.proyecto?["id"].toString() ?? "";
     _nombreController.text = widget.proyecto?['project_name'] ?? 'Sin nombre';
-    _inicioController.text = widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
-    _finController.text = widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finalización';
-    _costoController.text = widget.proyecto?["costo"].toString() ?? "Sin costo total";
-    _costoInicialController.text = widget.proyecto?["costo_inicial"].toString() ?? "Sin costo Inicial";
+    _inicioController.text =
+        widget.proyecto?['fecha_inicio'] ?? 'Sin fecha de inicio';
+    _finController.text =
+        widget.proyecto?['fecha_fin'] ?? 'Sin fecha de finalización';
+    _costoController.text =
+        widget.proyecto?["costo"].toString() ?? "Sin costo total";
+    _costoInicialController.text =
+        widget.proyecto?["costo_inicial"].toString() ?? "Sin costo Inicial";
   }
 
   @override
@@ -55,8 +60,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                       Tab(text: 'Detalles'),
                       Tab(text: 'Clientes Asociados'),
                       Tab(text: 'Trabajadores'),
-                      Tab(text: "Servicios"),
-                      Tab(text: "Pagos")
+                      Tab(text: "Costos"),
+                      Tab(text: "Abonos")
                     ],
                   ),
                   Expanded(
@@ -67,19 +72,23 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
 
                         // Clientes Asociados (window 2)
                         Container(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Window2(proyecto: widget.proyecto, idProyecto: _idProyecto,)
-                        ),
+                            padding: const EdgeInsets.all(16.0),
+                            child: Window2(
+                              proyecto: widget.proyecto,
+                              idProyecto: _idProyecto,
+                            )),
 
                         // Contenido para la tercera pestaña
-                         Container(
+                        Container(
                           padding: const EdgeInsets.all(16.0),
                           child: Window3(proyecto: widget.proyecto),
                         ),
 
-                      // window 4 servicios
-Tab4Content(idProyecto: _idProyecto, costoInicial: _costoInicialController.text),
-Tab5Content(idProyecto: _idProyecto)
+                        // window 4 servicios
+                        Tab4Content(
+                            idProyecto: _idProyecto,
+                            costoInicial: _costoInicialController.text),
+                        Tab5Content(idProyecto: _idProyecto)
                       ],
                     ),
                   ),
@@ -101,7 +110,4 @@ Tab5Content(idProyecto: _idProyecto)
       ),
     );
   }
-
-
- 
 }

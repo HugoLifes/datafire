@@ -3,7 +3,8 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchCosts() async {
-  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
+  const url =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
   try {
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
@@ -17,8 +18,9 @@ Future<List<dynamic>> fetchCosts() async {
   }
 }
 
-Future<String?> addCosto(String projectId, String amount, String description, String precio, String selecterDate) async {
-  const urlCrearProyecto = "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
+Future<String?> addCosto(String projectId, String amount, String description,
+    String precio, String selecterDate) async {
+  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos/services";
   try {
     final resCrearCosto = await http.post(
       Uri.parse(urlCrearProyecto),
@@ -32,20 +34,18 @@ Future<String?> addCosto(String projectId, String amount, String description, St
       }),
     );
     if (resCrearCosto.statusCode == 201) {
-      return "Guardado exitosamente"; 
+      return "Guardado exitosamente";
     } else {
-  
-      return null; 
+      return null;
     }
   } catch (err) {
-    return null; 
+    return null;
   }
 }
 
-
-
 Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
-  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
+  const url =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
 
   try {
     final res = await http.get(Uri.parse('$url?projectId=$projectId'));
@@ -62,39 +62,35 @@ Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
 
 Future<void> updateCostos(
     String id, String amount, String service, String cost, fecha_costo) async {
-  final url = "https://datafire-production.up.railway.app/Api/v1/proyectos/services/$id";
+  final url =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/services/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
       Uri.parse(url),
       headers: {"Content-Type": "application/json", ...headers},
-      body: jsonEncode(
-          {"amount": amount, "service": service, "cost": cost, fecha_costo: "fecha_costo"}),
+      body: jsonEncode({
+        "amount": amount,
+        "service": service,
+        "cost": cost,
+        fecha_costo: "fecha_costo"
+      }),
     );
-    if (res.statusCode == 200) {
-    }
-  // ignore: empty_catches
-  } catch (err) {
-    
-  }
+    if (res.statusCode == 200) {}
+    // ignore: empty_catches
+  } catch (err) {}
 }
 
-
-
 void deleteCost(int costId) async {
-  final url =
-      "https://datafire-production.up.railway.app/Api/v1/proyectos/services/$costId";
-Map<String, String> headers = await getAuthHeaders();
+  final url = "http://localhost:3000/Api/v1/proyectos/services/$costId";
+  Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(
       Uri.parse(url),
       headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
-    } else {
-    }
-  // ignore: empty_catches
-  } catch (err) {
-    
-  }
+    } else {}
+    // ignore: empty_catches
+  } catch (err) {}
 }

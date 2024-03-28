@@ -5,12 +5,13 @@ import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/form_Edita
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/form_agregar_costo.dart';
 import 'package:flutter/material.dart';
 
-
 class Tab4Content extends StatefulWidget {
   final String idProyecto;
   final String costoInicial;
 
-  const Tab4Content({Key? key, required this.idProyecto, required this.costoInicial}) : super(key: key);
+  const Tab4Content(
+      {Key? key, required this.idProyecto, required this.costoInicial})
+      : super(key: key);
 
   @override
   _Tab4ContentState createState() => _Tab4ContentState();
@@ -20,9 +21,9 @@ class _Tab4ContentState extends State<Tab4Content> {
   late Future<List<dynamic>> futureCostos;
 
   @override
-    void initState() {
-      super.initState();
-      futureCostos = fetchCostsByProjectId(widget.idProyecto);
+  void initState() {
+    super.initState();
+    futureCostos = fetchCostsByProjectId(widget.idProyecto);
   }
 
   @override
@@ -39,9 +40,10 @@ class _Tab4ContentState extends State<Tab4Content> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Text("No hay servicios asociados al proyecto.");
           } else {
-            List<dynamic> serviciosProyecto = snapshot.data!.where((servicio) =>
-              servicio["project_id"].toString() == widget.idProyecto
-            ).toList();
+            List<dynamic> serviciosProyecto = snapshot.data!
+                .where((servicio) =>
+                    servicio["project_id"].toString() == widget.idProyecto)
+                .toList();
 
             return ListView.builder(
               itemCount: serviciosProyecto.length + 2,
@@ -53,11 +55,16 @@ class _Tab4ContentState extends State<Tab4Content> {
                       side: const BorderSide(color: Colors.green, width: 2.0),
                       borderRadius: BorderRadius.circular(8.0),
                     ),
-                    child:  Column(
+                    child: Column(
                       children: <Widget>[
                         ListTile(
                           leading: const Icon(Icons.payments_outlined),
-                          title:  Text(widget.costoInicial, style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          title: Text(
+                            widget.costoInicial,
+                            style: const TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w700),
+                          ),
                           subtitle: const Text("Costo inicial"),
                         ),
                       ],
@@ -70,7 +77,12 @@ class _Tab4ContentState extends State<Tab4Content> {
                       children: <Widget>[
                         ListTile(
                           leading: const Icon(Icons.payments_outlined),
-                          title: Text(servicio["cost"]?.toString() ?? "", style: const TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.w700),),
+                          title: Text(
+                            servicio["cost"]?.toString() ?? "",
+                            style: const TextStyle(
+                                fontStyle: FontStyle.italic,
+                                fontWeight: FontWeight.w700),
+                          ),
                           subtitle: Text(servicio["service"]?.toString() ?? ""),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
@@ -86,25 +98,26 @@ class _Tab4ContentState extends State<Tab4Content> {
                                   );
                                 },
                               ),
-                                                            IconButton(
+                              IconButton(
                                 icon: const Icon(Icons.delete_forever),
                                 onPressed: () {
-      AwesomeDialog(
-    context: context,
-    dialogType: DialogType.warning,
-    animType: AnimType.bottomSlide,
-    title: 'Eliminar costo',
-    desc: '¿Estás seguro de que quieres eliminar este costo?',
-    width: 620,
-    btnCancelOnPress: () {},
-    btnOkOnPress: () {
-              deleteCost(servicio["id"]);
-      setState(() {
-        futureCostos = fetchCostsByProjectId(widget.idProyecto);
-      });
-    },
-  ).show();
-
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.warning,
+                                    animType: AnimType.bottomSlide,
+                                    title: 'Eliminar costo',
+                                    desc:
+                                        '¿Estás seguro de que quieres eliminar este costo?',
+                                    width: 620,
+                                    btnCancelOnPress: () {},
+                                    btnOkOnPress: () {
+                                      deleteCost(servicio["id"]);
+                                      setState(() {
+                                        futureCostos = fetchCostsByProjectId(
+                                            widget.idProyecto);
+                                      });
+                                    },
+                                  ).show();
                                 },
                               ),
                             ],
@@ -120,7 +133,8 @@ class _Tab4ContentState extends State<Tab4Content> {
                       Center(
                         child: IconButton.filled(
                           style: ButtonStyle(
-                            padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                            padding:
+                                MaterialStateProperty.all<EdgeInsetsGeometry>(
                               const EdgeInsets.symmetric(horizontal: 24.0),
                             ),
                           ),
@@ -147,7 +161,8 @@ class _Tab4ContentState extends State<Tab4Content> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text("Agregar nuevo costo"),
-          content: TuFormularioCosto(idProyecto: widget.idProyecto, futureCosts: futureCostos),
+          content: TuFormularioCosto(
+              idProyecto: widget.idProyecto, futureCosts: futureCostos),
           actions: [
             TextButton(
               onPressed: () {

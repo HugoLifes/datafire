@@ -171,7 +171,8 @@ class _LoginViewState extends State<LoginView> {
                         ),
                       ),
                       child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 24),
                         child: Text(
                           'Iniciar Sesión',
                           style: TextStyle(fontSize: 18, color: Colors.white),

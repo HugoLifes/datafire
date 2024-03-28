@@ -84,11 +84,9 @@ class Clientes {
               {"name": nombre, "last_name": apellido, "company": company}),
         );
         if (res.statusCode == 201) {
-        } else {
-        }
-      // ignore: empty_catches
-      } catch (err) {
-      }
+        } else {}
+        // ignore: empty_catches
+      } catch (err) {}
     }
   }
 }
@@ -104,15 +102,16 @@ class Trabajadores {
   double? edad;
   String? position;
   double? salario;
+  double? semanalHours;
 
-  Trabajadores({
-    this.nombre,
-    this.apellido,
-    this.misionesEncargos,
-    this.edad,
-    this.position,
-    this.salario,
-  });
+  Trabajadores(
+      {this.nombre,
+      this.apellido,
+      this.misionesEncargos,
+      this.edad,
+      this.position,
+      this.salario,
+      this.semanalHours});
 
   Future<void> actualizarTrabajador({
     required int id,
@@ -139,27 +138,27 @@ class Trabajadores {
   }
 
   Future<void> nuevoTrabajador(String nombre, String apellido, String edad,
-      String position, String salario) async {
-        Map<String, String> headers = await getAuthHeaders();
+      String position, String salario, String semanalHours) async {
+    Map<String, String> headers = await getAuthHeaders();
     try {
       final res = await http.post(
-        Uri.parse(
-            "https://datafire-production.up.railway.app/api/v1/trabajadores"),
+        Uri.parse("http://localhost:3000/api/v1/trabajadores"),
         headers: {"Content-Type": "application/json", ...headers},
         body: jsonEncode({
           "name": nombre,
           "last_name": apellido,
           "age": edad,
           "position": position,
-          "salary": salario
+          "salary_hour": salario,
+          "semanal_hours": semanalHours
         }),
       );
       if (res.statusCode == 201) {
       } else {
+        print("${res.statusCode}");
       }
-    // ignore: empty_catches
-    } catch (err) {
-    }
+      // ignore: empty_catches
+    } catch (err) {}
   }
 }
 

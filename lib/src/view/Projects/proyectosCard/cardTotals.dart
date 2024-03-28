@@ -1,5 +1,6 @@
-import 'package:datafire/src/services/proyectos.service.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:web_socket_channel/io.dart';
 
 class CardTotals extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
@@ -17,149 +18,107 @@ class _CardTotalsState extends State<CardTotals> {
   late String costo;
   late String abonado;
   late String remaining;
+  late IOWebSocketChannel channel;
 
   @override
   void initState() {
     super.initState();
-    costoController = TextEditingController(text: widget.proyecto?["costo"].toString() ?? "Sin costo total");
-    abonadoController = TextEditingController(text: widget.proyecto?["abonado"].toString() ?? "sin abonos");
-    remainingController = TextEditingController(text: widget.proyecto?["remaining"].toString() ?? "sin abonos");
-    costo = widget.proyecto?["costo"].toString() ?? "Sin costo total";
-    abonado = widget.proyecto?["abonado"].toString() ?? "sin abonos";
-    remaining = widget.proyecto?["remaining"].toString() ?? "sin abonos";
+    // Inicializa los controladores con valores por defecto o provenientes del proyecto inicial
+    initializeControllersAndValues();
+
+    // Configura la conexión WebSocket
+    setupWebSocket();
   }
 
-Future<void> actualizarDatos() async {
-  try {
-    final String projectId = widget.proyecto?["id"].toString() ?? "";
+  void initializeControllersAndValues() {
+    costoController = TextEditingController(
+        text: widget.proyecto?["costo"].toString() ?? "0");
+    abonadoController = TextEditingController(
+        text: widget.proyecto?["abonado"].toString() ?? "0");
+    remainingController = TextEditingController(
+        text: widget.proyecto?["remaining"].toString() ?? "0");
+    costo = widget.proyecto?["costo"].toString() ?? "0";
+    abonado = widget.proyecto?["abonado"].toString() ?? "0";
+    remaining = widget.proyecto?["remaining"].toString() ?? "0";
+  }
 
-    final Map<String, dynamic> proyecto = await fetchProjectById(projectId);
+  void setupWebSocket() {
+    channel = IOWebSocketChannel.connect('ws://localhost:3000');
 
-    setState(() {
-      costoController.text = proyecto["costo"].toString();
-      abonadoController.text = proyecto["abonado"].toString();
-      remainingController.text = proyecto["remaining"].toString();
-
-      // Actualiza los valores de costo, abonado y remaining
-      costo = proyecto["costo"].toString();
-      abonado = proyecto["abonado"].toString();
-      remaining = proyecto["remaining"].toString();
+    channel.stream.listen((message) {
+      print("Datos recibidos del socket: $message");
+      final proyectoActualizado = jsonDecode(message);
+      setState(() {
+        updateProjectInfo(proyectoActualizado);
+      });
     });
-
-  // ignore: empty_catches
-  } catch (err) {
-    
   }
-}
+
+  void updateProjectInfo(dynamic proyecto) {
+    // Asegúrate de que los campos aquí coincidan con los que envías desde el backend
+    costoController.text = proyecto["costo"].toString();
+    abonadoController.text = proyecto["abonado"].toString();
+    remainingController.text = proyecto["remaining"].toString();
+    // Actualizar los valores late
+    costo = proyecto["costo"].toString();
+    abonado = proyecto["abonado"].toString();
+    remaining = proyecto["remaining"].toString();
+  }
+
+  @override
+  void dispose() {
+    channel.sink.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Container(
-          width: 150.0,
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Colors.lightBlueAccent, Colors.blue],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 3,
-                blurRadius: 7,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              const Text(
-                "Total:",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              Text(
-                "\$$costo",
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          width: 150.0,
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Colors.amber, Colors.orange],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 3,
-                blurRadius: 7,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              const Text(
-                "Abonado:",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              Text(
-                "\$$abonado",
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          width: 150.0,
-          padding: const EdgeInsets.all(10),
-          margin: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Colors.deepOrange, Colors.red],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            borderRadius: BorderRadius.circular(10.0),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 3,
-                blurRadius: 7,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Column(
-            children: [
-              const Text(
-                "Restante:",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-              Text(
-                "\$$remaining",
-                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            ],
-          ),
-        ),
-        IconButton.filled(onPressed: () {
-          actualizarDatos();
-        }, icon: const Icon(Icons.refresh))
+        _buildCard("Total:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
+        _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
+        _buildCard("Restante:", "\$$remaining", Colors.deepOrange, Colors.red),
       ],
+    );
+  }
+
+  Widget _buildCard(
+      String title, String value, Color startColor, Color endColor) {
+    return Container(
+      width: 150.0,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [startColor, endColor],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 7,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+                fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          Text(
+            value,
+            style: const TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+        ],
+      ),
     );
   }
 }
