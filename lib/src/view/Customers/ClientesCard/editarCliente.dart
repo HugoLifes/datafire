@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/view/Customers/ClientesCard/form.editar.clientes.dart';
-import 'package:flutter/material.dart';
 
 class DetallesYEditarClientesPage extends StatefulWidget {
   final Map<String, dynamic>? cliente;
@@ -15,18 +15,6 @@ class DetallesYEditarClientesPage extends StatefulWidget {
 
 class _DetallesYEditarClientesPageState
     extends State<DetallesYEditarClientesPage> {
-  final _nombreController = TextEditingController();
-  final _apellidosController = TextEditingController();
-  final _empresaController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _nombreController.text = widget.cliente?['name'] ?? '';
-    _apellidosController.text = widget.cliente?['last_name'] ?? '';
-    _empresaController.text = widget.cliente?['company'] ?? '';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,63 +40,10 @@ class _DetallesYEditarClientesPageState
                     child: TabBarView(
                       children: [
                         // Detalles
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              columns: const [
-                                DataColumn(label: Text('Campo')),
-                                DataColumn(label: Text('Valor')),
-                              ],
-                              rows: widget.cliente?.entries
-                                      .map((entry) => DataRow(
-                                        cells: [
-                                          DataCell(Text(entry.key)),
-                                          DataCell(Text('${entry.value}')),
-                                        ],
-                                      ))
-                                      .toList() ??
-                                  [],
-                            ),
-                          ),
-                        ),
-
-                        // Proyectos (second tab)
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          child: FutureBuilder<List<dynamic>>(
-                            future: fetchCustomerProjectsbyId(widget.cliente?['id']),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else if (!snapshot.hasData ||
-                                  snapshot.data!.isEmpty) {
-                                return const Text('El cliente no tiene proyectos asociados');
-                              } else {
-                                List<dynamic> customerProjects = snapshot.data!;
-                                return DataTable(
-                                  columns: const [
-                                    DataColumn(label: Text("ID")),
-                                    DataColumn(label: Text('Proyecto')),
-                                  ],
-                                  rows: customerProjects
-                                      .map((project) => DataRow(
-                                            cells: [
-                                              DataCell(Text(project["project_id"].toString())),
-                                              DataCell(Text(project['project_name'].toString())),
-                                            ],
-                                          ))
-                                      .toList(),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-
-                        // Contenido para la tercera pestaña
+                        buildDetailsSection(widget.cliente),
+                        // Proyectos
+                        buildProjectsSection(widget.cliente),
+                        // Otra Más
                         const Center(
                           child: Text('Contenido de la tercera opción'),
                         ),
@@ -119,18 +54,70 @@ class _DetallesYEditarClientesPageState
               ),
             ),
           ),
-
-          // Formulario en el lado derecho
           Expanded(
             flex: 1,
             child: Container(
-              width: 300,
               padding: const EdgeInsets.all(18.0),
               child: EditarClienteForm(cliente: widget.cliente),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildDetailsSection(Map<String, dynamic>? cliente) {
+    if (cliente == null)
+      return const Center(child: Text("No hay información del cliente."));
+    return SingleChildScrollView(
+      child: Column(
+        children: cliente.entries
+            .map((entry) => Card(
+                  elevation: 4.0,
+                  margin: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: Icon(Icons.info_outline,
+                        color: Theme.of(context).primaryColor),
+                    title: Text(entry.key,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('${entry.value}'),
+                  ),
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget buildProjectsSection(Map<String, dynamic>? cliente) {
+    return FutureBuilder<List<dynamic>>(
+      future: fetchCustomerProjectsbyId(cliente?['id']),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+          return const Center(
+              child: Text('El cliente no tiene proyectos asociados'));
+        }
+        return SingleChildScrollView(
+          child: Column(
+            children: snapshot.data!
+                .map((project) => Card(
+                      elevation: 4.0,
+                      margin: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        leading: Icon(Icons.business_center,
+                            color: Theme.of(context).primaryColor),
+                        title: Text(project['project_name'],
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text("ID: ${project['project_id']}"),
+                      ),
+                    ))
+                .toList(),
+          ),
+        );
+      },
     );
   }
 }

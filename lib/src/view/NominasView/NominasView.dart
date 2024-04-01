@@ -23,7 +23,8 @@ class _NominasViewState extends State<NominasView> {
   }
 
   Future<void> fetchTrabajadores() async {
-    const url = "http://localhost:3000/Api/v1/trabajadores";
+    const url =
+        "https://datafire-production.up.railway.app/Api/v1/trabajadores";
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -213,7 +214,8 @@ class _NominasViewState extends State<NominasView> {
   void _enviarDatosNomina(Map<String, dynamic> nominaData) async {
     try {
       final response = await http.post(
-        Uri.parse("http://localhost:3000/Api/v1/nominasSemanales"),
+        Uri.parse(
+            "https://datafire-production.up.railway.app/Api/v1/nominasSemanales"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

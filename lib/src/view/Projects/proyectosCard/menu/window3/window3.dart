@@ -1,7 +1,7 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:flutter/material.dart';
-import 'package:awesome_dialog/awesome_dialog.dart';  // Asegúrate de tener esta importación
 
 class Window3 extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
@@ -41,71 +41,77 @@ class _Window3State extends State<Window3> {
                   .where((cp) => cp['project_id'] == widget.proyecto?['id'])
                   .toList();
 
-              return DataTable(
-                columns: const [
-                  DataColumn(label: Text('Trabajadores')),
-                  DataColumn(
-                    label: Text('Eliminar'),
-                    numeric: true,
-                  ),
-                ],
-                rows: workerData
-                    .map((worker) => DataRow(
-                          cells: [
-                            DataCell(Text(worker['worker_name'].toString())),
-                            DataCell(
-                              IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed: () async {
-                                  // Activar la pantalla de carga
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-
-                                  AwesomeDialog(
-                                    context: context,
-                                    dialogType: DialogType.warning,
-                                    animType: AnimType.scale,
-                                    title: "Eliminar Trabajador del proyecto",
-                                    desc: "¿Estas seguro que quieres eliminar este trabajador?",
-                                    width: 620,
-                                    btnCancelOnPress: (){},
-                                    btnOkOnPress: () async {
-                                      await deleteProjectWorkers(worker['id']);
-
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Trabajador eliminado correctamente'),
-                                        ),
-                                      );
-
-                                      // Desactivar la pantalla de carga
-                                      setState(() {
-                                        futureProjectWorkers = fetchProjectWorkers();
-                                        isLoading = false;
-                                      });
-                                    },
-                                  ).show();
-                                },
-                              ),
-                            ),
-                          ],
-                        ))
-                    .toList(),
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: workerData.length,
+                itemBuilder: (context, index) {
+                  final worker = workerData[index];
+                  return Card(
+                    elevation: 5,
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 10, horizontal: 0),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      leading: CircleAvatar(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        child: const Icon(Icons.person, color: Colors.white),
+                      ),
+                      title: Text(
+                        worker['worker_name'],
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      subtitle: Text('ID Trabajador: ${worker['id']}'),
+                      trailing: IconButton(
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                        onPressed: () => _deleteWorkerDialog(worker),
+                      ),
+                    ),
+                  );
+                },
               );
             }
           },
         ),
-        // Mostrar el botón de edición solo si no está cargando
         if (!isLoading)
-          IconButton.filled(
+          ElevatedButton.icon(
             onPressed: () {
-              _selectWorkersDialog(context, widget.proyecto?["id"].toString() ?? "");
+              _selectWorkersDialog(
+                  context, widget.proyecto?["id"].toString() ?? "");
             },
-            icon: const Icon(Icons.edit),
+            icon: const Icon(Icons.add),
+            label: const Text("Añadir Trabajadores"),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
           ),
       ],
     );
+  }
+
+  void _deleteWorkerDialog(dynamic worker) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.scale,
+      title: "Eliminar Trabajador del proyecto",
+      desc: "¿Estás seguro que quieres eliminar este trabajador?",
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        setState(() => isLoading = true);
+        await deleteProjectWorkers(worker['id']);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Trabajador eliminado correctamente')),
+        );
+        setState(() {
+          futureProjectWorkers = fetchProjectWorkers();
+          isLoading = false;
+        });
+      },
+    ).show();
   }
 
   void _selectWorkersDialog(BuildContext context, String projectId) async {
@@ -122,8 +128,8 @@ class _Window3State extends State<Window3> {
               return SingleChildScrollView(
                 child: Column(
                   children: workers.map((worker) {
-                    bool isSelected = workersSeleccionados.contains(worker["id"]?.toString() ?? "");
-
+                    bool isSelected = workersSeleccionados
+                        .contains(worker["id"]?.toString() ?? "");
                     return CheckboxListTile(
                       title: Text(worker["name"]?.toString() ?? ""),
                       value: isSelected,
@@ -131,9 +137,11 @@ class _Window3State extends State<Window3> {
                         setState(() {
                           if (value != null) {
                             if (value) {
-                              workersSeleccionados.add(worker["id"]?.toString() ?? "");
+                              workersSeleccionados
+                                  .add(worker["id"]?.toString() ?? "");
                             } else {
-                              workersSeleccionados.remove(worker["id"]?.toString() ?? "");
+                              workersSeleccionados
+                                  .remove(worker["id"]?.toString() ?? "");
                             }
                           }
                         });
@@ -146,27 +154,23 @@ class _Window3State extends State<Window3> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text("Cancelar"),
             ),
             TextButton(
-  onPressed: () async {
-    Navigator.of(context).pop();
-
-    await Future.forEach(workersSeleccionados, (workerId) async {
-      await postProjectWorker().addProjectWorker(projectId, workerId);
-    });
-
-    setState(() {
-      futureProjectWorkers = fetchProjectWorkers();
-    });
-  },
-  child: const Text("Guardar"),
-),
-
-
+              onPressed: () async {
+                await Future.forEach(workersSeleccionados,
+                    (dynamic workerId) async {
+                  await postProjectWorker()
+                      .addProjectWorker(projectId, workerId.toString());
+                });
+                setState(() {
+                  futureProjectWorkers = fetchProjectWorkers();
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Text("Guardar"),
+            ),
           ],
         );
       },

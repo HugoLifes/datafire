@@ -7,7 +7,6 @@ class Window2 extends StatefulWidget {
   final Map<String, dynamic>? proyecto;
   final String idProyecto;
 
-
   const Window2({
     Key? key,
     required this.proyecto,
@@ -24,7 +23,6 @@ class _Window2State extends State<Window2> {
   @override
   void initState() {
     super.initState();
-    // Inicializar la lista de clientes al inicio
     futureCustomerProjects = fetchCustomerProjects();
   }
 
@@ -42,74 +40,97 @@ class _Window2State extends State<Window2> {
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                return const Text('No hay Clientes disponibles', style: TextStyle(fontSize: 20));
+                return const Text('No hay Clientes disponibles',
+                    style: TextStyle(fontSize: 20));
               } else {
                 List<dynamic> customerProjects = snapshot.data!;
                 List customerData = customerProjects
                     .where((cp) => cp['project_id'] == widget.proyecto?['id'])
                     .toList();
 
-                return DataTable(
-                  columns: const [
-                    DataColumn(label: Text('Clientes')),
-                    DataColumn(
-                      label: Text('Eliminar'),
-                      numeric: true,
-                    ),
-                  ],
-                  rows: customerData
-                      .map((customer) => DataRow(
-                            cells: [
-                              DataCell(Text(customer['customer_name'].toString())),
-                              DataCell(
-                                IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  onPressed: () async {
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.warning,
-                                animType: AnimType.scale,
-                                title: "Eliminar Cliente del proyecto",
-                                desc: "¿Estas seguro que quieres eliminar este Cliente?",
-                                width: 620,
-                                btnCancelOnPress: (){},
-                                btnOkOnPress: () async {
-                                      await deleteCustomerProjectRelation(customer['id']);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        content:  Text('Cliente eliminado correctamente'),
-                                      ),
-                                    );
-                                    // Actualizar la lista después de eliminar un cliente
-                                    setState(() {
-                                      futureCustomerProjects = fetchCustomerProjects();
-                                    });
-                                },
-                              ).show();
-
-                                  },
-                                ),
-                              ),
-                            ],
-                          ))
-                      .toList(),
+                return ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: customerData.length,
+                  itemBuilder: (context, index) {
+                    final customer = customerData[index];
+                    return Card(
+                      elevation: 5,
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 0),
+                      child: ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 20),
+                        leading: CircleAvatar(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          child: Text(
+                            customer['customer_name'][0].toUpperCase(),
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
+                        title: Text(
+                          customer['customer_name'],
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text('ID Cliente: ${customer['id']}'),
+                        trailing: Wrap(
+                          spacing: 12,
+                          children: <Widget>[
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _deleteCustomerDialog(customer),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
                 );
               }
             },
           ),
           const SizedBox(height: 20),
-          IconButton.filled(
+          ElevatedButton.icon(
             onPressed: () {
               _selectClientsDialog(widget.idProyecto);
             },
-            icon: const Icon(Icons.edit),
+            icon: const Icon(Icons.add),
+            label: const Text("Añadir Clientes"),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
           ),
         ],
       ),
     );
   }
 
- void _selectClientsDialog(String projectId) async {
+  void _deleteCustomerDialog(dynamic customer) {
+    AwesomeDialog(
+      context: context,
+      dialogType: DialogType.warning,
+      animType: AnimType.scale,
+      title: "Eliminar Cliente del proyecto",
+      desc: "¿Estás seguro que quieres eliminar este Cliente?",
+      width: 620,
+      btnCancelOnPress: () {},
+      btnOkOnPress: () async {
+        await deleteCustomerProjectRelation(customer['id']);
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Cliente eliminado correctamente'),
+          ),
+        );
+        setState(() {
+          futureCustomerProjects = fetchCustomerProjects();
+        });
+      },
+    ).show();
+  }
+
+  void _selectClientsDialog(String projectId) async {
     List<dynamic> clientes = await fetchClientes();
     List<String> clientesSeleccionados = [];
 
@@ -123,8 +144,8 @@ class _Window2State extends State<Window2> {
               return SingleChildScrollView(
                 child: Column(
                   children: clientes.map((cliente) {
-                    bool isSelected = clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
-
+                    bool isSelected = clientesSeleccionados
+                        .contains(cliente["id"]?.toString() ?? "");
                     return CheckboxListTile(
                       title: Text(cliente["name"]?.toString() ?? ""),
                       value: isSelected,
@@ -132,9 +153,11 @@ class _Window2State extends State<Window2> {
                         setState(() {
                           if (value != null) {
                             if (value) {
-                              clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
+                              clientesSeleccionados
+                                  .add(cliente["id"]?.toString() ?? "");
                             } else {
-                              clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
+                              clientesSeleccionados
+                                  .remove(cliente["id"]?.toString() ?? "");
                             }
                           }
                         });
@@ -147,27 +170,21 @@ class _Window2State extends State<Window2> {
           ),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text("Cancelar"),
             ),
             TextButton(
-onPressed: () async {
-  await Future.forEach(clientesSeleccionados, (clienteId) async {
-    await PostCustomerProject().addCustomerProject(projectId, clienteId);
-  });
-
-  // Actualizar la lista después de agregar clientes
-  setState(() {
-    futureCustomerProjects = fetchCustomerProjects();
-  });
-
-  // Cerrar el diálogo
-  Navigator.of(context).pop();
-},
-
-              
+              onPressed: () async {
+                await Future.forEach(clientesSeleccionados,
+                    (dynamic clienteId) async {
+                  await PostCustomerProject()
+                      .addCustomerProject(projectId, clienteId.toString());
+                });
+                setState(() {
+                  futureCustomerProjects = fetchCustomerProjects();
+                });
+                Navigator.of(context).pop();
+              },
               child: const Text("Guardar"),
             ),
           ],
@@ -175,8 +192,4 @@ onPressed: () async {
       },
     );
   }
-
 }
-
-
-

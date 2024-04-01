@@ -13,8 +13,8 @@ class AltaProyectos extends StatefulWidget {
 class _AltaProyectosState extends State<AltaProyectos> {
   late Future<List<dynamic>> _proyectosFuture;
   List<dynamic> _proyectos = []; // Lista original de proyectos
-  bool _showPagados = true; // Nuevo estado para controlar la visibilidad de proyectos pagados
-
+  bool _showPagados =
+      true; // Nuevo estado para controlar la visibilidad de proyectos pagados
 
   @override
   void initState() {
@@ -33,7 +33,9 @@ class _AltaProyectosState extends State<AltaProyectos> {
 
     // Filtrar proyectos pagados
     if (!_showPagados) {
-      proyectosFiltrados = proyectosFiltrados.where((proyecto) => proyecto['status'] == true).toList();
+      proyectosFiltrados = proyectosFiltrados
+          .where((proyecto) => proyecto['status'] == true)
+          .toList();
     }
 
     return proyectosFiltrados;

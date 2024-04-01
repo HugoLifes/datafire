@@ -20,7 +20,8 @@ Future<List<dynamic>> fetchCosts() async {
 
 Future<String?> addCosto(String projectId, String amount, String description,
     String precio, String selecterDate) async {
-  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos/services";
+  const urlCrearProyecto =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/services";
   try {
     final resCrearCosto = await http.post(
       Uri.parse(urlCrearProyecto),
@@ -82,7 +83,8 @@ Future<void> updateCostos(
 }
 
 void deleteCost(int costId) async {
-  final url = "http://localhost:3000/Api/v1/proyectos/services/$costId";
+  final url =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/services/$costId";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(

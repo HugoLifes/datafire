@@ -142,7 +142,8 @@ class Trabajadores {
     Map<String, String> headers = await getAuthHeaders();
     try {
       final res = await http.post(
-        Uri.parse("http://localhost:3000/api/v1/trabajadores"),
+        Uri.parse(
+            "https://datafire-production.up.railway.app/api/v1/trabajadores"),
         headers: {"Content-Type": "application/json", ...headers},
         body: jsonEncode({
           "name": nombre,

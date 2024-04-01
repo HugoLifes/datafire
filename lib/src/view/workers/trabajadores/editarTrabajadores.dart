@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/view/workers/trabajadores/menu/WorkerCosts.dart';
-import 'package:flutter/material.dart';
 import 'package:datafire/src/view/workers/trabajadores/form_editarTrabajadores.dart';
 
 class DetallesYEditarTrabajadoresPage extends StatefulWidget {
@@ -16,18 +16,6 @@ class DetallesYEditarTrabajadoresPage extends StatefulWidget {
 
 class _DetallesYEditarTrabajadoresPageState
     extends State<DetallesYEditarTrabajadoresPage> {
-  final _nombreController = TextEditingController();
-  final _apellidosController = TextEditingController();
-  final _cargoController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    _nombreController.text = widget.trabajador?['name'] ?? '';
-    _apellidosController.text = widget.trabajador?['last_name'] ?? '';
-    _cargoController.text = widget.trabajador?['position'] ?? '';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,7 +25,7 @@ class _DetallesYEditarTrabajadoresPageState
       body: Row(
         children: [
           Expanded(
-            flex: 1, // Ajusta el flex para la mitad de la pantalla
+            flex: 1,
             child: DefaultTabController(
               length: 3,
               child: Column(
@@ -53,73 +41,14 @@ class _DetallesYEditarTrabajadoresPageState
                     child: TabBarView(
                       children: [
                         // Detalles
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          child: SingleChildScrollView(
-                            child: DataTable(
-                              columns: const [
-                                DataColumn(label: Text('Campo')),
-                                DataColumn(label: Text('Valor')),
-                              ],
-                              rows: widget.trabajador?.entries
-                                      .map((entry) => DataRow(
-                                            cells: [
-                                              DataCell(Text(entry.key)),
-                                              DataCell(Text('${entry.value}')),
-                                            ],
-                                          ))
-                                      .toList() ??
-                                  [],
-                            ),
-                          ),
-                        ),
-
-                        // Contenido para la segunda pestaña
-                        Container(
-                          padding: const EdgeInsets.all(16.0),
-                          child: FutureBuilder<List<dynamic>>(
-                            future: fetchProjectWorkersbyId(
-                                widget.trabajador?['id']),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const CircularProgressIndicator();
-                              } else if (snapshot.hasError) {
-                                return Text('Error: ${snapshot.error}');
-                              } else if (!snapshot.hasData ||
-                                  snapshot.data!.isEmpty) {
-                                return const Text(
-                                    'El cliente no tiene proyectos asociados');
-                              } else {
-                                List<dynamic> customerProjects = snapshot.data!;
-                                return DataTable(
-                                  columns: const [
-                                    DataColumn(label: Text("ID")),
-                                    DataColumn(label: Text('Proyecto')),
-                                  ],
-                                  rows: customerProjects
-                                      .map((project) => DataRow(
-                                            cells: [
-                                              DataCell(Text(
-                                                  project["project_id"]
-                                                      .toString())),
-                                              DataCell(Text(
-                                                  project['project_name']
-                                                      .toString())),
-                                            ],
-                                          ))
-                                      .toList(),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-
-                        // Contenido para la tercera pestaña
+                        buildDetailsSection(widget.trabajador),
+                        // Proyectos
+                        buildProjectsSection(widget.trabajador),
+                        // Costo Empresa semanal
                         WorkerCostsTab(
                           idProyecto: widget.trabajador!["id"].toString(),
                           salary: widget.trabajador!["salary"],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -127,17 +56,70 @@ class _DetallesYEditarTrabajadoresPageState
               ),
             ),
           ),
-//lado derecho jaja
           Expanded(
             flex: 1,
             child: Container(
-              width: 300,
               padding: const EdgeInsets.all(16.0),
               child: EditarTrabajadoresForm(trabajador: widget.trabajador),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget buildDetailsSection(Map<String, dynamic>? trabajador) {
+    if (trabajador == null)
+      return const Center(child: Text("No hay información del trabajador."));
+    return SingleChildScrollView(
+      child: Column(
+        children: trabajador.entries
+            .map((entry) => Card(
+                  elevation: 4.0,
+                  margin: const EdgeInsets.all(8.0),
+                  child: ListTile(
+                    leading: Icon(Icons.person_outline,
+                        color: Theme.of(context).primaryColor),
+                    title: Text(entry.key,
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    subtitle: Text('${entry.value}'),
+                  ),
+                ))
+            .toList(),
+      ),
+    );
+  }
+
+  Widget buildProjectsSection(Map<String, dynamic>? trabajador) {
+    return FutureBuilder<List<dynamic>>(
+      future: fetchProjectWorkersbyId(trabajador?['id']),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        } else if (snapshot.hasError) {
+          return Text('Error: ${snapshot.error}');
+        } else if (snapshot.data == null || snapshot.data!.isEmpty) {
+          return const Center(
+              child: Text('El trabajador no tiene proyectos asociados'));
+        }
+        return SingleChildScrollView(
+          child: Column(
+            children: snapshot.data!
+                .map((project) => Card(
+                      elevation: 4.0,
+                      margin: const EdgeInsets.all(8.0),
+                      child: ListTile(
+                        leading: Icon(Icons.work_outline,
+                            color: Theme.of(context).primaryColor),
+                        title: Text(project['project_name'],
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        subtitle: Text("ID: ${project['project_id']}"),
+                      ),
+                    ))
+                .toList(),
+          ),
+        );
+      },
     );
   }
 }

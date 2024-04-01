@@ -78,7 +78,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                               idProyecto: _idProyecto,
                             )),
 
-                        // Contenido para la tercera pestaña
+                        //Trabajadores
                         Container(
                           padding: const EdgeInsets.all(16.0),
                           child: Window3(proyecto: widget.proyecto),

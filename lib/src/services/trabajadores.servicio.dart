@@ -64,7 +64,8 @@ Future<void> deleteTrabajador(int id) async {
 }
 
 Future<List<dynamic>> fetchWorkerCostsById(String projectId) async {
-  const url = "http://localhost:3000/api/v1/trabajadores/WorkerCosts";
+  const url =
+      "https://datafire-production.up.railway.app/api/v1/trabajadores/WorkerCosts";
 
   try {
     final res = await http.get(Uri.parse('$url?projecto_id=$projectId'));

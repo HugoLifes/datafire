@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'package:datafire/src/view/finances/menu/Egresos.dart' as Egresos;
 import 'package:datafire/src/view/finances/menu/Flujo.dart';
 import 'package:datafire/src/view/finances/menu/cuentasPorCobrar.dart';
-import 'package:datafire/src/view/finances/menu/ingresos.dart' hide OrderInfoDataSource;
+import 'package:datafire/src/view/finances/menu/ingresos.dart'
+    hide OrderInfoDataSource;
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -32,7 +33,8 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future<List<Map<String, dynamic>>> fetchData() async {
-    final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/Api/v1/proyectos/egresos'));
+    final response = await http.get(Uri.parse(
+        'https://datafire-production.up.railway.app/Api/v1/proyectos/egresos'));
 
     if (response.statusCode == 200) {
       debugPrint("cargado con éxito");
@@ -43,7 +45,8 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future<List<Map<String, dynamic>>> fetchingresos() async {
-    final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/Api/v1/proyectos/weeklyAbonos'));
+    final response = await http.get(Uri.parse(
+        'https://datafire-production.up.railway.app/Api/v1/proyectos/ingresos'));
 
     if (response.statusCode == 200) {
       debugPrint("cargado con éxito");
@@ -54,7 +57,8 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
-    final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/Api/v1/proyectos/cuentasCobrar'));
+    final response = await http.get(Uri.parse(
+        'https://datafire-production.up.railway.app/Api/v1/proyectos/cuentasCobrar'));
 
     if (response.statusCode == 200) {
       debugPrint("Cuentas por cobrar cargado con éxito");
@@ -65,7 +69,8 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future<List<Map<String, dynamic>>> fetchFlujoData() async {
-    final response = await http.get(Uri.parse('https://datafire-production.up.railway.app/Api/v1/proyectos/flujo'));
+    final response = await http.get(Uri.parse(
+        'https://datafire-production.up.railway.app/Api/v1/proyectos/flujo'));
 
     if (response.statusCode == 200) {
       debugPrint("Cuentas por cobrar cargado con éxito");
@@ -75,13 +80,15 @@ class _FinancesViewState extends State<FinancesView> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
-        child: AppBarDatafire(title: "Finanzas", description: "Aquí tendrás acceso a todas las finanzas de los proyectos"),
+        child: AppBarDatafire(
+            title: "Finanzas",
+            description:
+                "Aquí tendrás acceso a todas las finanzas de los proyectos"),
       ),
       body: Row(
         children: [
@@ -90,20 +97,19 @@ class _FinancesViewState extends State<FinancesView> {
             child: DefaultTabController(
               length: 5,
               child: Column(
-                children:  [
+                children: [
                   const TabBar(tabs: [
                     Tab(text: "egresos"),
                     Tab(text: "ingresos"),
                     Tab(text: "Noominas"),
                     Tab(text: "flujo"),
-                    Tab(text:"  Cuentas por cobrar")
+                    Tab(text: "  Cuentas por cobrar")
                   ]),
                   Expanded(
                     child: TabBarView(
                       children: [
                         Egresos.EgresosWidget(fetchDataFuture: fetchDataFuture),
                         IngresosWidget(fetchDataFuture: fetchIngresosFuture),
-                        
                         FlujoWidget(fetchDataFuture: fetchFlujData),
                         CobrarWidget(fetchDataFuture: fetchCobrarData)
                       ],

@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 
 Future<void> postAbono(
     String monto, String fechaAbono, String projectId, int customerId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/abonos";
+  const url =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/abonos";
 
   Map<String, String> headers = await getAuthHeaders();
 
@@ -82,7 +83,8 @@ Future<void> updateAbono(int id, String monto, String fechaAbono,
 }
 
 Future<void> deleteAbono(int id) async {
-  final url = "http://localhost:3000/api/v1/proyectos/abonos/$id";
+  final url =
+      "https://datafire-production.up.railway.app/api/v1/proyectos/abonos/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(
