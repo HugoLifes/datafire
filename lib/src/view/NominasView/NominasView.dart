@@ -74,35 +74,46 @@ class _NominasViewState extends State<NominasView> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2025),
     );
-    if (picked != null) {
-      if (picked.weekday == DateTime.monday) {
-        // La fecha seleccionada es lunes
-        DateTime startOfWeek = picked;
-        DateTime endOfWeek = startOfWeek.add(Duration(days: 6));
-
-        setState(() {
-          fechaInicioSemana = startOfWeek;
-          fechaFinSemana = endOfWeek;
-        });
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Selección inválida'),
-              content: Text(
-                  'Por favor, selecciona un lunes para iniciar la semana.'),
-              actions: <Widget>[
-                TextButton(
-                    child: Text('OK'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    }),
-              ],
-            );
-          },
-        );
-      }
+    if (picked != null && picked.weekday == DateTime.monday) {
+      DateTime startOfWeek =
+          DateTime.utc(picked.year, picked.month, picked.day);
+      DateTime endOfWeek = DateTime.utc(picked.year, picked.month, picked.day)
+          .add(Duration(days: 6));
+      setState(() {
+        fechaInicioSemana = startOfWeek;
+        fechaFinSemana = endOfWeek;
+      });
+    } else if (picked != null) {
+      // Si el día seleccionado no es lunes, se ajusta para comenzar desde el lunes más cercano anterior
+      int daysToSubtract = picked.weekday - DateTime.monday;
+      DateTime startOfWeek = DateTime.utc(picked.year, picked.month, picked.day)
+          .subtract(Duration(days: daysToSubtract));
+      DateTime endOfWeek = DateTime.utc(picked.year, picked.month, picked.day)
+          .subtract(Duration(days: daysToSubtract))
+          .add(Duration(days: 6));
+      setState(() {
+        fechaInicioSemana = startOfWeek;
+        fechaFinSemana = endOfWeek;
+      });
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Selección inválida'),
+            content:
+                Text('Por favor, selecciona un lunes para iniciar la semana.'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 

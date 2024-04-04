@@ -115,8 +115,28 @@ class _Window3State extends State<Window3> {
   }
 
   void _selectWorkersDialog(BuildContext context, String projectId) async {
-    List<dynamic> workers = await fetchTrabajadores();
-    List<String> workersSeleccionados = [];
+    List<dynamic> todosLosTrabajadores =
+        await fetchTrabajadores(); // Obtiene todos los trabajadores
+    List<dynamic> proyectosTrabajadores =
+        await fetchProjectWorkers(); // Obtiene todos los trabajadores por proyecto
+
+    // Filtra para obtener solo los trabajadores relacionados con este proyecto específico
+    List<dynamic> trabajadoresDelProyecto = proyectosTrabajadores
+        .where((cp) => cp['project_id'].toString() == projectId)
+        .toList();
+
+    // Extrae los IDs de los trabajadores ya relacionados con el proyecto
+    List<String> idsTrabajadoresDelProyecto = trabajadoresDelProyecto
+        .map((cp) => cp['worker_id'].toString())
+        .toList();
+
+    // Filtra la lista de todos los trabajadores para excluir aquellos que ya están asignados al proyecto
+    List<dynamic> trabajadoresParaMostrar = todosLosTrabajadores
+        .where((trabajador) =>
+            !idsTrabajadoresDelProyecto.contains(trabajador['id'].toString()))
+        .toList();
+
+    List<String> trabajadoresSeleccionados = [];
 
     await showDialog(
       context: context,
@@ -127,21 +147,21 @@ class _Window3State extends State<Window3> {
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
                 child: Column(
-                  children: workers.map((worker) {
-                    bool isSelected = workersSeleccionados
-                        .contains(worker["id"]?.toString() ?? "");
+                  children: trabajadoresParaMostrar.map((trabajador) {
+                    bool isSelected = trabajadoresSeleccionados
+                        .contains(trabajador["id"]?.toString() ?? "");
                     return CheckboxListTile(
-                      title: Text(worker["name"]?.toString() ?? ""),
+                      title: Text(trabajador["name"]?.toString() ?? ""),
                       value: isSelected,
                       onChanged: (bool? value) {
                         setState(() {
                           if (value != null) {
                             if (value) {
-                              workersSeleccionados
-                                  .add(worker["id"]?.toString() ?? "");
+                              trabajadoresSeleccionados
+                                  .add(trabajador["id"]?.toString() ?? "");
                             } else {
-                              workersSeleccionados
-                                  .remove(worker["id"]?.toString() ?? "");
+                              trabajadoresSeleccionados
+                                  .remove(trabajador["id"]?.toString() ?? "");
                             }
                           }
                         });
@@ -159,7 +179,8 @@ class _Window3State extends State<Window3> {
             ),
             TextButton(
               onPressed: () async {
-                await Future.forEach(workersSeleccionados,
+                // Aquí se asume la existencia de una función postProjectWorker para asignar trabajadores al proyecto
+                await Future.forEach(trabajadoresSeleccionados,
                     (dynamic workerId) async {
                   await postProjectWorker()
                       .addProjectWorker(projectId, workerId.toString());

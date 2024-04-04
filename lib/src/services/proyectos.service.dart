@@ -20,9 +20,10 @@ Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
   }
 }
 
-
-Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fechaFinalizada, String costo) async {
-  const urlCrearProyecto = "https://datafire-production.up.railway.app/Api/v1/proyectos";
+Future<String?> obtenerIdProyecto(String nombre, String fechaInicio,
+    String fechaFinalizada, String costo) async {
+  const urlCrearProyecto =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos";
 
   try {
     Map<String, String> headers = await getAuthHeaders();
@@ -55,10 +56,12 @@ Future<String?> obtenerIdProyecto(String nombre, String fechaInicio, String fech
 }
 
 Future<String?> buscarIdProyectoPorNombre(String nombre) async {
-  const urlBuscarProyecto = "https://datafire-production.up.railway.app/Api/v1/proyectos";
-      Map<String, String> headers = await getAuthHeaders();
+  const urlBuscarProyecto =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos";
+  Map<String, String> headers = await getAuthHeaders();
   try {
-    final resBuscarProyecto = await http.get(Uri.parse(urlBuscarProyecto), headers: headers);
+    final resBuscarProyecto =
+        await http.get(Uri.parse(urlBuscarProyecto), headers: headers);
     if (resBuscarProyecto.statusCode == 200) {
       final List<dynamic> proyectos = jsonDecode(resBuscarProyecto.body);
       // Buscamos el ID del proyecto por el nombre
@@ -68,26 +71,23 @@ Future<String?> buscarIdProyectoPorNombre(String nombre) async {
         }
       }
       return null;
-    } 
+    }
   } catch (err) {
     return null;
   }
   return null;
 }
 
-
-
-
 Future<List<dynamic>> fetchProjects() async {
   const url = "https://datafire-production.up.railway.app/Api/v1/proyectos";
-Map<String, String> headers = await getAuthHeaders();
+  Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.get(Uri.parse(url), headers: headers);
     if (res.statusCode == 200) {
       final List<dynamic> proyectos = jsonDecode(res.body);
       return proyectos;
     } else {
-      return []  ;
+      return [];
     }
   } catch (err) {
     return [];
@@ -97,7 +97,7 @@ Map<String, String> headers = await getAuthHeaders();
 Future<void> updateProyecto(
     int id, String nombre, String fechaInicio, String fechaFinalizada) async {
   final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
- Map<String, String> headers = await getAuthHeaders();
+  Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
       Uri.parse(url),
@@ -109,32 +109,31 @@ Future<void> updateProyecto(
       }),
     );
     if (res.statusCode == 200) {
-    } else {
-    }
-  // ignore: empty_catches
-  } catch (err) {
-    
-  }
+    } else {}
+    // ignore: empty_catches
+  } catch (err) {}
 }
 
 Future<void> deleteProyecto(int id) async {
-  final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
- Map<String, String> headers = await getAuthHeaders();
+  final url = "http://localhost:3000/api/v1/proyectos/$id";
+  Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(
       Uri.parse(url),
       headers: {"Content-Type": "application/json", ...headers},
     );
     if (res.statusCode == 200) {
-    } else {
-    }
-  // ignore: empty_catches
-  } catch (err) {
-  }
+    } else {}
+    // ignore: empty_catches
+  } catch (err) {}
 }
 
-Future<void> postProyecto(String datePrestamo, String amountPaid,) async {
-  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/prestamos";
+Future<void> postProyecto(
+  String datePrestamo,
+  String amountPaid,
+) async {
+  const url =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/prestamos";
 
   try {
     final res = await http.post(
@@ -144,11 +143,7 @@ Future<void> postProyecto(String datePrestamo, String amountPaid,) async {
           {"date_prestamo": datePrestamo, "amount_paid": amountPaid}),
     );
     if (res.statusCode == 200) {
-    } else {
-    }
-  // ignore: empty_catches
-  } catch (err) {
-    
-  }
+    } else {}
+    // ignore: empty_catches
+  } catch (err) {}
 }
-

@@ -44,6 +44,8 @@ dependencies:
   syncfusion_flutter_datagrid: ^20.1.42
   syncfusion_flutter_core: ^20.1.42
   web_socket_channel: ^2.2.0
+  pdf: ^3.6.0
+  printing: ^5.9.3
   socket_io_client: ^2.0.0
   # starflut: ^0.9.5
   http: ^0.13.5

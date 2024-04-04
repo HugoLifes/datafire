@@ -131,7 +131,24 @@ class _Window2State extends State<Window2> {
   }
 
   void _selectClientsDialog(String projectId) async {
-    List<dynamic> clientes = await fetchClientes();
+    List<dynamic> todosLosClientes = await fetchClientes();
+    List<dynamic> proyectosClientes = await fetchCustomerProjects();
+
+    // Filtra para obtener solo los clientes relacionados
+    List<dynamic> clientesDelProyecto = proyectosClientes
+        .where((cp) => cp['project_id'].toString() == projectId)
+        .toList();
+
+    // Extrae los IDs de los clientes
+    List<String> idsClientesDelProyecto =
+        clientesDelProyecto.map((cp) => cp['customer_id'].toString()).toList();
+
+    // Filtra la lista de todos los clientes
+    List<dynamic> clientesParaMostrar = todosLosClientes
+        .where((cliente) =>
+            !idsClientesDelProyecto.contains(cliente['id'].toString()))
+        .toList();
+
     List<String> clientesSeleccionados = [];
 
     await showDialog(
@@ -143,7 +160,7 @@ class _Window2State extends State<Window2> {
             builder: (BuildContext context, StateSetter setState) {
               return SingleChildScrollView(
                 child: Column(
-                  children: clientes.map((cliente) {
+                  children: clientesParaMostrar.map((cliente) {
                     bool isSelected = clientesSeleccionados
                         .contains(cliente["id"]?.toString() ?? "");
                     return CheckboxListTile(
