@@ -4,7 +4,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 class CobrarWidget extends StatelessWidget {
   final Future<List<dynamic>> fetchDataFuture;
 
-  const CobrarWidget({required this.fetchDataFuture});
+  const CobrarWidget({super.key, required this.fetchDataFuture});
 
   @override
   Widget build(BuildContext context) {

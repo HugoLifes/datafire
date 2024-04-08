@@ -10,7 +10,7 @@ class UserVerificationView extends StatefulWidget {
 }
 
 class _UserVerificationViewState extends State<UserVerificationView> {
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {

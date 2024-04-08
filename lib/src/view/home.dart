@@ -86,7 +86,7 @@ class _HomeState extends State<Home> {
 
   void _showWelcomeMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
+      const SnackBar(
           content: Text('Bienvenido a la gestión de tus proyectos!'),
           duration: Duration(seconds: 3)),
     );
@@ -111,7 +111,7 @@ class _HomeState extends State<Home> {
                 "Proyectos de los últimos 12 meses",
                 pieChartSections.isNotEmpty
                     ? PieChart(_pieChartData())
-                    : CircularProgressIndicator()),
+                    : const CircularProgressIndicator()),
           ],
         ),
       ),
@@ -129,9 +129,9 @@ class _HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.only(left: 15, top: 6),
             child: Text(title,
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           SizedBox(height: 200, child: chart),
         ],
       ),

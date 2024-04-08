@@ -61,10 +61,10 @@ class _AltaProyectosState extends State<AltaProyectos> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: AppBar(
-          title: Text("Proyectos"),
+          title: const Text("Proyectos"),
           actions: [
             IconButton(
-              icon: Icon(Icons.search),
+              icon: const Icon(Icons.search),
               onPressed: _startSearch,
             ),
             // Nuevo botón para cambiar la visibilidad de proyectos pagados
@@ -136,7 +136,7 @@ class ProyectoSearch extends SearchDelegate<dynamic> {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-        icon: Icon(Icons.clear),
+        icon: const Icon(Icons.clear),
         onPressed: () {
           query = '';
         },
@@ -147,7 +147,7 @@ class ProyectoSearch extends SearchDelegate<dynamic> {
   @override
   Widget buildLeading(BuildContext context) {
     return IconButton(
-      icon: Icon(Icons.arrow_back),
+      icon: const Icon(Icons.arrow_back),
       onPressed: () {
         close(context, null);
       },
@@ -162,7 +162,7 @@ class ProyectoSearch extends SearchDelegate<dynamic> {
         .toList();
 
     return GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2, // Dos cards por fila
         crossAxisSpacing: 8.0, // Espaciado horizontal entre cards
         mainAxisSpacing: 8.0, // Espaciado vertical entre cards

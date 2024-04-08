@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class EgresosWidget extends StatelessWidget {
   final Future<List<Map<String, dynamic>>> fetchDataFuture;
 
-  const EgresosWidget({required this.fetchDataFuture});
+  const EgresosWidget({super.key, required this.fetchDataFuture});
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class OrderInfoDataSource extends DataGridSource {
       return Flexible(
         child: Text(
           '$projectName: \$${cost.toStringAsFixed(2)}', // Agrega el signo de pesos y formatea el número a dos decimales
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         ),
       );
     }).toList();
@@ -125,7 +125,7 @@ class OrderInfoDataSource extends DataGridSource {
             textAlign:
                 TextAlign.center, // Aseguramos que el texto esté centrado
             style: e.columnName == 'totalWeeklyCost'
-                ? TextStyle(fontWeight: FontWeight.bold)
+                ? const TextStyle(fontWeight: FontWeight.bold)
                 : null,
           );
         }

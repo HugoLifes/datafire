@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 class FlujoWidget extends StatelessWidget {
   final Future<List<Map<String, dynamic>>> fetchDataFuture;
 
-   FlujoWidget({required this.fetchDataFuture});
+   FlujoWidget({super.key, required this.fetchDataFuture});
 
   final _dateController = TextEditingController();
   final _amountController = TextEditingController();
@@ -19,7 +19,7 @@ class FlujoWidget extends StatelessWidget {
         future: fetchDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           } else if (snapshot.hasError) {
@@ -89,7 +89,7 @@ class FlujoWidget extends StatelessWidget {
         onPressed: () {
           _mostrarFormulario(context);
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
         
       ),
     );
@@ -114,13 +114,13 @@ class FlujoWidget extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Agregar Préstamo'),
+          title: const Text('Agregar Préstamo'),
           content: Column(
             children: [
               Row(
                 children: [
-                  Text('Fecha del Préstamo:'),
-                  SizedBox(width: 10),
+                  const Text('Fecha del Préstamo:'),
+                  const SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () async {
                       await showDatePicker(
@@ -136,13 +136,13 @@ class FlujoWidget extends StatelessWidget {
                         }
                       });
                     },
-                    child: Text('Seleccionar Fecha'),
+                    child: const Text('Seleccionar Fecha'),
                   ),
                 ],
               ),
               TextField(
                 controller: _amountController,
-                decoration: InputDecoration(labelText: 'Monto Pagado'),
+                decoration: const InputDecoration(labelText: 'Monto Pagado'),
               ),
             ],
           ),
@@ -151,14 +151,14 @@ class FlujoWidget extends StatelessWidget {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancelar'),
+              child: const Text('Cancelar'),
             ),
             ElevatedButton(
               onPressed: () {
                 _enviarFormulario();
                 Navigator.of(context).pop();
               },
-              child: Text('Guardar'),
+              child: const Text('Guardar'),
             ),
           ],
         );

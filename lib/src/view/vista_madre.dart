@@ -21,13 +21,13 @@ class MotherView extends StatelessWidget {
         builder: (ctx, child) {
           switch (controller.selectedIndex) {
             case 0:
-              return Home();
+              return const Home();
             case 1:
-              return AltaProyectos();
+              return const AltaProyectos();
             case 2:
-              return AltaClientes();
+              return const AltaClientes();
             case 3:
-              return AltaTrabajadores();
+              return const AltaTrabajadores();
             case 4:
             //aqui se pueden añadir mas pantallas
             default:

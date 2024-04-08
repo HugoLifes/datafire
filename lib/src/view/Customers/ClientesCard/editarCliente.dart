@@ -67,8 +67,9 @@ class _DetallesYEditarClientesPageState
   }
 
   Widget buildDetailsSection(Map<String, dynamic>? cliente) {
-    if (cliente == null)
+    if (cliente == null) {
       return const Center(child: Text("No hay información del cliente."));
+    }
     return SingleChildScrollView(
       child: Column(
         children: cliente.entries
@@ -79,7 +80,7 @@ class _DetallesYEditarClientesPageState
                     leading: Icon(Icons.info_outline,
                         color: Theme.of(context).primaryColor),
                     title: Text(entry.key,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('${entry.value}'),
                   ),
                 ))
@@ -110,7 +111,7 @@ class _DetallesYEditarClientesPageState
                         leading: Icon(Icons.business_center,
                             color: Theme.of(context).primaryColor),
                         title: Text(project['project_name'],
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text("ID: ${project['project_id']}"),
                       ),
                     ))

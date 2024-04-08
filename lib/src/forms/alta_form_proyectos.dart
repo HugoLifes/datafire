@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../widgets/colors.dart';
 
 class AltaProyectoPage extends StatefulWidget {
+  const AltaProyectoPage({super.key});
+
   @override
   _AltaProyectoPageState createState() => _AltaProyectoPageState();
 }
@@ -63,7 +65,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
           children: [
             TextFormField(
               controller: _nombreController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Nombre del Proyecto',
               ),
               validator: (value) {
@@ -73,7 +75,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 return null;
               },
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
@@ -84,7 +86,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('Guardar'),
+              child: const Text('Guardar'),
             ),
           ],
         ),

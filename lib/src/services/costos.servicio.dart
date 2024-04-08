@@ -62,7 +62,7 @@ Future<List<dynamic>> fetchCostsByProjectId(String projectId) async {
 }
 
 Future<void> updateCostos(
-    String id, String amount, String service, String cost, fecha_costo) async {
+    String id, String amount, String service, String cost, fechaCosto) async {
   final url =
       "https://datafire-production.up.railway.app/Api/v1/proyectos/services/$id";
   Map<String, String> headers = await getAuthHeaders();
@@ -74,7 +74,7 @@ Future<void> updateCostos(
         "amount": amount,
         "service": service,
         "cost": cost,
-        fecha_costo: "fecha_costo"
+        fechaCosto: "fecha_costo"
       }),
     );
     if (res.statusCode == 200) {}

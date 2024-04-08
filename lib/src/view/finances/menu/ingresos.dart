@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 class IngresosWidget extends StatelessWidget {
   final Future<List<dynamic>> fetchDataFuture;
 
-  const IngresosWidget({required this.fetchDataFuture});
+  const IngresosWidget({super.key, required this.fetchDataFuture});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +80,7 @@ class OrderInfoDataSource extends DataGridSource {
       double cost = entry['amount']?.toDouble() ?? 0.0;
       return Text(
         '$projectName: $cost',
-        style: TextStyle(fontWeight: FontWeight.bold),
+        style: const TextStyle(fontWeight: FontWeight.bold),
       );
     }).toList();
   }

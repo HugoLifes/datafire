@@ -78,7 +78,7 @@ class _NominasViewState extends State<NominasView> {
       DateTime startOfWeek =
           DateTime.utc(picked.year, picked.month, picked.day);
       DateTime endOfWeek = DateTime.utc(picked.year, picked.month, picked.day)
-          .add(Duration(days: 6));
+          .add(const Duration(days: 6));
       setState(() {
         fechaInicioSemana = startOfWeek;
         fechaFinSemana = endOfWeek;
@@ -90,7 +90,7 @@ class _NominasViewState extends State<NominasView> {
           .subtract(Duration(days: daysToSubtract));
       DateTime endOfWeek = DateTime.utc(picked.year, picked.month, picked.day)
           .subtract(Duration(days: daysToSubtract))
-          .add(Duration(days: 6));
+          .add(const Duration(days: 6));
       setState(() {
         fechaInicioSemana = startOfWeek;
         fechaFinSemana = endOfWeek;
@@ -100,12 +100,12 @@ class _NominasViewState extends State<NominasView> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Selección inválida'),
+            title: const Text('Selección inválida'),
             content:
-                Text('Por favor, selecciona un lunes para iniciar la semana.'),
+                const Text('Por favor, selecciona un lunes para iniciar la semana.'),
             actions: <Widget>[
               TextButton(
-                child: Text('OK'),
+                child: const Text('OK'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
@@ -125,9 +125,9 @@ class _NominasViewState extends State<NominasView> {
       return;
     }
 
-    final TextEditingController _horasTrabajadasController =
+    final TextEditingController horasTrabajadasController =
         TextEditingController();
-    final TextEditingController _horasExtraController = TextEditingController();
+    final TextEditingController horasExtraController = TextEditingController();
 
     showDialog(
       context: context,
@@ -141,13 +141,13 @@ class _NominasViewState extends State<NominasView> {
                 Text(
                     'Semana del ${DateFormat('dd/MM/yyyy').format(fechaInicioSemana!)} al ${DateFormat('dd/MM/yyyy').format(fechaFinSemana!)}'),
                 TextField(
-                  controller: _horasTrabajadasController,
-                  decoration: InputDecoration(labelText: 'Horas trabajadas'),
+                  controller: horasTrabajadasController,
+                  decoration: const InputDecoration(labelText: 'Horas trabajadas'),
                   keyboardType: TextInputType.number,
                 ),
                 TextField(
-                  controller: _horasExtraController,
-                  decoration: InputDecoration(labelText: 'Horas extra'),
+                  controller: horasExtraController,
+                  decoration: const InputDecoration(labelText: 'Horas extra'),
                   keyboardType: TextInputType.number,
                 ),
               ],
@@ -155,15 +155,15 @@ class _NominasViewState extends State<NominasView> {
           ),
           actions: <Widget>[
             TextButton(
-                child: Text('Cancelar'),
+                child: const Text('Cancelar'),
                 onPressed: () => Navigator.of(context).pop()),
             TextButton(
-              child: Text('Guardar'),
+              child: const Text('Guardar'),
               onPressed: () {
                 final int horasTrabajadas =
-                    int.tryParse(_horasTrabajadasController.text) ?? 0;
+                    int.tryParse(horasTrabajadasController.text) ?? 0;
                 final int horasExtra =
-                    int.tryParse(_horasExtraController.text) ?? 0;
+                    int.tryParse(horasExtraController.text) ?? 0;
                 setState(() {
                   trabajadoresDatos[trabajadorId] = {
                     ...trabajadoresDatos[trabajadorId]!,
@@ -325,8 +325,8 @@ class _NominasViewState extends State<NominasView> {
       floatingActionButton: FloatingActionButton(
         onPressed: _generarNomina,
         backgroundColor: Colors.green,
-        child: const Icon(Icons.publish),
         tooltip: 'Generar Nómina',
+        child: const Icon(Icons.publish),
       ),
     );
   }

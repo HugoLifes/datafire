@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 class TrabajadorCard extends StatefulWidget {
   final Map<String, dynamic> trabajador;
 
-  const TrabajadorCard({Key? key, required this.trabajador});
+  const TrabajadorCard({super.key, Key? customKey, required this.trabajador});
 
   @override
   State<TrabajadorCard> createState() => _TrabajadorCardState();

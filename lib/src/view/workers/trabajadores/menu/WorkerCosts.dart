@@ -1,4 +1,3 @@
-import 'dart:ffi';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/abonos.service.dart';
@@ -62,7 +61,7 @@ class _WorkerCostsTabState extends State<WorkerCostsTab> {
                       children: <Widget>[
                         ListTile(
                           leading: const Icon(Icons.summarize),
-                          title: Text("\$${totalCosts}"),
+                          title: Text("\$$totalCosts"),
                           subtitle: const Text("Costo total del trabajador"),
                         ),
                         ListTile(

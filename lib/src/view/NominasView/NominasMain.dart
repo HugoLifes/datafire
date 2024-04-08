@@ -43,14 +43,14 @@ class _NominasMainState extends State<NominasMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarDatafire(
+      appBar: const AppBarDatafire(
           title: "Nominas", description: "Registro y generación de nóminas."),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: Theme.of(context).primaryColor,
         label:
             const Text("Generar Nómina", style: TextStyle(color: Colors.white)),
         onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => NominasView())),
+            context, MaterialPageRoute(builder: (context) => const NominasView())),
         icon: const Icon(Icons.group_add, color: Colors.white),
       ),
       body: allNominas.isNotEmpty
@@ -139,7 +139,7 @@ class _NominasMainState extends State<NominasMain> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(nomina['workerName'],
-              style: TextStyle(fontWeight: FontWeight.bold)),
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           content: SingleChildScrollView(
             child: ListBody(
               children: <Widget>[
@@ -174,7 +174,7 @@ class _NominasMainState extends State<NominasMain> {
     return ListTile(
       leading: Icon(icon, color: Theme.of(context).primaryColor),
       title: Text(title),
-      trailing: Text(trailing, style: TextStyle(fontWeight: FontWeight.bold)),
+      trailing: Text(trailing, style: const TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 

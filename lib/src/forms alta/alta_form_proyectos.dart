@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/cliente.servicio.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
@@ -164,9 +163,9 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
               onPressed: () {
                Navigator.of(context).pop();
                 // Guarda la relación entre el proyecto y los clientes seleccionados
-                clientesSeleccionados.forEach((clienteId) {
+                for (var clienteId in clientesSeleccionados) {
                   PostCustomerProject().addCustomerProject(projectId, clienteId);
-                });
+                }
 
                 
               },

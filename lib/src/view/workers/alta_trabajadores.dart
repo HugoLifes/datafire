@@ -25,8 +25,8 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(kToolbarHeight),
+            appBar: const PreferredSize(
+              preferredSize: Size.fromHeight(kToolbarHeight),
               child: AppBarDatafire(title: "Trabajadores", description: "Administra y da de alta tu trabajadores")
             ),
       floatingActionButton: FloatingActionButton.extended(

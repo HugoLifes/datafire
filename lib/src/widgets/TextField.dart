@@ -5,7 +5,7 @@ class CustomTextField extends StatelessWidget {
   final String labelText;
   final String validationMessage;
 
-  CustomTextField({
+  const CustomTextField({super.key, 
     required this.controller,
     required this.labelText,
     required this.validationMessage,

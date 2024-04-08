@@ -69,8 +69,9 @@ class _DetallesYEditarTrabajadoresPageState
   }
 
   Widget buildDetailsSection(Map<String, dynamic>? trabajador) {
-    if (trabajador == null)
+    if (trabajador == null) {
       return const Center(child: Text("No hay información del trabajador."));
+    }
     return SingleChildScrollView(
       child: Column(
         children: trabajador.entries
@@ -81,7 +82,7 @@ class _DetallesYEditarTrabajadoresPageState
                     leading: Icon(Icons.person_outline,
                         color: Theme.of(context).primaryColor),
                     title: Text(entry.key,
-                        style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: const TextStyle(fontWeight: FontWeight.bold)),
                     subtitle: Text('${entry.value}'),
                   ),
                 ))
@@ -112,7 +113,7 @@ class _DetallesYEditarTrabajadoresPageState
                         leading: Icon(Icons.work_outline,
                             color: Theme.of(context).primaryColor),
                         title: Text(project['project_name'],
-                            style: TextStyle(fontWeight: FontWeight.bold)),
+                            style: const TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text("ID: ${project['project_id']}"),
                       ),
                     ))
