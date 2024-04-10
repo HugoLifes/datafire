@@ -1,75 +1,98 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_pdfview/flutter_pdfview.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:typed_data';
 
-class Window1 extends StatefulWidget {
-  final int projectId;
+class Window1 extends StatelessWidget {
+  final Map<String, dynamic>? proyecto;
 
-  const Window1({Key? key, required this.projectId}) : super(key: key);
+  const Window1({Key? key, this.proyecto}) : super(key: key);
 
   @override
-  _Window1State createState() => _Window1State();
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          proyecto != null ? buildProjectDetails(context) : buildEmptyState(),
+        ],
+      ),
+    );
+  }
+
+  Widget buildProjectDetails(BuildContext context) {
+    List<Widget> projectDetails = proyecto!.entries.map((entry) {
+      return Card(
+        elevation: 4.0,
+        margin: const EdgeInsets.all(8.0),
+        child: ListTile(
+          leading: const Icon(Icons.check_circle_outline),
+          title: Text(entry.key, style: const TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text('${entry.value}'),
+        ),
+      );
+    }).toList();
+
+    projectDetails.add(
+      Card(
+        margin: const EdgeInsets.all(8.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ElevatedButton(
+            onPressed: () => _viewPDF(context, proyecto!['id']),
+            child: const Text('Ver PDF'),
+          ),
+        ),
+      ),
+    );
+
+    return Column(
+      children: projectDetails,
+    );
+  }
+
+  Widget buildEmptyState() {
+    return const Center(
+      child: Text('No hay detalles del proyecto para mostrar.'),
+    );
+  }
+
+  Future<void> _viewPDF(BuildContext context, int projectId) async {
+    String url = 'http://localhost:3000/Api/v1/proyectos/$projectId/pdf';
+    try {
+      var response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        Uint8List pdfData = response.bodyBytes;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PDFViewerPage(pdfData: pdfData),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Error al obtener el PDF')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error al conectarse a la API: $e')),
+      );
+    }
+  }
 }
 
-class _Window1State extends State<Window1> {
-  String? pdfPath;
+class PDFViewerPage extends StatelessWidget {
+  final Uint8List pdfData;
 
-  @override
-  void initState() {
-    super.initState();
-    // Aquí haces la llamada a la API para obtener el PDF
-    // Reemplaza "getPdfPath" con el método adecuado para obtener el PDF
-    getPdfPath(widget.projectId).then((path) {
-      setState(() {
-        pdfPath = path;
-      });
-    });
-  }
+  const PDFViewerPage({Key? key, required this.pdfData}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Detalles del proyecto'),
+        title: const Text('Vista previa del PDF'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            pdfPath != null
-                ? Container(
-                    height: 400, // Ajusta la altura según sea necesario
-                    child: PDFView(
-                      filePath: pdfPath!,
-                    ),
-                  )
-                : Center(
-                    child: CircularProgressIndicator(),
-                  ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Función para imprimir el PDF
-                if (pdfPath != null) {
-                  // Lógica para imprimir el PDF
-                  // Esto puede variar según la plataforma
-                  // Por ejemplo, para Android puedes usar la plataforma 'android_intent'
-                  // y para iOS 'url_launcher'
-                }
-              },
-              child: Text('Imprimir PDF'),
-            ),
-          ],
-        ),
-      ),
+      body: SfPdfViewer.memory(pdfData),
     );
-  }
-
-  // Método para obtener el path del PDF desde la API
-  Future<String?> getPdfPath(int projectId) async {
-    // Realiza la llamada a la API para obtener el PDF y retorna el path
-    // Reemplaza esta lógica con la llamada real a tu API
-    // Ejemplo:
-    // String pdfPath = await myApiService.getPdfPath(projectId);
-    // return pdfPath;
-    return "http://localhost:3000/Api/v1/proyectos/$projectId/pdf";
   }
 }
