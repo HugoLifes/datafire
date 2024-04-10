@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:http/http.dart' as http;
 import 'dart:typed_data';
+import 'package:printing/printing.dart';
 
 class Window1 extends StatelessWidget {
   final Map<String, dynamic>? proyecto;
@@ -26,7 +27,8 @@ class Window1 extends StatelessWidget {
         margin: const EdgeInsets.all(8.0),
         child: ListTile(
           leading: const Icon(Icons.check_circle_outline),
-          title: Text(entry.key, style: const TextStyle(fontWeight: FontWeight.bold)),
+          title: Text(entry.key,
+              style: const TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text('${entry.value}'),
         ),
       );
@@ -91,8 +93,20 @@ class PDFViewerPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Vista previa del PDF'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.print),
+            onPressed: () => _printPDF(context),
+          ),
+        ],
       ),
       body: SfPdfViewer.memory(pdfData),
+    );
+  }
+
+  Future<void> _printPDF(BuildContext context) async {
+    await Printing.layoutPdf(
+      onLayout: (format) => pdfData,
     );
   }
 }
