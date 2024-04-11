@@ -68,7 +68,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                     child: TabBarView(
                       children: [
                         // Detalles (Window 1)
-                        Window1(projectId: widget.proyecto?['id']),
+                        Window1(proyecto: widget.proyecto),
 
                         // Clientes Asociados (window 2)
                         Container(
