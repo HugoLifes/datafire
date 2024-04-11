@@ -95,14 +95,13 @@ class _FinancesViewState extends State<FinancesView> {
           Expanded(
             flex: 2,
             child: DefaultTabController(
-              length: 5,
+              length: 4,
               child: Column(
                 children: [
                   const TabBar(tabs: [
-                    Tab(text: "egresos"),
-                    Tab(text: "ingresos"),
-                    Tab(text: "Noominas"),
-                    Tab(text: "flujo"),
+                    Tab(text: "Egresos"),
+                    Tab(text: "Ingresos"),
+                    Tab(text: "Flujo"),
                     Tab(text: "  Cuentas por cobrar")
                   ]),
                   Expanded(

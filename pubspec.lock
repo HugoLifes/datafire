@@ -211,6 +211,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_pdfview:
+    dependency: "direct main"
+    description:
+      name: flutter_pdfview
+      sha256: a9055bf920c7095bf08c2781db431ba23577aa5da5a056a7152dc89a18fbec6f
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.2"
   flutter_styled_toast:
     dependency: "direct main"
     description:
@@ -357,14 +365,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.2"
-  logger:
-    dependency: transitive
-    description:
-      name: logger
-      sha256: "7ad7215c15420a102ec687bb320a7312afd449bac63bfb1c60d9787c27b9767f"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.0"
   logging:
     dependency: transitive
     description:
@@ -397,14 +397,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
-  mutex:
-    dependency: transitive
-    description:
-      name: mutex
-      sha256: "8827da25de792088eb33e572115a5eb0d61d61a3c01acbc8bcbe76ed78f1a1f2"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.1.0"
   nested:
     dependency: transitive
     description:
@@ -414,7 +406,7 @@ packages:
     source: hosted
     version: "1.0.0"
   odoo:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: odoo
       sha256: "3f775f7c3311f69b87f4bfccdcff27880c325d84db58cddbe9077e8ff5dbbf8f"
@@ -429,22 +421,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.3"
-  odoo_repository:
-    dependency: "direct main"
-    description:
-      name: odoo_repository
-      sha256: "59f1d536252f73fc04c29c902ad0b404af8f9a56e2d77563a746b870d5b91e30"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.6"
-  odoo_rpc:
-    dependency: transitive
-    description:
-      name: odoo_rpc
-      sha256: "644a4130ab71e1cab59de193cbc64bda0efb0e801530476b30e4434da6ca84c9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.5.1"
   path:
     dependency: transitive
     description:
@@ -509,14 +485,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.4.0"
-  pedantic:
-    dependency: transitive
-    description:
-      name: pedantic
-      sha256: "67fc27ed9639506c856c840ccce7594d0bdcd91bc8d53d6e52359449a1d50602"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.11.1"
   petitparser:
     dependency: transitive
     description:
