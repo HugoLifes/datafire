@@ -17,25 +17,30 @@ class IngresosWidget extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text('Error: ${snapshot.error}');
         } else {
-          final dataSource = OrderInfoDataSource(snapshot.data as List<Map<String, dynamic>>);
+          final dataSource =
+              OrderInfoDataSource(snapshot.data as List<Map<String, dynamic>>);
           return SfDataGrid(
             source: dataSource,
             columns: [
               GridColumn(
                 columnName: 'startDate',
-                label: const Text('                   Inicio de semana', textAlign: TextAlign.center),
+                label: const Text('                   Inicio de proyecto',
+                    textAlign: TextAlign.center),
               ),
               GridColumn(
                 columnName: 'endDate',
-                label: const Text('                          Fin de semana', textAlign: TextAlign.center),
+                label: const Text('                          Fin de proyecto',
+                    textAlign: TextAlign.center),
               ),
               GridColumn(
                 columnName: 'weeklyCost',
-                label: const Text('Costo Semanal', textAlign: TextAlign.center),
+                label:
+                    const Text('   Costo Semanal', textAlign: TextAlign.center),
               ),
               GridColumn(
                 columnName: 'totalWeeklyCost',
-                label: const Text('Total Semanal', textAlign: TextAlign.center),
+                label: const Text('    Total Semanal',
+                    textAlign: TextAlign.center),
               ),
             ],
             allowSorting: true,
@@ -54,10 +59,16 @@ class OrderInfoDataSource extends DataGridSource {
   OrderInfoDataSource(List<Map<String, dynamic>> data) {
     _dataGridRows = data
         .map<DataGridRow>((e) => DataGridRow(cells: [
-              DataGridCell<String>(columnName: 'startDate', value: _formatDate(e['startDate'])),
-              DataGridCell<String>(columnName: 'endDate', value: _formatDate(e['endDate'])),
-              DataGridCell<List<Widget>>(columnName: 'weeklyCost', value: _formatWeeklyCost(e['abonos'])),
-              DataGridCell<double>(columnName: 'totalWeeklyCost', value: (e['totalWeeklyAbonos'] ?? 0.0).toDouble()),
+              DataGridCell<String>(
+                  columnName: 'startDate', value: _formatDate(e['startDate'])),
+              DataGridCell<String>(
+                  columnName: 'endDate', value: _formatDate(e['endDate'])),
+              DataGridCell<List<Widget>>(
+                  columnName: 'weeklyCost',
+                  value: _formatWeeklyCost(e['abonos'])),
+              DataGridCell<double>(
+                  columnName: 'totalWeeklyCost',
+                  value: (e['totalWeeklyAbonos'] ?? 0.0).toDouble()),
             ]))
         .toList();
   }
@@ -68,7 +79,8 @@ class OrderInfoDataSource extends DataGridSource {
     }
 
     final DateTime date = DateTime.parse(dateStr);
-    final DateFormat formatter = DateFormat('dd-MM-yyyy'); // Ajusta el formato según tus preferencias
+    final DateFormat formatter =
+        DateFormat('dd-MM-yyyy'); // Ajusta el formato según tus preferencias
     return formatter.format(date);
   }
 

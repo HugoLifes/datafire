@@ -24,7 +24,7 @@ Future<List<dynamic>> fetchTrabajadores() async {
 Future<void> updateTrabajador(int id, String nombre, String lastName, int edad,
     String position, int salary) async {
   final url =
-      "https://datafire-production.up.railway.app/api/v1/trabajadores/$id";
+      "https://datafire-production.up.railway.app/api/v1/trabajadores/SalaryUpdate/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
@@ -40,10 +40,17 @@ Future<void> updateTrabajador(int id, String nombre, String lastName, int edad,
     );
 
     if (res.statusCode == 200) {
+      print(res.statusCode);
+      print(res.body);
     } else if (res.statusCode == 404) {
-    } else {}
+    } else {
+      print(res.statusCode);
+      print(res.body);
+    }
     // ignore: empty_catches
-  } catch (err) {}
+  } catch (err) {
+    print(err);
+  }
 }
 
 Future<void> deleteTrabajador(int id) async {

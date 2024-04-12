@@ -10,8 +10,7 @@ class EditarTrabajadoresForm extends StatefulWidget {
       : super(key: key);
 
   @override
-  _EditarTrabajadoresFormState createState() =>
-      _EditarTrabajadoresFormState();
+  _EditarTrabajadoresFormState createState() => _EditarTrabajadoresFormState();
 }
 
 class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
@@ -47,34 +46,33 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             CustomTextField(
-              controller: _nombreController,
+                controller: _nombreController,
                 labelText: 'Nombre del Trabajador',
-                validationMessage: 'Por favor, ingresa el nombre del Trabajador'
-            ),
+                validationMessage:
+                    'Por favor, ingresa el nombre del Trabajador'),
             const SizedBox(height: 16.0),
             CustomTextField(
-              controller: _apellidosController,
+                controller: _apellidosController,
                 labelText: 'Apellidos',
-                validationMessage: 'Por favor, ingresa los apellidos del trabajador'
-            ),
+                validationMessage:
+                    'Por favor, ingresa los apellidos del trabajador'),
             const SizedBox(height: 16.0),
             CustomTextField(
-              controller: _edadController,
+                controller: _edadController,
                 labelText: 'Edad',
-                validationMessage: 'Por favor, ingresa la edad del trabajador'
-            ),
+                validationMessage: 'Por favor, ingresa la edad del trabajador'),
             const SizedBox(height: 16.0),
             CustomTextField(
-              controller: _cargoController,
+                controller: _cargoController,
                 labelText: 'Posicion',
-                validationMessage: 'Por favor, ingresa la posición del trabajador'
-            ),
+                validationMessage:
+                    'Por favor, ingresa la posición del trabajador'),
             const SizedBox(height: 16.0),
             CustomTextField(
-              controller: _salarioController,
+                controller: _salarioController,
                 labelText: 'Salario',
-                validationMessage: 'Por favor, ingresa el salario del trabajador'
-            ),
+                validationMessage:
+                    'Por favor, ingresa el salario del trabajador'),
             const SizedBox(height: 16.0),
             SizedBox(
               width: double.infinity,
@@ -99,15 +97,16 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                         position: cargo,
                         salario: int.parse(salary),
                       );
-                      Navigator.pop(context);
+
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => const SuccessfulScreen(),
                         ),
                       );
-                    // ignore: empty_catches
+                      // ignore: empty_catches
                     } catch (error) {
+                      print(error);
                     }
                   }
                 },
@@ -119,9 +118,7 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
               width: double.infinity,
               child: IconButton.filled(
                 icon: const Icon(Icons.delete_forever),
-                style: IconButton.styleFrom(
-                  backgroundColor: Colors.red
-                ),
+                style: IconButton.styleFrom(backgroundColor: Colors.red),
                 onPressed: () async {
                   showDialog(
                     context: context,
@@ -140,14 +137,12 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                           TextButton(
                             onPressed: () async {
                               try {
-                                Navigator.of(context)
-                                    .pop(); 
+                                Navigator.of(context).pop();
                                 await trabajadorInstance.eliminarTrabajador(
                                     widget.trabajador?['id']);
                                 Navigator.pop(context);
-                              // ignore: empty_catches
-                              } catch (error) {
-                              }
+                                // ignore: empty_catches
+                              } catch (error) {}
                             },
                             child: const Text('Confirmar'),
                           ),

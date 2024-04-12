@@ -37,6 +37,7 @@ class _FinancesViewState extends State<FinancesView> {
         'https://datafire-production.up.railway.app/Api/v1/proyectos/egresos'));
 
     if (response.statusCode == 200) {
+      print(response.body);
       debugPrint("cargado con éxito");
       return List<Map<String, dynamic>>.from(json.decode(response.body));
     } else {
@@ -49,6 +50,7 @@ class _FinancesViewState extends State<FinancesView> {
         'https://datafire-production.up.railway.app/Api/v1/proyectos/ingresos'));
 
     if (response.statusCode == 200) {
+      print(response.body);
       debugPrint("cargado con éxito");
       return List<Map<String, dynamic>>.from(json.decode(response.body));
     } else {

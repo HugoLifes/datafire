@@ -24,20 +24,20 @@ class EgresosWidget extends StatelessWidget {
             columns: [
               GridColumn(
                   columnName: 'startDate',
-                  label: const Text('Inicio de semana',
+                  label: const Text('                      Inicio de proyecto',
                       textAlign: TextAlign.center)),
               GridColumn(
                   columnName: 'endDate',
-                  label:
-                      const Text('Fin de semana', textAlign: TextAlign.center)),
+                  label: const Text('                Fin de proyecto',
+                      textAlign: TextAlign.center)),
               GridColumn(
                   columnName: 'weeklyCost',
-                  label:
-                      const Text('Costo Semanal', textAlign: TextAlign.center)),
+                  label: const Text('                Costo Semanal',
+                      textAlign: TextAlign.center)),
               GridColumn(
                   columnName: 'totalWeeklyCost',
-                  label:
-                      const Text('Total Semanal', textAlign: TextAlign.center)),
+                  label: const Text('        Total Semanal',
+                      textAlign: TextAlign.center)),
             ],
             allowSorting: true,
             allowFiltering: true,

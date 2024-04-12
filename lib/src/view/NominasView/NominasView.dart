@@ -101,8 +101,8 @@ class _NominasViewState extends State<NominasView> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Selección inválida'),
-            content:
-                const Text('Por favor, selecciona un lunes para iniciar la semana.'),
+            content: const Text(
+                'Por favor, selecciona un lunes para iniciar la semana.'),
             actions: <Widget>[
               TextButton(
                 child: const Text('OK'),
@@ -142,7 +142,8 @@ class _NominasViewState extends State<NominasView> {
                     'Semana del ${DateFormat('dd/MM/yyyy').format(fechaInicioSemana!)} al ${DateFormat('dd/MM/yyyy').format(fechaFinSemana!)}'),
                 TextField(
                   controller: horasTrabajadasController,
-                  decoration: const InputDecoration(labelText: 'Horas trabajadas'),
+                  decoration:
+                      const InputDecoration(labelText: 'Horas trabajadas'),
                   keyboardType: TextInputType.number,
                 ),
                 TextField(
@@ -222,7 +223,7 @@ class _NominasViewState extends State<NominasView> {
     });
   }
 
-  void _enviarDatosNomina(Map<String, dynamic> nominaData) async {
+  Future _enviarDatosNomina(Map<String, dynamic> nominaData) async {
     try {
       final response = await http.post(
         Uri.parse(
@@ -233,8 +234,9 @@ class _NominasViewState extends State<NominasView> {
         body: jsonEncode(nominaData),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         // Manejar la respuesta exitosa aquí
+        print(response.body);
         print(
             "Datos enviados correctamente para el trabajador ID: ${nominaData['worker_id']}");
       } else {
