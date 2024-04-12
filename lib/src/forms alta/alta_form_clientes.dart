@@ -47,13 +47,15 @@ class _AltaClientePageState extends State<AltaClientePage> {
                 CustomTextField(
                   controller: _apellidoController,
                   labelText: 'Apellidos',
-                  validationMessage: 'Por favor, ingresa los apellidos del cliente',
+                  validationMessage:
+                      'Por favor, ingresa los apellidos del cliente',
                 ),
                 const SizedBox(height: 16.0),
                 CustomTextField(
                   controller: _companyController,
                   labelText: 'Compañia',
-                  validationMessage: 'Por favor, ingresa la compañía a la que pertenece el cliente',
+                  validationMessage:
+                      'Por favor, ingresa la compañía a la que pertenece el cliente',
                 ),
                 const SizedBox(height: 16.0),
                 SizedBox(
@@ -71,29 +73,25 @@ class _AltaClientePageState extends State<AltaClientePage> {
     );
   }
 
+  void _saveCliente() {
+    if (_formKey.currentState!.validate()) {
+      String nombreCliente = _nombreController.text;
+      String apellidoCliente = _apellidoController.text;
+      String companyCliente = _companyController.text;
 
-void _saveCliente() {
-  if (_formKey.currentState!.validate()) {
-    String nombreCliente = _nombreController.text;
-    String apellidoCliente = _apellidoController.text;
-    String companyCliente = _companyController.text;
+      // Create a new Clientes instance
+      Clientes cliente = Clientes(
+          nombre: nombreCliente,
+          apellido: apellidoCliente,
+          company: companyCliente);
 
-    // Create a new Clientes instance
-    Clientes cliente = Clientes(
-      nombre: nombreCliente,
-      apellido: apellidoCliente,
-      company: companyCliente
-    );
-
-    // Lógica para dar de alta el cliente
-    cliente.nuevoCliente();
-
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const SuccessfulScreen()),
-    );
+      // Lógica para dar de alta el cliente
+      cliente.nuevoCliente();
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const SuccessfulScreen()),
+      );
+    }
   }
-}
-
 }

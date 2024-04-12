@@ -58,6 +58,8 @@ dependencies:
   printing: ^5.12.0
   intl: any 
   image: ^4.1.7
+  syncfusion_flutter_charts: ^20.4.54
+  
 
 dev_dependencies:
   flutter_test:

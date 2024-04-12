@@ -48,6 +48,7 @@ class _CardTotalsState extends State<CardTotals> {
     channel.stream.listen((message) {
       print("Datos recibidos del socket: $message");
       final proyectoActualizado = jsonDecode(message);
+
       setState(() {
         updateProjectInfo(proyectoActualizado);
       });
@@ -56,6 +57,7 @@ class _CardTotalsState extends State<CardTotals> {
 
   void updateProjectInfo(dynamic proyecto) {
     // Asegúrate de que los campos aquí coincidan con los que envías desde el backend
+
     costoController.text = proyecto["costo"].toString();
     abonadoController.text = proyecto["abonado"].toString();
     remainingController.text = proyecto["remaining"].toString();
@@ -77,8 +79,14 @@ class _CardTotalsState extends State<CardTotals> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         _buildCard("Total:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
-        _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
-        _buildCard("Restante:", "\$$remaining", Colors.deepOrange, Colors.red),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
+            _buildCard("Ganancia:", "\$0", Colors.greenAccent, Colors.green),
+          ],
+        ),
+        _buildCard("Balance:", "\$$remaining", Colors.deepOrange, Colors.red),
       ],
     );
   }
