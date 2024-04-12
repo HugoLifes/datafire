@@ -18,6 +18,8 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
   DateTime? _inicioDate;
   DateTime? _finDate;
   final _initialCostController = TextEditingController();
+  final _presupuestoController = TextEditingController();
+  final _anticipoController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +82,18 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                  validationMessage: 'Por favor, ingresa el costo inicial'
               ),
               const SizedBox(height: 16.0),
+                            CustomTextField(
+                controller: _presupuestoController,
+                  labelText: 'Presupuesto',
+                 validationMessage: 'Por favor, ingresa El presupuesto'
+              ),
+              const SizedBox(height: 16.0),
+                            CustomTextField(
+                controller: _anticipoController,
+                  labelText: 'Anticipo',
+                 validationMessage: 'Por favor, ingresa la cantidad del anticipo'
+              ),
+              const SizedBox(height: 16.0),
               SizedBox(
                 width: double.infinity,
                 child: FilledButton(
@@ -89,8 +103,10 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                       String fechaInicio = _inicioDate.toString();
                       String fechaFinalizada = _finDate.toString();
                       String costo = _initialCostController.text;
+                      String presupuesto = _presupuestoController.text;
+                      String anticipo = _anticipoController.text;
 
-                      String? projectId = await obtenerIdProyecto(nombre, fechaInicio, fechaFinalizada, costo);
+                      String? projectId = await obtenerIdProyecto(nombre, fechaInicio, fechaFinalizada, costo, presupuesto, anticipo);
 
                       if (projectId != null) {
                         _selectClientsDialog(projectId);
