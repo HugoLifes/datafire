@@ -13,7 +13,7 @@ class NominasView extends StatefulWidget {
 class _NominasViewState extends State<NominasView> {
   DateTime? fechaInicioSemana;
   DateTime? fechaFinSemana;
-  Map<String, Map<String, dynamic>> trabajadoresDatos = {};
+  Map<String, dynamic> trabajadoresDatos = {};
   List<String> trabajadores = [];
 
   @override
@@ -23,27 +23,20 @@ class _NominasViewState extends State<NominasView> {
   }
 
   Future<void> fetchTrabajadores() async {
-    const url =
-        "https://datafire-production.up.railway.app/Api/v1/trabajadores";
+    const url = "https://datafire-production.up.railway.app/Api/v1/trabajadores";
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
-          trabajadores = data
-              .map<String>((trabajador) =>
-                  "${trabajador["id"]} ${trabajador['name']} ${trabajador['last_name']} ${trabajador['salary_hour']}")
-              .toList();
-          for (var trabajador in data) {
-            trabajadoresDatos[trabajador["id"].toString()] = {
-              'completado': false,
-              'horasTrabajadas': 0,
-              'horasExtra': 0,
-              'salary_hour': trabajador['salary_hour'] != null
-                  ? double.parse(trabajador['salary_hour'].toString())
-                  : 0.0,
-            };
-          }
+          trabajadores = List<String>.from(data.map((trabajador) =>
+              "${trabajador['id']} ${trabajador['name']} ${trabajador['last_name']} \$${trabajador['salary_hour']} por hora"));
+          trabajadoresDatos = Map.fromIterable(data, key: (trabajador) => trabajador['id'].toString(), value: (trabajador) => {
+            'completado': false,
+            'horasTrabajadas': 0,
+            'horasExtra': 0,
+            'salary_hour': double.tryParse(trabajador['salary_hour'].toString()) ?? 0.0,
+          });
         });
       } else {
         throw Exception('Failed to load trabajadores');
@@ -54,126 +47,59 @@ class _NominasViewState extends State<NominasView> {
   }
 
   double calcularTotalSemanal() {
-    double totalSemanal = 0.0;
-    trabajadoresDatos.forEach((id, datos) {
-      if (datos['completado']) {
-        final double salaryHour = datos['salary_hour'];
-        final int horasTrabajadas = datos['horasTrabajadas'];
-        final int horasExtra = datos['horasExtra'];
-        final double salarioTotal = salaryHour * (horasTrabajadas + horasExtra);
-        totalSemanal += salarioTotal;
-      }
-    });
-    return totalSemanal;
+    return trabajadoresDatos.values.where((datos) => datos['completado']).fold(0.0, (total, datos) => 
+      total + datos['salary_hour'] * (datos['horasTrabajadas'] + datos['horasExtra']));
   }
 
-  void _seleccionarSemana(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2025),
-    );
-    if (picked != null && picked.weekday == DateTime.monday) {
-      DateTime startOfWeek =
-          DateTime.utc(picked.year, picked.month, picked.day);
-      DateTime endOfWeek = DateTime.utc(picked.year, picked.month, picked.day)
-          .add(const Duration(days: 6));
-      setState(() {
-        fechaInicioSemana = startOfWeek;
-        fechaFinSemana = endOfWeek;
-      });
-    } else if (picked != null) {
-      // Si el día seleccionado no es lunes, se ajusta para comenzar desde el lunes más cercano anterior
-      int daysToSubtract = picked.weekday - DateTime.monday;
-      DateTime startOfWeek = DateTime.utc(picked.year, picked.month, picked.day)
-          .subtract(Duration(days: daysToSubtract));
-      DateTime endOfWeek = DateTime.utc(picked.year, picked.month, picked.day)
-          .subtract(Duration(days: daysToSubtract))
-          .add(const Duration(days: 6));
-      setState(() {
-        fechaInicioSemana = startOfWeek;
-        fechaFinSemana = endOfWeek;
-      });
-    } else {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Selección inválida'),
-            content: const Text(
-                'Por favor, selecciona un lunes para iniciar la semana.'),
-            actions: <Widget>[
-              TextButton(
-                child: const Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-  }
-
-  void _mostrarDialogoNomina(String trabajadorId) {
+  void generarNomina() async {
     if (fechaInicioSemana == null || fechaFinSemana == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              "Por favor, selecciona primero las fechas de inicio y fin de la semana.")));
+        content: Text("Por favor, selecciona las fechas de inicio y fin de la semana."),
+      ));
+      return;
+    }
+    if (trabajadoresDatos.values.any((datos) => !datos['completado'])) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("No todos los trabajadores están completados."),
+      ));
       return;
     }
 
-    final TextEditingController horasTrabajadasController =
-        TextEditingController();
-    final TextEditingController horasExtraController = TextEditingController();
+    List<Future> nominasFutures = [];
 
+    String fechaInicio = fechaInicioSemana!.toIso8601String();
+    String fechaFin = fechaFinSemana!.toIso8601String();
+
+    trabajadoresDatos.forEach((id, datos) {
+      if (datos['completado']) {
+        var nominaData = {
+          "fecha_inicio_semana": fechaInicio,
+          "fecha_fin_semana": fechaFin,
+          "worker_id": int.parse(id),
+          "nombre": trabajadores.firstWhere((nombre) => nombre.startsWith(id)).split(" ").sublist(1).join(" "),
+          "salary_hour": datos['salary_hour'],
+          "horas_trabajadas": datos['horasTrabajadas'],
+          "horas_extra": datos['horasExtra'],
+        };
+        nominasFutures.add(enviarDatosNomina(nominaData));
+      }
+    });
+
+    await Future.wait(nominasFutures);
+
+    // Muestra un diálogo de éxito y cierra la pantalla actual
     showDialog(
       context: context,
+      barrierDismissible: false,  
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
-              'Ingresar Nómina para ${trabajadores.firstWhere((nombre) => nombre.startsWith(trabajadorId)).split(" ").skip(1).join(" ")}'),
-          content: SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Text(
-                    'Semana del ${DateFormat('dd/MM/yyyy').format(fechaInicioSemana!)} al ${DateFormat('dd/MM/yyyy').format(fechaFinSemana!)}'),
-                TextField(
-                  controller: horasTrabajadasController,
-                  decoration:
-                      const InputDecoration(labelText: 'Horas trabajadas'),
-                  keyboardType: TextInputType.number,
-                ),
-                TextField(
-                  controller: horasExtraController,
-                  decoration: const InputDecoration(labelText: 'Horas extra'),
-                  keyboardType: TextInputType.number,
-                ),
-              ],
-            ),
-          ),
+          title: const Text("Éxito"),
+          content: const Text("Las nóminas han sido creadas con éxito."),
           actions: <Widget>[
             TextButton(
-                child: const Text('Cancelar'),
-                onPressed: () => Navigator.of(context).pop()),
-            TextButton(
-              child: const Text('Guardar'),
+              child: const Text('OK'),
               onPressed: () {
-                final int horasTrabajadas =
-                    int.tryParse(horasTrabajadasController.text) ?? 0;
-                final int horasExtra =
-                    int.tryParse(horasExtraController.text) ?? 0;
-                setState(() {
-                  trabajadoresDatos[trabajadorId] = {
-                    ...trabajadoresDatos[trabajadorId]!,
-                    'completado': true,
-                    'horasTrabajadas': horasTrabajadas,
-                    'horasExtra': horasExtra,
-                  };
-                });
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Cierra el diálogo
               },
             ),
           ],
@@ -182,66 +108,14 @@ class _NominasViewState extends State<NominasView> {
     );
   }
 
-  void _generarNomina() {
-    if (fechaInicioSemana == null || fechaFinSemana == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text(
-              "Por favor, selecciona las fechas de inicio y fin de la semana.")));
-      return;
-    }
-    if (trabajadoresDatos.values.any((datos) => !datos['completado'])) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("No todos los trabajadores están completados.")));
-      return;
-    }
-
-    final DateFormat formatter = DateFormat('yyyy-MM-dd');
-    String fechaInicio = formatter.format(fechaInicioSemana!);
-    String fechaFin = formatter.format(fechaFinSemana!);
-
-    trabajadoresDatos.forEach((idTrabajador, trabajadorDatos) {
-      if (!trabajadorDatos['completado']) {
-        print("Faltan datos para el trabajador con ID: $idTrabajador");
-        return;
-      }
-
-      final Map<String, dynamic> nominaData = {
-        "fecha_inicio_semana": fechaInicio,
-        "fecha_fin_semana": fechaFin,
-        "worker_id": int.parse(idTrabajador),
-        "nombre": trabajadores
-            .firstWhere((nombre) => nombre.startsWith(idTrabajador))
-            .split(" ")
-            .sublist(1)
-            .join(" "),
-        "salary_hour": trabajadorDatos['salary_hour'] ?? 1.0,
-        "horas_trabajadas": trabajadorDatos['horasTrabajadas'],
-        "horas_extra": trabajadorDatos['horasExtra'],
-      };
-
-      _enviarDatosNomina(nominaData);
-    });
-  }
-
-  Future _enviarDatosNomina(Map<String, dynamic> nominaData) async {
+  Future<void> enviarDatosNomina(Map<String, dynamic> nominaData) async {
+    const url = "https://datafire-production.up.railway.app/Api/v1/nominasSemanales";
     try {
-      final response = await http.post(
-        Uri.parse(
-            "https://datafire-production.up.railway.app/Api/v1/nominasSemanales"),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: jsonEncode(nominaData),
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        // Manejar la respuesta exitosa aquí
-        print(response.body);
-        print(
-            "Datos enviados correctamente para el trabajador ID: ${nominaData['worker_id']}");
+      final response = await http.post(Uri.parse(url), headers: {'Content-Type': 'application/json; charset=UTF-8'}, body: jsonEncode(nominaData));
+      if (response.statusCode == 200) {
+        print("Datos enviados correctamente para el trabajador ID: ${nominaData['worker_id']}");
       } else {
-        print(
-            "Error en la solicitud: ${response.statusCode}, ${response.body}");
+        print("Error en la solicitud: ${response.statusCode}, ${response.body}");
       }
     } catch (e) {
       print("Error al enviar datos: $e");
@@ -250,17 +124,11 @@ class _NominasViewState extends State<NominasView> {
 
   @override
   Widget build(BuildContext context) {
-    double totalSemanal = calcularTotalSemanal();
-
     return Scaffold(
-      appBar: AppBar(
+            appBar: AppBar(
         title: const Text("Nóminas"),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.calendar_today),
-            onPressed: () => _seleccionarSemana(context),
-            tooltip: 'Seleccionar Semana',
-          ),
+          IconButton(icon: const Icon(Icons.calendar_today), onPressed: () => seleccionarSemana(context), tooltip: 'Seleccionar Semana'),
         ],
       ),
       body: Column(
@@ -268,11 +136,7 @@ class _NominasViewState extends State<NominasView> {
           if (fechaInicioSemana != null && fechaFinSemana != null)
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                'Semana de nómina: ${DateFormat('dd/MM/yyyy').format(fechaInicioSemana!)} - ${DateFormat('dd/MM/yyyy').format(fechaFinSemana!)}',
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
+              child: Text('Semana de nómina: ${DateFormat('dd/MM/yyyy').format(fechaInicioSemana!)} - ${DateFormat('dd/MM/yyyy').format(fechaFinSemana!)}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
           Expanded(
             child: ListView.builder(
@@ -280,36 +144,16 @@ class _NominasViewState extends State<NominasView> {
               itemBuilder: (context, index) {
                 final trabajadorId = trabajadores[index].split(" ")[0];
                 final trabajadorDatos = trabajadoresDatos[trabajadorId]!;
-
-                final int horasTrabajadas =
-                    trabajadorDatos['horasTrabajadas'] ?? 0;
-                final int horasExtra = trabajadorDatos['horasExtra'] ?? 0;
-                final double salaryHour = trabajadorDatos['salary_hour'] ?? 0.0;
-                final double salarioTotal =
-                    salaryHour * (horasTrabajadas + horasExtra);
+                final double salarioTotal = trabajadorDatos['salary_hour'] * (trabajadorDatos['horasTrabajadas'] + trabajadorDatos['horasExtra']);
 
                 return Card(
-                  color: trabajadorDatos['completado']
-                      ? Colors.green[400]
-                      : Colors.white,
+                  color: trabajadorDatos['completado'] ? Colors.green[400] : Colors.white,
                   elevation: 4,
-                  margin:
-                      const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                   child: ListTile(
                     title: Text(trabajadores[index]),
-                    subtitle: trabajadorDatos['completado']
-                        ? Text(
-                            "Total a pagar: \$${salarioTotal.toStringAsFixed(2)}")
-                        : null,
-                    trailing: Icon(
-                      trabajadorDatos['completado']
-                          ? Icons.check_circle_outline
-                          : Icons.radio_button_unchecked,
-                      color: trabajadorDatos['completado']
-                          ? Colors.white
-                          : Colors.grey,
-                    ),
-                    onTap: () => _mostrarDialogoNomina(trabajadorId),
+                    subtitle: trabajadorDatos['completado'] ? Text("Total a pagar: \$${salarioTotal.toStringAsFixed(2)}") : null,
+                    onTap: () => mostrarDialogoNomina(trabajadorId),
                   ),
                 );
               },
@@ -317,19 +161,78 @@ class _NominasViewState extends State<NominasView> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Total Semanal: \$${totalSemanal.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+            child: Text('Total Semanal: \$${calcularTotalSemanal().toStringAsFixed(2)}', style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _generarNomina,
+        onPressed: generarNomina,
         backgroundColor: Colors.green,
         tooltip: 'Generar Nómina',
         child: const Icon(Icons.publish),
       ),
+    );
+  }
+
+  Future<void> seleccionarSemana(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2025),
+    );
+    if (picked != null) {
+      setState(() {
+        fechaInicioSemana = DateTime(picked.year, picked.month, picked.day - (picked.weekday - DateTime.monday));
+        fechaFinSemana = fechaInicioSemana!.add(const Duration(days: 6));
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Selección inválida, por favor selecciona un lunes para iniciar la semana.'),
+      ));
+    }
+  }
+
+
+  void mostrarDialogoNomina(String trabajadorId) {
+    if (fechaInicioSemana == null || fechaFinSemana == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Por favor, selecciona primero las fechas de inicio y fin de la semana."),
+      ));
+      return;
+    }
+    final TextEditingController horasTrabajadasController = TextEditingController();
+    final TextEditingController horasExtraController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Ingresar Nómina para ${trabajadores.firstWhere((nombre) => nombre.startsWith(trabajadorId)).split(" ").skip(1).join(" ")}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Semana del ${DateFormat('dd/MM/yyyy').format(fechaInicioSemana!)} al ${DateFormat('dd/MM/yyyy').format(fechaFinSemana!)}'),
+              TextField(controller: horasTrabajadasController, decoration: const InputDecoration(labelText: 'Horas trabajadas'), keyboardType: TextInputType.number),
+              TextField(controller: horasExtraController, decoration: const InputDecoration(labelText: 'Horas extra'), keyboardType: TextInputType.number),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(child: const Text('Cancelar'), onPressed: () => Navigator.of(context).pop()),
+            TextButton(
+              child: const Text('Guardar'),
+              onPressed: () {
+                setState(() {
+                  trabajadoresDatos[trabajadorId]!['completado'] = true;
+                  trabajadoresDatos[trabajadorId]!['horasTrabajadas'] = int.tryParse(horasTrabajadasController.text) ?? 0;
+                  trabajadoresDatos[trabajadorId]!['horasExtra'] = int.tryParse(horasExtraController.text) ?? 0;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
