@@ -51,10 +51,10 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
               ),
               const SizedBox(height: 16.0),
               CustomTextField(
-                controller: _nombreController,
+                  controller: _nombreController,
                   labelText: 'Nombre del Proyecto',
-                  validationMessage:'Por favor, ingresa el nombre del proyecto'
-              ),
+                  validationMessage:
+                      'Por favor, ingresa el nombre del proyecto'),
               const SizedBox(height: 16.0),
               _buildDateTimePicker(
                 labelText: 'Fecha de inicio',
@@ -98,11 +98,12 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: () async {
-                    if (_formKey.currentState!.validate()  || _initialCostController.text == '0') {
+                    if (_formKey.currentState!.validate() ||
+                        _initialCostController.text == '0') {
                       String nombre = _nombreController.text;
                       String fechaInicio = _inicioDate.toString();
                       String fechaFinalizada = _finDate.toString();
-                      String costo = _initialCostController.text;
+                      String costo = "0";
                       String presupuesto = _presupuestoController.text;
                       String anticipo = _anticipoController.text;
 
@@ -110,16 +111,13 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
 
                       if (projectId != null) {
                         _selectClientsDialog(projectId);
-                        Navigator.pop(context);
-
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const SuccessfulScreen(),
                           ),
                         );
-                      } else {
-                      }
+                      } else {}
                     }
                   },
                   child: const Text('Guardar'),
@@ -146,7 +144,8 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
               return SingleChildScrollView(
                 child: Column(
                   children: clientes.map((cliente) {
-                    bool isSelected = clientesSeleccionados.contains(cliente["id"]?.toString() ?? "");
+                    bool isSelected = clientesSeleccionados
+                        .contains(cliente["id"]?.toString() ?? "");
 
                     return CheckboxListTile(
                       title: Text(cliente["name"]?.toString() ?? ""),
@@ -155,9 +154,11 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                         setState(() {
                           if (value != null) {
                             if (value) {
-                              clientesSeleccionados.add(cliente["id"]?.toString() ?? "");
+                              clientesSeleccionados
+                                  .add(cliente["id"]?.toString() ?? "");
                             } else {
-                              clientesSeleccionados.remove(cliente["id"]?.toString() ?? "");
+                              clientesSeleccionados
+                                  .remove(cliente["id"]?.toString() ?? "");
                             }
                           }
                         });
@@ -177,13 +178,12 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
             ),
             TextButton(
               onPressed: () {
-               Navigator.of(context).pop();
+                Navigator.of(context).pop();
                 // Guarda la relación entre el proyecto y los clientes seleccionados
                 for (var clienteId in clientesSeleccionados) {
-                  PostCustomerProject().addCustomerProject(projectId, clienteId);
+                  PostCustomerProject()
+                      .addCustomerProject(projectId, clienteId);
                 }
-
-                
               },
               child: const Text("Guardar"),
             ),
@@ -233,4 +233,3 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
     );
   }
 }
-

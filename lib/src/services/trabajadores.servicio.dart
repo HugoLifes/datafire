@@ -23,8 +23,7 @@ Future<List<dynamic>> fetchTrabajadores() async {
 
 Future<void> updateTrabajador(int id, String nombre, String lastName, int edad,
     String position, int salary) async {
-  final url =
-      "https://datafire-production.up.railway.app/api/v1/trabajadores/SalaryUpdate/$id";
+  final url = "http://localhost:3000/api/v1/trabajadores/SalaryUpdate/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
