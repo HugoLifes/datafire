@@ -39,7 +39,7 @@ class _CardTotalsState extends State<CardTotals> {
         text: widget.proyecto?["remaining"].toString() ?? "0");
     costo = widget.proyecto?["costo"].toString() ?? "0";
     abonado = widget.proyecto?["abonado"].toString() ?? "0";
-    remaining = widget.proyecto?["remaining"].toString() ?? "0";
+    remaining = widget.proyecto?["presupuesto"].toString() ?? "0";
   }
 
   void setupWebSocket() {
@@ -56,12 +56,9 @@ class _CardTotalsState extends State<CardTotals> {
   }
 
   void updateProjectInfo(dynamic proyecto) {
-    // Asegúrate de que los campos aquí coincidan con los que envías desde el backend
-
     costoController.text = proyecto["costo"].toString();
     abonadoController.text = proyecto["abonado"].toString();
     remainingController.text = proyecto["remaining"].toString();
-    // Actualizar los valores late
     costo = proyecto["costo"].toString();
     abonado = proyecto["abonado"].toString();
     remaining = proyecto["remaining"].toString();
@@ -78,7 +75,7 @@ class _CardTotalsState extends State<CardTotals> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        _buildCard("Total:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
+        _buildCard("Gastado:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
         Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -86,7 +83,7 @@ class _CardTotalsState extends State<CardTotals> {
             _buildCard("Ganancia:", "\$0", Colors.greenAccent, Colors.green),
           ],
         ),
-        _buildCard("Balance:", "\$$remaining", Colors.deepOrange, Colors.red),
+        _buildCard("Presupuesto:", "\$$remaining", Colors.deepOrange, Colors.red),
       ],
     );
   }
@@ -94,7 +91,7 @@ class _CardTotalsState extends State<CardTotals> {
   Widget _buildCard(
       String title, String value, Color startColor, Color endColor) {
     return Container(
-      width: 150.0,
+      width: 170.0,
       padding: const EdgeInsets.all(10),
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(

@@ -3,6 +3,7 @@ import 'package:datafire/src/view/Projects/proyectosCard/menu/window2/window2.da
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window3/window3.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/window4.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window5/window5.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window6/window6.dart';
 import 'package:flutter/material.dart';
 
 import 'package:datafire/src/view/Projects/proyectosCard/form_editarProyecto.dart';
@@ -52,7 +53,7 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
           Expanded(
             flex: 1,
             child: DefaultTabController(
-              length: 5,
+              length: 6,
               child: Column(
                 children: [
                   const TabBar(
@@ -61,7 +62,8 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                       Tab(text: 'Clientes Asociados'),
                       Tab(text: 'Trabajadores'),
                       Tab(text: "Costos"),
-                      Tab(text: "Abonos")
+                      Tab(text: "Abonos"),
+                      Tab(text: "Ajustes")
                     ],
                   ),
                   Expanded(
@@ -88,7 +90,10 @@ class _DetallesYAltaProyectoPageState extends State<DetallesYAltaProyectoPage> {
                         Tab4Content(
                             idProyecto: _idProyecto,
                             costoInicial: _costoInicialController.text),
-                        Tab5Content(idProyecto: _idProyecto)
+
+                        Tab5Content(idProyecto: _idProyecto),
+                        Tab6Content(idProyecto: _idProyecto),
+
                       ],
                     ),
                   ),

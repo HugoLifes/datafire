@@ -38,7 +38,6 @@ class _HomeState extends State<Home> {
         });
       }
     } catch (e) {
-      // Consider logging or showing an error message
     }
   }
 
@@ -57,9 +56,7 @@ class _HomeState extends State<Home> {
       Colors.cyan,
       Colors.deepOrange,
     ]);
-
     totalProjects = data['totalProjects'];
-
     pieChartSections =
         (data['projectsByMonth'] as List).asMap().entries.map((entry) {
       final projectCount =
@@ -91,7 +88,6 @@ class _HomeState extends State<Home> {
           duration: Duration(seconds: 3)),
     );
   }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -117,7 +113,6 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-
   Widget _buildCard(Size size, String title, Widget chart) {
     return Container(
       margin: const EdgeInsets.only(top: 35, left: 20, right: 20, bottom: 20),
