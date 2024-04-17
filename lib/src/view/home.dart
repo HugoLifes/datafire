@@ -3,7 +3,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'dart:math';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:datafire/src/widgets/card.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -119,7 +118,7 @@ class _HomeState extends State<Home> {
                 "Proyectos de los últimos 12 meses",
                 pieChartSections.isNotEmpty
                     ? PieChart(_pieChartData())
-                    : const CircularProgressIndicator()),
+                    : Center(child: const CircularProgressIndicator())),
           ],
         ),
       ),

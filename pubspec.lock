@@ -762,6 +762,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.1"
+  two_dimensional_scrollables:
+    dependency: "direct main"
+    description:
+      name: two_dimensional_scrollables
+      sha256: "89efe069f9eb312ef590ca500943effe702acd52f05f98218895f01cc636330b"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   typed_data:
     dependency: transitive
     description:

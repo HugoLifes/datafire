@@ -19,6 +19,7 @@ class _CardTotalsState extends State<CardTotals> {
   late String abonado;
   late String remaining;
   late IOWebSocketChannel channel;
+  late int ganancia;
 
   @override
   void initState() {
@@ -40,6 +41,7 @@ class _CardTotalsState extends State<CardTotals> {
     costo = widget.proyecto?["costo"].toString() ?? "0";
     abonado = widget.proyecto?["abonado"].toString() ?? "0";
     remaining = widget.proyecto?["presupuesto"].toString() ?? "0";
+    ganancia = widget.proyecto?['abonado'] - widget.proyecto?['costo'] ?? "0";
   }
 
   void setupWebSocket() {
@@ -62,6 +64,7 @@ class _CardTotalsState extends State<CardTotals> {
     costo = proyecto["costo"].toString();
     abonado = proyecto["abonado"].toString();
     remaining = proyecto["remaining"].toString();
+    ganancia = proyecto["abonado"] - proyecto['costo'];
   }
 
   @override
@@ -72,19 +75,25 @@ class _CardTotalsState extends State<CardTotals> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildCard("Gastado:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
-            _buildCard("Ganancia:", "\$0", Colors.greenAccent, Colors.green),
-          ],
-        ),
-        _buildCard("Presupuesto:", "\$$remaining", Colors.deepOrange, Colors.red),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildCard(
+              "Gastado:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
+              _buildCard("Ganancia:", "\$${ganancia.toString()}",
+                  Colors.greenAccent, Colors.green),
+            ],
+          ),
+          _buildCard(
+              "Presupuesto:", "\$$remaining", Colors.deepOrange, Colors.red),
+        ],
+      ),
     );
   }
 

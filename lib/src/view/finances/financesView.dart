@@ -5,6 +5,7 @@ import 'package:datafire/src/view/finances/menu/Flujo.dart';
 import 'package:datafire/src/view/finances/menu/cuentasPorCobrar.dart';
 import 'package:datafire/src/view/finances/menu/ingresos.dart'
     hide OrderInfoDataSource;
+import 'package:datafire/src/view/finances/menu/new_ingresos.dart';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -110,7 +111,7 @@ class _FinancesViewState extends State<FinancesView> {
                     child: TabBarView(
                       children: [
                         Egresos.EgresosWidget(fetchDataFuture: fetchDataFuture),
-                        IngresosWidget(fetchDataFuture: fetchIngresosFuture),
+                        Ingresos(),
                         FlujoWidget(fetchDataFuture: fetchFlujData),
                         CobrarWidget(fetchDataFuture: fetchCobrarData)
                       ],
