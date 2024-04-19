@@ -21,6 +21,7 @@ class _CardTotalsState extends State<CardTotals> {
   late String presupuesto;
   late String ganancia;
   late IOWebSocketChannel channel;
+  late int ganancia;
 
   @override
   void initState() {

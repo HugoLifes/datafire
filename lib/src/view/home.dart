@@ -3,9 +3,9 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
-import 'dart:math';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:datafire/src/widgets/card.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -18,11 +18,14 @@ class _HomeState extends State<Home> {
   late int totalProjects;
   late List<PieChartSectionData> pieChartSections = [];
   late List<FlSpot> costData = [];
+  late List<ChartData> chartData = [];
+  late TooltipBehavior _tooltipBehavior;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _showWelcomeMessage());
+    _tooltipBehavior = TooltipBehavior(enable: true);
     fetchData();
   }
 
@@ -32,12 +35,19 @@ class _HomeState extends State<Home> {
     try {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonData = json.decode(response.body);
         final data = json.decode(response.body);
         setState(() {
           _updateChartData(data);
+          chartData = (jsonData['CostsByMonth'] as List)
+              .map(
+                (e) => ChartData.fromJson(e),
+              )
+              .toList();
         });
       }
     } catch (e) {
+      print(e);
     }
   }
 
@@ -74,11 +84,11 @@ class _HomeState extends State<Home> {
       );
     }).toList();
 
-    costData = (data['CostsByMonth'] as List).asMap().entries.map((entry) {
+    /* costData = (data['CostsByMonth'] as List).asMap().entries.map((entry) {
       final totalExpense =
           double.tryParse(entry.value['totalExpense'].toString()) ?? 0.0;
       return FlSpot(entry.key.toDouble(), totalExpense);
-    }).toList();
+    }).toList();*/
   }
 
   void _showWelcomeMessage() {
@@ -88,6 +98,7 @@ class _HomeState extends State<Home> {
           duration: Duration(seconds: 3)),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -101,18 +112,19 @@ class _HomeState extends State<Home> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildCard(size, "Ganancia", LineChart(_lineChartData())),
+            _buildCard(size, "Ganancia", _cartesianChart()),
             _buildCard(
                 size,
                 "Proyectos de los últimos 12 meses",
                 pieChartSections.isNotEmpty
                     ? PieChart(_pieChartData())
-                    : const CircularProgressIndicator()),
+                    : Center(child: const CircularProgressIndicator())),
           ],
         ),
       ),
     );
   }
+
   Widget _buildCard(Size size, String title, Widget chart) {
     return Container(
       margin: const EdgeInsets.only(top: 35, left: 20, right: 20, bottom: 20),
@@ -124,7 +136,8 @@ class _HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.only(left: 15, top: 6),
             child: Text(title,
-                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 20),
           SizedBox(height: 200, child: chart),
@@ -133,38 +146,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  LineChartData _lineChartData() => LineChartData(
-        gridData: FlGridData(show: false),
-        titlesData: FlTitlesData(
-          bottomTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 22,
-            getTextStyles: (context, value) => const TextStyle(
-                color: Color(0xff68737d),
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
-            getTitles: (value) => _getMonthLabel(value.toInt()),
-            margin: 8,
-          ),
-        ),
-        borderData:
-            FlBorderData(show: true, border: Border.all(color: Colors.grey)),
-        minX: 0,
-        maxX: 11,
-        minY: 0,
-        maxY: costData.isNotEmpty
-            ? costData.map((spot) => spot.y).reduce(max)
-            : 1,
-        lineBarsData: [
-          LineChartBarData(
-            spots: costData,
-            isCurved: true,
-            colors: [Colors.blue],
-            belowBarData: BarAreaData(show: false),
-          ),
-        ],
-      );
-
   PieChartData _pieChartData() => PieChartData(
         sections: pieChartSections,
         sectionsSpace: 0,
@@ -172,6 +153,41 @@ class _HomeState extends State<Home> {
         startDegreeOffset: -90,
         borderData: FlBorderData(show: false),
         centerSpaceColor: Colors.transparent,
+      );
+
+  SfCartesianChart _cartesianChart() => SfCartesianChart(
+        enableAxisAnimation: true,
+        primaryXAxis: CategoryAxis(),
+        primaryYAxis: NumericAxis(
+            numberFormat:
+                NumberFormat.compactCurrency(locale: 'es_MX', symbol: '\$')),
+        tooltipBehavior: _tooltipBehavior,
+        series: <CartesianSeries>[
+          LineSeries<ChartData, String>(
+              enableTooltip: true,
+              dataSource: chartData,
+              width: 5,
+              pointColorMapper: (ChartData data, _) => data.color,
+              xValueMapper: (ChartData data, _) =>
+                  _getMonthLabel(DateTime.parse(data.month).month),
+              yValueMapper: (ChartData data, _) => data.totalExpense.toDouble(),
+              markerSettings: const MarkerSettings(
+                  color: Colors.green,
+                  borderColor: Colors.black,
+                  borderWidth: 3,
+                  shape: DataMarkerType.circle,
+                  width: 4,
+                  height: 4,
+                  isVisible: true),
+              dataLabelSettings: const DataLabelSettings(
+                  useSeriesColor: true,
+                  textStyle: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'Roboto',
+                      fontWeight: FontWeight.w500),
+                  isVisible: true,
+                  labelAlignment: ChartDataLabelAlignment.auto))
+        ],
       );
 
   String _getMonthLabel(int value) {
@@ -203,5 +219,17 @@ class _HomeState extends State<Home> {
       default:
         return '';
     }
+  }
+}
+
+class ChartData {
+  ChartData(this.month, this.totalExpense, this.color);
+  final String month;
+  final double totalExpense;
+  final Color? color;
+
+  factory ChartData.fromJson(Map<String, dynamic> json) {
+    return ChartData(
+        json['month'], double.parse(json['totalExpense']), Colors.blue);
   }
 }
