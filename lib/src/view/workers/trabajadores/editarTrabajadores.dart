@@ -1,3 +1,5 @@
+import 'package:datafire/src/view/workers/trabajadores/menu/Tools.dart';
+
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/view/workers/trabajadores/menu/WorkerCosts.dart';
@@ -27,7 +29,7 @@ class _DetallesYEditarTrabajadoresPageState
           Expanded(
             flex: 1,
             child: DefaultTabController(
-              length: 3,
+              length: 4,
               child: Column(
                 children: [
                   const TabBar(
@@ -35,6 +37,7 @@ class _DetallesYEditarTrabajadoresPageState
                       Tab(text: 'Detalles'),
                       Tab(text: 'Proyectos'),
                       Tab(text: 'Costo Empresa semanal'),
+                      Tab(text: 'Herramientas'),
                     ],
                   ),
                   Expanded(
@@ -47,6 +50,10 @@ class _DetallesYEditarTrabajadoresPageState
                         // Costo Empresa semanal
                         WorkerCostsTab(
                           idProyecto: widget.trabajador!["id"].toString(),
+                          salary: widget.trabajador!["salary"],
+                        ),
+                        ToolsTab(
+                          workerId: widget.trabajador!["id"].toString(),
                           salary: widget.trabajador!["salary"],
                         ),
                       ],

@@ -85,7 +85,7 @@ Future<void> updateAbono(int id, String monto, String fechaAbono,
 
 Future<void> deleteAjuste(int id) async {
   final url =
-      "https://datafire-production.up.railway.app/api/v1/proyectos/abonos/$id";
+      "http://localhost:3000/Api/v1/ajustes/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(
