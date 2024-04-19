@@ -60,6 +60,7 @@ dependencies:
   image: ^4.1.7
   syncfusion_flutter_charts: ^20.4.54
   two_dimensional_scrollables: ^0.2.0
+  adaptive_theme: ^3.6.0
   
 
 dev_dependencies:

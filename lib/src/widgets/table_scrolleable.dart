@@ -1,3 +1,4 @@
+import 'package:datafire/src/model/ingresos_model.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -5,7 +6,8 @@ import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
 class TableTemplate extends StatefulWidget {
   late final ScrollController verticalController = ScrollController();
-  TableTemplate({super.key, required verticalController});
+  List<IngresosScheme>? ingresoScheme = [];
+  TableTemplate({super.key, required verticalController, this.ingresoScheme});
 
   @override
   State<TableTemplate> createState() => _TableTemplateState();
@@ -26,42 +28,90 @@ class _TableTemplateState extends State<TableTemplate> {
         elevation: 4,
         clipBehavior: Clip.antiAlias,
         child: TableView.builder(
-          verticalDetails:
-              ScrollableDetails.vertical(controller: widget.verticalController),
-          cellBuilder: (BuildContext ctx, TableVicinity vicinity) {
-            final isStickyHeader = vicinity.xIndex == 0 || vicinity.yIndex == 0;
-            return TableViewCell(
-                child: ColoredBox(
-              color:
-                  isStickyHeader ? Colors.transparent : colorScheme.background,
-              child: Center(
-                child: FittedBox(
-                    child: Padding(
-                        padding: const EdgeInsets.all(8),
-                        child: Text(
-                            'Tile c: ${vicinity.column}, r: ${vicinity.row}',
-                            style: TextStyle(
-                              fontWeight:
-                                  isStickyHeader ? FontWeight.w600 : null,
-                              color:
-                                  isStickyHeader ? null : colorScheme.outline,
-                            )))),
-              ),
-            ));
-          },
-          columnBuilder: (index) {
-            return TableSpan(
-                foregroundDecoration: index == 0 ? decoration : null,
-                extent: const FractionalTableSpanExtent(1 / 8));
-          },
-          rowBuilder: (index) {
-            return TableSpan(
-                foregroundDecoration: index == 0 ? decoration : null,
-                extent: const FixedTableSpanExtent(50));
-          },
-          columnCount: 20,
-          rowCount: _rowCount,
-        ),
+            verticalDetails: ScrollableDetails.vertical(
+                controller: widget.verticalController),
+            cellBuilder: (BuildContext ctx, TableVicinity vicinity) {
+              final isStickyHeader =
+                  vicinity.xIndex == 0 || vicinity.yIndex == 0;
+              var label = '';
+              if (vicinity.yIndex == 0) {
+                switch (vicinity.xIndex) {
+                  case 0:
+                    label = 'ID';
+                    break;
+                  case 1:
+                    label = 'Nombre';
+                    break;
+                  case 2:
+                    label = 'Fecha Inicio';
+                    break;
+                  case 3:
+                    label = 'Fecha Final';
+                    break;
+                  case 4:
+                    label = 'Pago total';
+                    break;
+                  case 5:
+                    label = 'Fecha de pago';
+                }
+              } else {
+                final ingresoCount = widget.ingresoScheme?[vicinity.yIndex - 1];
+                final abonoCount = widget.ingresoScheme?[vicinity.yIndex - 1]
+                    .abonos[vicinity.yIndex];
+                switch (vicinity.xIndex) {
+                  case 0:
+                    label = vicinity.yIndex.toString();
+                    break;
+                  case 1:
+                    label = abonoCount!.projectName;
+                    break;
+                  case 2:
+                    label =
+                        '${ingresoCount?.startDate.day}/${ingresoCount?.startDate.month}/${ingresoCount?.startDate.year}';
+                    break;
+                  case 3:
+                    label =
+                        '${ingresoCount?.endDate.day}/${ingresoCount?.endDate.month}/${ingresoCount?.endDate.year}';
+                    break;
+                  case 4:
+                    label = ingresoCount!.totalWeeklyAbonos.toString();
+                    break;
+                  case 5:
+                    label =
+                        '${abonoCount!.date.day}/${abonoCount.date.month}/${abonoCount.date.year}';
+                }
+              }
+              return TableViewCell(
+                  child: ColoredBox(
+                color: isStickyHeader
+                    ? Colors.transparent
+                    : colorScheme.background,
+                child: Center(
+                  child: FittedBox(
+                      child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Text(label,
+                              style: TextStyle(
+                                fontWeight:
+                                    isStickyHeader ? FontWeight.w600 : null,
+                                color:
+                                    isStickyHeader ? null : colorScheme.outline,
+                              )))),
+                ),
+              ));
+            },
+            columnBuilder: (index) {
+              return TableSpan(
+                  foregroundDecoration: index == 0 ? decoration : null,
+                  extent: const FractionalTableSpanExtent(1 / 6));
+            },
+            rowBuilder: (index) {
+              return TableSpan(
+                  foregroundDecoration: index == 0 ? decoration : null,
+                  extent: const FixedTableSpanExtent(50));
+            },
+            columnCount: 15,
+            rowCount: 58),
       ),
       persistentFooterButtons: [
         TextButton(
@@ -88,57 +138,6 @@ class _TableTemplateState extends State<TableTemplate> {
   // construye las celdas
 
   //construye las columnas
-  TableSpan _buildColumnSpan(int index) {
-    const TableSpanDecoration decoration = TableSpanDecoration(
-      border: TableSpanBorder(
-        trailing: BorderSide(),
-      ),
-    );
-
-    switch (index % 5) {
-      case 0:
-        return TableSpan(
-          foregroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(100),
-          onEnter: (_) => print('Entered column $index'),
-          recognizerFactories: <Type, GestureRecognizerFactory>{
-            TapGestureRecognizer:
-                GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
-              () => TapGestureRecognizer(),
-              (TapGestureRecognizer t) =>
-                  t.onTap = () => print('Tap column $index'),
-            ),
-          },
-        );
-      case 1:
-        return TableSpan(
-          foregroundDecoration: decoration,
-          extent: const FractionalTableSpanExtent(0.5),
-          onEnter: (_) => print('Entered column $index'),
-          cursor: SystemMouseCursors.contextMenu,
-        );
-      case 2:
-        return TableSpan(
-          foregroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(120),
-          onEnter: (_) => print('Entered column $index'),
-        );
-      case 3:
-        return TableSpan(
-          foregroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(145),
-          onEnter: (_) => print('Entered column $index'),
-        );
-      case 4:
-        return TableSpan(
-          foregroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(200),
-          onEnter: (_) => print('Entered column $index'),
-        );
-    }
-    throw AssertionError(
-        'This should be unreachable, as every index is accounted for in the switch clauses.');
-  }
 
   //construye las filas
   TableSpan _buildRowSpan(int index) {
