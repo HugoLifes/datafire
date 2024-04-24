@@ -21,7 +21,6 @@ class _CardTotalsState extends State<CardTotals> {
   late String presupuesto;
   late String ganancia;
   late IOWebSocketChannel channel;
-  late int ganancia;
 
   @override
   void initState() {
@@ -49,7 +48,7 @@ class _CardTotalsState extends State<CardTotals> {
   }
 
   void setupWebSocket() {
-    channel = IOWebSocketChannel.connect('ws://localhost:3000');
+    channel = IOWebSocketChannel.connect('ws://datafire-production.up.railway.app');
 
     channel.stream.listen((message) {
       print("Datos recibidos del socket: $message");
@@ -65,11 +64,11 @@ class _CardTotalsState extends State<CardTotals> {
     gastadoController.text = proyecto["costo"].toString();
     abonadoController.text = proyecto["abonado"].toString();
     presupuestoController.text = proyecto["presupuesto"].toString();
-    presupuestoController.text = proyecto["ganancia"].toString();
+    gananciaController.text = proyecto["ganancia"].toString();
     costo = proyecto["costo"].toString();
     abonado = proyecto["abonado"].toString();
     presupuesto = proyecto["presupuesto"].toString();
-    presupuesto = proyecto["ganancia"].toString();
+    ganancia = proyecto["ganancia"].toString();
   }
 
   @override
