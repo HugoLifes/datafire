@@ -3,7 +3,7 @@ import 'package:datafire/src/view/Projects/proyectosCard/menu/window2/window2.da
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window3/window3.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window4/window4.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window5/window5.dart';
-import 'package:datafire/src/view/Projects/proyectosCard/menu/window6/window6.dart';
+import 'package:datafire/src/view/Projects/proyectosCard/menu/window6Adjustemns/window6.dart';
 import 'package:flutter/material.dart';
 
 import 'package:datafire/src/view/Projects/proyectosCard/form_editarProyecto.dart';

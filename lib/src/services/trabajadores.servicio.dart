@@ -104,3 +104,62 @@ Future<List<dynamic>> fetchWorkerCostsById(String projectId) async {
     return [];
   }
 }
+
+//tools service
+Future<List<dynamic>> fetchWorkerToolsById(String projectId) async {
+  const url =
+      "http://localhost:3000/Api/v1/trabajadores/tools";
+
+  try {
+    final res = await http.get(Uri.parse('$url?projecto_id=$projectId'));
+    if (res.statusCode == 200) {
+      final List<dynamic> costs = jsonDecode(res.body);
+      return costs;
+    } else {
+      return [];
+    }
+  } catch (err) {
+    return [];
+  }
+}
+
+Future<void> postTools(
+    String tool_name, String cost, String workerId, String fecha_adquisicion) async {
+  const url =
+      "http://localhost:3000/Api/v1/trabajadores/tools";
+
+  Map<String, String> headers = await getAuthHeaders();
+
+  try {
+    final res = await http.post(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json", ...headers},
+      body: jsonEncode({
+        "tool_name": tool_name,
+        "cost": cost,
+        "worker_id": workerId,
+        "fecha_adquisicion": fecha_adquisicion
+      }),
+    );
+    if (res.statusCode == 200) {
+    } else {}
+    // ignore: empty_catches
+  } catch (err) {}
+}
+
+Future<void> deleteTool(int id) async {
+  final url =
+      "http://localhost:3000/Api/v1/trabajadores/tools/$id";
+
+  Map<String, String> headers = await getAuthHeaders();
+
+  try {
+    final res = await http.delete(
+      Uri.parse(url),
+      headers: {"Content-Type": "application/json", ...headers},
+    );
+    if (res.statusCode == 200) {
+    } else {}
+    // ignore: empty_catches
+  } catch (err) {}
+}

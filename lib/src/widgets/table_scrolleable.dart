@@ -145,9 +145,57 @@ class _TableTemplateState extends State<TableTemplate> {
     );
   }
 
-  // construye las celdas
+  TableSpan _buildColumnSpan(int index) {
+    const TableSpanDecoration decoration = TableSpanDecoration(
+      border: TableSpanBorder(
+        trailing: BorderSide(),
+      ),
+    );
 
-  //construye las columnas
+    switch (index % 5) {
+      case 0:
+        return TableSpan(
+          foregroundDecoration: decoration,
+          extent: const FixedTableSpanExtent(100),
+          onEnter: (_) => print('Entered column $index'),
+          recognizerFactories: <Type, GestureRecognizerFactory>{
+            TapGestureRecognizer:
+                GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
+              () => TapGestureRecognizer(),
+              (TapGestureRecognizer t) =>
+                  t.onTap = () => print('Tap column $index'),
+            ),
+          },
+        );
+      case 1:
+        return TableSpan(
+          foregroundDecoration: decoration,
+          extent: const FractionalTableSpanExtent(0.5),
+          onEnter: (_) => print('Entered column $index'),
+          cursor: SystemMouseCursors.contextMenu,
+        );
+      case 2:
+        return TableSpan(
+          foregroundDecoration: decoration,
+          extent: const FixedTableSpanExtent(120),
+          onEnter: (_) => print('Entered column $index'),
+        );
+      case 3:
+        return TableSpan(
+          foregroundDecoration: decoration,
+          extent: const FixedTableSpanExtent(145),
+          onEnter: (_) => print('Entered column $index'),
+        );
+      case 4:
+        return TableSpan(
+          foregroundDecoration: decoration,
+          extent: const FixedTableSpanExtent(200),
+          onEnter: (_) => print('Entered column $index'),
+        );
+    }
+    throw AssertionError(
+        'This should be unreachable, as every index is accounted for in the switch clauses.');
+  }
 
   //construye las filas
 }

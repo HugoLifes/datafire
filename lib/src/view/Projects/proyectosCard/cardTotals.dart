@@ -12,14 +12,15 @@ class CardTotals extends StatefulWidget {
 }
 
 class _CardTotalsState extends State<CardTotals> {
-  late TextEditingController costoController;
+  late TextEditingController gastadoController;
   late TextEditingController abonadoController;
-  late TextEditingController remainingController;
+  late TextEditingController presupuestoController;
+  late TextEditingController gananciaController;
   late String costo;
   late String abonado;
-  late String remaining;
+  late String presupuesto;
+  late String ganancia;
   late IOWebSocketChannel channel;
-  late int ganancia;
 
   @override
   void initState() {
@@ -32,16 +33,18 @@ class _CardTotalsState extends State<CardTotals> {
   }
 
   void initializeControllersAndValues() {
-    costoController = TextEditingController(
+    gastadoController = TextEditingController(
         text: widget.proyecto?["costo"].toString() ?? "0");
     abonadoController = TextEditingController(
         text: widget.proyecto?["abonado"].toString() ?? "0");
-    remainingController = TextEditingController(
-        text: widget.proyecto?["remaining"].toString() ?? "0");
+    presupuestoController = TextEditingController(
+        text: widget.proyecto?["presupuesto"].toString() ?? "0");
+    gananciaController = TextEditingController(
+        text: widget.proyecto?["ganancia"].toString() ?? "0");
     costo = widget.proyecto?["costo"].toString() ?? "0";
     abonado = widget.proyecto?["abonado"].toString() ?? "0";
-    remaining = widget.proyecto?["presupuesto"].toString() ?? "0";
-    ganancia = widget.proyecto?['abonado'] - widget.proyecto?['costo'] ?? "0";
+    presupuesto = widget.proyecto?["presupuesto"].toString() ?? "0";
+    ganancia = widget.proyecto?["ganancia"].toString() ?? "0";
   }
 
   void setupWebSocket() {
@@ -59,13 +62,14 @@ class _CardTotalsState extends State<CardTotals> {
   }
 
   void updateProjectInfo(dynamic proyecto) {
-    costoController.text = proyecto["costo"].toString();
+    gastadoController.text = proyecto["costo"].toString();
     abonadoController.text = proyecto["abonado"].toString();
-    remainingController.text = proyecto["remaining"].toString();
+    presupuestoController.text = proyecto["presupuesto"].toString();
+    gananciaController.text = proyecto["ganancia"].toString();
     costo = proyecto["costo"].toString();
     abonado = proyecto["abonado"].toString();
-    remaining = proyecto["remaining"].toString();
-    ganancia = proyecto["abonado"] - proyecto['costo'];
+    presupuesto = proyecto["presupuesto"].toString();
+    ganancia = proyecto["ganancia"].toString();
   }
 
   @override
@@ -76,25 +80,21 @@ class _CardTotalsState extends State<CardTotals> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildCard(
-              "Gastado:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
-              _buildCard("Ganancia:", "\$${ganancia.toString()}",
-                  Colors.greenAccent, Colors.green),
-            ],
-          ),
-          _buildCard(
-              "Presupuesto:", "\$$remaining", Colors.deepOrange, Colors.red),
-        ],
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildCard("Gastado:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
+            _buildCard(
+                "Ganancia:", "\$$ganancia", Colors.greenAccent, Colors.green),
+          ],
+        ),
+        _buildCard(
+            "Presupuesto:", "\$$presupuesto", Colors.deepOrange, Colors.red),
+      ],
     );
   }
 
