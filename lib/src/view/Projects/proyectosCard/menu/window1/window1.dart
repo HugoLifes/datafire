@@ -59,7 +59,8 @@ class Window1 extends StatelessWidget {
   }
 
   Future<void> _viewPDF(BuildContext context, int projectId) async {
-    String url = 'http://localhost:3000/Api/v1/proyectos/$projectId/pdf';
+    String url =
+        'https://datafire-production.up.railway.app/Api/v1/proyectos/$projectId/pdf';
     try {
       var response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {

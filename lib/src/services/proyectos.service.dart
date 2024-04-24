@@ -20,9 +20,14 @@ Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
   }
 }
 
-Future<String?> obtenerIdProyecto(String nombre, String fechaInicio,
-    String fechaFinalizada, String costo, String presupuesto, String anticipo) async {
-  const urlCrearProyecto ="http://localhost:3000/Api/v1/proyectos";
+Future<String?> obtenerIdProyecto(
+    String nombre,
+    String fechaInicio,
+    String fechaFinalizada,
+    String costo,
+    String presupuesto,
+    String anticipo) async {
+  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos";
 
   try {
     Map<String, String> headers = await getAuthHeaders();
@@ -116,7 +121,7 @@ Future<void> updateProyecto(
 }
 
 Future<void> deleteProyecto(int id) async {
-  final url = "http://localhost:3000/api/v1/proyectos/$id";
+  final url = "https://datafire-production.up.railway.app/api/v1/proyectos/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(

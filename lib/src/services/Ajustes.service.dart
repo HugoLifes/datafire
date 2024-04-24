@@ -3,10 +3,9 @@ import 'dart:convert';
 import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
-Future<void> postAjuste(
-    String monto, String fechaAjuste, String projectId, String motive, bool operation) async {
-  const url =
-      "http://localhost:3000/Api/v1/ajustes";
+Future<void> postAjuste(String monto, String fechaAjuste, String projectId,
+    String motive, bool operation) async {
+  const url = "https://datafire-production.up.railway.app/Api/v1/ajustes";
 
   Map<String, String> headers = await getAuthHeaders();
 
@@ -46,8 +45,7 @@ Future<List<dynamic>> fetchAjustes() async {
 }
 
 Future<List<dynamic>> fetchAjustesById(String projectId) async {
-  const url =
-      "http://localhost:3000/Api/v1/ajustes";
+  const url = "https://datafire-production.up.railway.app/Api/v1/ajustes";
 
   try {
     final res = await http.get(Uri.parse('$url?projecto_id=$projectId'));

@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:datafire/src/model/ingresos_model.dart';
+import 'package:datafire/src/model/workers_model.dart';
+import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/finances/menu/Egresos.dart' as Egresos;
 import 'package:datafire/src/view/finances/menu/Flujo.dart';
 import 'package:datafire/src/view/finances/menu/cuentasPorCobrar.dart';
 import 'package:datafire/src/view/finances/menu/ingresos.dart'
     hide OrderInfoDataSource;
+import 'package:datafire/src/view/finances/menu/new_egresos.dart';
 import 'package:datafire/src/view/finances/menu/new_ingresos.dart';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
@@ -39,12 +42,14 @@ class _FinancesViewState extends State<FinancesView> {
   late dynamic ingresos;
   List<IngresosScheme> ingresoScheme = [];
   List<AbonoScheme> abonoScheme = [];
+  List<WorkerScheme> workersScheme = [];
 
   @override
   void initState() {
     super.initState();
     fetchDataFuture = fetchData();
     //fetchIngresosFuture = fetchingresos();
+    dataEgresos();
     dataIngresos();
     fetchCobrarData = fetchCuentasCobrarData();
     fetchFlujData = fetchFlujoData();
@@ -79,6 +84,28 @@ class _FinancesViewState extends State<FinancesView> {
                   endDate: value[i].endDate,
                   abonos: abonoScheme,
                   totalWeeklyAbonos: value[i].totalWeeklyAbonos))
+            }
+        });
+  }
+
+  Future dataEgresos() async {
+    newFetchWorkers().then((value) => {
+          for (int i = 0; i < value.length; i++)
+            {
+              workersScheme.add(WorkerScheme(
+                  id: value[i].id,
+                  name: value[i].name,
+                  lastName: value[i].lastName,
+                  age: value[i].age,
+                  position: value[i].position,
+                  salaryHour: value[i].salaryHour,
+                  semanalHours: value[i].semanalHours,
+                  salary: value[i].salary,
+                  workerCost: value[i].workerCost,
+                  createdAt: value[i].createdAt,
+                  monthCosts: WorkerScheme().pagomensual(value[i].salary),
+                  payxDay: WorkerScheme().pagodiario(value[i].salary),
+                  payxhr: WorkerScheme().pagohora(value[i].salary)))
             }
         });
   }
@@ -134,7 +161,9 @@ class _FinancesViewState extends State<FinancesView> {
                   Expanded(
                     child: TabBarView(
                       children: [
-                        Egresos.EgresosWidget(fetchDataFuture: fetchDataFuture),
+                        NewEgresos(
+                          workersScheme: workersScheme,
+                        ),
                         NewIngresos(
                           ingresoScheme: ingresoScheme,
                         ),

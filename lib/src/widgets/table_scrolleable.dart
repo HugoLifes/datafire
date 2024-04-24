@@ -40,7 +40,7 @@ class _TableTemplateState extends State<TableTemplate> {
                     label = 'ID';
                     break;
                   case 1:
-                    label = 'Nombre';
+                    label = 'Proyecto';
                     break;
                   case 2:
                     label = 'Fecha Inicio';
@@ -63,7 +63,12 @@ class _TableTemplateState extends State<TableTemplate> {
                     label = vicinity.yIndex.toString();
                     break;
                   case 1:
-                    label = abonoCount!.projectName;
+                    if (widget.ingresoScheme?[vicinity.yIndex - 1].abonos ==
+                        null) {
+                      label = "No hay proyecto";
+                    } else {
+                      label = abonoCount!.projectName;
+                    }
                     break;
                   case 2:
                     label =
@@ -77,8 +82,13 @@ class _TableTemplateState extends State<TableTemplate> {
                     label = ingresoCount!.totalWeeklyAbonos.toString();
                     break;
                   case 5:
-                    label =
-                        '${abonoCount!.date.day}/${abonoCount.date.month}/${abonoCount.date.year}';
+                    if (widget.ingresoScheme?[vicinity.yIndex - 1].abonos ==
+                        null) {
+                      label = "No hay pago";
+                    } else {
+                      label =
+                          '${abonoCount!.date.day}/${abonoCount.date.month}/${abonoCount.date.year}';
+                    }
                 }
               }
               return TableViewCell(
@@ -111,7 +121,7 @@ class _TableTemplateState extends State<TableTemplate> {
                   extent: const FixedTableSpanExtent(50));
             },
             columnCount: 15,
-            rowCount: 58),
+            rowCount: widget.ingresoScheme!.length),
       ),
       persistentFooterButtons: [
         TextButton(
@@ -140,43 +150,4 @@ class _TableTemplateState extends State<TableTemplate> {
   //construye las columnas
 
   //construye las filas
-  TableSpan _buildRowSpan(int index) {
-    final TableSpanDecoration decoration = TableSpanDecoration(
-      color: index.isEven ? Colors.purple[100] : null,
-      border: const TableSpanBorder(
-        trailing: BorderSide(
-          width: 3,
-        ),
-      ),
-    );
-
-    switch (index % 3) {
-      case 0:
-        return TableSpan(
-          backgroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(50),
-          recognizerFactories: <Type, GestureRecognizerFactory>{
-            TapGestureRecognizer:
-                GestureRecognizerFactoryWithHandlers<TapGestureRecognizer>(
-              () => TapGestureRecognizer(),
-              (TapGestureRecognizer t) =>
-                  t.onTap = () => print('Tap row $index'),
-            ),
-          },
-        );
-      case 1:
-        return TableSpan(
-          backgroundDecoration: decoration,
-          extent: const FixedTableSpanExtent(65),
-          cursor: SystemMouseCursors.click,
-        );
-      case 2:
-        return TableSpan(
-          backgroundDecoration: decoration,
-          extent: const FractionalTableSpanExtent(0.15),
-        );
-    }
-    throw AssertionError(
-        'This should be unreachable, as every index is accounted for in the switch clauses.');
-  }
 }

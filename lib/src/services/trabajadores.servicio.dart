@@ -1,10 +1,11 @@
 // cliente_network.dart
 import 'dart:convert';
+import 'package:datafire/src/model/workers_model.dart';
 import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchTrabajadores() async {
-  const url = "http://localhost:3000/Api/v1/trabajadores";
+  const url = "https://datafire-production.up.railway.app/Api/v1/trabajadores";
 
   Map<String, String> headers = await getAuthHeaders();
 
@@ -13,6 +14,23 @@ Future<List<dynamic>> fetchTrabajadores() async {
     if (res.statusCode == 200) {
       final List<dynamic> trabajadores = jsonDecode(res.body);
       return trabajadores;
+    } else {
+      return [];
+    }
+  } catch (err) {
+    return [];
+  }
+}
+
+Future<List<Trabajadores>> newFetchWorkers() async {
+  const url = "https://datafire-production.up.railway.app/Api/v1/trabajadores";
+
+  Map<String, String> headers = await getAuthHeaders();
+
+  try {
+    final res = await http.get(Uri.parse(url), headers: headers);
+    if (res.statusCode == 200) {
+      return trabajadoresFromJson(res.body);
     } else {
       return [];
     }
