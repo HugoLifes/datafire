@@ -108,7 +108,7 @@ Future<List<dynamic>> fetchWorkerCostsById(String projectId) async {
 //tools service
 Future<List<dynamic>> fetchWorkerToolsById(String projectId) async {
   const url =
-      "http://localhost:3000/Api/v1/trabajadores/tools";
+      "https://datafire-production.up.railway.app0/Api/v1/trabajadores/tools";
 
   try {
     final res = await http.get(Uri.parse('$url?projecto_id=$projectId'));
@@ -123,10 +123,10 @@ Future<List<dynamic>> fetchWorkerToolsById(String projectId) async {
   }
 }
 
-Future<void> postTools(
-    String tool_name, String cost, String workerId, String fecha_adquisicion) async {
+Future<void> postTools(String tool_name, String cost, String workerId,
+    String fecha_adquisicion) async {
   const url =
-      "http://localhost:3000/Api/v1/trabajadores/tools";
+      "https://datafire-production.up.railway.app/Api/v1/trabajadores/tools";
 
   Map<String, String> headers = await getAuthHeaders();
 
@@ -149,7 +149,7 @@ Future<void> postTools(
 
 Future<void> deleteTool(int id) async {
   final url =
-      "http://localhost:3000/Api/v1/trabajadores/tools/$id";
+      "https://datafire-production.up.railway.app/Api/v1/trabajadores/tools/$id";
 
   Map<String, String> headers = await getAuthHeaders();
 

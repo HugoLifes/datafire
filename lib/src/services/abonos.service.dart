@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 
 Future<void> postAbono(
     String monto, String fechaAbono, String projectId, int customerId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/abonos";
+  const url =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos/abonos";
 
   Map<String, String> headers = await getAuthHeaders();
 

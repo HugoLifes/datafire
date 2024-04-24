@@ -27,7 +27,8 @@ Future<String?> obtenerIdProyecto(
     String costo,
     String presupuesto,
     String anticipo) async {
-  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos";
+  const urlCrearProyecto =
+      "https://datafire-production.up.railway.app/Api/v1/proyectos";
 
   try {
     Map<String, String> headers = await getAuthHeaders();
