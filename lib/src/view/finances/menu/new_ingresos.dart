@@ -1,46 +1,50 @@
+import 'package:datafire/src/model/ingresos_model.dart';
 import 'package:datafire/src/widgets/table_scrolleable.dart';
 import 'package:flutter/material.dart';
 
-class Ingresos extends StatefulWidget {
-  const Ingresos({super.key});
+class NewIngresos extends StatefulWidget {
+  List<IngresosScheme>? ingresoScheme = [];
+  NewIngresos({super.key, this.ingresoScheme});
 
   @override
-  State<Ingresos> createState() => _IngresosState();
+  State<NewIngresos> createState() => _IngresosState();
 }
 
-class _IngresosState extends State<Ingresos> {
+class _IngresosState extends State<NewIngresos> {
   late ScrollController verticalController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(children: [
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IncomeCard(
-              title: 'Ultimo Ingreso',
-              amount: '\$8500',
-              descripcion: 'Ultimo ingreso de proyecto',
-            ),
-            IncomeCard(
-              title: 'Ingreso del mes',
-              amount: '\$55,000',
-              descripcion: 'Detalles de los ingresos del mes',
-            ),
-            IncomeCard(
-              title: 'Ingresos en transcurso',
-              amount: '\$150,000',
-              descripcion: 'Ingreso transcurrido anual',
-            )
-          ],
-        ),
-        const SizedBox(
-          height: 5,
-        ),
-        Flexible(child: TableTemplate(verticalController: verticalController))
-      ]),
-    );
+    return Column(children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          IncomeCard(
+            title: 'Ultimo Ingreso',
+            amount: '\$ ${widget.ingresoScheme?.last.totalWeeklyAbonos}',
+            descripcion: 'Ultimo ingreso de proyecto',
+          ),
+          const IncomeCard(
+            title: 'Ingreso del mes',
+            amount: '\$55,000',
+            descripcion: 'Detalles de los ingresos del mes',
+          ),
+          const IncomeCard(
+            title: 'Ingresos en transcurso',
+            amount: '\$150,000',
+            descripcion: 'Ingreso transcurrido anual',
+          )
+        ],
+      ),
+      const SizedBox(
+        height: 5,
+      ),
+      Flexible(
+          child: TableTemplate(
+        verticalController: verticalController,
+        ingresoScheme: widget.ingresoScheme,
+      ))
+    ]);
   }
 }
 

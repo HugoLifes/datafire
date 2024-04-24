@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:datafire/src/model/ingresos_model.dart';
 import 'package:datafire/src/view/finances/menu/Egresos.dart' as Egresos;
 import 'package:datafire/src/view/finances/menu/Flujo.dart';
 import 'package:datafire/src/view/finances/menu/cuentasPorCobrar.dart';
@@ -17,18 +18,34 @@ class FinancesView extends StatefulWidget {
   _FinancesViewState createState() => _FinancesViewState();
 }
 
+Future<List<Ingresos>> fetchingresos() async {
+  final response = await http.get(Uri.parse(
+      'https://datafire-production.up.railway.app/Api/v1/proyectos/ingresos'));
+
+  if (response.statusCode == 200) {
+    debugPrint("cargado con éxito");
+    return ingesosFromJson(response.body);
+  } else {
+    throw Exception('Error al cargar datos de Ingresos');
+  }
+}
+
 class _FinancesViewState extends State<FinancesView> {
   late Future<List<Map<String, dynamic>>> fetchDataFuture;
   late Future<List<Map<String, dynamic>>> fetchIngresosFuture;
   late Future<List<Map<String, dynamic>>> fetchCobrarData;
   late Future<List<Map<String, dynamic>>> fetchFlujData;
   late Egresos.OrderInfoDataSource dataSource;
+  late dynamic ingresos;
+  List<IngresosScheme> ingresoScheme = [];
+  List<AbonoScheme> abonoScheme = [];
 
   @override
   void initState() {
     super.initState();
     fetchDataFuture = fetchData();
-    fetchIngresosFuture = fetchingresos();
+    //fetchIngresosFuture = fetchingresos();
+    dataIngresos();
     fetchCobrarData = fetchCuentasCobrarData();
     fetchFlujData = fetchFlujoData();
   }
@@ -38,7 +55,6 @@ class _FinancesViewState extends State<FinancesView> {
         'https://datafire-production.up.railway.app/Api/v1/proyectos/egresos'));
 
     if (response.statusCode == 200) {
-      print(response.body);
       debugPrint("cargado con éxito");
       return List<Map<String, dynamic>>.from(json.decode(response.body));
     } else {
@@ -46,17 +62,25 @@ class _FinancesViewState extends State<FinancesView> {
     }
   }
 
-  Future<List<Map<String, dynamic>>> fetchingresos() async {
-    final response = await http.get(Uri.parse(
-        'https://datafire-production.up.railway.app/Api/v1/proyectos/ingresos'));
-
-    if (response.statusCode == 200) {
-      print(response.body);
-      debugPrint("cargado con éxito");
-      return List<Map<String, dynamic>>.from(json.decode(response.body));
-    } else {
-      throw Exception('Error al cargar datos de Ingresos');
-    }
+  //nueva funcion ingresos
+  Future dataIngresos() async {
+    await fetchingresos().then((value) => {
+          for (int i = 0; i < value.length; i++)
+            {
+              for (int j = 0; j < value[i].abonos.length; j++)
+                {
+                  abonoScheme.add(AbonoScheme(
+                      amount: value[i].abonos[j].amount,
+                      projectName: value[i].abonos[j].projectName,
+                      date: value[i].abonos[j].date))
+                },
+              ingresoScheme.add(IngresosScheme(
+                  startDate: value[i].startDate,
+                  endDate: value[i].endDate,
+                  abonos: abonoScheme,
+                  totalWeeklyAbonos: value[i].totalWeeklyAbonos))
+            }
+        });
   }
 
   Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
@@ -111,7 +135,9 @@ class _FinancesViewState extends State<FinancesView> {
                     child: TabBarView(
                       children: [
                         Egresos.EgresosWidget(fetchDataFuture: fetchDataFuture),
-                        Ingresos(),
+                        NewIngresos(
+                          ingresoScheme: ingresoScheme,
+                        ),
                         FlujoWidget(fetchDataFuture: fetchFlujData),
                         CobrarWidget(fetchDataFuture: fetchCobrarData)
                       ],
