@@ -1,3 +1,4 @@
+import 'package:datafire/src/widgets/shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
@@ -30,8 +31,8 @@ class _HomeState extends State<Home> {
   }
 
   Future<void> fetchData() async {
-    final uri = Uri.parse(
-        'https://datafire-production.up.railway.app/api/v1/proyectos/project-stats');
+    final uri =
+        Uri.parse('http://localhost:3000/api/v1/proyectos/project-stats');
     try {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
@@ -105,31 +106,116 @@ class _HomeState extends State<Home> {
 
     return Scaffold(
       appBar: const PreferredSize(
-        preferredSize: Size.fromHeight(kToolbarHeight),
+        preferredSize: Size.fromHeight(61),
         child: AppBarDatafire(
             title: "Gestion", description: "Mantente al dia de tus proyectos"),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _buildCard(size, "Ganancia", _cartesianChart()),
-            _buildCard(
-                size,
-                "Proyectos de los últimos 12 meses",
-                pieChartSections.isNotEmpty
-                    ? PieChart(_pieChartData())
-                    : Center(child: const CircularProgressIndicator())),
+            _buildCard("Ganancia", _cartesianChart(), size),
+            Row(
+              children: [
+                Container(
+                  width: size.width / 6,
+                  height: 350,
+                  child: _buildCardInfo(
+                      "Ultimos Datos",
+                      _triangles(Size(45, 45), TrianguloArriba()),
+                      _triangles(Size(45, 45), TrianguloAbajo()),
+                      size,
+                      false),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Container(
+                  width: size.width / 5,
+                  height: 350,
+                  child: _buildCard(
+                      "Proyectos añadidos",
+                      pieChartSections.isNotEmpty
+                          ? PieChart(_pieChartData())
+                          : const Center(
+                              child: const CircularProgressIndicator()),
+                      size),
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                cardsHorizontalView(size),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCard(Size size, String title, Widget chart) {
-    return Container(
-      margin: const EdgeInsets.only(top: 35, left: 20, right: 20, bottom: 20),
-      padding: const EdgeInsets.all(10),
-      decoration: CardTempII(blur: 3.0, of1: 0, of2: 3).getCard(),
+  Row cardsHorizontalView(Size size) {
+    return Row(
+      children: [
+        Column(
+          children: [
+            Container(
+              width: size.width / 4,
+              height: 150,
+              child: _buildCardInfo(
+                  "Clientes Recientes",
+                  _triangles(Size(45, 45), TrianguloArriba()),
+                  _triangles(Size(45, 45), TrianguloAbajo()),
+                  size,
+                  true),
+            ),
+            Container(
+              width: size.width / 4,
+              height: 150,
+              child: _buildCardInfo(
+                  "Ultimas Ganancias",
+                  _triangles(Size(45, 45), TrianguloArriba()),
+                  _triangles(Size(45, 45), TrianguloAbajo()),
+                  size,
+                  true),
+            ),
+          ],
+        ),
+        SizedBox(
+          width: 30,
+        ),
+        Column(
+          children: [
+            Container(
+              width: size.width / 4,
+              height: 150,
+              child: _buildCardInfo(
+                  "Pagos reciente",
+                  _triangles(Size(45, 45), TrianguloArriba()),
+                  _triangles(Size(45, 45), TrianguloAbajo()),
+                  size,
+                  true),
+            ),
+            Container(
+              width: size.width / 4,
+              height: 150,
+              child: _buildCardInfo(
+                  "Proyectos recientes",
+                  _triangles(Size(45, 45), TrianguloArriba()),
+                  _triangles(Size(45, 45), TrianguloAbajo()),
+                  size,
+                  true),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCard(String title, Widget chart, Size size) {
+    return Card(
+      borderOnForeground: false,
+      clipBehavior: Clip.antiAlias,
+      margin: const EdgeInsets.all(15),
+      elevation: 5,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -139,8 +225,56 @@ class _HomeState extends State<Home> {
                 style:
                     const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
           ),
-          const SizedBox(height: 20),
-          SizedBox(height: 200, child: chart),
+          const SizedBox(height: 10),
+          Container(
+            padding: EdgeInsets.all(10),
+            height: size.height * 0.25,
+            child: chart,
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCardInfo(String title, CustomPaint paint, CustomPaint paint2,
+      Size size, bool otherInfo) {
+    return Card(
+      borderOnForeground: false,
+      clipBehavior: Clip.antiAlias,
+      margin: EdgeInsets.all(15),
+      elevation: 5,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 15,
+            ),
+            child: Text(title,
+                style:
+                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          ),
+          SizedBox(
+            height: 35,
+          ),
+          otherInfo
+              ? Container()
+              : Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: paint,
+                    ),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 20),
+                      child: paint2,
+                    ),
+                  ],
+                )
         ],
       ),
     );
@@ -151,7 +285,9 @@ class _HomeState extends State<Home> {
         sectionsSpace: 0,
         centerSpaceRadius: 40,
         startDegreeOffset: -90,
-        borderData: FlBorderData(show: false),
+        borderData: FlBorderData(
+          show: false,
+        ),
         centerSpaceColor: Colors.transparent,
       );
 
@@ -166,7 +302,7 @@ class _HomeState extends State<Home> {
           LineSeries<ChartData, String>(
               enableTooltip: true,
               dataSource: chartData,
-              width: 5,
+              width: 3,
               pointColorMapper: (ChartData data, _) => data.color,
               xValueMapper: (ChartData data, _) =>
                   _getMonthLabel(DateTime.parse(data.month).month),
@@ -174,7 +310,7 @@ class _HomeState extends State<Home> {
               markerSettings: const MarkerSettings(
                   color: Colors.green,
                   borderColor: Colors.black,
-                  borderWidth: 3,
+                  borderWidth: 5,
                   shape: DataMarkerType.circle,
                   width: 4,
                   height: 4,
@@ -219,6 +355,13 @@ class _HomeState extends State<Home> {
       default:
         return '';
     }
+  }
+
+  CustomPaint _triangles(Size size, CustomPainter direction) {
+    return CustomPaint(
+      painter: direction,
+      size: size,
+    );
   }
 }
 

@@ -19,9 +19,9 @@ class _CardTotalsState extends State<CardTotals> {
   late String costo;
   late String abonado;
   late String presupuesto;
-  late String ganancia;
+  late int ganancia;
   late IOWebSocketChannel channel;
-
+  late int presupuestoReal;
   @override
   void initState() {
     super.initState();
@@ -44,12 +44,12 @@ class _CardTotalsState extends State<CardTotals> {
     costo = widget.proyecto?["costo"].toString() ?? "0";
     abonado = widget.proyecto?["abonado"].toString() ?? "0";
     presupuesto = widget.proyecto?["presupuesto"].toString() ?? "0";
-    ganancia = widget.proyecto?["ganancia"].toString() ?? "0";
+    ganancia = widget.proyecto?["abonado"] - widget.proyecto?["costo"] ?? "0";
+    presupuestoReal = int.parse(presupuesto) - int.parse(costo);
   }
 
   void setupWebSocket() {
-    channel =
-        IOWebSocketChannel.connect('ws://datafire-production.up.railway.app');
+    channel = IOWebSocketChannel.connect('ws://localhost:3000');
 
     channel.stream.listen((message) {
       print("Datos recibidos del socket: $message");
@@ -69,7 +69,7 @@ class _CardTotalsState extends State<CardTotals> {
     costo = proyecto["costo"].toString();
     abonado = proyecto["abonado"].toString();
     presupuesto = proyecto["presupuesto"].toString();
-    ganancia = proyecto["ganancia"].toString();
+    ganancia = int.parse(abonado) - int.parse(costo);
   }
 
   @override
@@ -80,21 +80,25 @@ class _CardTotalsState extends State<CardTotals> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildCard("Gastado:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
-            _buildCard(
-                "Ganancia:", "\$$ganancia", Colors.greenAccent, Colors.green),
-          ],
-        ),
-        _buildCard(
-            "Presupuesto:", "\$$presupuesto", Colors.deepOrange, Colors.red),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildCard(
+              "Gastado:", "\$$costo", Colors.lightBlueAccent, Colors.blue),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
+              _buildCard("Ganancia:", "\$${ganancia}", Colors.greenAccent,
+                  Colors.green),
+            ],
+          ),
+          _buildCard("Presupuesto:", "\$${presupuesto}", Colors.deepOrange,
+              Colors.red),
+        ],
+      ),
     );
   }
 

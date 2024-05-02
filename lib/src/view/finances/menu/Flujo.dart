@@ -7,7 +7,7 @@ import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 class FlujoWidget extends StatelessWidget {
   final Future<List<Map<String, dynamic>>> fetchDataFuture;
 
-   FlujoWidget({super.key, required this.fetchDataFuture});
+  FlujoWidget({super.key, required this.fetchDataFuture});
 
   final _dateController = TextEditingController();
   final _amountController = TextEditingController();
@@ -15,84 +15,88 @@ class FlujoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FutureBuilder(
-        future: fetchDataFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          } else if (snapshot.hasError) {
-            return Center(
-              child: Text('Error: ${snapshot.error}'),
-            );
-          } else {
-            final dataSource =
-                FlujoDataSource(snapshot.data as List<Map<String, dynamic>>);
-            return Column(
-              children: [
-                Expanded(
-                  child: SfDataGrid(
-                    source: dataSource,
-                    columns: [
-                      GridColumn(
-                        columnName: 'startDate',
-                        label: const Text('Inicio de semana',
-                            textAlign: TextAlign.center),
-                      ),
-                      GridColumn(
-                        columnName: 'endDate',
-                        label: const Text('Fin de semana',
-                            textAlign: TextAlign.center),
-                      ),
-                      GridColumn(
-                        columnName: 'caja',
-                        label: const Text('Caja', textAlign: TextAlign.center),
-                      ),
-                      GridColumn(
-                        columnName: 'ingresos',
-                        label: const Text('Ingresos',
-                            textAlign: TextAlign.center),
-                      ),
-                      GridColumn(
-                        columnName: 'egresos',
-                        label: const Text('Egresos',
-                            textAlign: TextAlign.center),
-                      ),
-                      GridColumn(
-                        columnName: 'balanceDeFlujo',
-                        label: const Text('Balance de Flujo',
-                            textAlign: TextAlign.center),
-                      ),
-                      GridColumn(
-                        columnName: 'prestamo',
-                        label: const Text('Prestamo',
-                            textAlign: TextAlign.center),
-                      ),
-                      GridColumn(
-                        columnName: 'balanceTotal',
-                        label: const Text('Balance Total',
-                            textAlign: TextAlign.center),
-                      ),
-                    ],
-                    allowSorting: true,
-                    allowFiltering: true,
-                    columnWidthMode: ColumnWidthMode.fill,
+        body: FutureBuilder(
+          future: fetchDataFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else {
+              final dataSource =
+                  FlujoDataSource(snapshot.data as List<Map<String, dynamic>>);
+              return Column(
+                children: [
+                  Expanded(
+                    child: SfDataGrid(
+                      source: dataSource,
+                      columns: [
+                        GridColumn(
+                          columnName: 'startDate',
+                          label: const Text('Inicio de semana',
+                              textAlign: TextAlign.center),
+                        ),
+                        GridColumn(
+                          columnName: 'endDate',
+                          label: const Text('Fin de semana',
+                              textAlign: TextAlign.center),
+                        ),
+                        GridColumn(
+                          columnName: 'caja',
+                          label:
+                              const Text('Caja', textAlign: TextAlign.center),
+                        ),
+                        GridColumn(
+                          columnName: 'ingresos',
+                          label: const Text('Ingresos',
+                              textAlign: TextAlign.center),
+                        ),
+                        GridColumn(
+                          columnName: 'egresos',
+                          label: const Text('Egresos',
+                              textAlign: TextAlign.center),
+                        ),
+                        GridColumn(
+                          columnName: 'balanceDeFlujo',
+                          label: const Text('Balance de Flujo',
+                              textAlign: TextAlign.center),
+                        ),
+                        GridColumn(
+                          columnName: 'prestamo',
+                          label: const Text('Prestamo',
+                              textAlign: TextAlign.center),
+                        ),
+                        GridColumn(
+                          columnName: 'balanceTotal',
+                          label: const Text('Balance Total',
+                              textAlign: TextAlign.center),
+                        ),
+                      ],
+                      allowSorting: true,
+                      allowFiltering: true,
+                      columnWidthMode: ColumnWidthMode.fill,
+                    ),
                   ),
-                ),
+                ],
+              );
+            }
+          },
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              _mostrarFormulario(context);
+            },
+            label: const Row(
+              children: [
+                Icon(Icons.add),
+                const SizedBox(width: 5),
+                Text('Agregar Préstamo'),
               ],
-            );
-          }
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _mostrarFormulario(context);
-        },
-        child: const Icon(Icons.add),
-        
-      ),
-    );
+            )));
   }
 
   Future<void> _mostrarFormulario(BuildContext context) async {
@@ -176,7 +180,7 @@ class FlujoWidget extends StatelessWidget {
   }
 
   Future<void> postProyecto(String datePrestamo, String amountPaid) async {
-    const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/prestamos";
+    const url = "http://localhost:3000/Api/v1/proyectos/prestamos";
 
     try {
       final res = await http.post(

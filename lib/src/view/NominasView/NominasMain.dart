@@ -23,7 +23,7 @@ class _NominasMainState extends State<NominasMain> {
 
   Future<void> loadNominas() async {
     final url = Uri.parse(
-        'https://datafire-production.up.railway.app/Api/v1/nominasSemanales/weeklyNominas');
+        'http://localhost:3000/Api/v1/nominasSemanales/weeklyNominas');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -49,8 +49,8 @@ class _NominasMainState extends State<NominasMain> {
         backgroundColor: Theme.of(context).primaryColor,
         label:
             const Text("Generar Nómina", style: TextStyle(color: Colors.white)),
-        onPressed: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const NominasView())),
+        onPressed: () => Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const NominasView())),
         icon: const Icon(Icons.group_add, color: Colors.white),
       ),
       body: allNominas.isNotEmpty
@@ -174,7 +174,8 @@ class _NominasMainState extends State<NominasMain> {
     return ListTile(
       leading: Icon(icon, color: Theme.of(context).primaryColor),
       title: Text(title),
-      trailing: Text(trailing, style: const TextStyle(fontWeight: FontWeight.bold)),
+      trailing:
+          Text(trailing, style: const TextStyle(fontWeight: FontWeight.bold)),
     );
   }
 

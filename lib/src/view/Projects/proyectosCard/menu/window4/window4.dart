@@ -23,6 +23,7 @@ class _Tab4ContentState extends State<Tab4Content> {
   @override
   void initState() {
     super.initState();
+    print(widget.idProyecto);
     futureCostos = fetchCostsByProjectId(widget.idProyecto);
   }
 
@@ -44,7 +45,7 @@ class _Tab4ContentState extends State<Tab4Content> {
                 .where((servicio) =>
                     servicio["project_id"].toString() == widget.idProyecto)
                 .toList();
-
+            sumarSalarios(serviciosProyecto);
             return ListView.builder(
               itemCount: serviciosProyecto.length + 2,
               itemBuilder: (context, index) {
@@ -139,7 +140,7 @@ class _Tab4ContentState extends State<Tab4Content> {
                             ),
                           ),
                           onPressed: () {
-                            _mostrarDialogo();
+                            _mostrarDialogo(context);
                           },
                           icon: const Icon(Icons.add),
                         ),
@@ -155,7 +156,7 @@ class _Tab4ContentState extends State<Tab4Content> {
     );
   }
 
-  void _mostrarDialogo() {
+  void _mostrarDialogo(BuildContext context) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -177,5 +178,11 @@ class _Tab4ContentState extends State<Tab4Content> {
         );
       },
     );
+  }
+
+  sumarSalarios(List<dynamic> list) {
+    for (var i in list) {
+      print(i);
+    }
   }
 }

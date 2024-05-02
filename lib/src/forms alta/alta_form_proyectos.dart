@@ -4,6 +4,7 @@ import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/successScreen.dart';
 import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class AltaProyectoPage extends StatefulWidget {
   const AltaProyectoPage({super.key});
@@ -20,7 +21,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
   final _initialCostController = TextEditingController();
   final _presupuestoController = TextEditingController();
   final _anticipoController = TextEditingController();
-
+  bool _isLoaderVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,22 +78,20 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
               ),
               const SizedBox(height: 16.0),
               CustomTextField(
-                controller: _initialCostController,
+                  controller: _initialCostController,
                   labelText: 'Costo Inicial',
-                 validationMessage: 'Por favor, ingresa el costo inicial'
-              ),
+                  validationMessage: 'Por favor, ingresa el costo inicial'),
               const SizedBox(height: 16.0),
-                            CustomTextField(
-                controller: _presupuestoController,
+              CustomTextField(
+                  controller: _presupuestoController,
                   labelText: 'Presupuesto',
-                 validationMessage: 'Por favor, ingresa El presupuesto'
-              ),
+                  validationMessage: 'Por favor, ingresa El presupuesto'),
               const SizedBox(height: 16.0),
-                            CustomTextField(
-                controller: _anticipoController,
+              CustomTextField(
+                  controller: _anticipoController,
                   labelText: 'Anticipo',
-                 validationMessage: 'Por favor, ingresa la cantidad del anticipo'
-              ),
+                  validationMessage:
+                      'Por favor, ingresa la cantidad del anticipo'),
               const SizedBox(height: 16.0),
               SizedBox(
                 width: double.infinity,
@@ -106,11 +105,28 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                       String costo = "0";
                       String presupuesto = _presupuestoController.text;
                       String anticipo = _anticipoController.text;
+                      context.loaderOverlay.show();
+                      setState(() {
+                        _isLoaderVisible = context.loaderOverlay.visible;
+                      });
+                      String? projectId = await obtenerIdProyecto(
+                              nombre,
+                              fechaInicio,
+                              fechaFinalizada,
+                              costo,
+                              presupuesto,
+                              anticipo)
+                          .whenComplete(() {
+                        context.loaderOverlay.hide();
 
-                      String? projectId = await obtenerIdProyecto(nombre, fechaInicio, fechaFinalizada, costo, presupuesto, anticipo);
+                        setState(() {
+                          _isLoaderVisible = false;
+                        });
+                      });
 
                       if (projectId != null) {
                         _selectClientsDialog(projectId);
+                        Navigator.pop(context);
                         Navigator.push(
                           context,
                           MaterialPageRoute(

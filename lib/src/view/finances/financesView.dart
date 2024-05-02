@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:datafire/src/model/ingresos_model.dart';
 import 'package:datafire/src/model/workers_model.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
@@ -12,6 +11,7 @@ import 'package:datafire/src/view/finances/menu/new_egresos.dart';
 import 'package:datafire/src/view/finances/menu/new_ingresos.dart';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class FinancesView extends StatefulWidget {
@@ -22,8 +22,8 @@ class FinancesView extends StatefulWidget {
 }
 
 Future<List<Ingresos>> fetchingresos() async {
-  final response = await http.get(Uri.parse(
-      'https://datafire-production.up.railway.app/Api/v1/proyectos/ingresos'));
+  final response = await http
+      .get(Uri.parse('http://localhost:3000/Api/v1/proyectos/ingresos'));
 
   if (response.statusCode == 200) {
     debugPrint("cargado con éxito");
@@ -43,28 +43,21 @@ class _FinancesViewState extends State<FinancesView> {
   List<IngresosScheme> ingresoScheme = [];
   List<AbonoScheme> abonoScheme = [];
   List<WorkerScheme> workersScheme = [];
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    fetchDataFuture = fetchData();
+
     //fetchIngresosFuture = fetchingresos();
-    dataEgresos();
+    dataEgresos().then((value) => {
+          setState(() {
+            isLoading = false;
+          })
+        });
     dataIngresos();
     fetchCobrarData = fetchCuentasCobrarData();
     fetchFlujData = fetchFlujoData();
-  }
-
-  Future<List<Map<String, dynamic>>> fetchData() async {
-    final response = await http.get(Uri.parse(
-        'https://datafire-production.up.railway.app/Api/v1/proyectos/egresos'));
-
-    if (response.statusCode == 200) {
-      debugPrint("cargado con éxito");
-      return List<Map<String, dynamic>>.from(json.decode(response.body));
-    } else {
-      throw Exception('Error al cargar datos de egresos');
-    }
   }
 
   //nueva funcion ingresos
@@ -89,30 +82,35 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future dataEgresos() async {
-    newFetchWorkers().then((value) => {
-          for (int i = 0; i < value.length; i++)
-            {
-              workersScheme.add(WorkerScheme(
-                  id: value[i].id,
-                  name: value[i].name,
-                  lastName: value[i].lastName,
-                  age: value[i].age,
-                  position: value[i].position,
-                  salaryHour: value[i].salaryHour,
-                  semanalHours: value[i].semanalHours,
-                  salary: value[i].salary,
-                  workerCost: value[i].workerCost,
-                  createdAt: value[i].createdAt,
-                  monthCosts: WorkerScheme().pagomensual(value[i].salary),
-                  payxDay: WorkerScheme().pagodiario(value[i].salary),
-                  payxhr: WorkerScheme().pagohora(value[i].salary)))
-            }
-        });
+    var data = await newFetchWorkers();
+
+    for (int i = 0; i < data.length; i++) {
+      workersScheme.add(WorkerScheme(
+          id: data[i].id,
+          name: data[i].name,
+          lastName: data[i].lastName,
+          age: data[i].age,
+          position: data[i].position,
+          semanalHours: data[i].semanalHours,
+          yearsWorked: data[i].yearsWorked,
+          salary: data[i].salary,
+          workerCost: data[i].workerCost,
+          createdAt: data[i].createdAt,
+          monthCosts: WorkerScheme().pagomensual(data[i].salary),
+          payxDay: WorkerScheme().pagodiario(data[i].salary),
+          payxhr: WorkerScheme().pagohora(data[i].salary),
+          salarioBrutoAnual:
+              WorkerScheme().pagoAnual(data[i].salary, data[i].yearsWorked),
+          seguroSocial: WorkerScheme().calcularImss(
+            data[i].salary,
+          ),
+          isr: WorkerScheme().calcularISR(data[i].salary)));
+    }
   }
 
   Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
-    final response = await http.get(Uri.parse(
-        'https://datafire-production.up.railway.app/Api/v1/proyectos/cuentasCobrar'));
+    final response = await http
+        .get(Uri.parse('http://localhost:3000/Api/v1/proyectos/cuentasCobrar'));
 
     if (response.statusCode == 200) {
       debugPrint("Cuentas por cobrar cargado con éxito");
@@ -123,8 +121,8 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future<List<Map<String, dynamic>>> fetchFlujoData() async {
-    final response = await http.get(Uri.parse(
-        'https://datafire-production.up.railway.app/Api/v1/proyectos/flujo'));
+    final response = await http
+        .get(Uri.parse('http://localhost:3000/Api/v1/proyectos/flujo'));
 
     if (response.statusCode == 200) {
       debugPrint("Cuentas por cobrar cargado con éxito");
@@ -144,40 +142,48 @@ class _FinancesViewState extends State<FinancesView> {
             description:
                 "Aquí tendrás acceso a todas las finanzas de los proyectos"),
       ),
-      body: Row(
-        children: [
-          Expanded(
-            flex: 2,
-            child: DefaultTabController(
-              length: 4,
-              child: Column(
-                children: [
-                  const TabBar(tabs: [
-                    Tab(text: "Egresos"),
-                    Tab(text: "Ingresos"),
-                    Tab(text: "Flujo"),
-                    Tab(text: "  Cuentas por cobrar")
-                  ]),
-                  Expanded(
-                    child: TabBarView(
-                      children: [
-                        NewEgresos(
-                          workersScheme: workersScheme,
-                        ),
-                        NewIngresos(
-                          ingresoScheme: ingresoScheme,
-                        ),
-                        FlujoWidget(fetchDataFuture: fetchFlujData),
-                        CobrarWidget(fetchDataFuture: fetchCobrarData)
-                      ],
-                    ),
+      body: tabView(),
+    );
+  }
+
+  Row tabView() {
+    return Row(
+      children: [
+        Expanded(
+          flex: 2,
+          child: DefaultTabController(
+            length: 4,
+            child: Column(
+              children: [
+                const TabBar(tabs: [
+                  Tab(text: "Egresos"),
+                  Tab(text: "Ingresos"),
+                  Tab(text: "Flujo"),
+                  Tab(text: "  Cuentas por cobrar")
+                ]),
+                Flexible(
+                  child: TabBarView(
+                    children: [
+                      isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : NewEgresos(
+                              workersScheme: workersScheme,
+                            ),
+                      isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : NewIngresos(
+                              ingresoScheme: ingresoScheme,
+                            ),
+                      FlujoWidget(fetchDataFuture: fetchFlujData),
+                      CobrarWidget(fetchDataFuture: fetchCobrarData)
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

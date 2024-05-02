@@ -84,9 +84,14 @@ class Clientes {
               {"name": nombre, "last_name": apellido, "company": company}),
         );
         if (res.statusCode == 201) {
-        } else {}
+          print(res.body);
+        } else {
+          print(res.body);
+        }
         // ignore: empty_catches
-      } catch (err) {}
+      } catch (err) {
+        print(err);
+      }
     }
   }
 }
@@ -101,7 +106,7 @@ class Trabajadores {
   List<dynamic>? misionesEncargos = [];
   double? edad;
   String? position;
-  double? salario;
+  int? salario;
   double? semanalHours;
 
   Trabajadores(
@@ -142,15 +147,14 @@ class Trabajadores {
     Map<String, String> headers = await getAuthHeaders();
     try {
       final res = await http.post(
-        Uri.parse(
-            "https://datafire-production.up.railway.app/api/v1/trabajadores"),
+        Uri.parse("http://localhost:3000/api/v1/trabajadores"),
         headers: {"Content-Type": "application/json", ...headers},
         body: jsonEncode({
           "name": nombre,
           "last_name": apellido,
           "age": edad,
           "position": position,
-          "salary_hour": salario,
+          "salary": salario,
           "semanal_hours": semanalHours
         }),
       );

@@ -22,7 +22,7 @@ class _LoginViewState extends State<LoginView> {
     };
 
     final response = await http.post(
-      Uri.parse('https://datafire-production.up.railway.app/Api/v1/auth/login'),
+      Uri.parse('http://localhost:3000/Api/v1/auth/login'),
       headers: {
         'Content-Type': 'application/json',
       },

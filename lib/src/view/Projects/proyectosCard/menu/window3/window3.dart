@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:datafire/src/services/costos.servicio.dart';
 import 'package:datafire/src/services/proyectosTrabajadores.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:flutter/material.dart';
@@ -64,7 +65,9 @@ class _Window3State extends State<Window3> {
                       subtitle: Text('ID Trabajador: ${worker['id']}'),
                       trailing: IconButton(
                         icon: const Icon(Icons.delete, color: Colors.red),
-                        onPressed: () => _deleteWorkerDialog(worker),
+                        onPressed: () {
+                          _deleteWorkerDialog(worker);
+                        },
                       ),
                     ),
                   );

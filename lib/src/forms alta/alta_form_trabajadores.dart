@@ -73,9 +73,9 @@ class _AltaTrabajadorPageState extends State<AltaTrabajadorPage> {
               const SizedBox(height: 16.0),
               CustomTextField(
                   controller: _salaryHourController,
-                  labelText: 'Salario por hora',
+                  labelText: 'Salario',
                   validationMessage:
-                      'Por favor, ingrese la cantidad que el trabajador gana por hora'),
+                      'Por favor, ingrese el salario del trabajador'),
               const SizedBox(height: 16.0),
               CustomTextField(
                   controller: _semanalHoursController,
@@ -112,7 +112,7 @@ class _AltaTrabajadorPageState extends State<AltaTrabajadorPage> {
         apellido: apellidoWorker,
         edad: double.parse(edadWorker),
         position: positionWorker,
-        salario: double.parse(salarioHora),
+        salario: int.parse(salarioHora),
         semanalHours: double.parse(semanalHours),
       );
 

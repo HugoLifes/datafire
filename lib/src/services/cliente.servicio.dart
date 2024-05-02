@@ -4,7 +4,7 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<void> postCliente(String nombre, String apellido, String company) async {
-  const url = "https://datafire-production.up.railway.app/api/v1/clientes";
+  const url = "http://localhost:3000/api/v1/clientes";
 
   try {
     final res = await http.post(
@@ -14,23 +14,20 @@ Future<void> postCliente(String nombre, String apellido, String company) async {
           {"name": nombre, "last_name": apellido, "company": company}),
     );
     if (res.statusCode == 200) {
-    } else {
-    }
-  // ignore: empty_catches
-  } catch (err) {
-    
-  }
+    } else {}
+    // ignore: empty_catches
+  } catch (err) {}
 }
 
 Future<List<dynamic>> fetchClientes() async {
-  const url = "https://datafire-production.up.railway.app/Api/v1/clientes";
-Map<String, String> headers = await getAuthHeaders();
+  const url = "http://localhost:3000/Api/v1/clientes";
+  Map<String, String> headers = await getAuthHeaders();
 
   try {
     final res = await http.get(Uri.parse(url), headers: headers);
     if (res.statusCode == 200) {
       final List<dynamic> clientes = jsonDecode(res.body);
-      return clientes; 
+      return clientes;
     } else {
       return [];
     }
@@ -39,10 +36,9 @@ Map<String, String> headers = await getAuthHeaders();
   }
 }
 
-
 Future<void> updateCliente(
     int id, String nombre, String lastName, String company) async {
-  final url = "https://datafire-production.up.railway.app/api/v1/clientes/$id";
+  final url = "http://localhost:3000/api/v1/clientes/$id";
   try {
     final res = await http.patch(
       Uri.parse(url),
@@ -50,24 +46,20 @@ Future<void> updateCliente(
       body: jsonEncode(
           {"name": nombre, "last_name": lastName, "company": company}),
     );
-    if (res.statusCode == 200) {
-    }
-  // ignore: empty_catches
-  } catch (err) {
-  }
+    if (res.statusCode == 200) {}
+    // ignore: empty_catches
+  } catch (err) {}
 }
 
 Future<void> deleteCliente(int id) async {
-  final url = "https://datafire-production.up.railway.app/api/v1/clientes/$id";
+  final url = "http://localhost:3000/api/v1/clientes/$id";
   try {
     final res = await http.delete(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
     );
     if (res.statusCode == 200) {
-    } else {
-    }
-  // ignore: empty_catches
-  } catch (err) {
-  }
+    } else {}
+    // ignore: empty_catches
+  } catch (err) {}
 }

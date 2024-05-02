@@ -1,5 +1,7 @@
 import 'package:datafire/src/model/workers_model.dart';
+import 'package:datafire/src/widgets/table_scrolleable.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class NewEgresos extends StatefulWidget {
@@ -10,35 +12,125 @@ class NewEgresos extends StatefulWidget {
 }
 
 class _NewEgresosState extends State<NewEgresos> {
-  late ScrollController verticalController = ScrollController();
+  late ScrollController verrticalController = ScrollController();
+  double impustosTotal = 0;
+  int totalSueldos = 0;
+  final NumberFormat numberFormat = NumberFormat("#,##0.00", "es_MX");
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    calculosEgresos();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Column(children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            cardXtable(),
+            Flexible(
+              child: Column(
+                children: [
+                  Container(
+                    width: 600,
+                    child: IncomeCard(
+                      title: 'Division Egresos',
+                      amount: '',
+                      descripcion: 'Tipos de division de egresos',
+                      isChart: true,
+                    ),
+                  ),
+                  Container(
+                    width: 600,
+                    child: IncomeCard(
+                      title: 'Pago de Impuestos',
+                      amount: '',
+                      descripcion: 'Gastos en pago de impuestos',
+                      isChart: true,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ]),
+    );
+  }
+
+  cardXtable() {
+    return Container(
+      width: 800,
+      //height: 900,
+      // color: Colors.red,,
+      child: Column(
         children: [
-          IncomeCard(
-            title: 'Otros gastos',
-            amount: '\$ 5000',
-            descripcion: 'Otros gastos de la empresa',
-            isChart: false,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IncomeCard(
+                title: 'Total Impuestos',
+                amount: '\$ ${numberFormat.format(impustosTotal)} MXN',
+                descripcion: 'Otros gastos de la empresa',
+                isChart: false,
+              ),
+              IncomeCard(
+                title: 'Nomina de trabajadores',
+                amount: '\$ ${numberFormat.format(totalSueldos)} MXN',
+                descripcion: 'Gastos en nomina de trabajadores',
+                isChart: false,
+              ),
+            ],
           ),
-          IncomeCard(
-            title: 'Nomina de trabajadores',
-            amount: '\$50,000',
-            descripcion: 'Gastos en nomina de trabajadores',
-            isChart: false,
+          const SizedBox(
+            height: 15,
           ),
-          IncomeCard(
-            title: 'Division Egresos',
-            amount: '',
-            descripcion: 'Tipos de division de egresos',
-            isChart: true,
+          Container(
+            height: 500,
+            width: 900,
+
+            // color: Colors.red,,
+            child: TableTemplate(
+              isEgresos: true,
+              verticalController: verrticalController,
+              workerScheme: widget.workersScheme!,
+            ),
+          ),
+          Container(
+            height: 500,
+            width: 900,
+
+            // color: Colors.red,,
+            child: TableTemplate(
+              isEgresos: true,
+              verticalController: verrticalController,
+              workerScheme: widget.workersScheme!,
+            ),
           )
         ],
       ),
-    ]);
+    );
+  }
+
+  calculosEgresos() {
+    double totalIsr = 0;
+    double totalSS = 0;
+    int sueldos = 0;
+    for (int i = 0; i < widget.workersScheme!.length; i++) {
+      totalSS += widget.workersScheme![i].seguroSocial;
+      totalIsr += widget.workersScheme![i].isr;
+      sueldos += widget.workersScheme![i].salary!;
+    }
+    setState(() {
+      impustosTotal = totalSS + totalIsr;
+      totalSueldos = sueldos;
+    });
   }
 }
 
@@ -47,6 +139,7 @@ class IncomeCard extends StatelessWidget {
   final String amount;
   final String descripcion;
   bool isChart = false;
+
   IncomeCard(
       {Key? key,
       required this.amount,
@@ -140,4 +233,22 @@ class ChartData {
   ChartData(this.x, this.y);
   final String x;
   final double y;
+}
+
+class TramoISR {
+  final double limiteInferior;
+  final double limiteSuperior;
+  final double tasa;
+
+  TramoISR(
+      {required this.limiteInferior,
+      required this.limiteSuperior,
+      required this.tasa});
+}
+
+class Deduccion {
+  final String nombre;
+  final double monto;
+
+  Deduccion({required this.nombre, required this.monto});
 }

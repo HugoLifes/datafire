@@ -73,7 +73,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
     );
   }
 
-  void _saveCliente() {
+  void _saveCliente() async {
     if (_formKey.currentState!.validate()) {
       String nombreCliente = _nombreController.text;
       String apellidoCliente = _apellidoController.text;
@@ -87,7 +87,7 @@ class _AltaClientePageState extends State<AltaClientePage> {
 
       // Lógica para dar de alta el cliente
       cliente.nuevoCliente();
-      Navigator.pop(context);
+      Navigator.of(context).pop();
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const SuccessfulScreen()),

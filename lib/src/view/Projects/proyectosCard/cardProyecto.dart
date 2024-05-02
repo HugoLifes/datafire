@@ -22,21 +22,12 @@ class _ProyectoCardState extends State<ProyectoCard> {
   Widget build(BuildContext context) {
     bool isPagado = widget.proyecto["status"];
 
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: canvasColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.grey,
-            blurRadius: 5,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
+    return Card(
+      borderOnForeground: false,
+      clipBehavior: Clip.antiAlias,
+      elevation: 4,
       child: InkWell(
-        hoverColor: accentCanvasColor,
+        hoverColor: Colors.grey.withOpacity(0.1),
         onTap: () {
           debugPrint('Proyecto ID: ${widget.proyecto["id"]} selected!');
           Navigator.push(
@@ -47,71 +38,74 @@ class _ProyectoCardState extends State<ProyectoCard> {
             ),
           );
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'Nombre:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  widget.proyecto["name"],
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Fecha Inicio:',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  formatDateTime(widget.proyecto["fecha_inicio"]),
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Fecha Fin:',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  formatDateTime(widget.proyecto["fecha_fin"]),
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Pagado?',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(width: 12),
-                CircleAvatar(
-                  backgroundColor: isPagado ? Colors.green : Colors.red,
-                  radius: 8,
-                  child: Icon(
-                    isPagado ? Icons.check : Icons.close,
-                    size: 12,
-                    color: Colors.white,
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'Nombre:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                   ),
-                ),
-              ],
-            ),
-          ],
+                  const SizedBox(width: 12),
+                  Text(
+                    widget.proyecto["name"],
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text(
+                    'Fecha Inicio:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    formatDateTime(widget.proyecto["fecha_inicio"]),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text(
+                    'Fecha Fin:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    formatDateTime(widget.proyecto["fecha_fin"]),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text(
+                    'Pagado?',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(width: 12),
+                  CircleAvatar(
+                    backgroundColor: isPagado ? Colors.green : Colors.red,
+                    radius: 8,
+                    child: Icon(
+                      isPagado ? Icons.check : Icons.close,
+                      size: 12,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

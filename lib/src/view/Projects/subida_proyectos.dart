@@ -21,9 +21,11 @@ class _AltaProyectosState extends State<AltaProyectos> {
     super.initState();
     _proyectosFuture = obtenerProyectos();
     _proyectosFuture.then((proyectos) {
-      setState(() {
-        _proyectos = proyectos;
-      });
+      if (mounted) {
+        setState(() {
+          _proyectos = proyectos;
+        });
+      }
     });
   }
 
@@ -59,9 +61,27 @@ class _AltaProyectosState extends State<AltaProyectos> {
 
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight),
+        preferredSize: const Size.fromHeight(59),
         child: AppBar(
-          title: const Text("Proyectos"),
+          elevation: 5,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          title: const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Proyectos',
+                  style: TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.bold,
+                  )),
+              SizedBox(height: 5),
+              // Nuevo texto para describir la página)
+              Text(
+                'Da de alta tus proyectos y administralos',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
           actions: [
             IconButton(
               icon: const Icon(Icons.search),

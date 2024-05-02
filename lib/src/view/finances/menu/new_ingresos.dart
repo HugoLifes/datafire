@@ -41,6 +41,7 @@ class _IngresosState extends State<NewIngresos> {
       ),
       Flexible(
           child: TableTemplate(
+        isEgresos: false,
         verticalController: verticalController,
         ingresoScheme: widget.ingresoScheme,
       ))

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchCustomerProjects() async {
-  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/projectCustomer";
+  const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -18,7 +18,7 @@ Future<List<dynamic>> fetchCustomerProjects() async {
 }
 
 Future<List<String>> fetchCustomerProjectsforcustomers() async {
-  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/projectCustomer";
+  const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -39,7 +39,7 @@ class PostCustomerProject {
       "project_id": projectId,
       "customer_id": customerId,
     };
-    const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/projectCustomer";
+    const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
 
     try {
       final res = await http.post(
@@ -49,20 +49,19 @@ class PostCustomerProject {
       );
 
       if (res.statusCode == 201) {
-        return true; 
+        return true;
       } else {
-        return false; 
+        return false;
       }
     } catch (err) {
-      return false; 
+      return false;
     }
   }
 }
 
-
 Future<bool> deleteCustomerProjectRelation(int customerProjectId) async {
   final url =
-      "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer/$customerProjectId";
+      "http://localhost:3000/api/v1/proyectos/projectCustomer/$customerProjectId";
 
   try {
     final res = await http.delete(
@@ -71,23 +70,24 @@ Future<bool> deleteCustomerProjectRelation(int customerProjectId) async {
     );
 
     if (res.statusCode == 200) {
-      return true; 
+      return true;
     } else {
-      return false; 
+      return false;
     }
   } catch (err) {
-    return false; 
+    return false;
   }
 }
 
-
-Future<List<Map<String, dynamic>>> fetchCustomerProjectsbyId(int customerId) async {
-  const url = "https://datafire-production.up.railway.app/api/v1/proyectos/projectCustomer";
+Future<List<Map<String, dynamic>>> fetchCustomerProjectsbyId(
+    int customerId) async {
+  const url = "http://localhost:3000/api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
-      final List<Map<String, dynamic>> allProjects = List<Map<String, dynamic>>.from(jsonDecode(res.body));
+      final List<Map<String, dynamic>> allProjects =
+          List<Map<String, dynamic>>.from(jsonDecode(res.body));
 
       final List<Map<String, dynamic>> customerProjects = allProjects
           .where((project) => project['customer_id'] == customerId)

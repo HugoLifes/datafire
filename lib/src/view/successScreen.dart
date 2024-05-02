@@ -1,5 +1,6 @@
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:datafire/src/app.dart';
 
 class SuccessfulScreen extends StatelessWidget {
   const SuccessfulScreen({Key? key}) : super(key: key);
@@ -52,7 +53,12 @@ class SuccessfulScreen extends StatelessWidget {
                     backgroundColor: greenSuccess,
                     padding: const EdgeInsets.symmetric(vertical: 20)),
                 onPressed: () {
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MyApp(),
+                    ),
+                  );
                 },
                 child: const Text(
                   "DONE",

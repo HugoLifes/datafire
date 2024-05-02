@@ -14,17 +14,12 @@ class ClienteCard extends StatefulWidget {
 class _ClienteCardState extends State<ClienteCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: canvasColor,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(0, 4)),
-        ],
-      ),
+    return Card(
+      borderOnForeground: false,
+      clipBehavior: Clip.antiAlias,
+      elevation: 4,
       child: InkWell(
-        hoverColor: accentCanvasColor,
+        hoverColor: Colors.grey.withOpacity(0.1),
         onTap: () {
           debugPrint('Cliente ID: ${widget.cliente["id"]} selected!');
           Navigator.push(
@@ -33,67 +28,70 @@ class _ClienteCardState extends State<ClienteCard> {
                   builder: (context) =>
                       DetallesYEditarClientesPage(cliente: widget.cliente)));
         },
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Row(
-              children: [
-                const Text(
-                  'ID Cliente:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  widget.cliente["id"].toString(),
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w400),
-                )
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Nombre:',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  widget.cliente["name"],
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Apellidos:',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  widget.cliente["last_name"],
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                const Text(
-                  'Empresa:',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                ),
-                const SizedBox(width: 12),
-                Text(
-                  widget.cliente["company"],
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-          ],
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Row(
+                children: [
+                  const Text(
+                    'ID Cliente:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    widget.cliente["id"].toString(),
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  const Text(
+                    'Nombre:',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    widget.cliente["name"],
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text(
+                    'Apellidos:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    widget.cliente["last_name"],
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  const Text(
+                    'Empresa:',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    widget.cliente["company"],
+                    style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchProjectWorkers() async {
-  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/projectWorker";
+  const url = "http://localhost:3000/Api/v1/proyectos/projectWorker";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -24,7 +24,7 @@ class postProjectWorker {
       "worker_id": workerId,
     };
 
-    const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/projectWorker";
+    const url = "http://localhost:3000/Api/v1/proyectos/projectWorker";
 
     try {
       final res = await http.post(
@@ -34,21 +34,20 @@ class postProjectWorker {
       );
 
       if (res.statusCode == 201) {
-      } else {
-      }
-    // ignore: empty_catches
-    } catch (err) {
-    }
+      } else {}
+      // ignore: empty_catches
+    } catch (err) {}
   }
 }
 
 Future<List<Map<String, dynamic>>> fetchProjectWorkersbyId(int workerId) async {
-  const url = "https://datafire-production.up.railway.app/Api/v1/proyectos/projectWorker";
+  const url = "http://localhost:3000/Api/v1/proyectos/projectWorker";
 
   try {
     final res = await http.get(Uri.parse(url));
     if (res.statusCode == 200) {
-      final List<Map<String, dynamic>> allProjects = List<Map<String, dynamic>>.from(jsonDecode(res.body));
+      final List<Map<String, dynamic>> allProjects =
+          List<Map<String, dynamic>>.from(jsonDecode(res.body));
 
       // Filter projects based on customer_id
       final List<Map<String, dynamic>> workerProjects = allProjects
@@ -65,7 +64,9 @@ Future<List<Map<String, dynamic>>> fetchProjectWorkersbyId(int workerId) async {
 }
 
 Future<bool> deleteProjectWorkers(int projectWorkersId) async {
-  final url = "https://datafire-production.up.railway.app/Api/v1/proyectos/projectWorker/$projectWorkersId";
+  print('worker id: $projectWorkersId');
+  final url =
+      "http://localhost:3000/Api/v1/proyectos/projectWorker/$projectWorkersId";
 
   try {
     final response = await http.delete(

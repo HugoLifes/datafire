@@ -3,6 +3,7 @@ import 'package:datafire/src/widgets/TextField.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 
 class AddAbonoForm extends StatefulWidget {
   final String idProyecto;
@@ -23,7 +24,7 @@ class _AddAbonoFormState extends State<AddAbonoForm> {
   int? selectedCustomerId;
   List<Map<String, dynamic>> customerData = [];
   DateTime selectedDate = DateTime.now();
-
+  bool _isLoaderVisible = false;
   @override
   void initState() {
     super.initState();
@@ -31,7 +32,8 @@ class _AddAbonoFormState extends State<AddAbonoForm> {
       setState(() {
         customerData = result
             .where((cp) => cp['project_id'] == int.parse(widget.idProyecto))
-            .map<Map<String, dynamic>>((dynamic item) => item as Map<String, dynamic>)
+            .map<Map<String, dynamic>>(
+                (dynamic item) => item as Map<String, dynamic>)
             .toList();
       });
     });
@@ -40,22 +42,19 @@ class _AddAbonoFormState extends State<AddAbonoForm> {
   List<DropdownMenuItem<int>> buildDropdownMenuItems() {
     List<int> uniqueCustomerIds = [];
 
-    return customerData
-        .where((customer) {
-          int customerId = customer['customer_id'] as int;
-          if (!uniqueCustomerIds.contains(customerId)) {
-            uniqueCustomerIds.add(customerId);
-            return true;
-          }
-          return false;
-        })
-        .map<DropdownMenuItem<int>>((dynamic customer) {
-          return DropdownMenuItem<int>(
-            value: customer['customer_id'] as int,
-            child: Text(customer['customer_name'].toString()),
-          );
-        })
-        .toList();
+    return customerData.where((customer) {
+      int customerId = customer['customer_id'] as int;
+      if (!uniqueCustomerIds.contains(customerId)) {
+        uniqueCustomerIds.add(customerId);
+        return true;
+      }
+      return false;
+    }).map<DropdownMenuItem<int>>((dynamic customer) {
+      return DropdownMenuItem<int>(
+        value: customer['customer_id'] as int,
+        child: Text(customer['customer_name'].toString()),
+      );
+    }).toList();
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -81,10 +80,9 @@ class _AddAbonoFormState extends State<AddAbonoForm> {
       child: Column(
         children: [
           CustomTextField(
-            controller: _amountController,
+              controller: _amountController,
               labelText: 'Importe',
-              validationMessage:'Por favor, ingresa una cantidad'
-          ),
+              validationMessage: 'Por favor, ingresa una cantidad'),
           const SizedBox(height: 20),
           TextFormField(
             controller: _dateController,
@@ -118,15 +116,24 @@ class _AddAbonoFormState extends State<AddAbonoForm> {
           ),
           const SizedBox(height: 20),
           ElevatedButton(
-            onPressed: () {
-              if (_formKey.currentState!.validate() && selectedCustomerId != null) {
+            onPressed: () async {
+              if (_formKey.currentState!.validate() &&
+                  selectedCustomerId != null) {
                 String idProyecto = widget.idProyecto;
                 String amountCosto = _amountController.text;
                 int customerId = selectedCustomerId!;
                 String selectedDateString = _dateController.text;
-                postAbono(amountCosto, selectedDateString, idProyecto, customerId);
 
-                Navigator.of(context).pop(); // Cerrar el formulario
+                // Llamar al servicio para agregar el abono
+                postAbono(
+                        amountCosto, selectedDateString, idProyecto, customerId)
+                    .whenComplete(() {})
+                    .onError((error, stackTrace) {
+                  print(error);
+                  print(stackTrace);
+                });
+
+                Navigator.pop(context); // Cerrar el formulario
               }
             },
             child: const Text('Guardar'),
