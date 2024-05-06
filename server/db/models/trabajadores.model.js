@@ -90,7 +90,7 @@ class Worker extends Model {
             var salarioMensual = worker.salary * 4
             var diario = salarioMensual / worker.semanal_hours
             worker.salary_hour = diario.toFixed(3)
-            console.log(diario.toFixed(2))
+            
           }
         },
         beforeSave: (worker) => {
