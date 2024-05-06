@@ -57,6 +57,8 @@ const updateSalaryWorkerSchema = Joi.object({
   age: age,
   position: position,
   salary: salary,
+  salary_hour: salary_hour,
+  semanal_hours: semanal_hours,
 });
 
 const getWorkerSchema = Joi.object({

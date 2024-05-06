@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const WorkerService = require('../services/trabajadores.service');
 const service = new WorkerService();
-const passport = require('passport');
+
 const validatorHandler = require('../middlewares/validator.handler');
-const { checkRoles } = require('../middlewares/auth.handler');
+
 const {
   createWorkerSchema,
   getWorkerSchema,
@@ -145,8 +145,7 @@ router.patch(
 
 router.delete(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRoles('user', 'admin'),
+  
   validatorHandler(getWorkerSchema, 'params'),
   async (req, res, next) => {
     try {

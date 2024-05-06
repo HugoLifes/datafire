@@ -26,7 +26,7 @@ const WorkerSchema = {
     type: DataTypes.STRING,
   },
   salary_hour: {
-    allowNull: true,
+    allowNull: false,
     type: DataTypes.FLOAT,
     defaultValue: 0,
   },
@@ -83,12 +83,23 @@ class Worker extends Model {
       modelName: 'Worker',
       timestamps: false,
       hooks: {
-        beforeSave: (worker) => {
+        beforeUpdate: async (worker,) => {
           worker.salary
+          worker.semanal_hours
           if(worker.salary != 0){
             var salarioMensual = worker.salary * 4
             var diario = salarioMensual / worker.semanal_hours
-            worker.salary_hour = diario
+            worker.salary_hour = diario.toFixed(3)
+            console.log(diario.toFixed(2))
+          }
+        },
+        beforeSave: (worker) => {
+          worker.salary
+          worker.semanal_hours
+          if(worker.salary != 0){
+            var salarioMensual = worker.salary * 4
+            var diario = salarioMensual / worker.semanal_hours
+            worker.salary_hour = diario.toFixed(3)
           }
  
         },
