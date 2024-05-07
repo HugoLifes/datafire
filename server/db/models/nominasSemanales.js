@@ -92,6 +92,7 @@ class NominasSemanales extends Model {
             nominasSemanales.salary_hour * nominasSemanales.horas_trabajadas;
           const salarioExtra =
             nominasSemanales.salary_hour * 1.5 * nominasSemanales.horas_extra;
+          
           nominasSemanales.salary = salarioBase + salarioExtra;
          
         },
