@@ -87,8 +87,8 @@ class Worker extends Model {
           worker.salary
           worker.semanal_hours
           if(worker.salary != 0){
-            var salarioMensual = worker.salary * 4
-            var diario = salarioMensual / worker.semanal_hours
+            
+            var diario = worker.salary/ worker.semanal_hours
             worker.salary_hour = diario.toFixed(3)
             
           }
@@ -97,8 +97,7 @@ class Worker extends Model {
           worker.salary
           worker.semanal_hours
           if(worker.salary != 0){
-            var salarioMensual = worker.salary * 4
-            var diario = salarioMensual / worker.semanal_hours
+            var diario = worker.salary  / worker.semanal_hours
             worker.salary_hour = diario.toFixed(3)
           }
  
