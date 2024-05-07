@@ -41,12 +41,12 @@ const NominasSemanalesSchema = {
     defaultValue: 0,
   },
   horas_trabajadas: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER,
     defaultValue: 0,
   },
   horas_extra: {
-    allowNull: false,
+    allowNull: true,
     type: DataTypes.INTEGER,
     defaultValue: 0,
   },
@@ -93,12 +93,7 @@ class NominasSemanales extends Model {
           const salarioExtra =
             nominasSemanales.salary_hour * 1.5 * nominasSemanales.horas_extra;
           nominasSemanales.salary = salarioBase + salarioExtra;
-          nominasSemanales.isr = nominasSemanales.salary * 0.04;
-          nominasSemanales.seguro_social = nominasSemanales.salary * 0.02;
-          nominasSemanales.salario_final =
-            nominasSemanales.salary -
-            nominasSemanales.isr -
-            nominasSemanales.seguro_social;
+         
         },
       },
     };

@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 
-const { models } = require('../lib/sequelize');
-
 const payrollService = require('../services/proyectos.service');
 const service = new payrollService();
 
@@ -10,11 +8,10 @@ const passport = require('passport');
 const validatorHandler = require('../middlewares/validator.handler');
 const { checkRoles } = require('../middlewares/auth.handler');
 const {
-  createWorkerSchema,
   getWorkerSchema,
   updateWorkerSchema,
 } = require('../schemas/trabajadores.schema');
-const PayrollService = require('../services/payrolls.service');
+
 
 router.get('/', async (req, res, next) => {
   try {
@@ -60,8 +57,6 @@ router.post('/', async (req, res, next) => {
 
 router.patch(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRoles('user', 'admin'),
   validatorHandler(updateWorkerSchema, 'body'),
   validatorHandler(getWorkerSchema, 'params'),
   async (req, res, next) => {

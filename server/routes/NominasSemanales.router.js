@@ -1,16 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const PDFDocument = require('pdfkit');
-const { models } = require('../lib/sequelize');
-
 const NominasSemanalesService = require('../services/NominasSemanales.service');
 const service = new NominasSemanalesService();
-
-const passport = require('passport');
 const validatorHandler = require('../middlewares/validator.handler');
-const { checkRoles } = require('../middlewares/auth.handler');
+
 const {
-  createWorkerSchema,
+ 
   getWorkerSchema,
   updateWorkerSchema,
 } = require('../schemas/trabajadores.schema');
@@ -88,8 +84,7 @@ router.post('/', async (req, res, next) => {
 
 router.patch(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRoles('user', 'admin'),
+ 
   validatorHandler(updateWorkerSchema, 'body'),
   validatorHandler(getWorkerSchema, 'params'),
   async (req, res, next) => {
@@ -106,8 +101,7 @@ router.patch(
 
 router.delete(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRoles('user', 'admin'),
+ 
   validatorHandler(getWorkerSchema, 'params'),
   async (req, res, next) => {
     try {

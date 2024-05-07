@@ -1,6 +1,4 @@
-const { faker } = require('@faker-js/faker');
 const boom = require('@hapi/boom');
-const { create } = require('../schemas/trabajadores.schema');
 const { models } = require('../lib/sequelize');
 const { Op } = require('sequelize');
 
@@ -58,7 +56,7 @@ class NominasSemanalesService {
           salary: nomina.salary,
           isr: nomina.isr,
           seguro_social: nomina.seguro_social,
-          salary: nomina.salario_final,
+          salario_final: nomina.salario_final,
           startDate: nomina.fecha_inicio_semana,
           endDate: nomina.fecha_fin_semana,
         }));
