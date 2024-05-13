@@ -1,6 +1,7 @@
 import 'package:datafire/src/app.dart';
 import 'package:datafire/src/view/login/login_view.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
@@ -9,6 +10,9 @@ void main() async {
   String? token = prefs.getString('token');
 
   runApp(MaterialApp(
+    theme: ThemeData(
+      fontFamily: 'GoogleSans',
+    ),
     debugShowCheckedModeBanner: false,
     initialRoute: token != null ? '/home' : '/login',
     routes: {

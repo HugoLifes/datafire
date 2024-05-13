@@ -1,3 +1,4 @@
+import 'package:datafire/src/model/nominas_semanales.dart';
 import 'package:datafire/src/model/workers_model.dart';
 import 'package:datafire/src/widgets/table_scrolleable.dart';
 import 'package:flutter/material.dart';
@@ -5,8 +6,9 @@ import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class NewEgresos extends StatefulWidget {
-  NewEgresos({super.key, this.workersScheme});
+  NewEgresos({super.key, this.workersScheme, this.nominasWeek});
   List<WorkerScheme>? workersScheme = [];
+  List<NominasSemanales>? nominasWeek = [];
   @override
   State<NewEgresos> createState() => _NewEgresosState();
 }
@@ -16,10 +18,12 @@ class _NewEgresosState extends State<NewEgresos> {
   double impustosTotal = 0;
   int totalSueldos = 0;
   final NumberFormat numberFormat = NumberFormat("#,##0.00", "es_MX");
+  bool isEgresos = true;
 
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
     calculosEgresos();
   }
@@ -92,27 +96,24 @@ class _NewEgresosState extends State<NewEgresos> {
             height: 15,
           ),
           Container(
-            height: 500,
-            width: 900,
-
-            // color: Colors.red,,
-            child: TableTemplate(
-              isEgresos: true,
-              verticalController: verrticalController,
-              workerScheme: widget.workersScheme!,
+            child: GridView.builder(
+              scrollDirection: Axis.vertical,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                childAspectRatio: 3.9,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 15,
+              ),
+              itemCount: widget.nominasWeek!.length,
+              itemBuilder: (_, int data) {
+                return TableTemplate(
+                  isEgresos: isEgresos,
+                  verticalController: verrticalController,
+                  workerScheme: widget.workersScheme!,
+                );
+              },
             ),
           ),
-          Container(
-            height: 500,
-            width: 900,
-
-            // color: Colors.red,,
-            child: TableTemplate(
-              isEgresos: true,
-              verticalController: verrticalController,
-              workerScheme: widget.workersScheme!,
-            ),
-          )
         ],
       ),
     );
@@ -165,6 +166,7 @@ class IncomeCard extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
+                  fontFamily: 'GoogleSans',
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -207,6 +209,7 @@ class IncomeCard extends StatelessWidget {
               Text(
                 amount,
                 style: const TextStyle(
+                  fontFamily: 'GoogleSans',
                   fontSize: 24,
                 ),
               ),
@@ -218,6 +221,7 @@ class IncomeCard extends StatelessWidget {
               Text(
                 descripcion,
                 style: const TextStyle(
+                  fontFamily: 'GoogleSans',
                   fontSize: 16,
                 ),
               ),

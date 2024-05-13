@@ -17,6 +17,9 @@ const greenSuccess = Color(0xFF35d187);
 TextStyle largeText =
     GoogleFonts.montserrat(fontSize: 30, fontWeight: FontWeight.bold);
 
+TextStyle mediumText =
+    GoogleFonts.montserrat(fontSize: 25, fontWeight: FontWeight.bold);
+
 TextStyle normalText = GoogleFonts.montserrat(fontSize: 15);
 
 TextStyle rowText =

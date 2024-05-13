@@ -142,6 +142,7 @@ class _TableTemplateState extends State<TableTemplate> {
                       padding: const EdgeInsets.all(8),
                       child: Text(label,
                           style: TextStyle(
+                            fontFamily: 'GoogleSans',
                             fontWeight: isStickyHeader ? FontWeight.w600 : null,
                             color: isStickyHeader ? null : colorScheme.outline,
                           )))),
@@ -226,6 +227,7 @@ class _TableTemplateState extends State<TableTemplate> {
                       child: Text(
                         label,
                         style: TextStyle(
+                          fontFamily: 'GoogleSans',
                           fontWeight: isStickyHeader ? FontWeight.w600 : null,
                           color: isStickyHeader ? null : colorScheme.outline,
                         ),

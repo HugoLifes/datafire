@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:datafire/src/model/ingresos_model.dart';
+import 'package:datafire/src/model/nominas_semanales.dart';
 import 'package:datafire/src/model/workers_model.dart';
+import 'package:datafire/src/services/nominas_semanales_service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/finances/menu/Egresos.dart' as Egresos;
 import 'package:datafire/src/view/finances/menu/Flujo.dart';
@@ -44,6 +46,8 @@ class _FinancesViewState extends State<FinancesView> {
   List<AbonoScheme> abonoScheme = [];
   List<WorkerScheme> workersScheme = [];
   bool isLoading = true;
+  List<NominasSemanales> nominasWeek = [];
+  List<Nomina> nominasPay = [];
 
   @override
   void initState() {
@@ -81,6 +85,7 @@ class _FinancesViewState extends State<FinancesView> {
         });
   }
 
+  //funcion que llama a los egresos
   Future dataEgresos() async {
     var data = await newFetchWorkers();
 
@@ -96,16 +101,37 @@ class _FinancesViewState extends State<FinancesView> {
           salary: data[i].salary,
           workerCost: data[i].workerCost,
           createdAt: data[i].createdAt,
-          monthCosts: WorkerScheme().pagomensual(data[i].salary),
-          payxDay: WorkerScheme().pagodiario(data[i].salary),
-          payxhr: WorkerScheme().pagohora(data[i].salary),
           salarioBrutoAnual:
-              WorkerScheme().pagoAnual(data[i].salary, data[i].yearsWorked),
+              WorkerScheme().pagoAnual(data[i].salaryHour, data[i].yearsWorked),
           seguroSocial: WorkerScheme().calcularImss(
             data[i].salary,
           ),
           isr: WorkerScheme().calcularISR(data[i].salary)));
     }
+  }
+
+  // funcion que carga las nominas
+  Future dataNominas() async {
+    await loadNominas().then((value) {
+      for (int i = 0; i < value.length; i++) {
+        for (int j = 0; j < value[i].nominas!.length; j++) {
+          nominasPay.add(Nomina(
+              workerId: value[i].nominas![j].workerId,
+              workerName: value[i].nominas![j].workerName,
+              salaryHour: value[i].nominas![j].salaryHour,
+              salary: value[i].nominas![j].salary,
+              horasTrabajadas: value[i].nominas![j].horasTrabajadas,
+              isr: WorkerScheme().calcularISR(value[i].nominas![j].salary),
+              seguroSocial:
+                  WorkerScheme().calcularImss(value[i].nominas![j].salary)));
+        }
+        nominasWeek.add(NominasSemanales(
+          startDate: value[i].startDate,
+          endDate: value[i].endDate,
+          nominas: nominasPay,
+        ));
+      }
+    });
   }
 
   Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
@@ -155,12 +181,16 @@ class _FinancesViewState extends State<FinancesView> {
             length: 4,
             child: Column(
               children: [
-                const TabBar(tabs: [
-                  Tab(text: "Egresos"),
-                  Tab(text: "Ingresos"),
-                  Tab(text: "Flujo"),
-                  Tab(text: "  Cuentas por cobrar")
-                ]),
+                const TabBar(
+                    labelStyle: TextStyle(
+                      fontFamily: 'GoogleSans',
+                    ),
+                    tabs: [
+                      Tab(text: "Egresos"),
+                      Tab(text: "Ingresos"),
+                      Tab(text: "Flujo"),
+                      Tab(text: "  Cuentas por cobrar")
+                    ]),
                 Flexible(
                   child: TabBarView(
                     children: [
@@ -168,6 +198,7 @@ class _FinancesViewState extends State<FinancesView> {
                           ? const Center(child: CircularProgressIndicator())
                           : NewEgresos(
                               workersScheme: workersScheme,
+                              nominasWeek: nominasWeek,
                             ),
                       isLoading
                           ? const Center(child: CircularProgressIndicator())

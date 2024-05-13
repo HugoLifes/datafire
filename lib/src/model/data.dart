@@ -118,23 +118,18 @@ class Trabajadores {
       this.salario,
       this.semanalHours});
 
-  Future<void> actualizarTrabajador({
-    required int id,
-    required String nombre,
-    required String apellido,
-    required int edad,
-    required String position,
-    required int salario,
-  }) async {
+  Future<void> actualizarTrabajador(
+      {required int id,
+      required String nombre,
+      required String apellido,
+      required int edad,
+      required String position,
+      required int salario,
+      required int semanahour,
+      required double salaryhour}) async {
     // Llama al método en el servicio correspondiente
     await updateTrabajador(
-      id,
-      nombre,
-      apellido,
-      edad,
-      position,
-      salario,
-    );
+        id, nombre, apellido, edad, position, salario, semanahour, salaryhour);
   }
 
   Future<void> eliminarTrabajador(int id) async {

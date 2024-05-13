@@ -81,7 +81,10 @@ class _HomeState extends State<Home> {
         value: projectCount,
         title: '$monthName\n${projectCount.toInt()}',
         titleStyle: const TextStyle(
-            fontSize: 12, color: Colors.black, fontWeight: FontWeight.bold),
+            fontFamily: 'GoogleSans',
+            fontSize: 12,
+            color: Colors.black,
+            fontWeight: FontWeight.bold),
       );
     }).toList();
 
@@ -95,7 +98,12 @@ class _HomeState extends State<Home> {
   void _showWelcomeMessage() {
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-          content: Text('Bienvenido a la gestión de tus proyectos!'),
+          content: Text(
+            'Bienvenido a la gestión de tus proyectos!',
+            style: TextStyle(
+              fontFamily: 'GoogleSans',
+            ),
+          ),
           duration: Duration(seconds: 3)),
     );
   }
@@ -222,8 +230,10 @@ class _HomeState extends State<Home> {
           Padding(
             padding: const EdgeInsets.only(left: 15, top: 6),
             child: Text(title,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                style: const TextStyle(
+                    fontFamily: 'GoogleSans',
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
           ),
           const SizedBox(height: 10),
           Container(
@@ -251,8 +261,10 @@ class _HomeState extends State<Home> {
               left: 15,
             ),
             child: Text(title,
-                style:
-                    const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                style: const TextStyle(
+                    fontFamily: 'GoogleSans',
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold)),
           ),
           SizedBox(
             height: 35,
@@ -319,7 +331,7 @@ class _HomeState extends State<Home> {
                   useSeriesColor: true,
                   textStyle: TextStyle(
                       fontSize: 13,
-                      fontFamily: 'Roboto',
+                      fontFamily: 'GoogleSans',
                       fontWeight: FontWeight.w500),
                   isVisible: true,
                   labelAlignment: ChartDataLabelAlignment.auto))

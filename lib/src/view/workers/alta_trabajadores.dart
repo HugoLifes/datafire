@@ -25,10 +25,11 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-            appBar: const PreferredSize(
-              preferredSize: Size.fromHeight(kToolbarHeight),
-              child: AppBarDatafire(title: "Trabajadores", description: "Administra y da de alta tu trabajadores")
-            ),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: AppBarDatafire(
+              title: "Trabajadores",
+              description: "Administra y da de alta tu trabajadores")),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
@@ -41,7 +42,8 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
         icon: const Icon(Icons.receipt),
         elevation: 4,
         label: const Row(children: [
-          Text('Agregar Trabajador', style: TextStyle(fontSize: 15))
+          Text('Agregar Trabajador',
+              style: TextStyle(fontFamily: 'GoogleSans', fontSize: 15))
         ]),
       ),
       body: FutureBuilder<List<dynamic>>(
@@ -51,9 +53,20 @@ class _AltaTrabajadoresState extends State<AltaTrabajadores> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return const Center(
-                child: Text('Error al cargar los trabajadores'));
+                child: Text(
+              'Error al cargar los trabajadores',
+              style: TextStyle(
+                fontFamily: 'GoogleSans',
+              ),
+            ));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No hay trabajadores disponibles'));
+            return const Center(
+                child: Text(
+              'No hay trabajadores disponibles',
+              style: TextStyle(
+                fontFamily: 'GoogleSans',
+              ),
+            ));
           } else {
             final trabajadores = snapshot.data as List<dynamic>;
             return GridView.builder(

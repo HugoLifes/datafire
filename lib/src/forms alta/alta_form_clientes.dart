@@ -35,7 +35,10 @@ class _AltaClientePageState extends State<AltaClientePage> {
               children: [
                 const Text(
                   "Ingresa todos los datos del nuevo cliente",
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  style: TextStyle(
+                      fontFamily: 'GoogleSans',
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 16.0),
                 CustomTextField(
@@ -62,7 +65,12 @@ class _AltaClientePageState extends State<AltaClientePage> {
                   width: double.infinity,
                   child: FilledButton(
                     onPressed: _saveCliente,
-                    child: const Text('Guardar'),
+                    child: const Text(
+                      'Guardar',
+                      style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                      ),
+                    ),
                   ),
                 ),
               ],

@@ -20,6 +20,8 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
   final _edadController = TextEditingController();
   final _cargoController = TextEditingController();
   final _salarioController = TextEditingController();
+  final _salaryHourController = TextEditingController();
+  final _semanalSalaryController = TextEditingController();
 
   Trabajadores trabajadorInstance = Trabajadores();
 
@@ -31,6 +33,10 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
     _edadController.text = widget.trabajador?['age'].toString() ?? '';
     _cargoController.text = widget.trabajador?['position'] ?? '';
     _salarioController.text = widget.trabajador?['salary'].toString() ?? '';
+    _salaryHourController.text =
+        widget.trabajador?['salary_hour'].toString() ?? '';
+    _semanalSalaryController.text =
+        widget.trabajador?['semanal_hours'].toString() ?? '';
   }
 
   @override
@@ -74,6 +80,11 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                 validationMessage:
                     'Por favor, ingresa el salario del trabajador'),
             const SizedBox(height: 16.0),
+            CustomTextField(
+                controller: _semanalSalaryController,
+                labelText: 'Horas semanales',
+                validationMessage: 'Por favor, edita las horas del trabajador'),
+            const SizedBox(height: 16.0),
             SizedBox(
               width: double.infinity,
               child: FilledButton(
@@ -87,16 +98,19 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                     String age = _edadController.text;
                     String cargo = _cargoController.text;
                     String salary = _salarioController.text;
+                    String salaryHour = _salaryHourController.text;
+                    String semanalHour = _semanalSalaryController.text;
 
                     try {
                       await trabajadorInstance.actualizarTrabajador(
-                        id: widget.trabajador?["id"],
-                        nombre: name,
-                        apellido: lastName,
-                        edad: int.parse(age),
-                        position: cargo,
-                        salario: int.parse(salary),
-                      );
+                          id: widget.trabajador?["id"],
+                          nombre: name,
+                          apellido: lastName,
+                          edad: int.parse(age),
+                          position: cargo,
+                          salario: int.parse(salary),
+                          salaryhour: double.parse(salaryHour),
+                          semanahour: int.parse(semanalHour));
 
                       Navigator.push(
                         context,
@@ -137,7 +151,6 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                           TextButton(
                             onPressed: () async {
                               try {
-                                Navigator.of(context).pop();
                                 await trabajadorInstance.eliminarTrabajador(
                                     widget.trabajador?['id']);
                                 Navigator.pop(context);

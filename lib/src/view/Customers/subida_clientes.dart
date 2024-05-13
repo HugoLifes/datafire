@@ -25,10 +25,12 @@ class _AltaClientesState extends State<AltaClientes> {
     var size = MediaQuery.of(context).size;
 
     return Scaffold(
-            appBar: const PreferredSize(
-              preferredSize: Size.fromHeight(kToolbarHeight),
-              child: AppBarDatafire(title: "Clientes", description: "En esta sección se mostrarán sus clientes o poder dar de alta clientes")
-            ),
+      appBar: const PreferredSize(
+          preferredSize: Size.fromHeight(kToolbarHeight),
+          child: AppBarDatafire(
+              title: "Clientes",
+              description:
+                  "En esta sección se mostrarán sus clientes o poder dar de alta clientes")),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           // Al presionar el botón, navegar a la página AltaClientePage
@@ -42,7 +44,8 @@ class _AltaClientesState extends State<AltaClientes> {
         icon: const Icon(Icons.group_add),
         elevation: 4,
         label: const Row(children: [
-          Text('Agregar Cliente', style: TextStyle(fontSize: 15))
+          Text('Agregar Cliente',
+              style: TextStyle(fontFamily: 'GoogleSans', fontSize: 15))
         ]),
       ),
       body: FutureBuilder<List<dynamic>>(
@@ -52,9 +55,21 @@ class _AltaClientesState extends State<AltaClientes> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error al cargar los clientes'));
+            return const Center(
+                child: Text(
+              'Error al cargar los clientes',
+              style: TextStyle(
+                fontFamily: 'GoogleSans',
+              ),
+            ));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No hay clientes disponibles'));
+            return const Center(
+                child: Text(
+              'No hay clientes disponibles',
+              style: TextStyle(
+                fontFamily: 'GoogleSans',
+              ),
+            ));
           } else {
             // Mostrar la lista de clientes en la UI
             final clientes = snapshot.data as List<dynamic>;
@@ -78,4 +93,3 @@ class _AltaClientesState extends State<AltaClientes> {
     );
   }
 }
-

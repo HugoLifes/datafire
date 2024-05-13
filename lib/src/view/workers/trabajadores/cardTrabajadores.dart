@@ -36,13 +36,18 @@ class _TrabajadorCardState extends State<TrabajadorCard> {
                 children: [
                   const Text(
                     'ID Trabajador:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.trabajador["id"].toString(),
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   )
                 ],
               ),
@@ -50,13 +55,18 @@ class _TrabajadorCardState extends State<TrabajadorCard> {
                 children: [
                   const Text(
                     'Nombre:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.trabajador["name"],
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -64,13 +74,18 @@ class _TrabajadorCardState extends State<TrabajadorCard> {
                 children: [
                   const Text(
                     'Apellidos:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.trabajador["last_name"],
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -78,13 +93,18 @@ class _TrabajadorCardState extends State<TrabajadorCard> {
                 children: [
                   const Text(
                     'Edad:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.trabajador["age"].toString(),
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -92,13 +112,18 @@ class _TrabajadorCardState extends State<TrabajadorCard> {
                 children: [
                   const Text(
                     'Cargo:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.trabajador["position"],
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -106,13 +131,18 @@ class _TrabajadorCardState extends State<TrabajadorCard> {
                 children: [
                   const Text(
                     'Salario:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.trabajador["salary"].toString(),
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),

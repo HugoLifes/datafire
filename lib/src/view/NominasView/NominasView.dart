@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:datafire/src/app.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -30,7 +31,7 @@ class _NominasViewState extends State<NominasView> {
         final data = json.decode(response.body);
         setState(() {
           trabajadores = List<String>.from(data.map((trabajador) =>
-              "${trabajador['id']} ${trabajador['name']} ${trabajador['last_name']} \$${trabajador['salary_hour']} por hora"));
+              "${trabajador['id']} ${trabajador['name']} ${trabajador['last_name']} "));
           trabajadoresDatos = Map.fromIterable(data,
               key: (trabajador) => trabajador['id'].toString(),
               value: (trabajador) => {
@@ -98,27 +99,32 @@ class _NominasViewState extends State<NominasView> {
       }
     });
 
-    await Future.wait(nominasFutures);
+    print(nominasFutures.length);
 
-    // Muestra un diálogo de éxito y cierra la pantalla actual
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Éxito"),
-          content: const Text("Las nóminas han sido creadas con éxito."),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop(); // Cierra el diálogo
-              },
-            ),
-          ],
-        );
-      },
-    );
+    await Future.wait(nominasFutures).whenComplete(() => showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Éxito"),
+              content: const Text(
+                  "Las nóminas han sido creadas con éxito, regresar al menu principal?"),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MyApp(),
+                      ),
+                    ); // Cierra el diálogo
+                  },
+                ),
+              ],
+            );
+          },
+        ));
   }
 
   Future<void> enviarDatosNomina(Map<String, dynamic> nominaData) async {
@@ -127,7 +133,7 @@ class _NominasViewState extends State<NominasView> {
       final response = await http.post(Uri.parse(url),
           headers: {'Content-Type': 'application/json; charset=UTF-8'},
           body: jsonEncode(nominaData));
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         print(
             "Datos enviados correctamente para el trabajador ID: ${nominaData['worker_id']}");
       } else {

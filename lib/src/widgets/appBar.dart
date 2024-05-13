@@ -17,11 +17,14 @@ class AppBarDatafire extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+            style: const TextStyle(
+                fontFamily: 'GoogleSans',
+                fontWeight: FontWeight.bold,
+                fontSize: 25),
           ),
           Text(
             description,
-            style: const TextStyle(fontSize: 15),
+            style: const TextStyle(fontFamily: 'GoogleSans', fontSize: 15),
           ),
         ],
       ),

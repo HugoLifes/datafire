@@ -32,13 +32,15 @@ class MotherView extends StatelessWidget {
             case 4:
               return const FinancesView();
             case 5:
-              return const NominasMain(); 
-            case 6: 
+              return const NominasMain();
+            case 6:
               return const UserVerificationView();
             default:
               return Text(
                 'Page not found',
-                style: theme.textTheme.headlineSmall,
+                style: TextStyle(
+                  fontFamily: 'GoogleSans',
+                ),
               );
           }
         });

@@ -1,6 +1,7 @@
 import 'package:datafire/src/forms%20alta/alta_form_proyectos.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/cardProyecto.dart';
+import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class AltaProyectos extends StatefulWidget {
@@ -63,6 +64,7 @@ class _AltaProyectosState extends State<AltaProyectos> {
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(59),
         child: AppBar(
+          backgroundColor: accentCanvasColor,
           elevation: 5,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
@@ -71,6 +73,7 @@ class _AltaProyectosState extends State<AltaProyectos> {
             children: [
               Text('Proyectos',
                   style: TextStyle(
+                    fontFamily: 'GoogleSans',
                     fontSize: 23,
                     fontWeight: FontWeight.bold,
                   )),
@@ -78,7 +81,10 @@ class _AltaProyectosState extends State<AltaProyectos> {
               // Nuevo texto para describir la página)
               Text(
                 'Da de alta tus proyectos y administralos',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                style: TextStyle(
+                    fontFamily: 'GoogleSans',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400),
               )
             ],
           ),
@@ -112,7 +118,8 @@ class _AltaProyectosState extends State<AltaProyectos> {
         icon: const Icon(Icons.receipt),
         elevation: 4,
         label: const Row(children: [
-          Text('Agregar Proyecto', style: TextStyle(fontSize: 15))
+          Text('Agregar Proyecto',
+              style: TextStyle(fontFamily: 'GoogleSans', fontSize: 15))
         ]),
       ),
       body: FutureBuilder<List<dynamic>>(
@@ -121,9 +128,21 @@ class _AltaProyectosState extends State<AltaProyectos> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return const Center(child: Text('Error al cargar los clientes'));
+            return const Center(
+                child: Text(
+              'Error al cargar los clientes',
+              style: TextStyle(
+                fontFamily: 'GoogleSans',
+              ),
+            ));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('No hay clientes disponibles'));
+            return const Center(
+                child: Text(
+              'No hay clientes disponibles',
+              style: TextStyle(
+                fontFamily: 'GoogleSans',
+              ),
+            ));
           } else {
             // Mostrar la lista de clientes en la UI
             return GridView.builder(

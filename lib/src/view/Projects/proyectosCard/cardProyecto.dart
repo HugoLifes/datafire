@@ -48,13 +48,18 @@ class _ProyectoCardState extends State<ProyectoCard> {
                 children: [
                   const Text(
                     'Nombre:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.proyecto["name"],
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -62,13 +67,18 @@ class _ProyectoCardState extends State<ProyectoCard> {
                 children: [
                   const Text(
                     'Fecha Inicio:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     formatDateTime(widget.proyecto["fecha_inicio"]),
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -76,13 +86,18 @@ class _ProyectoCardState extends State<ProyectoCard> {
                 children: [
                   const Text(
                     'Fecha Fin:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     formatDateTime(widget.proyecto["fecha_fin"]),
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -90,7 +105,10 @@ class _ProyectoCardState extends State<ProyectoCard> {
                 children: [
                   const Text(
                     'Pagado?',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   CircleAvatar(

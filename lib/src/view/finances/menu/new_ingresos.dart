@@ -77,6 +77,7 @@ class IncomeCard extends StatelessWidget {
               Text(
                 title,
                 style: const TextStyle(
+                  fontFamily: 'GoogleSans',
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
@@ -87,6 +88,7 @@ class IncomeCard extends StatelessWidget {
               Text(
                 amount,
                 style: const TextStyle(
+                  fontFamily: 'GoogleSans',
                   fontSize: 24,
                 ),
               ),
@@ -96,6 +98,7 @@ class IncomeCard extends StatelessWidget {
               Text(
                 descripcion,
                 style: const TextStyle(
+                  fontFamily: 'GoogleSans',
                   fontSize: 16,
                 ),
               ),

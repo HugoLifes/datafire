@@ -43,8 +43,15 @@ router.get('/', async (req, res, next) => {
 router.get('/weeklyNominas', async (req, res, next) => {
   try {
     const workers = await service.findWeeklyNominasManual();
-    res.json(workers);
+    
+    if(workers.length == 0){
+      res.status(405).json(workers);
+    }else{
+      res.status(200).json(workers);
+    }
+    
   } catch (error) {
+    res.status(400);
     next(error);
   }
 });

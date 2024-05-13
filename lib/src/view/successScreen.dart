@@ -30,6 +30,7 @@ class SuccessfulScreen extends StatelessWidget {
             const Text(
               "SUCCESS!",
               style: TextStyle(
+                  fontFamily: 'GoogleSans',
                   fontWeight: FontWeight.bold,
                   fontSize: 35,
                   color: greenSuccess,
@@ -40,6 +41,7 @@ class SuccessfulScreen extends StatelessWidget {
               "Felicidades! Solicitud al servidor \n hecha correctamente!",
               textAlign: TextAlign.center,
               style: TextStyle(
+                fontFamily: 'GoogleSans',
                 color: Color.fromARGB(255, 113, 109, 109),
                 fontWeight: FontWeight.w500,
                 fontSize: 20,
@@ -63,6 +65,7 @@ class SuccessfulScreen extends StatelessWidget {
                 child: const Text(
                   "DONE",
                   style: TextStyle(
+                      fontFamily: 'GoogleSans',
                       fontSize: 20,
                       fontWeight: FontWeight.w400,
                       letterSpacing: 2),

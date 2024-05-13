@@ -195,10 +195,6 @@ class WorkerScheme {
     return salary * 4;
   }
 
-  double pagodiario(int salary) {
-    return salary / 7;
-  }
-
   double pagohora(int salary) {
     double diario = salary / 7;
 
@@ -206,7 +202,7 @@ class WorkerScheme {
   }
 
   pagoAnual(dynamic salary, int yearsTrabajados) {
-    var salarioDiario = pagodiario(salary);
+    var salarioDiario = salary;
     var aguinaldo = calcularAguinaldo(salary);
     var vacaciones = calcularVacaciones(salary, yearsTrabajados);
     var isr = salarioDiario;
@@ -215,7 +211,7 @@ class WorkerScheme {
     return salarioanual;
   }
 
-  double calcularAguinaldo(int salarioSemanal) {
+  dynamic calcularAguinaldo(dynamic salarioSemanal) {
     // Calculate the number of weeks worked in a year
     int semanasTrabajadas = 12;
 
@@ -225,7 +221,7 @@ class WorkerScheme {
     return aguinaldo;
   }
 
-  int calcularVacaciones(dynamic salarioSemanal, int yearsTrabajados) {
+  dynamic calcularVacaciones(dynamic salarioSemanal, int yearsTrabajados) {
     // Calculate the minimum number of vacation days
     int diasVacacionesMinimas = 6;
 
@@ -244,8 +240,8 @@ class WorkerScheme {
     return pagoVacacionesTotal;
   }
 
-  double calcularImss(int salary) {
-    double salarioDiario = pagodiario(salary);
+  dynamic calcularImss(dynamic salary) {
+    dynamic salarioDiario = salary;
     double cuotaPatronal = 3.075;
     double cuotaObrero = 7.0;
     double cuotaPatronalDiaria;
@@ -263,7 +259,7 @@ class WorkerScheme {
     return imss;
   }
 
-  double calcularISR(int salary) {
+  dynamic calcularISR(dynamic salary) {
     double ingresoGravableDiario = salary - 107.8;
 
     // Initialize ISR amount
@@ -284,7 +280,7 @@ class WorkerScheme {
         break; // Exit the loop once the appropriate bracket is found
       }
     }
-    
+
     return isrDiario;
   }
 }

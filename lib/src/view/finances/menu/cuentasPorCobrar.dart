@@ -14,15 +14,33 @@ class CobrarWidget extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CircularProgressIndicator();
         } else if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
+          return Text(
+            'Error: ${snapshot.error}',
+            style: TextStyle(
+              fontFamily: 'GoogleSans',
+            ),
+          );
         } else {
-          final dataSource = ProjectInfoDataSource(snapshot.data as List<Map<String, dynamic>>);
+          final dataSource = ProjectInfoDataSource(
+              snapshot.data as List<Map<String, dynamic>>);
           return SfDataGrid(
             source: dataSource,
             columns: [
-              GridColumn(columnName: 'name', label: const Text('                               Nombre del proyecto', textAlign: TextAlign.end)),
-              GridColumn(columnName: 'remaining', label: const Text('                                               Deuda', textAlign: TextAlign.start)),
-              GridColumn(columnName: 'projectCustomers', label: const Text('                          Clientes al que pertenece', textAlign: TextAlign.center)),
+              GridColumn(
+                  columnName: 'name',
+                  label: const Text(
+                      '                               Nombre del proyecto',
+                      textAlign: TextAlign.end)),
+              GridColumn(
+                  columnName: 'remaining',
+                  label: const Text(
+                      '                                               Deuda',
+                      textAlign: TextAlign.start)),
+              GridColumn(
+                  columnName: 'projectCustomers',
+                  label: const Text(
+                      '                          Clientes al que pertenece',
+                      textAlign: TextAlign.center)),
             ],
             allowSorting: true,
             allowFiltering: true,
@@ -39,8 +57,12 @@ class ProjectInfoDataSource extends DataGridSource {
     _dataGridRows = data
         .map<DataGridRow>((e) => DataGridRow(cells: [
               DataGridCell<String>(columnName: 'name', value: e['name'] ?? ''),
-              DataGridCell<double>(columnName: 'remaining', value: (e['remaining'] ?? 0).toDouble()),
-              DataGridCell<List<Widget>>(columnName: 'projectCustomers', value: _formatProjectCustomers(e['projectCustomers'])),
+              DataGridCell<double>(
+                  columnName: 'remaining',
+                  value: (e['remaining'] ?? 0).toDouble()),
+              DataGridCell<List<Widget>>(
+                  columnName: 'projectCustomers',
+                  value: _formatProjectCustomers(e['projectCustomers'])),
             ]))
         .toList();
   }
@@ -59,37 +81,40 @@ class ProjectInfoDataSource extends DataGridSource {
   @override
   List<DataGridRow> get rows => _dataGridRows;
 
-@override
-DataGridRowAdapter buildRow(DataGridRow row) {
-  return DataGridRowAdapter(
-    cells: row.getCells().map<Widget>((e) {
-      if (e.columnName == 'projectCustomers') {
-        List<Widget> customerWidgets = e.value as List<Widget>;
-        return Container(
-          alignment: getAlignment(e.columnName),
-          padding: const EdgeInsets.all(8.0),
-          child: SizedBox(
-            height: 60.0, // Ajusta la altura según sea necesario
-            child: ListView(
-              scrollDirection: Axis.vertical, // Hace la celda scrollable verticalmente
-              children: customerWidgets,
+  @override
+  DataGridRowAdapter buildRow(DataGridRow row) {
+    return DataGridRowAdapter(
+      cells: row.getCells().map<Widget>((e) {
+        if (e.columnName == 'projectCustomers') {
+          List<Widget> customerWidgets = e.value as List<Widget>;
+          return Container(
+            alignment: getAlignment(e.columnName),
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              height: 60.0, // Ajusta la altura según sea necesario
+              child: ListView(
+                scrollDirection:
+                    Axis.vertical, // Hace la celda scrollable verticalmente
+                children: customerWidgets,
+              ),
             ),
-          ),
-        );
-      } else {
-        return Container(
-          alignment: getAlignment(e.columnName),
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            e.value.toString(),
-            textAlign: TextAlign.center,
-          ),
-        );
-      }
-    }).toList(),
-  );
-}
-
+          );
+        } else {
+          return Container(
+            alignment: getAlignment(e.columnName),
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              e.value.toString(),
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: 'GoogleSans',
+              ),
+            ),
+          );
+        }
+      }).toList(),
+    );
+  }
 
   Alignment getAlignment(String columnName) {
     if (columnName == 'remaining') {

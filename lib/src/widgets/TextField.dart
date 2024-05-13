@@ -5,7 +5,8 @@ class CustomTextField extends StatelessWidget {
   final String labelText;
   final String validationMessage;
 
-  const CustomTextField({super.key, 
+  const CustomTextField({
+    super.key,
     required this.controller,
     required this.labelText,
     required this.validationMessage,
@@ -14,6 +15,9 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyle(
+        fontFamily: 'GoogleSans',
+      ),
       controller: controller,
       decoration: InputDecoration(
         labelText: labelText,

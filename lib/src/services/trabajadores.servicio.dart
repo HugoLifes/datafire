@@ -41,7 +41,7 @@ Future<List<Trabajadores>> newFetchWorkers() async {
 }
 
 Future<void> updateTrabajador(int id, String nombre, String lastName, int edad,
-    String position, int salary) async {
+    String position, int salary, int semanahour, double salaryhour) async {
   final url = "http://localhost:3000/api/v1/trabajadores/SalaryUpdate/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
@@ -54,6 +54,8 @@ Future<void> updateTrabajador(int id, String nombre, String lastName, int edad,
         "age": edad,
         "position": position,
         "salary": salary,
+        "salary_hour": salaryhour,
+        "semanal_hours": semanahour
       }),
     );
 

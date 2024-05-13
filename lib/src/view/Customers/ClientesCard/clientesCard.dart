@@ -38,13 +38,18 @@ class _ClienteCardState extends State<ClienteCard> {
                 children: [
                   const Text(
                     'ID Cliente:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.cliente["id"].toString(),
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   )
                 ],
               ),
@@ -52,13 +57,18 @@ class _ClienteCardState extends State<ClienteCard> {
                 children: [
                   const Text(
                     'Nombre:',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.cliente["name"],
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -66,13 +76,18 @@ class _ClienteCardState extends State<ClienteCard> {
                 children: [
                   const Text(
                     'Apellidos:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.cliente["last_name"],
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -80,13 +95,18 @@ class _ClienteCardState extends State<ClienteCard> {
                 children: [
                   const Text(
                     'Empresa:',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    style: TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16),
                   ),
                   const SizedBox(width: 12),
                   Text(
                     widget.cliente["company"],
                     style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontFamily: 'GoogleSans',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
