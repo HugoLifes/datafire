@@ -1,4 +1,5 @@
 import 'package:datafire/src/model/ingresos_model.dart';
+import 'package:datafire/src/model/nominas_semanales.dart';
 import 'package:datafire/src/model/workers_model.dart';
 import 'package:flutter/material.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
@@ -7,6 +8,7 @@ class TableTemplate extends StatefulWidget {
   late final ScrollController verticalController = ScrollController();
   List<IngresosScheme>? ingresoScheme = [];
   List<WorkerScheme>? workerScheme = [];
+  List<Nomina>? payroll = [];
   bool? isEgresos = false;
 
   TableTemplate(
@@ -14,6 +16,7 @@ class TableTemplate extends StatefulWidget {
       required verticalController,
       this.ingresoScheme,
       this.workerScheme,
+      this.payroll,
       this.isEgresos});
 
   @override
@@ -178,7 +181,7 @@ class _TableTemplateState extends State<TableTemplate> {
                 label = 'ID';
                 break;
               case 1:
-                label = 'Sueldos';
+                label = 'Pago';
                 break;
               case 2:
                 label = 'Salario Bruto';
@@ -191,29 +194,28 @@ class _TableTemplateState extends State<TableTemplate> {
                 break;
             }
           } else {
-            final egresoCount = widget.workerScheme?[vicinity.yIndex - 1];
+            final egresoCount = widget.payroll?[vicinity.yIndex - 1];
 
             switch (vicinity.xIndex) {
               case 0:
                 label = vicinity.yIndex.toString();
                 break;
               case 1:
-                label = egresoCount!.salary.toString();
+                label = double.tryParse(egresoCount!.salary.toString())!
+                    .toStringAsFixed(2);
 
                 break;
               case 2:
-                label =
-                    double.tryParse(egresoCount!.salarioBrutoAnual.toString())!
-                        .toStringAsFixed(3);
+                label = '0';
 
                 break;
               case 3:
                 label = double.tryParse(egresoCount!.seguroSocial.toString())!
-                    .toStringAsFixed(3);
+                    .toStringAsFixed(2);
                 break;
               case 4:
-                label = double.tryParse(egresoCount!.isr.toString().toString())!
-                    .toStringAsFixed(3);
+                label = double.tryParse(egresoCount!.isr.toString())!
+                    .toStringAsFixed(2);
                 break;
             }
           }
@@ -247,7 +249,7 @@ class _TableTemplateState extends State<TableTemplate> {
               extent: const FixedTableSpanExtent(50));
         },
         columnCount: 10,
-        rowCount: widget.workerScheme!.length + 1);
+        rowCount: widget.payroll!.length);
   }
   //construye las filas
 }

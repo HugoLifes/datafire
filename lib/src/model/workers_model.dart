@@ -241,7 +241,7 @@ class WorkerScheme {
   }
 
   dynamic calcularImss(dynamic salary) {
-    dynamic salarioDiario = salary;
+    dynamic salarioDiario = salary * 8;
     double cuotaPatronal = 3.075;
     double cuotaObrero = 7.0;
     double cuotaPatronalDiaria;

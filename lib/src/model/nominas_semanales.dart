@@ -11,7 +11,7 @@ class NominasSemanales {
   DateTime? startDate;
   DateTime? endDate;
   List<Nomina>? nominas;
-  int? totalWeeklySalary;
+  dynamic? totalWeeklySalary;
 
   NominasSemanales({
     this.startDate,
@@ -50,9 +50,9 @@ class Nomina {
   double? salaryHour;
   int? horasTrabajadas;
   int? horasExtra;
-  int? salary;
-  int? isr;
-  int? seguroSocial;
+  dynamic? salary;
+  dynamic? isr;
+  dynamic? seguroSocial;
   int? salarioFinal;
   DateTime? startDate;
   DateTime? endDate;

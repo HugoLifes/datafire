@@ -30,42 +30,39 @@ class _NewEgresosState extends State<NewEgresos> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: Column(children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            cardXtable(),
-            Flexible(
-              child: Column(
-                children: [
-                  Container(
-                    width: 600,
-                    child: IncomeCard(
-                      title: 'Division Egresos',
-                      amount: '',
-                      descripcion: 'Tipos de division de egresos',
-                      isChart: true,
-                    ),
+    return Column(children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          cardXtable(),
+          Flexible(
+            child: Column(
+              children: [
+                Container(
+                  width: 600,
+                  child: IncomeCard(
+                    title: 'Division Egresos',
+                    amount: '',
+                    descripcion: 'Tipos de division de egresos',
+                    isChart: true,
                   ),
-                  Container(
-                    width: 600,
-                    child: IncomeCard(
-                      title: 'Pago de Impuestos',
-                      amount: '',
-                      descripcion: 'Gastos en pago de impuestos',
-                      isChart: true,
-                    ),
+                ),
+                Container(
+                  width: 600,
+                  child: IncomeCard(
+                    title: 'Pago de Impuestos',
+                    amount: '',
+                    descripcion: 'Gastos en pago de impuestos',
+                    isChart: true,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ]),
-    );
+          ),
+        ],
+      ),
+    ]);
   }
 
   cardXtable() {
@@ -92,16 +89,16 @@ class _NewEgresosState extends State<NewEgresos> {
               ),
             ],
           ),
-          const SizedBox(
-            height: 15,
-          ),
           Container(
+            width: 900,
+            height: 500,
             child: GridView.builder(
+              shrinkWrap: true,
               scrollDirection: Axis.vertical,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 1,
-                childAspectRatio: 3.9,
-                crossAxisSpacing: 16,
+                childAspectRatio: 1.6,
+                crossAxisSpacing: 20,
                 mainAxisSpacing: 15,
               ),
               itemCount: widget.nominasWeek!.length,
@@ -110,6 +107,7 @@ class _NewEgresosState extends State<NewEgresos> {
                   isEgresos: isEgresos,
                   verticalController: verrticalController,
                   workerScheme: widget.workersScheme!,
+                  payroll: widget.nominasWeek![data].nominas,
                 );
               },
             ),

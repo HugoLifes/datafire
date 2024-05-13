@@ -47,19 +47,19 @@ class _FinancesViewState extends State<FinancesView> {
   List<WorkerScheme> workersScheme = [];
   bool isLoading = true;
   List<NominasSemanales> nominasWeek = [];
-  List<Nomina> nominasPay = [];
 
   @override
   void initState() {
     super.initState();
 
     //fetchIngresosFuture = fetchingresos();
-    dataEgresos().then((value) => {
+    dataEgresos();
+    dataIngresos();
+    dataNominas().then((value) => {
           setState(() {
             isLoading = false;
           })
         });
-    dataIngresos();
     fetchCobrarData = fetchCuentasCobrarData();
     fetchFlujData = fetchFlujoData();
   }
@@ -114,6 +114,7 @@ class _FinancesViewState extends State<FinancesView> {
   Future dataNominas() async {
     await loadNominas().then((value) {
       for (int i = 0; i < value.length; i++) {
+        List<Nomina> nominasPay = [];
         for (int j = 0; j < value[i].nominas!.length; j++) {
           nominasPay.add(Nomina(
               workerId: value[i].nominas![j].workerId,
@@ -122,8 +123,8 @@ class _FinancesViewState extends State<FinancesView> {
               salary: value[i].nominas![j].salary,
               horasTrabajadas: value[i].nominas![j].horasTrabajadas,
               isr: WorkerScheme().calcularISR(value[i].nominas![j].salary),
-              seguroSocial:
-                  WorkerScheme().calcularImss(value[i].nominas![j].salary)));
+              seguroSocial: WorkerScheme()
+                  .calcularImss(value[i].nominas![j].salaryHour)));
         }
         nominasWeek.add(NominasSemanales(
           startDate: value[i].startDate,
