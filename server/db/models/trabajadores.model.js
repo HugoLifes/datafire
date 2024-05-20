@@ -74,6 +74,10 @@ class Worker extends Model {
       as: 'WorkerCosts',
       foreignKey: 'worker_id',
     });
+    this.hasMany(models.Nomina, {
+      as: 'Nomina',
+      foreignKey: 'worker_id',
+    });
   }
 
   static config(sequelize) {
