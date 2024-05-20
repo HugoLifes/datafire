@@ -64,6 +64,12 @@ class Nomina extends Model {
       onDelete: 'CASCADE',
       onUpdate: 'CASCADE',
     });
+    this.hasMany(models.Worker, {
+      foreignKey: 'worker_id',
+      as: 'worker',  // This should match the alias used in your include in the service
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    });
   }
 
   static config(sequelize) {

@@ -113,7 +113,11 @@ class Project extends Model {
     this.hasMany(models.Adjustments,{
       as: 'adjustments',
       foreignKey: 'projectId',
-    })
+    });
+    this.belongsTo(models.Nomina, {
+      as: 'nomina',
+      foreignKey: 'worker_id',
+    });
   }
 
   static config(sequelize) {
@@ -249,6 +253,8 @@ class Project extends Model {
           Sequelize.fn('date_trunc', 'month', Sequelize.col('fecha_inicio')),
         ],
       });
+
+      console.log(expensesByMonth);
 
       return expensesByMonth;
     } catch (error) {

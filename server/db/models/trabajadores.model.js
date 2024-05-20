@@ -74,7 +74,7 @@ class Worker extends Model {
       as: 'WorkerCosts',
       foreignKey: 'worker_id',
     });
-    this.hasMany(models.Nomina, {
+    this.belongsTo(models.Nomina, {
       as: 'Nomina',
       foreignKey: 'worker_id',
     });
