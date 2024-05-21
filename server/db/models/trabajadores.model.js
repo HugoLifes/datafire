@@ -74,10 +74,7 @@ class Worker extends Model {
       as: 'WorkerCosts',
       foreignKey: 'worker_id',
     });
-    this.belongsTo(models.Nomina, {
-      as: 'Nomina',
-      foreignKey: 'worker_id',
-    });
+    
   }
 
   static config(sequelize) {

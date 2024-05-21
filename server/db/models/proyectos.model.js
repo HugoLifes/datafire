@@ -114,10 +114,11 @@ class Project extends Model {
       as: 'adjustments',
       foreignKey: 'projectId',
     });
-    this.belongsTo(models.Nomina, {
-      as: 'nomina',
-      foreignKey: 'worker_id',
-    });
+    this.hasMany(models.NominasSemanales,{
+      as: 'nominasSemanales',
+      foreignKey: 'project_id'
+    })
+   
   }
 
   static config(sequelize) {

@@ -211,18 +211,7 @@ class ProjectService {
   async findPayrollsWeeks() {
     try {
       const payrolls = await models.Nomina.findAll({
-        include: [
-          {
-            model: models.Worker,
-            as: 'worker',
-            attributes: ['name'],
-          },
-          {
-            model: models.Project,
-            as: 'project',
-            attributes: ['name'],
-          },
-        ],
+       
         attributes: ['payment_dates', 'amount_paid'],
       });
 
@@ -230,9 +219,9 @@ class ProjectService {
       const formattedPayrolls = payrolls.map((payroll) => {
         return {
           fecha_pago: payroll.payment_dates, // Assuming payment_dates is an array of dates
-          nombre_trabajador: payroll.worker.name,
+          
           sueldo: payroll.amount_paid,
-          nombre_proyecto: payroll.project.name,
+         
         };
       });
 

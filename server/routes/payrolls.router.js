@@ -1,12 +1,8 @@
 const express = require('express');
 const router = express.Router();
-
 const payrollService = require('../services/proyectos.service');
 const service = new payrollService();
-
-const passport = require('passport');
 const validatorHandler = require('../middlewares/validator.handler');
-const { checkRoles } = require('../middlewares/auth.handler');
 const {
   getWorkerSchema,
   updateWorkerSchema,
@@ -25,6 +21,15 @@ router.get('/', async (req, res, next) => {
 router.get('/payrollsWeek', async (req, res, next) => {
   try {
     const payrolls = await service.findPayrollsWeeks();
+    res.json(payrolls);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/info', async (req, res, next) => {
+  try {
+    const payrolls = await service.getPayrollInformation();
     res.json(payrolls);
   } catch (error) {
     next(error);
@@ -73,8 +78,7 @@ router.patch(
 
 router.delete(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRoles('user', 'admin'),
+ 
   validatorHandler(getWorkerSchema, 'params'),
   async (req, res, next) => {
     try {

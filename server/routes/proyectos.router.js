@@ -24,6 +24,7 @@ const {
 } = require('../schemas/proyectos.schema');
 
 
+
 router.get('/', async (req, res, next) => {
   try {
     const projects = await service.findProjects();
@@ -247,6 +248,22 @@ router.get('/cuentasCobrar', async (req, res, next) => {
   }
 });
 
+router.get('/ganancias', async (req, res, next) => {
+  try {
+    const projects = await models.Project.findAll({
+      where: {
+        status: false,
+      },
+      
+      attributes: ['name', 'ganancia', 'abonado'],
+    });
+
+    res.json(projects);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get('/project-stats', async (req, res) => {
   try {
     const totalProjects = await models.Project.getTotalProjects();
@@ -319,6 +336,24 @@ router.get('/flujo', async (req, res, next) => {
 
     const prestamos = await service.findAllPrestamos();
 
+    if (!prestamos || prestamos.length === 0) {
+      return res.status(404).json({ error: 'Projects not found' });
+    }
+
+    const nominas = await models.NominasSemanales.findAll();
+    if (!nominas || nominas.length === 0) {
+      return res.status(404).json({ error: 'Nominas not found' });
+    }
+    const ganancia = await models.Project.findAll({where: {
+        status: false,
+      },
+      
+      attributes: [ 'ganancia','presupuesto','createdAt' ],});
+
+      if (!ganancia || ganancia.length === 0) {
+        return res.status(404).json({ error: 'Ganancias not found' });
+      }
+
     const weeklyFlows = [];
 
     let currentDate = new Date(startDate);
@@ -341,12 +376,14 @@ router.get('/flujo', async (req, res, next) => {
       const weeklyIncomes = projects.reduce((total, project) => {
         const projectData = project.toJSON();
         
-
+        
         // Agregar ingresos semanales de abonos al total
         const abonosForWeek = projectData.abonos.filter((abono) => {
           const abonoDate = new Date(abono.createdAt);
           return abonoDate >= startOfWeek && abonoDate <= endOfWeek;
         });
+
+       
 
         const abonosTotalForWeek = abonosForWeek.reduce(
           (totalAbono, abono) => totalAbono + abono.monto,
@@ -378,6 +415,9 @@ router.get('/flujo', async (req, res, next) => {
           ? totalPrestamo + prestamo.amount_paid
           : totalPrestamo;
       }, 0);
+
+
+      
 
       // Resto de la lógica para calcular caja, balance de flujo, etc.
 
@@ -462,8 +502,7 @@ router.post(
 
 router.patch(
   '/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRoles('user', 'admin'),
+  
   validatorHandler(getProjectSchema, 'params'),
   validatorHandler(updateProjectSchema, 'body'),
   async (req, res, next) => {

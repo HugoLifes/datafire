@@ -70,6 +70,11 @@ const NominasSemanalesSchema = {
     type: DataTypes.FLOAT,
     defaultValue: 0,
   },
+  project_id: {
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  }
 };
 
 class NominasSemanales extends Model {
