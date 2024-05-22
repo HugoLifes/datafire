@@ -10,13 +10,10 @@ const {
 const router = express.Router();
 const service = new UserService();
 
-const passport = require('passport');
-const { checkRoles } = require('../middlewares/auth.handler');
 
 router.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  checkRoles('user', 'admin'),
+  
   async (req, res, next) => {
     try {
       const users = await service.findUsers();

@@ -266,11 +266,24 @@ router.get('/ganancias', async (req, res, next) => {
 
 router.get('/project-stats', async (req, res) => {
   try {
+    //por mes
     const totalProjects = await models.Project.getTotalProjects();
     const projectsByMonth = await models.Project.getProjectsByMonth();
     const CostsByMonth = await models.Project.getExpensesByMonth();
+    const profitByMonth = await models.Project.getProfitByMonth();
+    const paymentsByMonth = await models.Project.getPaymentsByMonth();
+    //por semana
+    const paymentsByWeek = await models.Project.getPaymentsByWeek();
+    const profitByWeek = await models.Project.getProfitByWeek();
+    const expensesByWeek = await models.Project.getExpensesByWeek();
 
-    res.json({ totalProjects, projectsByMonth, CostsByMonth });
+    const lastProject = await models.Project.getLastAddedProject();
+    const Payment = await models.Project.getLastPayment();
+    const lastCustomer = await models.Customer.getLastAddedClient();
+    const lastPayment = Payment['abonos'][Payment['abonos'].length - 1]['monto'];
+    const lastProfit = profitByWeek[profitByWeek.length - 1]['dataValues']['totalProfit']
+
+    res.json({ totalProjects, lastProfit ,lastProject: lastProject['name'], lastCustomer: lastCustomer['name'] +' '+lastCustomer['last_name'], lastPayment, projectsByMonth, CostsByMonth, profitByMonth, paymentsByMonth, paymentsByWeek, profitByWeek, expensesByWeek });
   } catch (error) {
     res.status(500).json({ error: 'Internal Server Error' });
   }
@@ -323,11 +336,11 @@ router.post('/prestamos', async (req, res, next) => {
 
 router.get('/flujo', async (req, res, next) => {
   try {
-    const startDate = new Date('2023-01-01');
+    const startDate = new Date('2024-01-01');
     const endDate = new Date();
 
     const projects = await models.Project.findAll({
-      include: ['abonos', 'services'],
+      include: ['abonos', 'services','nominasSemanales'],
     });
 
     if (!projects || projects.length === 0) {
@@ -340,19 +353,7 @@ router.get('/flujo', async (req, res, next) => {
       return res.status(404).json({ error: 'Projects not found' });
     }
 
-    const nominas = await models.NominasSemanales.findAll();
-    if (!nominas || nominas.length === 0) {
-      return res.status(404).json({ error: 'Nominas not found' });
-    }
-    const ganancia = await models.Project.findAll({where: {
-        status: false,
-      },
-      
-      attributes: [ 'ganancia','presupuesto','createdAt' ],});
-
-      if (!ganancia || ganancia.length === 0) {
-        return res.status(404).json({ error: 'Ganancias not found' });
-      }
+    
 
     const weeklyFlows = [];
 
@@ -370,32 +371,39 @@ router.get('/flujo', async (req, res, next) => {
         weeklyFlows.length > 0
           ? weeklyFlows[weeklyFlows.length - 1]['Balance total']
           : 0;
-
-      // Lógica de cálculo de ingresos semanales
-      // Lógica de cálculo de ingresos semanales
+      
+      //añadir presupuesto agregados a caja
+      const weeklyPresupuesto = projects.filter((project) => {
+         const presupuestoDate = new Date(project.createdAt)
+         return presupuestoDate >= startOfWeek && presupuestoDate <= endOfWeek
+      })
+      //total presupuestos
+      const weeklyTotalPresupuesto = weeklyPresupuesto.reduce((total, p)=> total+p.presupuesto,0)
+      
+      // Ló gica de cálculo de ingresos semanales
       const weeklyIncomes = projects.reduce((total, project) => {
         const projectData = project.toJSON();
-        
-        
+       
+  
+              
         // Agregar ingresos semanales de abonos al total
         const abonosForWeek = projectData.abonos.filter((abono) => {
           const abonoDate = new Date(abono.createdAt);
           return abonoDate >= startOfWeek && abonoDate <= endOfWeek;
         });
-
-       
-
         const abonosTotalForWeek = abonosForWeek.reduce(
           (totalAbono, abono) => totalAbono + abono.monto,
           0,
         );
 
-        return total + abonosTotalForWeek;
+        return total + abonosTotalForWeek 
       }, 0);
 
       // Lógica de cálculo de egresos semanales
       const weeklyExpenses = projects.reduce((total, project) => {
         const projectData = project.toJSON();
+
+        
         const projectWeeklyExpense = projectData.services.reduce(
           (totalService, service) => {
             const serviceDate = new Date(service.createdAt);
@@ -405,7 +413,11 @@ router.get('/flujo', async (req, res, next) => {
           },
           0,
         );
-        return total + projectWeeklyExpense;
+
+
+        
+
+        return total + projectWeeklyExpense ;
       }, 0);
 
       // Lógica de cálculo de préstamos semanales
@@ -417,25 +429,68 @@ router.get('/flujo', async (req, res, next) => {
       }, 0);
 
 
-      
+      // logica impuestos 
+      const weeklyTaxes = projects.reduce((total, project) => {
+        const projectData = project.toJSON();
+        
+        
+
+
+        const nominaWeeklyExpense = projectData.nominasSemanales.reduce((totalNomina,nomina)=>{
+          const nominaDate = new Date(nomina.createdAt);
+          return nominaDate >= startOfWeek && nominaDate <= endOfWeek ?totalNomina + nomina.isr + nomina.seguro_social:totalNomina
+        },0);
+
+        
+
+        return total +  nominaWeeklyExpense;
+      }, 0);
+
+
+      // logina nominas
+      const weeklyNominas = projects.reduce((total, project) => {
+        const projectData = project.toJSON();
+        
+        
+
+
+        const nominaWeeklyExpense = projectData.nominasSemanales.reduce((totalNomina,nomina)=>{
+          const nominaDate = new Date(nomina.createdAt);
+          return nominaDate >= startOfWeek && nominaDate <= endOfWeek ?totalNomina + nomina.salary : totalNomina
+        },0);
+
+        
+
+        return total +  nominaWeeklyExpense;
+      }, 0);
+
 
       // Resto de la lógica para calcular caja, balance de flujo, etc.
 
       // Crear el objeto de flujo semanal
-      const weeklyFlow = {
-        startDate: startOfWeek.toISOString(),
-        endDate: endOfWeek.toISOString(),
-        caja: lastWeekBalance,
-        ingresos: weeklyIncomes,
-        egresos: weeklyExpenses,
-        'balance de flujo': lastWeekBalance + weeklyIncomes - weeklyExpenses,
-        prestamo: weeklyPrestamo,
-        'Balance total':
-          lastWeekBalance + weeklyIncomes - weeklyExpenses + weeklyPrestamo,
-      };
+        const flujobalance = lastWeekBalance + weeklyIncomes - weeklyExpenses - weeklyTaxes
+        const totalBalance  = flujobalance +weeklyNominas
+        const weeklyFlow = {
+          startDate: startOfWeek.toISOString(),
+          endDate: endOfWeek.toISOString(),
+          caja: lastWeekBalance + weeklyTotalPresupuesto,
+          ingresos: weeklyIncomes,
+          egresos: weeklyExpenses,
+          'nomina': weeklyNominas,
+          'impuestos': weeklyTaxes,
+          'balance de flujo': flujobalance ,
+          prestamo: weeklyPrestamo,
+          'Balance total':
+            totalBalance,
+        };
+       
+        // Agregar el flujo semanal al array
+        
 
-      // Agregar el flujo semanal al array
-      weeklyFlows.push(weeklyFlow);
+        
+        weeklyFlows.push(weeklyFlow);
+       
+      
 
       // Mover a la siguiente semana
       currentDate.setDate(currentDate.getDate() + 7);

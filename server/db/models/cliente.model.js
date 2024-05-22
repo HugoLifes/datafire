@@ -46,6 +46,19 @@ class Customer extends Model {
       timestamps: false,
     };
   }
+
+  static async getLastAddedClient() {
+    try {
+      const lastClient = await this.findOne({
+        order: [['createdAt', 'DESC']], // Ordenar por fecha de creación descendente
+      });
+  
+      return lastClient;
+    } catch (error) {
+      console.error('Error fetching last added project:', error);
+      throw error;
+    }
+  }
 }
 
 module.exports = { CUSTOMER_TABLE, CustomerSchema, Customer };

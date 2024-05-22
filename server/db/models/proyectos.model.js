@@ -176,12 +176,43 @@ class Project extends Model {
           await sequelize.models.Adjustments.destroy({
             where: { projectId: project.id },
           });
+
+          await sequelize.models.NominasSemanales.destroy({
+            where: { project_id: project.id },
+          });
         
 
          
         },
       },
     };
+  }
+
+  static async getLastAddedProject() {
+    try {
+      const lastProject = await this.findOne({
+        order: [['createdAt', 'DESC']], // Ordenar por fecha de creación descendente
+      });
+  
+      return lastProject;
+    } catch (error) {
+      console.error('Error fetching last added project:', error);
+      throw error;
+    }
+  }
+
+  static async getLastPayment() {
+    try {
+      const lastPayment = await this.findOne({
+        include: ['abonos'],
+        order: [['fecha_inicio', 'DESC']], // Ordenar por fecha_inicio descendente
+      });
+  
+      return lastPayment;
+    } catch (error) {
+      console.error('Error fetching last payment:', error);
+      throw error;
+    }
   }
 
   static async getTotalProjects() {
@@ -255,7 +286,7 @@ class Project extends Model {
         ],
       });
 
-      console.log(expensesByMonth);
+     
 
       return expensesByMonth;
     } catch (error) {
@@ -263,6 +294,196 @@ class Project extends Model {
       throw error;
     }
   }
+  static async getProfitByMonth() {
+    try {
+      const currentDate = new Date();
+      const twelveMonthsAgo = new Date(currentDate);
+      twelveMonthsAgo.setMonth(currentDate.getMonth() - 12);
+
+      const profitByMonth = await this.findAll({
+        attributes: [
+          [
+            Sequelize.fn('date_trunc', 'month', Sequelize.col('fecha_inicio')),
+            'month',
+          ],
+          [Sequelize.fn('sum', Sequelize.col('ganancia')), 'totalProfit'],
+        ],
+        where: {
+          fecha_inicio: {
+            [Op.between]: [twelveMonthsAgo, currentDate],
+          },
+        },
+        group: [
+          Sequelize.fn('date_trunc', 'month', Sequelize.col('fecha_inicio')),
+        ],
+        order: [
+          Sequelize.fn('date_trunc', 'month', Sequelize.col('fecha_inicio')),
+        ],
+      });
+
+     
+
+      return profitByMonth;
+    } catch (error) {
+      console.error('Error fetching profit by month:', error);
+      throw error;
+    }
+  }
+
+  static async getPaymentsByMonth() {
+    try {
+      const currentDate = new Date();
+      const twelveMonthsAgo = new Date(currentDate);
+      twelveMonthsAgo.setMonth(currentDate.getMonth() - 12);
+
+      const paymentByMonth = await this.findAll({
+        attributes: [
+          [
+            Sequelize.fn('date_trunc', 'month', Sequelize.col('fecha_inicio')),
+            'month',
+          ],
+          [Sequelize.fn('sum', Sequelize.col('abonado')), 'totalPayment'],
+        ],
+        where: {
+          fecha_inicio: {
+            [Op.between]: [twelveMonthsAgo, currentDate],
+          },
+        },
+        group: [
+          Sequelize.fn('date_trunc', 'month', Sequelize.col('fecha_inicio')),
+        ],
+        order: [
+          Sequelize.fn('date_trunc', 'month', Sequelize.col('fecha_inicio')),
+        ],
+      });
+
+     
+
+      return paymentByMonth;
+    } catch (error) {
+      console.error('Error fetching payments by month:', error);
+      throw error;
+    }
+  }
+  //datos a la semana
+  static async getPaymentsByWeek() {
+    try {
+      const currentDate = new Date();
+  
+      // Calcula la fecha de inicio de la semana actual (considera el lunes como inicio)
+      const currentWeekStart = new Date(currentDate);
+      currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1); // Lunes
+  
+      // Calcula la fecha de inicio de la semana hace 12 semanas
+      const twelveWeeksAgo = new Date(currentWeekStart);
+      twelveWeeksAgo.setDate(currentWeekStart.getDate() - 7 * 12); 
+  
+      const paymentByWeek = await this.findAll({
+        attributes: [
+          [
+            Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+            'week',
+          ],
+          [Sequelize.fn('sum', Sequelize.col('abonado')), 'totalPayment'],
+        ],
+        where: {
+          fecha_inicio: {
+            [Op.between]: [twelveWeeksAgo, currentDate],
+          },
+        },
+        group: [
+          Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+        ],
+        order: [
+          Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+        ],
+      });
+  
+      return paymentByWeek;
+    } catch (error) {
+      console.error('Error fetching payments by week:', error);
+      throw error;
+    }
+  }
+  static async getProfitByWeek() {
+    try {
+      const currentDate = new Date();
+  
+      // Calcula la fecha de inicio de la semana actual (considera el lunes como inicio)
+      const currentWeekStart = new Date(currentDate);
+      currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1); // Lunes
+  
+      // Calcula la fecha de inicio de la semana hace 12 semanas
+      const twelveWeeksAgo = new Date(currentWeekStart);
+      twelveWeeksAgo.setDate(currentWeekStart.getDate() - 7 * 12); 
+  
+      const profitByWeek = await this.findAll({
+        attributes: [
+          [
+            Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+            'week',
+          ],
+          [Sequelize.fn('sum', Sequelize.col('ganancia')), 'totalProfit'],
+        ],
+        where: {
+          fecha_inicio: {
+            [Op.between]: [twelveWeeksAgo, currentDate],
+          },
+        },
+        group: [
+          Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+        ],
+        order: [
+          Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+        ],
+      });
+  
+      return profitByWeek;
+    } catch (error) {
+      console.error('Error fetching profit by week:', error);
+      throw error;
+    }
+  }
+  static async getExpensesByWeek() {
+    try {
+      const currentDate = new Date();
+  
+      // Calcula la fecha de inicio de la semana actual (considera el lunes como inicio)
+      const currentWeekStart = new Date(currentDate);
+      currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1); // Lunes
+  
+      // Calcula la fecha de inicio de la semana hace 12 semanas
+      const twelveWeeksAgo = new Date(currentWeekStart);
+      twelveWeeksAgo.setDate(currentWeekStart.getDate() - 7 * 12); 
+  
+      const expensesByWeek = await this.findAll({
+        attributes: [
+          [
+            Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+            'week',
+          ],
+          [Sequelize.fn('sum', Sequelize.col('costo')), 'totalExpense'],
+        ],
+        where: {
+          fecha_inicio: {
+            [Op.between]: [twelveWeeksAgo, currentDate],
+          },
+        },
+        group: [
+          Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+        ],
+        order: [
+          Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+        ],
+      });
+  
+      return expensesByWeek;
+    } catch (error) {
+      console.error('Error fetching expenses by week:', error);
+      throw error;
+    }
+  }
+
 }
 
 module.exports = { PROJECT_TABLE, ProjectSchema, Project };

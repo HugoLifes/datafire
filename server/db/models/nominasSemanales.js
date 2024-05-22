@@ -74,6 +74,11 @@ const NominasSemanalesSchema = {
     allowNull: true,
     type: DataTypes.INTEGER,
     defaultValue: 0,
+  },
+  createdAt:{
+    allowNull: false,
+    type: DataTypes.DATE,
+    defaultValue: 0,
   }
 };
 
