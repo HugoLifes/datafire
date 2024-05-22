@@ -14,7 +14,7 @@ class Ingresos {
   DateTime startDate;
   DateTime endDate;
   List<Abono> abonos;
-  int totalWeeklyAbonos;
+  dynamic totalWeeklyAbonos;
 
   Ingresos({
     required this.startDate,
@@ -39,7 +39,7 @@ class Ingresos {
 }
 
 class Abono {
-  int amount;
+  dynamic amount;
   String projectName;
   DateTime date;
 

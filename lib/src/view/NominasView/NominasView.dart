@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:datafire/src/app.dart';
+import 'package:datafire/src/model/proyectos_model.dart';
+import 'package:datafire/src/model/workers_model.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class NominasView extends StatefulWidget {
-  const NominasView({Key? key}) : super(key: key);
+  List<Proyectos>? proyectos = [];
+  NominasView({Key? key, this.proyectos}) : super(key: key);
 
   @override
   State<NominasView> createState() => _NominasViewState();
@@ -16,6 +19,10 @@ class _NominasViewState extends State<NominasView> {
   DateTime? fechaFinSemana;
   Map<String, dynamic> trabajadoresDatos = {};
   List<String> trabajadores = [];
+  int id_proyecto = 0;
+  DateTime? fechaInicioP;
+  DateTime? fechaFinP;
+  DateTime? fechaCreacionProyecto;
 
   @override
   void initState() {
@@ -79,8 +86,12 @@ class _NominasViewState extends State<NominasView> {
 
     String fechaInicio = fechaInicioSemana!.toIso8601String();
     String fechaFin = fechaFinSemana!.toIso8601String();
+    String fechaCreacionP = fechaCreacionProyecto!.toIso8601String();
 
     trabajadoresDatos.forEach((id, datos) {
+      double salarioT = 0.0;
+
+      salarioT = datos['salary_hour'] * datos['horasTrabajadas'];
       if (datos['completado']) {
         var nominaData = {
           "fecha_inicio_semana": fechaInicio,
@@ -94,12 +105,14 @@ class _NominasViewState extends State<NominasView> {
           "salary_hour": datos['salary_hour'],
           "horas_trabajadas": datos['horasTrabajadas'],
           "horas_extra": datos['horasExtra'],
+          "isr": WorkerScheme().calcularISR(salarioT),
+          "seguro_social": WorkerScheme().calcularImss(datos['salary_hour']),
+          "project_id": id_proyecto,
+          "createdAt": fechaCreacionP
         };
         nominasFutures.add(enviarDatosNomina(nominaData));
       }
     });
-
-    print(nominasFutures.length);
 
     await Future.wait(nominasFutures).whenComplete(() => showDialog(
           context: context,
@@ -113,12 +126,9 @@ class _NominasViewState extends State<NominasView> {
                 TextButton(
                   child: const Text('OK'),
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MyApp(),
-                      ),
-                    ); // Cierra el diálogo
+                    Navigator.of(context)
+                      ..pop()
+                      ..pop(); // Cierra el diálogo
                   },
                 ),
               ],
@@ -155,6 +165,10 @@ class _NominasViewState extends State<NominasView> {
               icon: const Icon(Icons.calendar_today),
               onPressed: () => seleccionarSemana(context),
               tooltip: 'Seleccionar Semana'),
+          IconButton(
+              icon: const Icon(Icons.work),
+              onPressed: () => mostrarProyectos(context),
+              tooltip: 'Asigne la nomina a proyecto'),
         ],
       ),
       body: Column(
@@ -179,7 +193,7 @@ class _NominasViewState extends State<NominasView> {
 
                 return Card(
                   color: trabajadorDatos['completado']
-                      ? Colors.green[400]
+                      ? Colors.greenAccent
                       : Colors.white,
                   elevation: 4,
                   margin:
@@ -217,15 +231,14 @@ class _NominasViewState extends State<NominasView> {
   Future<void> seleccionarSemana(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
+      initialDate: fechaInicioP,
+      firstDate: fechaInicioP!,
       lastDate: DateTime(2025),
     );
     if (picked != null) {
       setState(() {
-        fechaInicioSemana = DateTime(picked.year, picked.month,
-            picked.day - (picked.weekday - DateTime.monday));
-        fechaFinSemana = fechaInicioSemana!.add(const Duration(days: 6));
+        fechaInicioSemana = DateTime(picked.year, picked.month, picked.day);
+        fechaFinSemana = fechaInicioSemana!.add(const Duration(days: 7));
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -242,6 +255,10 @@ class _NominasViewState extends State<NominasView> {
             "Por favor, selecciona primero las fechas de inicio y fin de la semana."),
       ));
       return;
+    } else if (fechaInicioP == null || fechaFinP == null) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Por favor, asigna la nomina a un proyecto"),
+      ));
     }
     final TextEditingController horasTrabajadasController =
         TextEditingController();
@@ -290,5 +307,64 @@ class _NominasViewState extends State<NominasView> {
         );
       },
     );
+  }
+
+  mostrarProyectos(BuildContext ctx) {
+    return showDialog(
+        context: ctx,
+        builder: (ctx) {
+          return AlertDialog(
+            title: const Text(
+              'Asigne a un proyecto la nomina',
+              style: TextStyle(fontFamily: 'GoogleSans'),
+            ),
+            content: SizedBox(
+              width: double.maxFinite,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: widget.proyectos!.length,
+                  itemBuilder: (ctx, int data) {
+                    return ListTile(
+                      title: Text(widget.proyectos![data].name!,
+                          style: const TextStyle(
+                              fontFamily: 'GoogleSans',
+                              fontWeight: FontWeight.bold)),
+                      subtitle: Row(
+                        children: [
+                          Text(
+                              'Fecha Inicio: ${widget.proyectos![data].fechaInicio!.day}/${widget.proyectos![data].fechaInicio!.month}/${widget.proyectos![data].fechaInicio!.year}',
+                              style: const TextStyle(
+                                  fontFamily: 'GoogleSans',
+                                  fontWeight: FontWeight.bold)),
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                              'Fecha Fin: ${widget.proyectos![data].fechaFin!.day}/${widget.proyectos![data].fechaFin!.month}/${widget.proyectos![data].fechaFin!.year}',
+                              style: const TextStyle(
+                                  fontFamily: 'GoogleSans',
+                                  fontWeight: FontWeight.bold)),
+                        ],
+                      ),
+                      onTap: () {
+                        setState(() {
+                          id_proyecto = widget.proyectos![data].id!;
+                          fechaInicioP = widget.proyectos![data].fechaInicio;
+                          fechaFinP = widget.proyectos![data].fechaFin;
+                          fechaCreacionProyecto =
+                              widget.proyectos![data].createdAt!;
+                          print(id_proyecto);
+                          Navigator.of(context).pop();
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                            content: Text('Se asigno nomina a un proyecto.'),
+                          ));
+                        });
+                      },
+                    );
+                  }),
+            ),
+          );
+        });
   }
 }

@@ -1,10 +1,12 @@
 import 'package:datafire/src/model/ingresos_model.dart';
 import 'package:datafire/src/widgets/table_scrolleable.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class NewIngresos extends StatefulWidget {
   List<IngresosScheme>? ingresoScheme = [];
-  NewIngresos({super.key, this.ingresoScheme});
+  List<AbonoScheme>? abono = [];
+  NewIngresos({super.key, this.ingresoScheme, this.abono});
 
   @override
   State<NewIngresos> createState() => _IngresosState();
@@ -12,6 +14,15 @@ class NewIngresos extends StatefulWidget {
 
 class _IngresosState extends State<NewIngresos> {
   late ScrollController verticalController = ScrollController();
+  int ingresoMes = 0;
+  int ingresoAnual = 0;
+  final NumberFormat numberFormat = NumberFormat("#,##0.00", "es_MX");
+
+  @override
+  void initState() {
+    calculos();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,17 +32,17 @@ class _IngresosState extends State<NewIngresos> {
         children: [
           IncomeCard(
             title: 'Ultimo Ingreso',
-            amount: '\$ ${widget.ingresoScheme?.last.totalWeeklyAbonos}',
+            amount: '\$ ${numberFormat.format(widget.abono!.last.amount)} MXN',
             descripcion: 'Ultimo ingreso de proyecto',
           ),
-          const IncomeCard(
+          IncomeCard(
             title: 'Ingreso del mes',
-            amount: '\$55,000',
+            amount: '\$ ${numberFormat.format(ingresoMes)} MXN',
             descripcion: 'Detalles de los ingresos del mes',
           ),
-          const IncomeCard(
+          IncomeCard(
             title: 'Ingresos en transcurso',
-            amount: '\$150,000',
+            amount: '\$ ${numberFormat.format(ingresoAnual)} MXN',
             descripcion: 'Ingreso transcurrido anual',
           )
         ],
@@ -44,8 +55,23 @@ class _IngresosState extends State<NewIngresos> {
         isEgresos: false,
         verticalController: verticalController,
         ingresoScheme: widget.ingresoScheme,
+        abono: widget.abono,
+        isFlujo: false,
       ))
     ]);
+  }
+
+  calculos() {
+    int mesActual = DateTime.now().month;
+    for (int i = 0; i < widget.ingresoScheme!.length; i++) {
+      ingresoAnual += widget.ingresoScheme![i].totalWeeklyAbonos;
+    }
+
+    for (int i = 0; i < widget.abono!.length; i++) {
+      if (mesActual == widget.abono![i].date.month) {
+        ingresoMes += widget.abono![i].amount;
+      }
+    }
   }
 }
 

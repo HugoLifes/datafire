@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:datafire/src/services/users.service.dart';
+import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
 
 class UsersView extends StatefulWidget {
@@ -16,22 +17,24 @@ class _UsersViewState extends State<UsersView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController roleController = TextEditingController();
-  
-  List<String> roles = ['user', 'admin']; 
-  String selectedRole = 'user'; 
 
+  List<String> roles = ['user', 'admin'];
+  String selectedRole = 'user';
 
   @override
   void initState() {
     super.initState();
-    futureUsers = fetchUsers(); 
+    futureUsers = fetchUsers();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Alta y baja Usuarios"),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: AppBarDatafire(
+            title: "Edicion de Usuarios",
+            description: "Edita o elimina usuarios"),
       ),
       body: Center(
         child: Column(
@@ -49,7 +52,10 @@ class _UsersViewState extends State<UsersView> {
                   );
                 } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                   return const Center(
-                    child: Text('No hay usuarios disponibles'),
+                    child: Text(
+                      'No hay usuarios disponibles',
+                      style: TextStyle(fontFamily: 'GoogleSans'),
+                    ),
                   );
                 } else {
                   List<dynamic> users = snapshot.data!;
@@ -65,45 +71,51 @@ class _UsersViewState extends State<UsersView> {
                         numeric: false,
                       ),
                     ],
-                    rows: users.map((user) => DataRow(
-                      cells: [
-                        DataCell(Text(user["id"].toString())),
-                        DataCell(Text(user['name'].toString())),
-                        DataCell(Text(user["email"].toString())),
-                        DataCell(Text(user["role"].toString())),
-                        DataCell(
-                          SizedBox(
-                            width: 50,
-                            child: IconButton(
-                              style: const ButtonStyle(),
-                              icon: const Icon(Icons.delete),
-                              onPressed: () async {
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.warning,
-                                animType: AnimType.bottomSlide,
-                                title: 'Eliminar usuario',
-                                desc: '¿Estás seguro de que quieres eliminar este Usuario?',
-                                width: 620,
-                                btnCancelOnPress: () {},
-                                btnOkOnPress: () {
-                                             // Eliminar trabajadores
-                                deleteUser(user["id"]);
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Trabajador eliminado correctamente'),
+                    rows: users
+                        .map((user) => DataRow(
+                              cells: [
+                                DataCell(Text(user["id"].toString())),
+                                DataCell(Text(user['name'].toString())),
+                                DataCell(Text(user["email"].toString())),
+                                DataCell(Text(user["role"].toString())),
+                                DataCell(
+                                  SizedBox(
+                                    width: 50,
+                                    child: IconButton(
+                                      style: const ButtonStyle(),
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () async {
+                                        AwesomeDialog(
+                                          context: context,
+                                          dialogType: DialogType.warning,
+                                          animType: AnimType.bottomSlide,
+                                          title: 'Eliminar usuario',
+                                          desc:
+                                              '¿Estás seguro de que quieres eliminar este Usuario?',
+                                          width: 620,
+                                          btnCancelOnPress: () {},
+                                          btnOkOnPress: () {
+                                            // Eliminar trabajadores
+                                            deleteUser(user["id"]);
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(
+                                              const SnackBar(
+                                                content: Text(
+                                                    'Trabajador eliminado correctamente'),
+                                              ),
+                                            );
+                                            setState(() {
+                                              futureUsers = fetchUsers();
+                                            });
+                                          },
+                                        ).show();
+                                      },
+                                    ),
                                   ),
-                                );
-                                setState(() {
-                                  futureUsers = fetchUsers();
-                                });},).show();
-
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
-                    )).toList(),
+                                ),
+                              ],
+                            ))
+                        .toList(),
                   );
                 }
               },
@@ -117,8 +129,10 @@ class _UsersViewState extends State<UsersView> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        
-                        title: const Text('Ingrese los datos para agregar un nuevo usuario'),
+                        title: const Text(
+                          'Ingrese los datos para agregar un nuevo usuario',
+                          style: TextStyle(fontFamily: 'GoogleSans'),
+                        ),
                         content: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 20),
                           child: Form(
@@ -128,7 +142,9 @@ class _UsersViewState extends State<UsersView> {
                               children: [
                                 TextFormField(
                                   controller: nameController,
-                                  decoration: const InputDecoration(labelText: 'Nombre'),
+                                  style: TextStyle(fontFamily: 'GoogleSans'),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Nombre'),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Por favor, ingrese el nombre';
@@ -138,7 +154,9 @@ class _UsersViewState extends State<UsersView> {
                                 ),
                                 TextFormField(
                                   controller: emailController,
-                                  decoration: const InputDecoration(labelText: 'Correo'),
+                                  style: TextStyle(fontFamily: 'GoogleSans'),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Correo'),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Por favor, ingrese el correo';
@@ -146,9 +164,11 @@ class _UsersViewState extends State<UsersView> {
                                     return null;
                                   },
                                 ),
-                                  TextFormField(
+                                TextFormField(
                                   controller: passwordController,
-                                  decoration: const InputDecoration(labelText: 'Contaseña'),
+                                  style: TextStyle(fontFamily: 'GoogleSans'),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Contaseña'),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
                                       return 'Por favor, ingrese su contraseña';
@@ -156,57 +176,63 @@ class _UsersViewState extends State<UsersView> {
                                     return null;
                                   },
                                 ),
-                                        DropdownButtonFormField<String>(
-                                              value: selectedRole,
-                                              items: roles.map((String role) {
-                                                return DropdownMenuItem<String>(
-                          value: role,
-                          child: Text(role),
-                                                );
-                                              }).toList(),
-                                              onChanged: (String? value) {
-                                                setState(() {
-                          selectedRole = value!;
-                          roleController.text = value;
-                                                });
-                                              },
-                                              decoration: const InputDecoration(labelText: 'Rol'),
-                                              validator: (value) {
-                                                if (value == null || value.isEmpty) {
-                          return 'Por favor, seleccione el rol';
-                                                }
-                                                return null;
-                                              },
-                                            ),
-                                            const SizedBox(height: 10),
+                                DropdownButtonFormField<String>(
+                                  value: selectedRole,
+                                  style: TextStyle(fontFamily: 'GoogleSans'),
+                                  items: roles.map((String role) {
+                                    return DropdownMenuItem<String>(
+                                      value: role,
+                                      child: Text(role),
+                                    );
+                                  }).toList(),
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      selectedRole = value!;
+                                      roleController.text = value;
+                                    });
+                                  },
+                                  decoration:
+                                      const InputDecoration(labelText: 'Rol'),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Por favor, seleccione el rol';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 10),
                                 ElevatedButton(
-                          onPressed: () async {
-                            if (_formKey.currentState!.validate()) {
-                              try {
-                                await postUser(
-                                  nameController.text,
-                                  emailController.text,
-                                  passwordController.text,
-                                  roleController.text,
-                                );
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      try {
+                                        await postUser(
+                                          nameController.text,
+                                          emailController.text,
+                                          passwordController.text,
+                                          roleController.text,
+                                        );
 
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Usuario agregado correctamente'),
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          const SnackBar(
+                                            content: Text(
+                                                'Usuario agregado correctamente'),
+                                          ),
+                                        );
+
+                                        setState(() {
+                                          futureUsers = fetchUsers();
+                                        });
+                                      } finally {
+                                        Navigator.pop(context);
+                                      }
+                                    }
+                                  },
+                                  child: const Text(
+                                    'Agregar Usuario',
+                                    style: TextStyle(fontFamily: 'GoogleSans'),
                                   ),
-                                );
-
-                                setState(() {
-                                  futureUsers = fetchUsers();
-                                });
-                              } finally {
-                                Navigator.pop(context); 
-                              }
-                            }
-                          },
-                          child: const Text('Agregar Usuario'),
-                        ),
-
+                                ),
                               ],
                             ),
                           ),
@@ -221,8 +247,12 @@ class _UsersViewState extends State<UsersView> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Icon(Icons.add),
-                    SizedBox(width: 10),
-                    Text("Nuevo", style: TextStyle(color: Colors.white, fontSize: 20)),
+                    SizedBox(width: 5),
+                    Text("Nuevo",
+                        style: TextStyle(
+                            fontFamily: 'GoogleSans',
+                            color: Colors.white,
+                            fontSize: 20)),
                   ],
                 ),
               ),

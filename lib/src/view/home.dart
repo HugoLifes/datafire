@@ -1,3 +1,4 @@
+import 'package:datafire/src/widgets/colors.dart';
 import 'package:datafire/src/widgets/shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -21,13 +22,24 @@ class _HomeState extends State<Home> {
   late List<FlSpot> costData = [];
   late List<ChartData> chartData = [];
   late TooltipBehavior _tooltipBehavior;
+  late List<ChartData> profit = [];
+  late List<ChartData> payments = [];
+  dynamic lastProfit;
+  String? lastProject;
+  String? lastCustomer;
+  dynamic lastPayment;
+  bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) => _showWelcomeMessage());
     _tooltipBehavior = TooltipBehavior(enable: true);
-    fetchData();
+    fetchData().whenComplete(() {
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
   Future<void> fetchData() async {
@@ -40,10 +52,21 @@ class _HomeState extends State<Home> {
         final data = json.decode(response.body);
         setState(() {
           _updateChartData(data);
+          lastProfit = jsonData['lastProfit'];
+          lastProject = jsonData['lastProject'];
+          lastCustomer = jsonData['lastCustomer'];
+          lastPayment = jsonData['lastPayment'];
+
           chartData = (jsonData['CostsByMonth'] as List)
               .map(
                 (e) => ChartData.fromJson(e),
               )
+              .toList();
+          profit = (jsonData['profitByMonth'] as List)
+              .map((e) => ChartData.fromJson(e))
+              .toList();
+          payments = (jsonData['paymentsByMonth'] as List)
+              .map((e) => ChartData.fromJson(e))
               .toList();
         });
       }
@@ -79,7 +102,7 @@ class _HomeState extends State<Home> {
       return PieChartSectionData(
         color: monthColor,
         value: projectCount,
-        title: '$monthName\n${projectCount.toInt()}',
+        title: '${monthName.substring(0, 3)}\n${projectCount.toInt()}',
         titleStyle: const TextStyle(
             fontFamily: 'GoogleSans',
             fontSize: 12,
@@ -87,12 +110,6 @@ class _HomeState extends State<Home> {
             fontWeight: FontWeight.bold),
       );
     }).toList();
-
-    /* costData = (data['CostsByMonth'] as List).asMap().entries.map((entry) {
-      final totalExpense =
-          double.tryParse(entry.value['totalExpense'].toString()) ?? 0.0;
-      return FlSpot(entry.key.toDouble(), totalExpense);
-    }).toList();*/
   }
 
   void _showWelcomeMessage() {
@@ -118,45 +135,40 @@ class _HomeState extends State<Home> {
         child: AppBarDatafire(
             title: "Gestion", description: "Mantente al dia de tus proyectos"),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _buildCard("Ganancia", _cartesianChart(), size),
-            Row(
-              children: [
-                Container(
-                  width: size.width / 6,
-                  height: 350,
-                  child: _buildCardInfo(
-                      "Ultimos Datos",
-                      _triangles(Size(45, 45), TrianguloArriba()),
-                      _triangles(Size(45, 45), TrianguloAbajo()),
-                      size,
-                      false),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                Container(
-                  width: size.width / 5,
-                  height: 350,
-                  child: _buildCard(
-                      "Proyectos añadidos",
-                      pieChartSections.isNotEmpty
-                          ? PieChart(_pieChartData())
-                          : const Center(
-                              child: const CircularProgressIndicator()),
-                      size),
-                ),
-                const SizedBox(
-                  width: 10,
-                ),
-                cardsHorizontalView(size),
-              ],
+      body: isLoading == true
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : SingleChildScrollView(
+              child: Column(
+                children: [
+                  _buildCard(
+                      "Calculo de datos", _cartesianChart(), size, 0.25, false),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Container(
+                        width: size.width / 3,
+                        height: 300,
+                        child: _buildCard(
+                            "Proyectos añadidos",
+                            pieChartSections.isNotEmpty
+                                ? PieChart(_pieChartData())
+                                : const Center(
+                                    child: const CircularProgressIndicator()),
+                            size,
+                            0.25,
+                            true),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      cardsHorizontalView(size),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 
@@ -167,23 +179,15 @@ class _HomeState extends State<Home> {
           children: [
             Container(
               width: size.width / 4,
-              height: 150,
+              height: 200,
               child: _buildCardInfo(
-                  "Clientes Recientes",
-                  _triangles(Size(45, 45), TrianguloArriba()),
-                  _triangles(Size(45, 45), TrianguloAbajo()),
-                  size,
-                  true),
+                  "Clientes Recientes", lastCustomer!, "Cliente mas actual"),
             ),
             Container(
               width: size.width / 4,
-              height: 150,
-              child: _buildCardInfo(
-                  "Ultimas Ganancias",
-                  _triangles(Size(45, 45), TrianguloArriba()),
-                  _triangles(Size(45, 45), TrianguloAbajo()),
-                  size,
-                  true),
+              height: 200,
+              child: _buildCardInfo("Ultimas Ganancias", lastProfit,
+                  "Ultima ganancia registrada"),
             ),
           ],
         ),
@@ -194,23 +198,15 @@ class _HomeState extends State<Home> {
           children: [
             Container(
               width: size.width / 4,
-              height: 150,
+              height: 200,
               child: _buildCardInfo(
-                  "Pagos reciente",
-                  _triangles(Size(45, 45), TrianguloArriba()),
-                  _triangles(Size(45, 45), TrianguloAbajo()),
-                  size,
-                  true),
+                  "Pagos reciente", lastPayment, "Pagos mas recientes"),
             ),
             Container(
               width: size.width / 4,
-              height: 150,
-              child: _buildCardInfo(
-                  "Proyectos recientes",
-                  _triangles(Size(45, 45), TrianguloArriba()),
-                  _triangles(Size(45, 45), TrianguloAbajo()),
-                  size,
-                  true),
+              height: 200,
+              child: _buildCardInfo("Proyectos recientes", lastProject!,
+                  "Ultimos pagos realizados"),
             ),
           ],
         ),
@@ -218,76 +214,87 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildCard(String title, Widget chart, Size size) {
+  Widget _buildCard(
+      String title, Widget chart, Size size, double height, bool circular) {
     return Card(
       borderOnForeground: false,
       clipBehavior: Clip.antiAlias,
-      margin: const EdgeInsets.all(15),
-      elevation: 5,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 15, top: 6),
-            child: Text(title,
-                style: const TextStyle(
-                    fontFamily: 'GoogleSans',
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold)),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            padding: EdgeInsets.all(10),
-            height: size.height * 0.25,
-            child: chart,
-          )
-        ],
+      elevation: 3,
+      color: cardColor,
+      margin: EdgeInsets.all(11),
+      child: Container(
+        padding: EdgeInsets.all(5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            //texto chart
+            Padding(
+              padding: const EdgeInsets.only(left: 15, top: 6),
+              child: Text(title,
+                  style: const TextStyle(
+                      fontFamily: 'GoogleSans',
+                      fontSize: 21,
+                      fontWeight: FontWeight.bold)),
+            ),
+            const SizedBox(height: 10),
+            //chart
+            Container(
+              padding: EdgeInsets.all(5),
+              height: size.height * height,
+              child: chart,
+            )
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildCardInfo(String title, CustomPaint paint, CustomPaint paint2,
-      Size size, bool otherInfo) {
-    return Card(
-      borderOnForeground: false,
-      clipBehavior: Clip.antiAlias,
-      margin: EdgeInsets.all(15),
-      elevation: 5,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 15,
-            ),
-            child: Text(title,
-                style: const TextStyle(
+  Widget _buildCardInfo(String title, dynamic content, String descripcion) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: InkWell(
+        child: Card(
+          elevation: 3,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          margin: const EdgeInsets.all(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontFamily: 'GoogleSans',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  '$content',
+                  style: const TextStyle(
                     fontFamily: 'GoogleSans',
                     fontSize: 24,
-                    fontWeight: FontWeight.bold)),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  descripcion,
+                  style: const TextStyle(
+                    fontFamily: 'GoogleSans',
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
           ),
-          SizedBox(
-            height: 35,
-          ),
-          otherInfo
-              ? Container()
-              : Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: paint,
-                    ),
-                    SizedBox(
-                      height: 50,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: paint2,
-                    ),
-                  ],
-                )
-        ],
+        ),
       ),
     );
   }
@@ -312,22 +319,78 @@ class _HomeState extends State<Home> {
         tooltipBehavior: _tooltipBehavior,
         series: <CartesianSeries>[
           LineSeries<ChartData, String>(
+              name: 'Gastos',
               enableTooltip: true,
               dataSource: chartData,
               width: 3,
-              pointColorMapper: (ChartData data, _) => data.color,
+              pointColorMapper: (ChartData data, _) => data.color![0],
               xValueMapper: (ChartData data, _) =>
-                  _getMonthLabel(DateTime.parse(data.month).month),
-              yValueMapper: (ChartData data, _) => data.totalExpense.toDouble(),
+                  _getMonthLabel(DateTime.parse(data.month!).month),
+              yValueMapper: (ChartData data, _) =>
+                  data.totalExpense!.toDouble(),
               markerSettings: const MarkerSettings(
                   color: Colors.green,
                   borderColor: Colors.black,
                   borderWidth: 5,
-                  shape: DataMarkerType.circle,
+                  shape: DataMarkerType.diamond,
                   width: 4,
                   height: 4,
                   isVisible: true),
               dataLabelSettings: const DataLabelSettings(
+                  alignment: ChartAlignment.far,
+                  useSeriesColor: true,
+                  textStyle: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'GoogleSans',
+                      fontWeight: FontWeight.w500),
+                  isVisible: true,
+                  labelAlignment: ChartDataLabelAlignment.top)),
+          LineSeries<ChartData, String>(
+              name: 'Ganancias',
+              enableTooltip: true,
+              dataSource: profit,
+              width: 3,
+              pointColorMapper: (ChartData data, _) => data.color![1],
+              xValueMapper: (ChartData data, _) =>
+                  _getMonthLabel(DateTime.parse(data.month!).month),
+              yValueMapper: (ChartData data, _) => data.totalProfit,
+              markerSettings: const MarkerSettings(
+                  color: Colors.green,
+                  borderColor: Colors.black,
+                  borderWidth: 5,
+                  shape: DataMarkerType.diamond,
+                  width: 4,
+                  height: 4,
+                  isVisible: true),
+              dataLabelSettings: const DataLabelSettings(
+                  alignment: ChartAlignment.near,
+                  useSeriesColor: true,
+                  textStyle: TextStyle(
+                      fontSize: 13,
+                      fontFamily: 'GoogleSans',
+                      fontWeight: FontWeight.w500),
+                  isVisible: true,
+                  labelAlignment: ChartDataLabelAlignment.outer)),
+          LineSeries<ChartData, String>(
+              name: 'Pagos',
+              enableTooltip: true,
+              dataSource: payments,
+              width: 3,
+              pointColorMapper: (ChartData data, _) => data.color![2],
+              xValueMapper: (ChartData data, _) =>
+                  _getMonthLabel(DateTime.parse(data.month!).month),
+              yValueMapper: (ChartData data, _) =>
+                  data.totalPayments.toDouble(),
+              markerSettings: const MarkerSettings(
+                  color: Colors.green,
+                  borderColor: Colors.black,
+                  borderWidth: 5,
+                  shape: DataMarkerType.diamond,
+                  width: 4,
+                  height: 4,
+                  isVisible: true),
+              dataLabelSettings: const DataLabelSettings(
+                  alignment: ChartAlignment.near,
                   useSeriesColor: true,
                   textStyle: TextStyle(
                       fontSize: 13,
@@ -368,23 +431,33 @@ class _HomeState extends State<Home> {
         return '';
     }
   }
-
-  CustomPaint _triangles(Size size, CustomPainter direction) {
-    return CustomPaint(
-      painter: direction,
-      size: size,
-    );
-  }
 }
 
 class ChartData {
-  ChartData(this.month, this.totalExpense, this.color);
-  final String month;
-  final double totalExpense;
-  final Color? color;
+  ChartData(
+      {this.month,
+      this.totalExpense,
+      this.color,
+      this.totalProfit,
+      this.totalPayments});
+  final String? month;
+  final dynamic? totalExpense;
+  final dynamic? totalProfit;
+  final dynamic? totalPayments;
+  final List<Color>? color;
 
   factory ChartData.fromJson(Map<String, dynamic> json) {
     return ChartData(
-        json['month'], double.parse(json['totalExpense']), Colors.blue);
+        month: json['month'],
+        totalExpense: json['totalExpense'] != null
+            ? double.parse(json['totalExpense'])
+            : '',
+        totalPayments: json['totalPayment'] != null
+            ? double.parse(json['totalPayment'])
+            : '',
+        totalProfit: json['totalProfit'] != null
+            ? double.parse(json['totalProfit'].toString())
+            : '',
+        color: [Colors.redAccent, Colors.greenAccent, Colors.blueAccent]);
   }
 }

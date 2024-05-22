@@ -17,40 +17,20 @@ class _MyAppState extends State<MyApp> {
   final _controller = SidebarXController(selectedIndex: 0);
   @override
   Widget build(BuildContext context) {
-    return GlobalLoaderOverlay(
-      overlayColor: Colors.grey.withOpacity(0.8),
-      useDefaultLoading: false,
-      overlayWidgetBuilder: (_) {
-        //ignored progress for the moment
-        return Center(
-          child: SpinKitRotatingCircle(
-            color: Colors.blue,
-            size: 50.0,
+    return Scaffold(
+      body: Row(
+        children: [
+          // la barra lateral y su controller, que sirve para detectar acciones dentro
+          SideBar(
+            controller: _controller,
           ),
-        );
-      },
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'DataFire',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-        home: Scaffold(
-          body: Row(
-            children: [
-              // la barra lateral y su controller, que sirve para detectar acciones dentro
-              SideBar(
-                controller: _controller,
-              ),
-              //permite adaptar la vista en ciertas ocasiones
-              Expanded(
-                child: MotherView(
-                  controller: _controller,
-                ),
-              ),
-            ],
+          //permite adaptar la vista en ciertas ocasiones
+          Expanded(
+            child: MotherView(
+              controller: _controller,
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

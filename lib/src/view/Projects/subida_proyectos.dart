@@ -116,7 +116,7 @@ class _AltaProyectosState extends State<AltaProyectos> {
           );
         },
         icon: const Icon(Icons.receipt),
-        elevation: 4,
+        elevation: 3,
         label: const Row(children: [
           Text('Agregar Proyecto',
               style: TextStyle(fontFamily: 'GoogleSans', fontSize: 15))

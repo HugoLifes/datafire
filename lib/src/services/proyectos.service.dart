@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:datafire/src/model/proyectos_model.dart';
 import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
@@ -81,6 +82,21 @@ Future<String?> buscarIdProyectoPorNombre(String nombre) async {
     return null;
   }
   return null;
+}
+
+Future<List<Proyectos>> fetchProjects2() async {
+  const url = "http://localhost:3000/Api/v1/proyectos";
+  Map<String, String> headers = await getAuthHeaders();
+  try {
+    final res = await http.get(Uri.parse(url), headers: headers);
+    if (res.statusCode == 200) {
+      return proyectosFromJson(res.body);
+    } else {
+      return [];
+    }
+  } catch (err) {
+    return [];
+  }
 }
 
 Future<List<dynamic>> fetchProjects() async {

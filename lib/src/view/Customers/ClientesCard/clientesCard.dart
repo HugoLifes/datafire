@@ -17,7 +17,8 @@ class _ClienteCardState extends State<ClienteCard> {
     return Card(
       borderOnForeground: false,
       clipBehavior: Clip.antiAlias,
-      elevation: 4,
+      elevation: 3,
+      color: cardColor,
       child: InkWell(
         hoverColor: Colors.grey.withOpacity(0.1),
         onTap: () {

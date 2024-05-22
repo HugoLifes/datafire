@@ -1,5 +1,8 @@
 import 'dart:io';
 
+import 'package:datafire/src/model/proyectos_model.dart';
+import 'package:datafire/src/services/proyectos.service.dart';
+import 'package:datafire/src/widgets/appBar.dart';
 import 'package:datafire/src/widgets/cache_image.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
@@ -19,11 +22,14 @@ class NominasMain extends StatefulWidget {
 class _NominasMainState extends State<NominasMain> {
   List<Map<String, dynamic>> allNominas = [];
   late Map<String, dynamic> selectedWeek;
+  Future<List<dynamic>>? projects;
   bool hasData = true;
+  List<Proyectos> proyectos = [];
   @override
   void initState() {
     super.initState();
     loadNominas();
+    obtenerProyectos();
   }
 
   Future<void> loadNominas() async {
@@ -49,18 +55,42 @@ class _NominasMainState extends State<NominasMain> {
     }
   }
 
+  obtenerProyectos() async {
+    await fetchProjects2().then((value) => {
+          for (int i = 0; i < value.length; i++)
+            {
+              proyectos.add(Proyectos(
+                  id: value[i].id,
+                  name: value[i].name,
+                  fechaInicio: value[i].fechaInicio,
+                  fechaFin: value[i].fechaFin,
+                  createdAt: value[i].createdAt))
+            },
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarDatafire(
-          title: "Nominas", description: "Registro y generación de nóminas."),
+      appBar: const PreferredSize(
+        preferredSize: Size.fromHeight(kToolbarHeight),
+        child: AppBarDatafire(
+            title: "Nominas", description: "Registro y generación de nóminas."),
+      ),
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Theme.of(context).primaryColor,
         label: const Text("Generar Nómina",
-            style: TextStyle(fontFamily: 'GoogleSans', color: Colors.white)),
-        onPressed: () => Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const NominasView())),
-        icon: const Icon(Icons.group_add, color: Colors.white),
+            style: TextStyle(
+              fontFamily: 'GoogleSans',
+            )),
+        onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => NominasView(
+                      proyectos: proyectos,
+                    ))),
+        icon: const Icon(
+          Icons.group_add,
+        ),
       ),
       body: allNominas.isNotEmpty
           ? buildNominaContent()
@@ -250,37 +280,4 @@ class _NominasMainState extends State<NominasMain> {
       },
     );
   }
-}
-
-class AppBarDatafire extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final String description;
-
-  const AppBarDatafire(
-      {Key? key, required this.title, required this.description})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: Text(
-        title,
-        style: TextStyle(
-          fontFamily: 'GoogleSans',
-        ),
-      ),
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(30.0),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10.0),
-          child: Text(description,
-              style: const TextStyle(
-                  fontFamily: 'GoogleSans', color: Colors.white)),
-        ),
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 30.0);
 }

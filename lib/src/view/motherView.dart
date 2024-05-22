@@ -16,7 +16,6 @@ class MotherView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
     return AnimatedBuilder(
         animation: controller,
         builder: (ctx, child) {
@@ -36,7 +35,7 @@ class MotherView extends StatelessWidget {
             case 6:
               return const UserVerificationView();
             default:
-              return Text(
+              return const Text(
                 'Page not found',
                 style: TextStyle(
                   fontFamily: 'GoogleSans',

@@ -1,8 +1,12 @@
 import 'dart:convert';
+import 'package:datafire/src/model/flujo_caja_model.dart';
 import 'package:datafire/src/model/ingresos_model.dart';
 import 'package:datafire/src/model/nominas_semanales.dart';
+import 'package:datafire/src/model/prestamos_model.dart';
 import 'package:datafire/src/model/workers_model.dart';
+import 'package:datafire/src/services/flujo_caja.service.dart';
 import 'package:datafire/src/services/nominas_semanales_service.dart';
+import 'package:datafire/src/services/prestamos.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/finances/menu/Egresos.dart' as Egresos;
 import 'package:datafire/src/view/finances/menu/Flujo.dart';
@@ -10,6 +14,7 @@ import 'package:datafire/src/view/finances/menu/cuentasPorCobrar.dart';
 import 'package:datafire/src/view/finances/menu/ingresos.dart'
     hide OrderInfoDataSource;
 import 'package:datafire/src/view/finances/menu/new_egresos.dart';
+import 'package:datafire/src/view/finances/menu/new_flujo.dart';
 import 'package:datafire/src/view/finances/menu/new_ingresos.dart';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +52,8 @@ class _FinancesViewState extends State<FinancesView> {
   List<WorkerScheme> workersScheme = [];
   bool isLoading = true;
   List<NominasSemanales> nominasWeek = [];
-
+  List<Prestamos> prestamos = [];
+  List<FlujoCaja> flujo = [];
   @override
   void initState() {
     super.initState();
@@ -60,8 +66,25 @@ class _FinancesViewState extends State<FinancesView> {
             isLoading = false;
           })
         });
+    dataPrestamos();
     fetchCobrarData = fetchCuentasCobrarData();
-    fetchFlujData = fetchFlujoData();
+    dataFlujo().then((value) {
+      setState(() {
+        isLoading = false;
+      });
+    });
+  }
+
+  Future dataPrestamos() async {
+    await loadprestamos().then((value) => {
+          for (int i = 0; i < value.length; i++)
+            {
+              prestamos.add(Prestamos(
+                  id: value[i].id,
+                  datePrestamo: value[i].datePrestamo,
+                  amountPaid: value[i].amountPaid))
+            }
+        });
   }
 
   //nueva funcion ingresos
@@ -69,19 +92,23 @@ class _FinancesViewState extends State<FinancesView> {
     await fetchingresos().then((value) => {
           for (int i = 0; i < value.length; i++)
             {
-              for (int j = 0; j < value[i].abonos.length; j++)
+              if (value[i].abonos.isNotEmpty)
                 {
-                  abonoScheme.add(AbonoScheme(
-                      amount: value[i].abonos[j].amount,
-                      projectName: value[i].abonos[j].projectName,
-                      date: value[i].abonos[j].date))
-                },
-              ingresoScheme.add(IngresosScheme(
-                  startDate: value[i].startDate,
-                  endDate: value[i].endDate,
-                  abonos: abonoScheme,
-                  totalWeeklyAbonos: value[i].totalWeeklyAbonos))
-            }
+                  for (int j = 0; j < value[i].abonos.length; j++)
+                    {
+                      abonoScheme.add(AbonoScheme(
+                          amount: value[i].abonos[j].amount,
+                          projectName: value[i].abonos[j].projectName,
+                          date: value[i].abonos[j].date))
+                    },
+                  ingresoScheme.add(IngresosScheme(
+                      startDate: value[i].startDate,
+                      endDate: value[i].endDate,
+                      abonos: abonoScheme,
+                      totalWeeklyAbonos: value[i].totalWeeklyAbonos))
+                }
+            },
+          print(abonoScheme.length)
         });
   }
 
@@ -108,6 +135,23 @@ class _FinancesViewState extends State<FinancesView> {
           ),
           isr: WorkerScheme().calcularISR(data[i].salary)));
     }
+  }
+
+  Future dataFlujo() async {
+    await fetchFlujoData().then((value) => {
+          for (int i = 0; i < value.length; i++)
+            {
+              flujo.add(FlujoCaja(
+                  caja: value[i].caja,
+                  ingresos: value[i].ingresos,
+                  egresos: value[i].egresos,
+                  nomina: value[i].nomina,
+                  impuestos: value[i].impuestos,
+                  balanceDeFlujo: value[i].balanceDeFlujo,
+                  prestamo: value[i].prestamo,
+                  balanceTotal: value[i].balanceTotal))
+            }
+        });
   }
 
   // funcion que carga las nominas
@@ -138,18 +182,6 @@ class _FinancesViewState extends State<FinancesView> {
   Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
     final response = await http
         .get(Uri.parse('http://localhost:3000/Api/v1/proyectos/cuentasCobrar'));
-
-    if (response.statusCode == 200) {
-      debugPrint("Cuentas por cobrar cargado con éxito");
-      return List<Map<String, dynamic>>.from(json.decode(response.body));
-    } else {
-      throw Exception('Error al cargar datos de Ingresos');
-    }
-  }
-
-  Future<List<Map<String, dynamic>>> fetchFlujoData() async {
-    final response = await http
-        .get(Uri.parse('http://localhost:3000/Api/v1/proyectos/flujo'));
 
     if (response.statusCode == 200) {
       debugPrint("Cuentas por cobrar cargado con éxito");
@@ -200,13 +232,21 @@ class _FinancesViewState extends State<FinancesView> {
                           : NewEgresos(
                               workersScheme: workersScheme,
                               nominasWeek: nominasWeek,
+                              prestamos: prestamos,
                             ),
                       isLoading
                           ? const Center(child: CircularProgressIndicator())
                           : NewIngresos(
                               ingresoScheme: ingresoScheme,
+                              abono: abonoScheme,
                             ),
-                      FlujoWidget(fetchDataFuture: fetchFlujData),
+                      isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : NewFlujo(
+                              flujo: flujo,
+                            ),
                       CobrarWidget(fetchDataFuture: fetchCobrarData)
                     ],
                   ),

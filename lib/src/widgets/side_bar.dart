@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sidebarx/sidebarx.dart';
 
-
 class SideBar extends StatefulWidget {
   const SideBar({super.key, required this.controller});
   final SidebarXController controller;
@@ -19,20 +18,20 @@ class _SideBarState extends State<SideBar> {
       theme: SidebarXTheme(
           margin: const EdgeInsets.all(10),
           decoration: BoxDecoration(boxShadow: const [
-            BoxShadow(color: Colors.grey, blurRadius: 5, offset: Offset(0, 5))
+            BoxShadow(color: Colors.grey, blurRadius: 4, offset: Offset(0, 5))
           ], color: canvasColor, borderRadius: BorderRadius.circular(20)),
           textStyle: const TextStyle(color: colorIcon),
           selectedTextStyle: const TextStyle(color: colorIcon),
           itemDecoration: BoxDecoration(border: Border.all(color: canvasColor)),
           selectedItemDecoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: colorIcon.withOpacity(0.38)),
-              color: selectColor,
-              boxShadow: [
-                BoxShadow(color: Colors.grey.withOpacity(0.5), blurRadius: 15)
-              ]),
-          iconTheme: const IconThemeData(color: unselectColor, size: 20)),
+              border: Border.all(color: materialPColor2.withOpacity(0.5)),
+              color: materialPColor,
+              boxShadow: [BoxShadow(color: materialPColor, blurRadius: 15)]),
+          iconTheme: const IconThemeData(color: unselectColor, size: 20),
+          selectedIconTheme: const IconThemeData(color: materialPColor2)),
       extendedTheme: const SidebarXTheme(
+          textStyle: TextStyle(fontFamily: 'GoogleSans'),
           width: 200,
           selectedItemTextPadding: EdgeInsets.only(left: 10),
           itemTextPadding: EdgeInsets.only(left: 10),
@@ -68,11 +67,7 @@ class _SideBarState extends State<SideBar> {
       },
       //aqui se editan la cantidad de pestañas
       items: [
-        SidebarXItem(
-            icon: Icons.home,
-            label: 'Dashboard',
-            onTap: () {
-            }),
+        SidebarXItem(icon: Icons.home, label: 'Dashboard', onTap: () {}),
         SidebarXItem(
             icon: Icons.assignment,
             label: 'Alta Proyectos',
@@ -97,28 +92,25 @@ class _SideBarState extends State<SideBar> {
             onTap: () {
               debugPrint('Balance');
             }),
-                    SidebarXItem(
+        SidebarXItem(
             icon: Icons.local_play_rounded,
             label: 'Nominas',
             onTap: () {
               debugPrint('Nominas');
             }),
-                    SidebarXItem(
+        SidebarXItem(
             icon: Icons.verified_user,
             label: 'Users',
             onTap: () {
               debugPrint('Balance');
             }),
-SidebarXItem(
-  icon: Icons.exit_to_app,
-  label: 'Log Out',
-  onTap: () async {
-    await _showLogoutConfirmationDialog(context);
-  },
-),
-
-
-
+        SidebarXItem(
+          icon: Icons.exit_to_app,
+          label: 'Log Out',
+          onTap: () async {
+            await _showLogoutConfirmationDialog(context);
+          },
+        ),
       ],
     );
   }
@@ -160,7 +152,3 @@ _performLogout(BuildContext context) async {
     print('Error al realizar la navegación: $e');
   }
 }
-
-
-
-

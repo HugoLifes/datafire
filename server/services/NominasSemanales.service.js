@@ -1,6 +1,5 @@
 const boom = require('@hapi/boom');
 const { models } = require('../lib/sequelize');
-const { Op } = require('sequelize');
 
 
 class NominasSemanalesService {
@@ -24,14 +23,7 @@ class NominasSemanalesService {
     
     //console.log(nominas);
     const nominas = await models.NominasSemanales.findAll({
-      where: {
-        fecha_inicio_semana: {
-          [Op.gte]: startDate,
-        },
-        fecha_fin_semana: {
-          [Op.lte]: endDate,
-        },
-      },
+      
     });
     
     
@@ -76,18 +68,18 @@ class NominasSemanalesService {
         }));
 
 
-        if (nominasForWeek.length > 0) {
+      if (nominasForWeek.length > 0) {
         const totalWeeklySalary = nominasForWeek.reduce(
-          (total, nomina) => total + nomina.salary,0,);
+          (total, nomina) => total + nomina.salary, 0,);
 
-      weeklyNominas.push({
-        startDate: startOfWeek.toISOString(),
-        endDate: endOfWeek.toISOString(),
-        nominas: nominasForWeek,
-        totalWeeklySalary,
-      });
-  
-    }
+        weeklyNominas.push({
+          startDate: startOfWeek.toISOString(),
+          endDate: endOfWeek.toISOString(),
+          nominas: nominasForWeek,
+          totalWeeklySalary,
+        });
+
+      }
 
       currentDate.setDate(currentDate.getDate() + 7);
     }

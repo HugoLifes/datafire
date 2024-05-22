@@ -1,15 +1,22 @@
+import 'package:datafire/src/model/flujo_caja_model.dart';
 import 'package:datafire/src/model/ingresos_model.dart';
 import 'package:datafire/src/model/nominas_semanales.dart';
 import 'package:datafire/src/model/workers_model.dart';
+import 'package:datafire/src/widgets/colors.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
 class TableTemplate extends StatefulWidget {
   late final ScrollController verticalController = ScrollController();
+  late ScrollController? horizontalController = ScrollController();
   List<IngresosScheme>? ingresoScheme = [];
   List<WorkerScheme>? workerScheme = [];
   List<Nomina>? payroll = [];
   bool? isEgresos = false;
+  bool? isFlujo = false;
+  List<AbonoScheme>? abono = [];
+  List<FlujoCaja>? flujo = [];
 
   TableTemplate(
       {super.key,
@@ -17,7 +24,11 @@ class TableTemplate extends StatefulWidget {
       this.ingresoScheme,
       this.workerScheme,
       this.payroll,
-      this.isEgresos});
+      this.isEgresos,
+      this.abono,
+      this.isFlujo,
+      this.horizontalController,
+      this.flujo});
 
   @override
   State<TableTemplate> createState() => _TableTemplateState();
@@ -25,7 +36,15 @@ class TableTemplate extends StatefulWidget {
 
 class _TableTemplateState extends State<TableTemplate> {
   final int _rowCount = 20;
-
+  List<String> rowContent = [
+    'Caja',
+    'Ingresos',
+    'Egresos',
+    'Impuestos',
+    'Blance Flujo',
+    'Prestamo',
+    'Balance Total'
+  ];
   @override
   void initState() {
     super.initState();
@@ -33,6 +52,20 @@ class _TableTemplateState extends State<TableTemplate> {
     widget.verticalController.addListener(() {
       setState(() {});
     });
+
+    if (widget.isFlujo == false) {
+    } else {
+      widget.horizontalController!.addListener(() {
+        setState(() {});
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.verticalController.dispose();
+    widget.horizontalController?.dispose();
+    super.dispose();
   }
 
   @override
@@ -43,13 +76,19 @@ class _TableTemplateState extends State<TableTemplate> {
         border:
             TableSpanBorder(trailing: const BorderSide(color: Colors.black)));
     return Scaffold(
-      body: Card(
-        elevation: 4,
-        clipBehavior: Clip.antiAlias,
-        child: widget.isEgresos!
-            ? egresosView(colorScheme, decoration)
-            : ingresosView(colorScheme, decoration),
-      ),
+      body: widget.isFlujo!
+          ? Card(
+              elevation: 3,
+              clipBehavior: Clip.antiAlias,
+              child: flujoView(colorScheme, decoration),
+            )
+          : Card(
+              elevation: 3,
+              clipBehavior: Clip.antiAlias,
+              child: widget.isEgresos!
+                  ? egresosView(colorScheme, decoration)
+                  : ingresosView(colorScheme, decoration),
+            ),
       persistentFooterButtons: [
         TextButton(
           onPressed: () {
@@ -90,80 +129,61 @@ class _TableTemplateState extends State<TableTemplate> {
                 label = 'Proyecto';
                 break;
               case 2:
-                label = 'Fecha Inicio';
-                break;
-              case 3:
-                label = 'Fecha Final';
-                break;
-              case 4:
                 label = 'Pago total';
                 break;
-              case 5:
+              case 3:
                 label = 'Fecha de pago';
             }
           } else {
-            final ingresoCount = widget.ingresoScheme?[vicinity.yIndex - 1];
-            final abonoCount = widget
-                .ingresoScheme?[vicinity.yIndex - 1].abonos[vicinity.yIndex];
+            final ingresoCount = widget.abono?[vicinity.yIndex - 1];
+
             switch (vicinity.xIndex) {
               case 0:
                 label = vicinity.yIndex.toString();
                 break;
               case 1:
-                if (widget.ingresoScheme?[vicinity.yIndex - 1].abonos == null) {
-                  label = "No hay proyecto";
-                } else {
-                  label = abonoCount!.projectName;
-                }
+                label = ingresoCount!.projectName;
+
                 break;
               case 2:
-                label =
-                    '${ingresoCount?.startDate.day}/${ingresoCount?.startDate.month}/${ingresoCount?.startDate.year}';
+                label = ingresoCount!.amount.toString();
                 break;
               case 3:
                 label =
-                    '${ingresoCount?.endDate.day}/${ingresoCount?.endDate.month}/${ingresoCount?.endDate.year}';
-                break;
-              case 4:
-                label = ingresoCount!.totalWeeklyAbonos.toString();
-                break;
-              case 5:
-                if (widget.ingresoScheme?[vicinity.yIndex - 1].abonos == null) {
-                  label = "No hay pago";
-                } else {
-                  label =
-                      '${abonoCount!.date.day}/${abonoCount.date.month}/${abonoCount.date.year}';
-                }
+                    '${ingresoCount!.date.day}/${ingresoCount.date.month}/${ingresoCount.date.year}';
             }
           }
           return TableViewCell(
               child: ColoredBox(
-            color: isStickyHeader ? Colors.transparent : colorScheme.background,
+            color: isStickyHeader ? Colors.transparent : Colors.white,
             child: Center(
               child: FittedBox(
                   child: Padding(
                       padding: const EdgeInsets.all(8),
-                      child: Text(label,
-                          style: TextStyle(
-                            fontFamily: 'GoogleSans',
-                            fontWeight: isStickyHeader ? FontWeight.w600 : null,
-                            color: isStickyHeader ? null : colorScheme.outline,
-                          )))),
+                      child: Text(
+                        label,
+                        style: TextStyle(
+                          fontFamily: 'GoogleSans',
+                          fontWeight: isStickyHeader ? FontWeight.w600 : null,
+                          color: isStickyHeader ? null : colorScheme.outline,
+                        ),
+                        textAlign: TextAlign.center,
+                      ))),
             ),
           ));
         },
         columnBuilder: (index) {
           return TableSpan(
               foregroundDecoration: index == 0 ? decoration : null,
-              extent: const FractionalTableSpanExtent(1 / 7));
+              extent: const FractionalTableSpanExtent(1 / 5));
         },
         rowBuilder: (index) {
           return TableSpan(
               foregroundDecoration: index == 0 ? decoration : null,
-              extent: const FixedTableSpanExtent(50));
+              extent: const FixedTableSpanExtent(40));
         },
-        columnCount: 15,
-        rowCount: widget.ingresoScheme!.length + 1);
+        columnCount: 10,
+        rowCount: widget.abono!.length + 1);
   }
 
   //vista de egresos
@@ -184,13 +204,16 @@ class _TableTemplateState extends State<TableTemplate> {
                 label = 'Pago';
                 break;
               case 2:
-                label = 'Salario Bruto';
+                label = 'Salario Hora';
                 break;
               case 3:
                 label = 'Seguro Social';
                 break;
               case 4:
                 label = 'ISR';
+                break;
+              case 5:
+                label = 'Horas';
                 break;
             }
           } else {
@@ -206,7 +229,8 @@ class _TableTemplateState extends State<TableTemplate> {
 
                 break;
               case 2:
-                label = '0';
+                label = double.tryParse(egresoCount!.salaryHour.toString())!
+                    .toStringAsFixed(2);
 
                 break;
               case 3:
@@ -217,11 +241,14 @@ class _TableTemplateState extends State<TableTemplate> {
                 label = double.tryParse(egresoCount!.isr.toString())!
                     .toStringAsFixed(2);
                 break;
+              case 5:
+                label = egresoCount!.horasTrabajadas.toString();
+                break;
             }
           }
           return TableViewCell(
               child: ColoredBox(
-            color: isStickyHeader ? Colors.transparent : colorScheme.background,
+            color: isStickyHeader ? Colors.transparent : Colors.white,
             child: Center(
               child: FittedBox(
                   child: Padding(
@@ -249,7 +276,97 @@ class _TableTemplateState extends State<TableTemplate> {
               extent: const FixedTableSpanExtent(50));
         },
         columnCount: 10,
-        rowCount: widget.payroll!.length);
+        rowCount: widget.payroll!.length + 1);
   }
   //construye las filas
+
+  flujoView(ColorScheme colorScheme, TableSpanDecoration decoration) {
+    return Scrollbar(
+      controller: widget.horizontalController,
+      thumbVisibility: true,
+      scrollbarOrientation: ScrollbarOrientation.bottom,
+      child: TableView.builder(
+          verticalDetails:
+              ScrollableDetails.vertical(controller: widget.verticalController),
+          horizontalDetails: ScrollableDetails.horizontal(
+              controller: widget.horizontalController),
+          columnCount: widget.flujo!.length,
+          rowCount: rowContent.length + 1,
+          columnBuilder: (index) {
+            return TableSpan(
+                foregroundDecoration: index == 0 ? decoration : null,
+                extent: const FractionalTableSpanExtent(1 / 7));
+          },
+          rowBuilder: (index) {
+            return TableSpan(
+                foregroundDecoration: index == 0 ? decoration : null,
+                extent: const FixedTableSpanExtent(85));
+          },
+          cellBuilder: (BuildContext ctx, TableVicinity vicinity) {
+            final isStickyHeader = vicinity.xIndex == 0 || vicinity.yIndex == 0;
+            var label = '';
+            if (vicinity.yIndex == 0) {
+              if (vicinity.xIndex == 0) {
+                label = 'ID';
+              } else {
+                label = "Semana ${vicinity.xIndex}";
+              }
+            } else {
+              final flujocaja = widget.flujo?[vicinity.xIndex];
+
+              if (vicinity.xIndex == 0) {
+                label = rowContent[vicinity.yIndex - 1];
+              } else {
+                switch (vicinity.yIndex) {
+                  case 1:
+                    label = double.parse(flujocaja!.caja.toString())
+                        .toStringAsFixed(2);
+                    break;
+                  case 2:
+                    label = double.parse(flujocaja!.ingresos.toString())
+                        .toStringAsFixed(2);
+                    break;
+                  case 3:
+                    label = double.parse(flujocaja!.egresos.toString())
+                        .toStringAsFixed(2);
+                    break;
+                  case 4:
+                    label = double.parse(flujocaja!.impuestos.toString())
+                        .toStringAsFixed(2);
+                    break;
+                  case 5:
+                    label = double.parse(flujocaja!.balanceDeFlujo.toString())
+                        .toStringAsFixed(2);
+                    break;
+                  case 6:
+                    label = double.parse(flujocaja!.prestamo.toString())
+                        .toStringAsFixed(2);
+                    break;
+                  case 7:
+                    label = double.parse(flujocaja!.balanceTotal.toString())
+                        .toStringAsFixed(2);
+                }
+              }
+            }
+            return TableViewCell(
+                child: ColoredBox(
+              color: isStickyHeader ? Colors.transparent : Colors.white,
+              child: Center(
+                child: FittedBox(
+                    child: Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          label,
+                          style: TextStyle(
+                            fontFamily: 'GoogleSans',
+                            fontWeight: isStickyHeader ? FontWeight.w600 : null,
+                            color: isStickyHeader ? null : colorScheme.outline,
+                          ),
+                          textAlign: TextAlign.center,
+                        ))),
+              ),
+            ));
+          }),
+    );
+  }
 }
