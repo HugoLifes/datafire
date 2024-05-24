@@ -62,22 +62,41 @@ class _UsersViewState extends State<UsersView> {
 
                   return DataTable(
                     columns: const [
-                      DataColumn(label: Text("ID")),
-                      DataColumn(label: Text('Trabajadores')),
-                      DataColumn(label: Text("Correo")),
-                      DataColumn(label: Text("Rol")),
                       DataColumn(
-                        label: Text('Eliminar'),
+                          label: Text(
+                        "ID",
+                        style: TextStyle(fontFamily: 'GoogleSans'),
+                      )),
+                      DataColumn(
+                          label: Text('Trabajadores',
+                              style: TextStyle(fontFamily: 'GoogleSans'))),
+                      DataColumn(
+                          label: Text("Correo",
+                              style: TextStyle(fontFamily: 'GoogleSans'))),
+                      DataColumn(
+                          label: Text("Rol",
+                              style: TextStyle(fontFamily: 'GoogleSans'))),
+                      DataColumn(
+                        label: Text('Eliminar',
+                            style: TextStyle(fontFamily: 'GoogleSans')),
                         numeric: false,
                       ),
                     ],
                     rows: users
                         .map((user) => DataRow(
                               cells: [
-                                DataCell(Text(user["id"].toString())),
-                                DataCell(Text(user['name'].toString())),
-                                DataCell(Text(user["email"].toString())),
-                                DataCell(Text(user["role"].toString())),
+                                DataCell(Text(user["id"].toString(),
+                                    style:
+                                        TextStyle(fontFamily: 'GoogleSans'))),
+                                DataCell(Text(user['name'].toString(),
+                                    style:
+                                        TextStyle(fontFamily: 'GoogleSans'))),
+                                DataCell(Text(user["email"].toString(),
+                                    style:
+                                        TextStyle(fontFamily: 'GoogleSans'))),
+                                DataCell(Text(user["role"].toString(),
+                                    style:
+                                        TextStyle(fontFamily: 'GoogleSans'))),
                                 DataCell(
                                   SizedBox(
                                     width: 50,
@@ -87,6 +106,10 @@ class _UsersViewState extends State<UsersView> {
                                       onPressed: () async {
                                         AwesomeDialog(
                                           context: context,
+                                          titleTextStyle: TextStyle(
+                                              fontFamily: 'GoogleSans'),
+                                          descTextStyle: TextStyle(
+                                              fontFamily: 'GoogleSans'),
                                           dialogType: DialogType.warning,
                                           animType: AnimType.bottomSlide,
                                           title: 'Eliminar usuario',
@@ -96,14 +119,8 @@ class _UsersViewState extends State<UsersView> {
                                           btnCancelOnPress: () {},
                                           btnOkOnPress: () {
                                             // Eliminar trabajadores
-                                            deleteUser(user["id"]);
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(
-                                              const SnackBar(
-                                                content: Text(
-                                                    'Trabajador eliminado correctamente'),
-                                              ),
-                                            );
+                                            deleteUser(user["id"], context);
+
                                             setState(() {
                                               futureUsers = fetchUsers();
                                             });
@@ -144,6 +161,10 @@ class _UsersViewState extends State<UsersView> {
                                   controller: nameController,
                                   style: TextStyle(fontFamily: 'GoogleSans'),
                                   decoration: const InputDecoration(
+                                      floatingLabelStyle:
+                                          TextStyle(fontFamily: 'GoogleSans'),
+                                      labelStyle:
+                                          TextStyle(fontFamily: 'GoogleSans'),
                                       labelText: 'Nombre'),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -156,6 +177,10 @@ class _UsersViewState extends State<UsersView> {
                                   controller: emailController,
                                   style: TextStyle(fontFamily: 'GoogleSans'),
                                   decoration: const InputDecoration(
+                                      floatingLabelStyle:
+                                          TextStyle(fontFamily: 'GoogleSans'),
+                                      labelStyle:
+                                          TextStyle(fontFamily: 'GoogleSans'),
                                       labelText: 'Correo'),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -168,6 +193,10 @@ class _UsersViewState extends State<UsersView> {
                                   controller: passwordController,
                                   style: TextStyle(fontFamily: 'GoogleSans'),
                                   decoration: const InputDecoration(
+                                      floatingLabelStyle:
+                                          TextStyle(fontFamily: 'GoogleSans'),
+                                      labelStyle:
+                                          TextStyle(fontFamily: 'GoogleSans'),
                                       labelText: 'Contaseña'),
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
@@ -182,7 +211,12 @@ class _UsersViewState extends State<UsersView> {
                                   items: roles.map((String role) {
                                     return DropdownMenuItem<String>(
                                       value: role,
-                                      child: Text(role),
+                                      child: Text(
+                                        role,
+                                        style: TextStyle(
+                                            fontFamily: 'GoogleSans',
+                                            color: Colors.black),
+                                      ),
                                     );
                                   }).toList(),
                                   onChanged: (String? value) {
@@ -206,11 +240,11 @@ class _UsersViewState extends State<UsersView> {
                                     if (_formKey.currentState!.validate()) {
                                       try {
                                         await postUser(
-                                          nameController.text,
-                                          emailController.text,
-                                          passwordController.text,
-                                          roleController.text,
-                                        );
+                                            nameController.text,
+                                            emailController.text,
+                                            passwordController.text,
+                                            roleController.text,
+                                            context);
 
                                         ScaffoldMessenger.of(context)
                                             .showSnackBar(
