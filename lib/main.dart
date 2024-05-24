@@ -1,7 +1,10 @@
 import 'package:datafire/src/app.dart';
+import 'package:datafire/src/bloc/login_auth_bloc.dart';
 import 'package:datafire/src/view/login/login_view.dart';
+import 'package:datafire/src/view/login/new_login_view.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:loader_overlay/loader_overlay.dart';
@@ -41,18 +44,21 @@ void main() async {
         ),
       );
     },
-    child: MaterialApp(
-      theme: ThemeData(
-          useMaterial3: true,
-          scaffoldBackgroundColor: Colors.white,
-          textTheme:
-              TextTheme(displaySmall: TextStyle(color: materialPColor2))),
-      debugShowCheckedModeBanner: false,
-      initialRoute: token != null ? '/home' : '/login',
-      routes: {
-        '/login': (context) => const LoginView(),
-        '/home': (context) => const MyApp(),
-      },
+    child: BlocProvider(
+      create: (context) => LoginBloc(),
+      child: MaterialApp(
+        theme: ThemeData(
+            useMaterial3: true,
+            scaffoldBackgroundColor: Colors.white,
+            textTheme:
+                TextTheme(displaySmall: TextStyle(color: materialPColor2))),
+        debugShowCheckedModeBanner: false,
+        initialRoute: token != null ? '/home' : '/login',
+        routes: {
+          '/login': (context) => LoginScreen(),
+          '/home': (context) => const MyApp(),
+        },
+      ),
     ),
   ));
 }

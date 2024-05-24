@@ -4,7 +4,7 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<Map<String, dynamic>> fetchProjectById(String projectId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos";
+  const url = "https://data-fire-product.up.railway.app/Api/v1/proyectos";
   Map<String, String> headers = await getAuthHeaders();
 
   try {
@@ -28,7 +28,8 @@ Future<String?> obtenerIdProyecto(
     String costo,
     String presupuesto,
     String anticipo) async {
-  const urlCrearProyecto = "http://localhost:3000/Api/v1/proyectos";
+  const urlCrearProyecto =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos";
 
   try {
     Map<String, String> headers = await getAuthHeaders();
@@ -63,7 +64,8 @@ Future<String?> obtenerIdProyecto(
 }
 
 Future<String?> buscarIdProyectoPorNombre(String nombre) async {
-  const urlBuscarProyecto = "http://localhost:3000/Api/v1/proyectos";
+  const urlBuscarProyecto =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final resBuscarProyecto =
@@ -85,7 +87,7 @@ Future<String?> buscarIdProyectoPorNombre(String nombre) async {
 }
 
 Future<List<Proyectos>> fetchProjects2() async {
-  const url = "http://localhost:3000/Api/v1/proyectos";
+  const url = "https://data-fire-product.up.railway.app/Api/v1/proyectos";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.get(Uri.parse(url), headers: headers);
@@ -100,7 +102,7 @@ Future<List<Proyectos>> fetchProjects2() async {
 }
 
 Future<List<dynamic>> fetchProjects() async {
-  const url = "http://localhost:3000/Api/v1/proyectos";
+  const url = "https://data-fire-product.up.railway.app/Api/v1/proyectos";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.get(Uri.parse(url), headers: headers);
@@ -117,7 +119,7 @@ Future<List<dynamic>> fetchProjects() async {
 
 Future<void> updateProyecto(
     int id, String nombre, String fechaInicio, String fechaFinalizada) async {
-  final url = "http://localhost:3000/api/v1/proyectos/$id";
+  final url = "https://data-fire-product.up.railway.app/api/v1/proyectos/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
@@ -136,7 +138,7 @@ Future<void> updateProyecto(
 }
 
 Future<void> deleteProyecto(int id) async {
-  final url = "http://localhost:3000/api/v1/proyectos/$id";
+  final url = "https://data-fire-product.up.railway.app/api/v1/proyectos/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(
@@ -153,7 +155,8 @@ Future<void> postProyecto(
   String datePrestamo,
   String amountPaid,
 ) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/prestamos";
+  const url =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos/prestamos";
 
   try {
     final res = await http.post(

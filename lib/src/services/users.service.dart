@@ -4,7 +4,7 @@ import 'package:datafire/src/services/AuthHeader.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchUsers() async {
-  const url = "http://localhost:3000/Api/v1/users";
+  const url = "https://data-fire-product.up.railway.app/Api/v1/users";
   Map<String, String> headers = await getAuthHeaders();
 
   try {
@@ -22,7 +22,7 @@ Future<List<dynamic>> fetchUsers() async {
 
 Future<void> postUser(
     String name, String email, String password, String role) async {
-  const url = "http://localhost:3000/Api/v1/users";
+  const url = "https://data-fire-product.up.railway.app/Api/v1/users";
 
   Map<String, String> headers = await getAuthHeaders();
 
@@ -40,7 +40,7 @@ Future<void> postUser(
 }
 
 Future<void> deleteUser(int id) async {
-  final url = "http://localhost:3000/Api/v1/users/$id";
+  final url = "https://data-fire-product.up.railway.app/Api/v1/users/$id";
   try {
     final res = await http.delete(
       Uri.parse(url),

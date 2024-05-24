@@ -1,5 +1,7 @@
+import 'package:datafire/src/bloc/login_auth_bloc.dart';
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sidebarx/sidebarx.dart';
 
@@ -54,12 +56,9 @@ class _SideBarState extends State<SideBar> {
               splashColor: accentCanvasColor,
               hoverColor: unselectColor.withOpacity(0.10),
               //cambiar Boton Perfil
-              child: BackButton(
-                onPressed: () {
-                  //widget.idmodel = IdModel();
-                  // widget.order!.clear();
-                  //Navigator.pop(context);
-                },
+              child: IconButton(
+                icon: Icon(Icons.person),
+                onPressed: () {},
               ),
             ),
           ),
@@ -105,6 +104,12 @@ class _SideBarState extends State<SideBar> {
               debugPrint('Balance');
             }),
         SidebarXItem(
+            icon: Icons.chat_bubble,
+            label: 'ChatBot',
+            onTap: () {
+              debugPrint('chat');
+            }),
+        SidebarXItem(
           icon: Icons.exit_to_app,
           label: 'Log Out',
           onTap: () async {
@@ -132,7 +137,7 @@ _showLogoutConfirmationDialog(BuildContext context) async {
           ),
           TextButton(
             onPressed: () async {
-              await _performLogout(context);
+              context.read<LoginBloc>().add(LogoutRequested(context: context));
             },
             child: const Text('Confirmar'),
           ),

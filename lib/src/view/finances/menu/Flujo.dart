@@ -180,7 +180,8 @@ class FlujoWidget extends StatelessWidget {
   }
 
   Future<void> postProyecto(String datePrestamo, String amountPaid) async {
-    const url = "http://localhost:3000/Api/v1/proyectos/prestamos";
+    const url =
+        "https://data-fire-product.up.railway.app/Api/v1/proyectos/prestamos";
 
     try {
       final res = await http.post(

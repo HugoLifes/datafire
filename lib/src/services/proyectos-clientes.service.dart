@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchCustomerProjects() async {
-  const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
+  const url =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -18,7 +19,8 @@ Future<List<dynamic>> fetchCustomerProjects() async {
 }
 
 Future<List<String>> fetchCustomerProjectsforcustomers() async {
-  const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
+  const url =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -39,7 +41,8 @@ class PostCustomerProject {
       "project_id": projectId,
       "customer_id": customerId,
     };
-    const url = "http://localhost:3000/Api/v1/proyectos/projectCustomer";
+    const url =
+        "https://data-fire-product.up.railway.app/Api/v1/proyectos/projectCustomer";
 
     try {
       final res = await http.post(
@@ -61,7 +64,7 @@ class PostCustomerProject {
 
 Future<bool> deleteCustomerProjectRelation(int customerProjectId) async {
   final url =
-      "http://localhost:3000/api/v1/proyectos/projectCustomer/$customerProjectId";
+      "https://data-fire-product.up.railway.app/api/v1/proyectos/projectCustomer/$customerProjectId";
 
   try {
     final res = await http.delete(
@@ -81,7 +84,8 @@ Future<bool> deleteCustomerProjectRelation(int customerProjectId) async {
 
 Future<List<Map<String, dynamic>>> fetchCustomerProjectsbyId(
     int customerId) async {
-  const url = "http://localhost:3000/api/v1/proyectos/projectCustomer";
+  const url =
+      "https://data-fire-product.up.railway.app/api/v1/proyectos/projectCustomer";
 
   try {
     final res = await http.get(Uri.parse(url));

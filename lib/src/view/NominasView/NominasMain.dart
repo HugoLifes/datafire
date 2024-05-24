@@ -34,7 +34,7 @@ class _NominasMainState extends State<NominasMain> {
 
   Future<void> loadNominas() async {
     final url = Uri.parse(
-        'http://localhost:3000/Api/v1/nominasSemanales/weeklyNominas');
+        'https://data-fire-product.up.railway.app/Api/v1/nominasSemanales/weeklyNominas');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {

@@ -2,6 +2,7 @@ import 'package:datafire/src/view/Customers/subida_clientes.dart';
 import 'package:datafire/src/view/NominasView/NominasMain.dart';
 import 'package:datafire/src/view/Projects/subida_proyectos.dart';
 import 'package:datafire/src/view/finances/financesView.dart';
+import 'package:datafire/src/view/geminiChat/geminiChatView.dart';
 import 'package:datafire/src/view/users/users.verification_view.dart';
 import 'package:datafire/src/view/workers/alta_trabajadores.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +35,15 @@ class MotherView extends StatelessWidget {
               return const NominasMain();
             case 6:
               return const UserVerificationView();
+            case 7:
+              return GeminiChatView();
             default:
-              return const Text(
-                'Page not found',
-                style: TextStyle(
-                  fontFamily: 'GoogleSans',
+              return const Center(
+                child: Text(
+                  'Cerrando Session...',
+                  style: TextStyle(
+                    fontFamily: 'GoogleSans',
+                  ),
                 ),
               );
           }

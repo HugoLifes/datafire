@@ -2,8 +2,8 @@ import 'package:datafire/src/model/flujo_caja_model.dart';
 import 'package:http/http.dart' as http;
 
 Future<List<FlujoCaja>> fetchFlujoData() async {
-  final response =
-      await http.get(Uri.parse('http://localhost:3000/Api/v1/proyectos/flujo'));
+  final response = await http.get(Uri.parse(
+      'https://data-fire-product.up.railway.app/Api/v1/proyectos/flujo'));
 
   if (response.statusCode == 200) {
     return flujoCajaFromJson(response.body);

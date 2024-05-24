@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 Future<List<dynamic>> fetchProjectWorkers() async {
-  const url = "http://localhost:3000/Api/v1/proyectos/projectWorker";
+  const url =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos/projectWorker";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -24,7 +25,8 @@ class postProjectWorker {
       "worker_id": workerId,
     };
 
-    const url = "http://localhost:3000/Api/v1/proyectos/projectWorker";
+    const url =
+        "https://data-fire-product.up.railway.app/Api/v1/proyectos/projectWorker";
 
     try {
       final res = await http.post(
@@ -41,7 +43,8 @@ class postProjectWorker {
 }
 
 Future<List<Map<String, dynamic>>> fetchProjectWorkersbyId(int workerId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/projectWorker";
+  const url =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos/projectWorker";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -66,7 +69,7 @@ Future<List<Map<String, dynamic>>> fetchProjectWorkersbyId(int workerId) async {
 Future<bool> deleteProjectWorkers(int projectWorkersId) async {
   print('worker id: $projectWorkersId');
   final url =
-      "http://localhost:3000/Api/v1/proyectos/projectWorker/$projectWorkersId";
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos/projectWorker/$projectWorkersId";
 
   try {
     final response = await http.delete(

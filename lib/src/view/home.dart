@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:datafire/src/widgets/colors.dart';
 import 'package:datafire/src/widgets/shapes.dart';
 import 'package:flutter/material.dart';
@@ -25,10 +27,11 @@ class _HomeState extends State<Home> {
   late List<ChartData> profit = [];
   late List<ChartData> payments = [];
   dynamic lastProfit;
-  String? lastProject;
-  String? lastCustomer;
+  String lastProject = '';
+  String lastCustomer = '';
   dynamic lastPayment;
   bool isLoading = true;
+  bool errorConection = false;
 
   @override
   void initState() {
@@ -42,9 +45,9 @@ class _HomeState extends State<Home> {
     });
   }
 
-  Future<void> fetchData() async {
-    final uri =
-        Uri.parse('http://localhost:3000/api/v1/proyectos/project-stats');
+  fetchData() async {
+    final uri = Uri.parse(
+        'https://data-fire-product.up.railway.app/api/v1/proyectos/project-stats');
     try {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
@@ -70,8 +73,11 @@ class _HomeState extends State<Home> {
               .toList();
         });
       }
+    } on SocketMessage {
+      return 'Error de conexion';
     } catch (e) {
       print(e);
+      return ErrorWidget('error, $e');
     }
   }
 
@@ -100,12 +106,13 @@ class _HomeState extends State<Home> {
       final monthColor = monthColors[entry.key % monthColors.length];
 
       return PieChartSectionData(
+        showTitle: true,
         color: monthColor,
         value: projectCount,
         title: '${monthName.substring(0, 3)}\n${projectCount.toInt()}',
         titleStyle: const TextStyle(
             fontFamily: 'GoogleSans',
-            fontSize: 12,
+            fontSize: 10,
             color: Colors.black,
             fontWeight: FontWeight.bold),
       );
@@ -140,16 +147,19 @@ class _HomeState extends State<Home> {
               child: CircularProgressIndicator(),
             )
           : SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
               child: Column(
                 children: [
-                  _buildCard(
-                      "Calculo de datos", _cartesianChart(), size, 0.25, false),
+                  Container(
+                    child: _buildCard("Calculo de datos", _cartesianChart(),
+                        size, 0.25, false),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Container(
                         width: size.width / 3,
-                        height: 300,
+                        height: 350,
                         child: _buildCard(
                             "Proyectos añadidos",
                             pieChartSections.isNotEmpty
@@ -181,7 +191,7 @@ class _HomeState extends State<Home> {
               width: size.width / 4,
               height: 200,
               child: _buildCardInfo(
-                  "Clientes Recientes", lastCustomer!, "Cliente mas actual"),
+                  "Clientes Recientes", lastCustomer, "Cliente mas actual"),
             ),
             Container(
               width: size.width / 4,
@@ -205,7 +215,7 @@ class _HomeState extends State<Home> {
             Container(
               width: size.width / 4,
               height: 200,
-              child: _buildCardInfo("Proyectos recientes", lastProject!,
+              child: _buildCardInfo("Proyectos recientes", lastProject,
                   "Ultimos pagos realizados"),
             ),
           ],
@@ -240,7 +250,8 @@ class _HomeState extends State<Home> {
             //chart
             Container(
               padding: EdgeInsets.all(5),
-              height: size.height * height,
+              height: size.height * 0.3,
+              width: size.width * 0.9,
               child: chart,
             )
           ],
@@ -312,7 +323,14 @@ class _HomeState extends State<Home> {
 
   SfCartesianChart _cartesianChart() => SfCartesianChart(
         enableAxisAnimation: true,
-        primaryXAxis: CategoryAxis(),
+        zoomPanBehavior: ZoomPanBehavior(
+          enableMouseWheelZooming: true,
+          zoomMode: ZoomMode.xy, // Zoom en ambos ejes
+          maximumZoomLevel: 5.0, // Límite de zoom máximo
+        ),
+        primaryXAxis: CategoryAxis(
+          labelPlacement: LabelPlacement.onTicks,
+        ),
         primaryYAxis: NumericAxis(
             numberFormat:
                 NumberFormat.compactCurrency(locale: 'es_MX', symbol: '\$')),

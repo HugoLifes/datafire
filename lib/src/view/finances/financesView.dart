@@ -29,8 +29,8 @@ class FinancesView extends StatefulWidget {
 }
 
 Future<List<Ingresos>> fetchingresos() async {
-  final response = await http
-      .get(Uri.parse('http://localhost:3000/Api/v1/proyectos/ingresos'));
+  final response = await http.get(Uri.parse(
+      'https://data-fire-product.up.railway.app/Api/v1/proyectos/ingresos'));
 
   if (response.statusCode == 200) {
     debugPrint("cargado con éxito");
@@ -180,8 +180,8 @@ class _FinancesViewState extends State<FinancesView> {
   }
 
   Future<List<Map<String, dynamic>>> fetchCuentasCobrarData() async {
-    final response = await http
-        .get(Uri.parse('http://localhost:3000/Api/v1/proyectos/cuentasCobrar'));
+    final response = await http.get(Uri.parse(
+        'https://data-fire-product.up.railway.app/Api/v1/proyectos/cuentasCobrar'));
 
     if (response.statusCode == 200) {
       debugPrint("Cuentas por cobrar cargado con éxito");

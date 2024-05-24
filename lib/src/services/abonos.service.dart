@@ -5,7 +5,8 @@ import 'package:http/http.dart' as http;
 
 Future<void> postAbono(
     String monto, String fechaAbono, String projectId, int customerId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/abonos";
+  const url =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos/abonos";
 
   Map<String, String> headers = await getAuthHeaders();
 
@@ -27,7 +28,8 @@ Future<void> postAbono(
 }
 
 Future<List<dynamic>> fetchAbonos() async {
-  const url = "http://localhost:3000//Api/v1/proyectos/abonos";
+  const url =
+      "https://data-fire-product.up.railway.app//Api/v1/proyectos/abonos";
 
   try {
     final res = await http.get(Uri.parse(url));
@@ -43,7 +45,8 @@ Future<List<dynamic>> fetchAbonos() async {
 }
 
 Future<List<dynamic>> fetchAbonosById(String projectId) async {
-  const url = "http://localhost:3000/Api/v1/proyectos/abonos";
+  const url =
+      "https://data-fire-product.up.railway.app/Api/v1/proyectos/abonos";
 
   try {
     final res = await http.get(Uri.parse('$url?projecto_id=$projectId'));
@@ -60,7 +63,8 @@ Future<List<dynamic>> fetchAbonosById(String projectId) async {
 
 Future<void> updateAbono(int id, String monto, String fechaAbono,
     String projectId, String customerId) async {
-  final url = "http://localhost:3000/api/v1/proyectos/abonos/$id";
+  final url =
+      "https://data-fire-product.up.railway.app/api/v1/proyectos/abonos/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.patch(
@@ -79,7 +83,8 @@ Future<void> updateAbono(int id, String monto, String fechaAbono,
 }
 
 Future<void> deleteAbono(int id) async {
-  final url = "http://localhost:3000/api/v1/proyectos/abonos/$id";
+  final url =
+      "https://data-fire-product.up.railway.app/api/v1/proyectos/abonos/$id";
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.delete(

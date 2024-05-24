@@ -22,7 +22,7 @@ class _LoginViewState extends State<LoginView> {
     };
 
     final response = await http.post(
-      Uri.parse('http://localhost:3000/Api/v1/auth/login'),
+      Uri.parse('https://data-fire-product.up.railway.app/Api/v1/auth/login'),
       headers: {
         'Content-Type': 'application/json',
       },
@@ -55,10 +55,6 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.blue,
-        elevation: 0,
-      ),
       body: Container(
         decoration: const BoxDecoration(
           color: Colors.blue,
