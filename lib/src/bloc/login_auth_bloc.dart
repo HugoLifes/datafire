@@ -41,8 +41,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           print('si success');
           Map<String, dynamic> responseData = json.decode(response.body);
           String token = responseData['token'];
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          await prefs.setString('token', token);
+
           // Analizar la respuesta JSON para obtener el token.
           emit(LoginSuccess(token: token));
         } else if (response.statusCode == 400) {

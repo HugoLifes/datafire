@@ -64,9 +64,11 @@ class LoginScreen extends StatelessWidget {
   BlocListener<LoginBloc, LoginState> blocListener() {
     return BlocListener<LoginBloc, LoginState>(
       child: Container(),
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is LoginSuccess) {
           // Navegar a la siguiente pantalla después de iniciar sesión.
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('token', state.token);
           Navigator.pushReplacementNamed(context, '/home');
         } else if (state is LoginFailure) {
           // ... (mostrar mensaje de error)
