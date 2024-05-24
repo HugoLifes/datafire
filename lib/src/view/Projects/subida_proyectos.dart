@@ -138,7 +138,7 @@ class _AltaProyectosState extends State<AltaProyectos> {
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return const Center(
                 child: Text(
-              'No hay clientes disponibles',
+              'No hay proyectos disponibles',
               style: TextStyle(
                 fontFamily: 'GoogleSans',
               ),

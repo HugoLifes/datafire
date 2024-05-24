@@ -79,6 +79,15 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   msix: ^3.16.7
+
+msix_config:
+  display_name: DataFire
+  publisher_display_name: Apia Ingenieria
+  identity_name: com.example.hugolifes
+  msix_version: 1.0.0.0
+  certificate_path : C:\Users\Ingde\Documents\Desarrollos Hugo\datafire\datafirePfx.pfx
+  certificate_password: edward12@
+  logo_path: C:\Users\Ingde\Documents\Desarrollos Hugo\datafire\windows\runner\resources\app_icon.ico
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

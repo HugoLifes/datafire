@@ -91,9 +91,10 @@ Future<List<Proyectos>> fetchProjects2() async {
   Map<String, String> headers = await getAuthHeaders();
   try {
     final res = await http.get(Uri.parse(url), headers: headers);
-    if (res.statusCode == 200) {
+    if (res.statusCode == 200 || res.statusCode == 201) {
       return proyectosFromJson(res.body);
     } else {
+      print(res.statusCode);
       return [];
     }
   } catch (err) {
