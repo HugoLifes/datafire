@@ -36,8 +36,6 @@ class _LoginViewState extends State<LoginView> {
       String token = responseData['token'];
 
       // Guardar el token en SharedPreferences.
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('token', token);
 
       // Navegar a la siguiente pantalla después de iniciar sesión.
       Navigator.pushReplacementNamed(context, '/home');

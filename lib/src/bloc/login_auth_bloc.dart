@@ -41,10 +41,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           print('si success');
           Map<String, dynamic> responseData = json.decode(response.body);
           String token = responseData['token'];
-
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          await prefs.setString('token', token);
           // Analizar la respuesta JSON para obtener el token.
           emit(LoginSuccess(token: token));
-        } else if (response.statusCode == 401) {
+        } else if (response.statusCode == 400) {
           emit(LoginFailure(
               error:
                   'Contraseña y Usuario podrian ser incorrectos, favor de checar datos'));
@@ -79,7 +80,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     };
 
     final response = await http.post(
-      Uri.parse('https://data-fire-product.up.railway.app/Api/v1/auth/login'),
+      Uri.parse('http://localhost:3000/Api/v1/auth/login'),
       headers: {
         'Content-Type': 'application/json',
       },
