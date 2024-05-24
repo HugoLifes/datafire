@@ -3,9 +3,6 @@ const router = express.Router();
 const CalculosHugoService = require('../services/CalculosHugo.service');
 const service = new CalculosHugoService();
 
-const passport = require('passport');
-const { checkRoles } = require('../middlewares/auth.handler');
-
 const validatorHandler = require('../middlewares/validator.handler');
 const {
   createCustomersSchema,
@@ -54,7 +51,7 @@ router.patch(
   '/:id',
   validatorHandler(getCustomersSchema, 'params'),
   validatorHandler(updateCustomersSchema, 'body'),
-  async (req, res) => {
+  async (req, res,next) => {
     try {
       const body = req.body;
       const { id } = req.params;

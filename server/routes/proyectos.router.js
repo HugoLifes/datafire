@@ -4,8 +4,7 @@ const ProjectService = require('../services/proyectos.service');
 const service = new ProjectService();
 const { models } = require('../lib/sequelize');
 const PDFDocument = require('pdfkit');
-const passport = require('passport');
-const { checkRoles } = require('../middlewares/auth.handler');
+
 const { format } = require('date-fns');
 
 const validatorHandler = require('../middlewares/validator.handler');
@@ -675,8 +674,7 @@ router.post(
 
 router.patch(
   '/services/:id',
-  passport.authenticate('jwt', { session: false }),
-  checkRoles('user', 'admin'),
+  
   validatorHandler(getCostSchema, 'params'),
   validatorHandler(updateCostsSchema, 'body'),
   async (req, res, next) => {
