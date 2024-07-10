@@ -265,26 +265,50 @@ router.get('/ganancias', async (req, res, next) => {
 
 router.get('/project-stats', async (req, res) => {
   try {
-    //por mes
+    // Fetch data
     const totalProjects = await models.Project.getTotalProjects();
     const projectsByMonth = await models.Project.getProjectsByMonth();
-    const CostsByMonth = await models.Project.getExpensesByMonth();
+    const costsByMonth = await models.Project.getExpensesByMonth();
     const profitByMonth = await models.Project.getProfitByMonth();
     const paymentsByMonth = await models.Project.getPaymentsByMonth();
-    //por semana
     const paymentsByWeek = await models.Project.getPaymentsByWeek();
     const profitByWeek = await models.Project.getProfitByWeek();
     const expensesByWeek = await models.Project.getExpensesByWeek();
-
     const lastProject = await models.Project.getLastAddedProject();
-    const Payment = await models.Project.getLastPayment();
+    const lastPaymentData = await models.Project.getLastPayment();
     const lastCustomer = await models.Customer.getLastAddedClient();
-    const lastPayment = Payment['abonos'][Payment['abonos'].length - 1]['monto'];
-    const lastProfit = profitByWeek[profitByWeek.length - 1]['dataValues']['totalProfit']
 
-    res.json({ totalProjects, lastProfit ,lastProject: lastProject['name'], lastCustomer: lastCustomer['name'] +' '+lastCustomer['last_name'], lastPayment, projectsByMonth, CostsByMonth, profitByMonth, paymentsByMonth, paymentsByWeek, profitByWeek, expensesByWeek });
+    // Data Handling with Default Values
+    const lastPayment = lastPaymentData && lastPaymentData['abonos'].length > 0
+      ? lastPaymentData['abonos'][lastPaymentData['abonos'].length - 1]['monto']
+      : 0; // Default to 0 if no payments
+
+    const lastProfit = profitByWeek.length > 0
+      ? profitByWeek[profitByWeek.length - 1]['dataValues']['totalProfit']
+      : 0; // Default to 0 if no weekly profits
+
+    const formattedLastCustomer = lastCustomer
+      ? `${lastCustomer['name']} ${lastCustomer['last_name']}`
+      : "N/A"; // Handle missing customer
+
+    // Construct the response
+    res.json({ 
+      totalProjects, 
+      lastProfit,
+      lastProject: lastProject ? lastProject['name'] : "N/A", // Handle missing last project
+      lastCustomer: formattedLastCustomer, 
+      lastPayment, 
+      projectsByMonth, 
+      costsByMonth, // Use consistent naming
+      profitByMonth, 
+      paymentsByMonth, 
+      paymentsByWeek, 
+      profitByWeek, 
+      expensesByWeek 
+    });
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    
+    res.status(500).json({ error: 'Internal Server Error', problem: error });
   }
 });
 
@@ -533,8 +557,11 @@ router.post(
     try {
       const body = req.body;
       const newProject = service.create(body);
+      console.log(newProject)
       res.status(201).json(newProject);
+
     } catch (error) {
+      console.log(error)
       next(error);
     }
   },
@@ -580,6 +607,7 @@ router.delete(
       await service.deleteProject(id);
       res.status(201).json({ id });
     } catch (error) {
+      console.log(error)
       next(error);
     }
   },

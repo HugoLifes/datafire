@@ -80,6 +80,8 @@ class ProjectService {
       ],
     });
 
+    console.log(project)
+
     if (!project) {
       throw boom.notFound('Project not found');
     }
@@ -334,6 +336,7 @@ class ProjectService {
     const project = await this.findOne(id);
 
     await project.destroy();
+    console.log(project)
     return { id };
   }
 
