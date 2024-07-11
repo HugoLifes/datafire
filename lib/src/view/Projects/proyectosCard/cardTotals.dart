@@ -49,7 +49,8 @@ class _CardTotalsState extends State<CardTotals> {
   }
 
   void setupWebSocket() {
-    channel = IOWebSocketChannel.connect('ws://localhost:3000');
+    channel =
+        IOWebSocketChannel.connect('ws://data-fire-product.up.railway.app');
 
     channel.stream.listen((message) {
       print("Datos recibidos del socket: $message");

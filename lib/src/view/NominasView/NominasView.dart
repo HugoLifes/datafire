@@ -75,12 +75,6 @@ class _NominasViewState extends State<NominasView> {
       ));
       return;
     }
-    if (trabajadoresDatos.values.any((datos) => !datos['completado'])) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("No todos los trabajadores están completados."),
-      ));
-      return;
-    }
 
     List<Future> nominasFutures = [];
 

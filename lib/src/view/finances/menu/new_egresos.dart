@@ -139,32 +139,44 @@ class _NewEgresosState extends State<NewEgresos> {
       dEgresos.add(DivisionEgresos(egresos: egresos));
     }
     setState(() {
-      impustosTotal =
-          dEgresos.last.egresos!.last.isr + dEgresos.last.egresos!.last.ss;
-      totalSueldos = dEgresos.last.egresos!.last.salary;
+      impustosTotal = dEgresos.isEmpty
+          ? 0.0
+          : dEgresos.last.egresos!.last.isr + dEgresos.last.egresos!.last.ss;
+      totalSueldos =
+          dEgresos.isEmpty ? 0.0 : dEgresos.last.egresos!.last.salary;
     });
 
     chartdata!.add(ChartData(
         'Ss',
-        double.parse(dEgresos.last.egresos!.last.ss.toString())
-            .toStringAsFixed(1)));
+        dEgresos.isEmpty
+            ? '0.0'
+            : double.parse(dEgresos.last.egresos!.last.ss.toString())
+                .toStringAsFixed(1)));
     chartdata!.add(ChartData(
         'ISR',
-        double.parse(dEgresos.last.egresos!.last.isr.toString())
-            .toStringAsFixed(1)));
+        dEgresos.isEmpty
+            ? '0.0'
+            : double.parse(dEgresos.last.egresos!.last.isr.toString())
+                .toStringAsFixed(1)));
 
     chartdata2!.add(ChartData(
         'Salario',
-        double.parse(dEgresos.last.egresos!.last.salary.toString())
-            .toStringAsFixed(1)));
+        dEgresos.isEmpty
+            ? '0.0'
+            : double.parse(dEgresos.last.egresos!.last.salary.toString())
+                .toStringAsFixed(1)));
     chartdata2!.add(ChartData(
         'ISR',
-        double.parse(dEgresos.last.egresos!.last.isr.toString())
-            .toStringAsFixed(1)));
+        dEgresos.isEmpty
+            ? '0.0'
+            : double.parse(dEgresos.last.egresos!.last.isr.toString())
+                .toStringAsFixed(1)));
     chartdata2!.add(ChartData(
         'Ss',
-        double.parse(dEgresos.last.egresos!.last.ss.toString())
-            .toStringAsFixed(1)));
+        dEgresos.isEmpty
+            ? double.parse('0.00').toStringAsFixed(1)
+            : double.parse(dEgresos.last.egresos!.last.ss.toString())
+                .toStringAsFixed(1)));
   }
 }
 

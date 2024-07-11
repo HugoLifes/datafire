@@ -105,28 +105,18 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
                       String costo = "0";
                       String presupuesto = _presupuestoController.text;
                       String anticipo = _anticipoController.text;
-                      context.loaderOverlay.show();
-                      setState(() {
-                        _isLoaderVisible = context.loaderOverlay.visible;
-                      });
-                      String? projectId = await obtenerIdProyecto(
-                              nombre,
-                              fechaInicio,
-                              fechaFinalizada,
-                              costo,
-                              presupuesto,
-                              anticipo)
-                          .whenComplete(() {
-                        context.loaderOverlay.hide();
 
-                        setState(() {
-                          _isLoaderVisible = false;
-                        });
-                      });
+                      String? projectId = await obtenerIdProyecto(
+                          nombre,
+                          fechaInicio,
+                          fechaFinalizada,
+                          costo,
+                          presupuesto,
+                          anticipo);
 
                       if (projectId != null) {
                         _selectClientsDialog(projectId);
-                        Navigator.pop(context);
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(

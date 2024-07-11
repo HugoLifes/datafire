@@ -46,8 +46,8 @@ class _HomeState extends State<Home> {
   }
 
   fetchData() async {
-    final uri = Uri.parse(
-        'https://data-fire-product.up.railway.app/api/v1/proyectos/project-stats');
+    final uri =
+        Uri.parse('http://localhost:3000/api/v1/proyectos/project-stats');
     try {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
@@ -60,7 +60,9 @@ class _HomeState extends State<Home> {
           lastCustomer = jsonData['lastCustomer'];
           lastPayment = jsonData['lastPayment'];
 
-          chartData = (jsonData['CostsByMonth'] as List)
+          print(jsonData['costsByMonth']);
+
+          chartData = (jsonData['costsByMonth'] as List)
               .map(
                 (e) => ChartData.fromJson(e),
               )
@@ -76,7 +78,6 @@ class _HomeState extends State<Home> {
     } on SocketMessage {
       return 'Error de conexion';
     } catch (e) {
-      print(e);
       return ErrorWidget('error, $e');
     }
   }
@@ -128,7 +129,7 @@ class _HomeState extends State<Home> {
               fontFamily: 'GoogleSans',
             ),
           ),
-          duration: Duration(seconds: 3)),
+          duration: Duration(seconds: 2)),
     );
   }
 
@@ -142,168 +143,293 @@ class _HomeState extends State<Home> {
         child: AppBarDatafire(
             title: "Gestion", description: "Mantente al dia de tus proyectos"),
       ),
-      body: isLoading == true
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
+      body: Center(
+        child: LayoutBuilder(builder: (context, constraints) {
+          final anchoPantalla = MediaQuery.of(context).size.width;
+          final largoPantalla = MediaQuery.of(context).size.height;
+          print(' ancho $anchoPantalla');
+          print('largo $largoPantalla');
+          final double title1 = anchoPantalla > 1100 ? 18 : 15;
+          final double title2 = anchoPantalla > 1100 ? 24 : 18;
+          final double title3 = anchoPantalla > 1100 ? 16 : 15;
+
+          return isLoading == true
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : ListView(
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          child: _buildCard("Calculo de datos",
+                              _cartesianChart(), size, 0.25, false),
+                        ),
+                        anchoPantalla < 950 && largoPantalla < 800
+                            ? Container(
+                                margin:
+                                    EdgeInsets.only(top: size.height * 0.40),
+                                alignment: Alignment.center,
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      width: size.width * 0.3,
+                                      height: size.height * 0.41,
+                                      child: _buildCard(
+                                          "Proyectos añadidos",
+                                          pieChartSections.isNotEmpty
+                                              ? PieChart(_pieChartData())
+                                              : const Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                          size,
+                                          0.25,
+                                          true),
+                                    ),
+                                    Container(
+                                        child: cardsHorizontalView(
+                                            size,
+                                            title1,
+                                            title2,
+                                            title3,
+                                            anchoPantalla,
+                                            largoPantalla)),
+                                  ],
+                                ),
+                              )
+                            : Container(
+                                margin:
+                                    EdgeInsets.only(top: size.height * 0.40),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      width: size.width * 0.3,
+                                      height: size.height * 0.41,
+                                      child: _buildCard(
+                                          "Proyectos añadidos",
+                                          pieChartSections.isNotEmpty
+                                              ? PieChart(_pieChartData())
+                                              : const Center(
+                                                  child:
+                                                      CircularProgressIndicator()),
+                                          size,
+                                          0.25,
+                                          true),
+                                    ),
+                                    Container(
+                                        child: cardsHorizontalView(
+                                            size,
+                                            title1,
+                                            title2,
+                                            title3,
+                                            anchoPantalla,
+                                            largoPantalla)),
+                                  ],
+                                ),
+                              )
+                      ],
+                    ),
+                  ],
+                );
+        }),
+      ),
+    );
+  }
+
+  cardsHorizontalView(Size size, double title1, double title2, double title3,
+      double ancho, double largo) {
+    return ancho < 950 && largo < 800
+        ? Column(
+            children: [
+              Column(
                 children: [
                   Container(
-                    child: _buildCard("Calculo de datos", _cartesianChart(),
-                        size, 0.25, false),
+                    width: size.width * 0.23,
+                    child: _buildCardInfo("Clientes Recientes", lastCustomer,
+                        "Cliente mas actual", size, title1, title2, title3),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        width: size.width / 3,
-                        height: 350,
-                        child: _buildCard(
-                            "Proyectos añadidos",
-                            pieChartSections.isNotEmpty
-                                ? PieChart(_pieChartData())
-                                : const Center(
-                                    child: const CircularProgressIndicator()),
-                            size,
-                            0.25,
-                            true),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      cardsHorizontalView(size),
-                    ],
+                  Container(
+                    width: size.width * 0.23,
+                    height: size.height * 0.26,
+                    child: _buildCardInfo(
+                        "Ultimas Ganancias",
+                        lastProfit,
+                        "Ultima ganancia registrada",
+                        size,
+                        title1,
+                        title2,
+                        title3),
                   ),
                 ],
               ),
-            ),
-    );
+              Column(
+                children: [
+                  Container(
+                    width: size.width * 0.23,
+                    height: size.height * 0.26,
+                    child: _buildCardInfo("Pagos reciente", lastPayment,
+                        "Pagos mas recientes", size, title1, title2, title3),
+                  ),
+                  Container(
+                    width: size.width * 0.23,
+                    height: size.height * 0.26,
+                    child: _buildCardInfo(
+                        "Proyectos recientes",
+                        lastProject,
+                        "Ultimos pagos realizados",
+                        size,
+                        title1,
+                        title2,
+                        title3),
+                  ),
+                ],
+              ),
+            ],
+          )
+        : Row(
+            children: [
+              Column(
+                children: [
+                  Container(
+                    width: size.width * 0.23,
+                    height: size.height * 0.26,
+                    child: _buildCardInfo("Clientes Recientes", lastCustomer,
+                        "Cliente mas actual", size, title1, title2, title3),
+                  ),
+                  Container(
+                    width: size.width * 0.23,
+                    height: size.height * 0.26,
+                    child: _buildCardInfo(
+                        "Ultimas Ganancias",
+                        lastProfit,
+                        "Ultima ganancia registrada",
+                        size,
+                        title1,
+                        title2,
+                        title3),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Container(
+                    width: size.width * 0.23,
+                    height: size.height * 0.26,
+                    child: _buildCardInfo("Pagos reciente", lastPayment,
+                        "Pagos mas recientes", size, title1, title2, title3),
+                  ),
+                  Container(
+                    width: size.width * 0.23,
+                    height: size.height * 0.26,
+                    child: _buildCardInfo(
+                        "Proyectos recientes",
+                        lastProject,
+                        "Ultimos pagos realizados",
+                        size,
+                        title1,
+                        title2,
+                        title3),
+                  ),
+                ],
+              ),
+            ],
+          );
   }
 
-  Row cardsHorizontalView(Size size) {
-    return Row(
-      children: [
-        Column(
-          children: [
-            Container(
-              width: size.width / 4,
-              height: 200,
-              child: _buildCardInfo(
-                  "Clientes Recientes", lastCustomer, "Cliente mas actual"),
-            ),
-            Container(
-              width: size.width / 4,
-              height: 200,
-              child: _buildCardInfo("Ultimas Ganancias", lastProfit,
-                  "Ultima ganancia registrada"),
-            ),
-          ],
-        ),
-        SizedBox(
-          width: 30,
-        ),
-        Column(
-          children: [
-            Container(
-              width: size.width / 4,
-              height: 200,
-              child: _buildCardInfo(
-                  "Pagos reciente", lastPayment, "Pagos mas recientes"),
-            ),
-            Container(
-              width: size.width / 4,
-              height: 200,
-              child: _buildCardInfo("Proyectos recientes", lastProject,
-                  "Ultimos pagos realizados"),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
+  // tarjetas primarias
   Widget _buildCard(
       String title, Widget chart, Size size, double height, bool circular) {
-    return Card(
-      borderOnForeground: false,
-      clipBehavior: Clip.antiAlias,
-      elevation: 3,
-      color: cardColor,
-      margin: EdgeInsets.all(11),
-      child: Container(
-        padding: EdgeInsets.all(5),
+    return Container(
+      padding: EdgeInsets.all(5),
+      child: Card(
+        borderOnForeground: false,
+        clipBehavior: Clip.antiAlias,
+        elevation: circular == true ? 5 : 3,
+        color: cardColor,
+        margin: EdgeInsets.all(11),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             //texto chart
             Padding(
               padding: const EdgeInsets.only(left: 15, top: 6),
-              child: Text(title,
-                  style: const TextStyle(
-                      fontFamily: 'GoogleSans',
-                      fontSize: 21,
-                      fontWeight: FontWeight.bold)),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(title,
+                    style: const TextStyle(
+                        fontFamily: 'GoogleSans',
+                        fontSize: 21,
+                        fontWeight: FontWeight.bold)),
+              ),
             ),
             const SizedBox(height: 10),
             //chart
-            Container(
-              padding: EdgeInsets.all(5),
-              height: size.height * 0.3,
-              width: size.width * 0.9,
-              child: chart,
-            )
+            circular == true
+                ? Container(
+                    margin: EdgeInsets.all(100),
+                    height: size.height * 0.0,
+                    child: chart,
+                  )
+                : Container(
+                    padding: EdgeInsets.all(5),
+                    height: size.height * 0.3,
+                    child: chart,
+                  )
           ],
         ),
       ),
     );
   }
 
-  Widget _buildCardInfo(String title, dynamic content, String descripcion) {
-    return Padding(
+  // contenido de las tarjetas paralelas
+  Widget _buildCardInfo(String title, dynamic content, String descripcion,
+      Size size, double title1, double title2, double title3) {
+    return Container(
       padding: const EdgeInsets.all(16.0),
-      child: InkWell(
-        child: Card(
-          elevation: 3,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          margin: const EdgeInsets.all(16),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
                   title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'GoogleSans',
                     fontWeight: FontWeight.bold,
-                    fontSize: 18,
+                    fontSize: title1,
                   ),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
+              ),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
                   '$content',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'GoogleSans',
-                    fontSize: 24,
+                    fontSize: title2,
                   ),
                 ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Text(
+              ),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
                   descripcion,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontFamily: 'GoogleSans',
-                    fontSize: 16,
+                    fontSize: title3,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -315,6 +441,7 @@ class _HomeState extends State<Home> {
         sectionsSpace: 0,
         centerSpaceRadius: 40,
         startDegreeOffset: -90,
+        pieTouchData: PieTouchData(enabled: true),
         borderData: FlBorderData(
           show: false,
         ),
@@ -328,12 +455,12 @@ class _HomeState extends State<Home> {
           zoomMode: ZoomMode.xy, // Zoom en ambos ejes
           maximumZoomLevel: 5.0, // Límite de zoom máximo
         ),
-        primaryXAxis: CategoryAxis(
+        primaryXAxis: const CategoryAxis(
           labelPlacement: LabelPlacement.onTicks,
         ),
         primaryYAxis: NumericAxis(
-            numberFormat:
-                NumberFormat.compactCurrency(locale: 'es_MX', symbol: '\$')),
+            numberFormat: NumberFormat.compactCurrency(
+                locale: 'es_MX', symbol: '\$', decimalDigits: 2)),
         tooltipBehavior: _tooltipBehavior,
         series: <CartesianSeries>[
           LineSeries<ChartData, String>(
@@ -351,8 +478,8 @@ class _HomeState extends State<Home> {
                   borderColor: Colors.black,
                   borderWidth: 5,
                   shape: DataMarkerType.diamond,
-                  width: 4,
-                  height: 4,
+                  width: 8,
+                  height: 8,
                   isVisible: true),
               dataLabelSettings: const DataLabelSettings(
                   alignment: ChartAlignment.far,
@@ -362,7 +489,7 @@ class _HomeState extends State<Home> {
                       fontFamily: 'GoogleSans',
                       fontWeight: FontWeight.w500),
                   isVisible: true,
-                  labelAlignment: ChartDataLabelAlignment.top)),
+                  labelAlignment: ChartDataLabelAlignment.auto)),
           LineSeries<ChartData, String>(
               name: 'Ganancias',
               enableTooltip: true,
@@ -381,7 +508,7 @@ class _HomeState extends State<Home> {
                   height: 4,
                   isVisible: true),
               dataLabelSettings: const DataLabelSettings(
-                  alignment: ChartAlignment.near,
+                  alignment: ChartAlignment.far,
                   useSeriesColor: true,
                   textStyle: TextStyle(
                       fontSize: 13,
@@ -421,29 +548,29 @@ class _HomeState extends State<Home> {
 
   String _getMonthLabel(int value) {
     switch (value) {
-      case 0:
-        return 'Ene';
       case 1:
-        return 'Feb';
+        return 'Ene';
       case 2:
-        return 'Mar';
+        return 'Feb';
       case 3:
-        return 'Abr';
+        return 'Mar';
       case 4:
-        return 'May';
+        return 'Abr';
       case 5:
-        return 'Jun';
+        return 'May';
       case 6:
-        return 'Jul';
+        return 'Jun';
       case 7:
-        return 'Ago';
+        return 'Jul';
       case 8:
-        return 'Sep';
+        return 'Ago';
       case 9:
-        return 'Oct';
+        return 'Sep';
       case 10:
-        return 'Nov';
+        return 'Oct';
       case 11:
+        return 'Nov';
+      case 12:
         return 'Dic';
       default:
         return '';

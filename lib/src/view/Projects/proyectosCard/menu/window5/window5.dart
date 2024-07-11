@@ -28,7 +28,22 @@ class _Tab5ContentState extends State<Tab5Content> {
           } else if (snapshot.hasError) {
             return Text("Error: ${snapshot.error}");
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Text("No hay Abonos asociados al proyecto.");
+            return Column(
+              children: [
+                const SizedBox(height: 10),
+                Center(
+                  child: IconButton.filled(
+                    style: ButtonStyle(
+                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                        const EdgeInsets.symmetric(horizontal: 24.0),
+                      ),
+                    ),
+                    onPressed: () => _mostrarDialogo(context),
+                    icon: const Icon(Icons.add),
+                  ),
+                ),
+              ],
+            );
           } else {
             List<dynamic> serviciosProyecto = snapshot.data!
                 .where((servicio) =>

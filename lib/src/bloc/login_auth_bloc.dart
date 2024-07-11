@@ -79,7 +79,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     };
 
     final response = await http.post(
-      Uri.parse('http://localhost:3000/Api/v1/auth/login'),
+      Uri.parse('https://data-fire-product.up.railway.app/Api/v1/auth/login'),
       headers: {
         'Content-Type': 'application/json',
       },
