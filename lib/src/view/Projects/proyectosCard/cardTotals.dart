@@ -20,6 +20,7 @@ class _CardTotalsState extends State<CardTotals> {
   late String abonado;
   late String presupuesto;
   late int ganancia;
+  late dynamic gains;
   late IOWebSocketChannel channel;
   late int presupuestoReal;
   @override
@@ -44,6 +45,7 @@ class _CardTotalsState extends State<CardTotals> {
     costo = widget.proyecto?["costo"].toString() ?? "0";
     abonado = widget.proyecto?["abonado"].toString() ?? "0";
     presupuesto = widget.proyecto?["presupuesto"].toString() ?? "0";
+    gains = widget.proyecto?["ganancia"].toString() ?? "0";
     ganancia = widget.proyecto?["abonado"] - widget.proyecto?["costo"] ?? "0";
     presupuestoReal = int.parse(presupuesto) - int.parse(costo);
   }
@@ -63,6 +65,8 @@ class _CardTotalsState extends State<CardTotals> {
   }
 
   void updateProjectInfo(dynamic proyecto) {
+    print('Proyecto $proyecto');
+
     gastadoController.text = proyecto["costo"].toString();
     abonadoController.text = proyecto["abonado"].toString();
     presupuestoController.text = proyecto["presupuesto"].toString();
@@ -70,6 +74,7 @@ class _CardTotalsState extends State<CardTotals> {
     costo = proyecto["costo"].toString();
     abonado = proyecto["abonado"].toString();
     presupuesto = proyecto["presupuesto"].toString();
+    gains = proyecto["ganancia"].toString();
     ganancia = int.parse(abonado) - int.parse(costo);
   }
 
@@ -92,8 +97,8 @@ class _CardTotalsState extends State<CardTotals> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
-              _buildCard("Ganancia:", "\$${ganancia}", Colors.greenAccent,
-                  Colors.green),
+              _buildCard(
+                  "Ganancia:", "\$$gains", Colors.greenAccent, Colors.green),
             ],
           ),
           _buildCard("Presupuesto:", "\$${presupuesto}", Colors.deepOrange,

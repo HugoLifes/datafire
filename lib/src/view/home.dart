@@ -46,8 +46,8 @@ class _HomeState extends State<Home> {
   }
 
   fetchData() async {
-    final uri =
-        Uri.parse('http://localhost:3000/api/v1/proyectos/project-stats');
+    final uri = Uri.parse(
+        'https://data-fire-product.up.railway.app/api/v1/proyectos/project-stats');
     try {
       final response = await http.get(uri);
       if (response.statusCode == 200) {
@@ -450,6 +450,7 @@ class _HomeState extends State<Home> {
 
   SfCartesianChart _cartesianChart() => SfCartesianChart(
         enableAxisAnimation: true,
+        legend: Legend(isVisible: true, isResponsive: true),
         zoomPanBehavior: ZoomPanBehavior(
           enableMouseWheelZooming: true,
           zoomMode: ZoomMode.xy, // Zoom en ambos ejes
@@ -474,7 +475,7 @@ class _HomeState extends State<Home> {
               yValueMapper: (ChartData data, _) =>
                   data.totalExpense!.toDouble(),
               markerSettings: const MarkerSettings(
-                  color: Colors.green,
+                  color: Colors.red,
                   borderColor: Colors.black,
                   borderWidth: 5,
                   shape: DataMarkerType.diamond,
@@ -482,14 +483,14 @@ class _HomeState extends State<Home> {
                   height: 8,
                   isVisible: true),
               dataLabelSettings: const DataLabelSettings(
-                  alignment: ChartAlignment.far,
+                  alignment: ChartAlignment.near,
                   useSeriesColor: true,
                   textStyle: TextStyle(
                       fontSize: 13,
                       fontFamily: 'GoogleSans',
                       fontWeight: FontWeight.w500),
                   isVisible: true,
-                  labelAlignment: ChartDataLabelAlignment.auto)),
+                  labelAlignment: ChartDataLabelAlignment.middle)),
           LineSeries<ChartData, String>(
               name: 'Ganancias',
               enableTooltip: true,
@@ -535,14 +536,14 @@ class _HomeState extends State<Home> {
                   height: 4,
                   isVisible: true),
               dataLabelSettings: const DataLabelSettings(
-                  alignment: ChartAlignment.near,
+                  alignment: ChartAlignment.far,
                   useSeriesColor: true,
                   textStyle: TextStyle(
                       fontSize: 13,
                       fontFamily: 'GoogleSans',
                       fontWeight: FontWeight.w500),
                   isVisible: true,
-                  labelAlignment: ChartDataLabelAlignment.auto))
+                  labelAlignment: ChartDataLabelAlignment.bottom))
         ],
       );
 
