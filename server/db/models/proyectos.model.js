@@ -366,43 +366,43 @@ class Project extends Model {
     }
   }
   //datos a la semana
-  static async getPaymentsByWeek() {
+  static async getPaymentsByWeek(weeksBack) {
     try {
       const currentDate = new Date();
   
-      // Calcula la fecha de inicio de la semana actual (considera el lunes como inicio)
+      // Calcula la fecha de inicio de la semana actual (lunes)
       const currentWeekStart = new Date(currentDate);
-      currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1); // Lunes
+      currentWeekStart.setDate(currentDate.getDate() - currentDate.getDay() + 1);
   
-      // Calcula la fecha de inicio de la semana hace 12 semanas
-      const twelveWeeksAgo = new Date(currentWeekStart);
-      twelveWeeksAgo.setDate(currentWeekStart.getDate() - 7 * 12); 
+      // Calcula la fecha de inicio de la semana hace X semanas (weeksBack)
+      const weeksAgoStart = new Date(currentWeekStart);
+      weeksAgoStart.setDate(currentWeekStart.getDate() - 7 * weeksBack);
   
       const paymentByWeek = await this.findAll({
         attributes: [
           [
-            Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
-            'week',
+            Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')), 
+            'week'
           ],
           [Sequelize.fn('sum', Sequelize.col('abonado')), 'totalPayment'],
         ],
         where: {
           fecha_inicio: {
-            [Op.between]: [twelveWeeksAgo, currentDate],
+            [Op.between]: [weeksAgoStart, currentDate],
           },
         },
         group: [
           Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
         ],
         order: [
-          Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')),
+          [Sequelize.fn('date_trunc', 'week', Sequelize.col('fecha_inicio')), 'ASC'],
         ],
       });
   
       return paymentByWeek;
     } catch (error) {
       console.error('Error fetching payments by week:', error);
-      throw error;
+      throw error; // Re-lanza el error para que pueda ser manejado en un nivel superior
     }
   }
   static async getProfitByWeek() {

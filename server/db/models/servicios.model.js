@@ -70,7 +70,7 @@ class Service extends Model {
             service.project_id,
           );
           if (project) {
-            project.ganancia = project.abonado - project.costo;
+            //project.ganancia = project.abonado - project.costo;
             await project.save();
           }
         },
@@ -79,7 +79,7 @@ class Service extends Model {
             service.project_id,
           );
           if (project) {
-            project.ganancia = project.abonado - project.costo; // Actualizar la ganancia
+            //project.ganancia = project.abonado - project.costo; // Actualizar la ganancia
             await project.save();
           }
         },
