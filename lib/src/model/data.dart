@@ -77,8 +77,7 @@ class Clientes {
     if (nombre != null && apellido != null && company != null) {
       try {
         final res = await http.post(
-          Uri.parse(
-              "https://datafire-production.up.railway.app/api/v1/clientes"),
+          Uri.parse("https://data-fire-product.up.railway.app/api/v1/clientes"),
           headers: {"Content-Type": "application/json", ...headers},
           body: jsonEncode(
               {"name": nombre, "last_name": apellido, "company": company}),

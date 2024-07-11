@@ -55,11 +55,10 @@ class SuccessfulScreen extends StatelessWidget {
                     backgroundColor: greenSuccess,
                     padding: const EdgeInsets.symmetric(vertical: 20)),
                 onPressed: () {
-                  Navigator.push(
+                  Navigator.pushNamedAndRemoveUntil(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const MyApp(),
-                    ),
+                    '/home',
+                    (Route<dynamic> route) => false,
                   );
                 },
                 child: const Text(

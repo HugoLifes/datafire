@@ -98,11 +98,11 @@ class _CardTotalsState extends State<CardTotals> {
             children: [
               _buildCard("Abonado:", "\$$abonado", Colors.amber, Colors.orange),
               _buildCard(
-                  "Ganancia:", "\$$gains", Colors.greenAccent, Colors.green),
+                  "Ganancia:", "\$$ganancia", Colors.greenAccent, Colors.green),
             ],
           ),
-          _buildCard("Presupuesto:", "\$${presupuesto}", Colors.deepOrange,
-              Colors.red),
+          _buildCard(
+              "Presupuesto:", "\$$presupuesto", Colors.deepOrange, Colors.red),
         ],
       ),
     );
