@@ -151,7 +151,7 @@ class Project extends Model {
           );
           project.duracion = durationInWeeks;
           project.remaining = project.presupuesto - project.abonado;
-          
+          project.ganancia = project.abonado - project.costo;
           // Verifica si 'remaining' se actualiza y es igual a 0
           if (project.changed('remaining') && project.remaining === 0) {
             // Cambia el valor de 'status' a true

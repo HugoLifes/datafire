@@ -17,6 +17,7 @@ class ProjectService {
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
         console.log('hola');
+        console.log('client', client);
       }
     });
 
@@ -675,6 +676,9 @@ class ProjectService {
 
     return { id };
   }
+
+  
+  
 }
 
 module.exports = ProjectService;
