@@ -41,6 +41,7 @@ class ProjectService {
             abonado: updatedProjectData.abonado,
             remaining: updatedProjectData.remaining,
             presupuesto: updatedProjectData.presupuesto,
+            ganancia: updatedProjectData.ganancia
           };
           console.log('Datos enviados al cliente:', dataToSend); // Registro agregado aquí
           client.send(JSON.stringify(dataToSend));

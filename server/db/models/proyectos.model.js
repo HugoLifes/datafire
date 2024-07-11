@@ -150,6 +150,7 @@ class Project extends Model {
             (end - start) / (7 * 24 * 60 * 60 * 1000),
           );
           project.duracion = durationInWeeks;
+          project.ganancia = project.abonado - project.costo;
           project.remaining = project.presupuesto - project.abonado;
           
           // Verifica si 'remaining' se actualiza y es igual a 0
