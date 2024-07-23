@@ -153,7 +153,17 @@ class _EditarTrabajadoresFormState extends State<EditarTrabajadoresForm> {
                               try {
                                 await trabajadorInstance.eliminarTrabajador(
                                     widget.trabajador?['id']);
-                                Navigator.pop(context);
+                                Navigator.pushNamedAndRemoveUntil(
+                                  context,
+                                  '/home',
+                                  (Route<dynamic> route) => false,
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                        'Trabajador eliminado correctamente'),
+                                  ),
+                                );
                                 // ignore: empty_catches
                               } catch (error) {}
                             },

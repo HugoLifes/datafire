@@ -101,11 +101,11 @@ class _SideBarState extends State<SideBar> {
             icon: Icons.verified_user,
             label: 'Users',
             onTap: () {
-              debugPrint('Balance');
+              debugPrint('Usuarios');
             }),
         SidebarXItem(
             icon: Icons.chat_bubble,
-            label: 'ChatBot',
+            label: 'FireIA',
             onTap: () {
               debugPrint('chat');
             }),

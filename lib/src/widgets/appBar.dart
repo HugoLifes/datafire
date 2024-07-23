@@ -28,7 +28,6 @@ class AppBarDatafire extends StatelessWidget {
           ),
         ],
       ),
-      backgroundColor: accentCanvasColor,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(25)),
       ),

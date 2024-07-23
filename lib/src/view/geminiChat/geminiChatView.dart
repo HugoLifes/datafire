@@ -17,10 +17,10 @@ class _GeminiChatViewState extends State<GeminiChatView> {
   @override
   void initState() {
     _model = GenerativeModel(
-        model: 'gemini-1.5-pro-latest',
+        model: 'gemini-1.5-pro',
         apiKey: api_Key,
-        systemInstruction: Content.system('Format Markdown'),
-        generationConfig: GenerationConfig(maxOutputTokens: 8000));
+        systemInstruction: Content.system('Format Justify'),
+        generationConfig: GenerationConfig(maxOutputTokens: 5000));
     super.initState();
   }
 
@@ -91,20 +91,22 @@ class _GeminiChatViewState extends State<GeminiChatView> {
     // Aquí enviarías el mensaje al modelo de lenguaje y esperarías la respuesta
     try {
       final message = Content.text(text);
-      final content = [Content.text(text)];
-      final chat = _model.startChat(history: [message]);
+      final nameApp = Content.text('La app se Llama DataFire');
+      final lenguaje = Content.text('hola aqui hablamos español');
+      final contextApp = Content.text(
+          'Esta es una app financiera, para administrar una empresa, desde sus nominas hasta proyectos, y tu sirves para ayudar al usuario que use la app');
+      final moreContext = Content.text(
+          'tambien segun los datos que vayas recibiendo ayudaras a crear analisis de comportamiento o lo que sea necesario para ayudar al usuario con los datos generados en la app');
+      final chat = _model.startChat(
+          history: [nameApp, lenguaje, message, contextApp, moreContext]);
       var totalTokens = await _model.countTokens([...chat.history, message]);
 
       print('Tokens count ${totalTokens.totalTokens}');
-      var res = chat.sendMessageStream(message);
-      List<String>? multiText;
-      await for (final response in res) {
-        print(response.text!);
+      var res = await chat.sendMessage(message);
 
-        setState(() {
-          _messages.insert(0, ChatMessage(text: response.text, isUser: false));
-        });
-      }
+      setState(() {
+        _messages.insert(0, ChatMessage(text: res.text, isUser: false));
+      });
     } catch (e) {
       print(e);
       return ErrorWidget('Error $e');

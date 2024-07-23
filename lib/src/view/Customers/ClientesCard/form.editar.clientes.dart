@@ -42,22 +42,19 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CustomTextField(
-            controller: _nombreController,
+              controller: _nombreController,
               labelText: 'Nombre del Cliente',
-              validationMessage: 'Por favor, ingresa el nombre del Cliente'
-          ),
+              validationMessage: 'Por favor, ingresa el nombre del Cliente'),
           const SizedBox(height: 16.0),
           CustomTextField(
-            controller: _apellidosController,
+              controller: _apellidosController,
               labelText: 'Apellidos',
-              validationMessage: 'Por favor, ingresa la edad del cliente'
-          ),
+              validationMessage: 'Por favor, ingresa la edad del cliente'),
           const SizedBox(height: 16.0),
           CustomTextField(
-            controller: _empresaController,
+              controller: _empresaController,
               labelText: 'Empresa',
-              validationMessage:'Por favor, ingresa la empresa del cliente'
-          ),
+              validationMessage: 'Por favor, ingresa la empresa del cliente'),
           const SizedBox(height: 16.0),
           SizedBox(
             width: double.infinity,
@@ -82,10 +79,8 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
                         builder: (context) => const SuccessfulScreen(),
                       ),
                     );
-                  // ignore: empty_catches
-                  } catch (error) {
-                    
-                  }
+                    // ignore: empty_catches
+                  } catch (error) {}
                 }
               },
               child: const Text(
@@ -120,18 +115,12 @@ class _EditarClienteFormState extends State<EditarClienteForm> {
                         TextButton(
                           onPressed: () async {
                             try {
-                              await clienteActual.eliminarCliente(
-                                  widget.cliente?['id']);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const MyApp(),
-                                ),
-                              );
-                            // ignore: empty_catches
-                            } catch (error) {
-                              
-                            }
+                              await clienteActual
+                                  .eliminarCliente(widget.cliente?['id']);
+                              Navigator.pushNamedAndRemoveUntil(
+                                  context, '/home', (route) => false);
+                              // ignore: empty_catches
+                            } catch (error) {}
                           },
                           child: const Text('Confirmar'),
                         ),

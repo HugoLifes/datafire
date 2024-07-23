@@ -66,7 +66,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
             event.context!, '/login', (route) => false);
         emit(LoginInitial());
       } catch (e) {
-        emit(LoginFailure(error: 'Hubo un error al cerrar Session'));
+        emit(LoginFailure(error: '$e'));
       } // Restablecer el estado a LoginInitial
     });
   }

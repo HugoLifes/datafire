@@ -141,7 +141,7 @@ class _HomeState extends State<Home> {
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(61),
         child: AppBarDatafire(
-            title: "Gestion", description: "Mantente al dia de tus proyectos"),
+            title: "Gestión", description: "Mantente al dia de tus proyectos"),
       ),
       body: Center(
         child: LayoutBuilder(builder: (context, constraints) {
@@ -157,82 +157,92 @@ class _HomeState extends State<Home> {
               ? const Center(
                   child: CircularProgressIndicator(),
                 )
-              : ListView(
-                  children: [
-                    Stack(
+              : Platform.isAndroid
+                  ? ListView(
                       children: [
-                        Container(
-                          child: _buildCard("Calculo de datos",
-                              _cartesianChart(), size, 0.25, false),
+                        Stack(
+                          children: [
+                            Container(
+                              child: _buildCard("Calculo de datos",
+                                  _cartesianChart(), size, 0.25, false),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: size.height * 0.40),
+                              alignment: Alignment.center,
+                              child: Column(
+                                children: [
+                                  Container(
+                                      child: cardsHorizontalView(
+                                          size,
+                                          title1,
+                                          title2,
+                                          title3,
+                                          anchoPantalla,
+                                          largoPantalla)),
+                                  Container(
+                                    width: size.width * 1,
+                                    height: size.height * 0.33,
+                                    child: _buildCard(
+                                        "Proyectos añadidos",
+                                        pieChartSections.isNotEmpty
+                                            ? PieChart(_pieChartData())
+                                            : const Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                        size,
+                                        0.25,
+                                        true),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
                         ),
-                        anchoPantalla < 950 && largoPantalla < 800
-                            ? Container(
-                                margin:
-                                    EdgeInsets.only(top: size.height * 0.40),
-                                alignment: Alignment.center,
-                                child: Column(
-                                  children: [
-                                    Container(
-                                      width: size.width * 0.3,
-                                      height: size.height * 0.41,
-                                      child: _buildCard(
-                                          "Proyectos añadidos",
-                                          pieChartSections.isNotEmpty
-                                              ? PieChart(_pieChartData())
-                                              : const Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
-                                          size,
-                                          0.25,
-                                          true),
-                                    ),
-                                    Container(
-                                        child: cardsHorizontalView(
-                                            size,
-                                            title1,
-                                            title2,
-                                            title3,
-                                            anchoPantalla,
-                                            largoPantalla)),
-                                  ],
-                                ),
-                              )
-                            : Container(
-                                margin:
-                                    EdgeInsets.only(top: size.height * 0.40),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Container(
-                                      width: size.width * 0.3,
-                                      height: size.height * 0.41,
-                                      child: _buildCard(
-                                          "Proyectos añadidos",
-                                          pieChartSections.isNotEmpty
-                                              ? PieChart(_pieChartData())
-                                              : const Center(
-                                                  child:
-                                                      CircularProgressIndicator()),
-                                          size,
-                                          0.25,
-                                          true),
-                                    ),
-                                    Container(
-                                        child: cardsHorizontalView(
-                                            size,
-                                            title1,
-                                            title2,
-                                            title3,
-                                            anchoPantalla,
-                                            largoPantalla)),
-                                  ],
-                                ),
-                              )
                       ],
-                    ),
-                  ],
-                );
+                    )
+                  : ListView(
+                      children: [
+                        Stack(
+                          children: [
+                            Container(
+                              child: _buildCard("Calculo de datos",
+                                  _cartesianChart(), size, 0.25, false),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(top: size.height * 0.40),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    width: size.width * 0.3,
+                                    height: size.height * 0.41,
+                                    child: _buildCard(
+                                        "Proyectos añadidos",
+                                        pieChartSections.isNotEmpty
+                                            ? PieChart(_pieChartData())
+                                            : const Center(
+                                                child:
+                                                    CircularProgressIndicator()),
+                                        size,
+                                        0.25,
+                                        true),
+                                  ),
+                                  Container(
+                                      child: cardsHorizontalView(
+                                          size,
+                                          title1,
+                                          title2,
+                                          title3,
+                                          anchoPantalla,
+                                          largoPantalla)),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ],
+                    );
         }),
       ),
     );
@@ -240,19 +250,19 @@ class _HomeState extends State<Home> {
 
   cardsHorizontalView(Size size, double title1, double title2, double title3,
       double ancho, double largo) {
-    return ancho < 950 && largo < 800
+    return ancho < 950 && largo < 900
         ? Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Column(
                 children: [
                   Container(
-                    width: size.width * 0.23,
+                    width: size.width * 1,
                     child: _buildCardInfo("Clientes Recientes", lastCustomer,
                         "Cliente mas actual", size, title1, title2, title3),
                   ),
                   Container(
-                    width: size.width * 0.23,
-                    height: size.height * 0.26,
+                    width: size.width * 1,
                     child: _buildCardInfo(
                         "Ultimas Ganancias",
                         lastProfit,
@@ -267,14 +277,12 @@ class _HomeState extends State<Home> {
               Column(
                 children: [
                   Container(
-                    width: size.width * 0.23,
-                    height: size.height * 0.26,
+                    width: size.width * 1,
                     child: _buildCardInfo("Pagos reciente", lastPayment,
                         "Pagos mas recientes", size, title1, title2, title3),
                   ),
                   Container(
-                    width: size.width * 0.23,
-                    height: size.height * 0.26,
+                    width: size.width * 1,
                     child: _buildCardInfo(
                         "Proyectos recientes",
                         lastProject,
@@ -347,7 +355,6 @@ class _HomeState extends State<Home> {
         borderOnForeground: false,
         clipBehavior: Clip.antiAlias,
         elevation: circular == true ? 5 : 3,
-        color: cardColor,
         margin: EdgeInsets.all(11),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
