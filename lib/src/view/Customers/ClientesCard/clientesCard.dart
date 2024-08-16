@@ -30,7 +30,7 @@ class _ClienteCardState extends State<ClienteCard> {
                       DetallesYEditarClientesPage(cliente: widget.cliente)));
         },
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

@@ -1,8 +1,4 @@
 import 'package:datafire/src/model/flujo_caja_model.dart';
-import 'package:datafire/src/model/ingresos_model.dart';
-import 'package:datafire/src/model/nominas_semanales.dart';
-import 'package:datafire/src/model/prestamos_model.dart';
-import 'package:datafire/src/model/workers_model.dart';
 import 'package:datafire/src/widgets/table_scrolleable.dart';
 import 'package:flutter/material.dart';
 

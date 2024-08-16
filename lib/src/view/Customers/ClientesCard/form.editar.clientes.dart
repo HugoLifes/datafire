@@ -1,4 +1,3 @@
-import 'package:datafire/src/app.dart';
 import 'package:datafire/src/model/data.dart';
 import 'package:datafire/src/view/successScreen.dart';
 import 'package:datafire/src/widgets/TextField.dart';

@@ -11,13 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:loader_overlay/loader_overlay.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sidebarx/sidebarx.dart';
 import 'dart:io';
 
 class MyApp extends StatelessWidget {
   dynamic token;
-  MyApp({this.token});
+  MyApp({super.key, this.token});
 
   @override
   Widget build(BuildContext context) {
@@ -25,31 +24,19 @@ class MyApp extends StatelessWidget {
 
     TextTheme textTheme = createTextTheme(context, "GoogleSans", "GoogleSans");
     MaterialTheme theme = MaterialTheme(textTheme);
-    return GlobalLoaderOverlay(
-      overlayColor: Colors.grey.withOpacity(0.8),
-      useDefaultLoading: false,
-      overlayWidgetBuilder: (_) {
-        //ignored progress for the moment
-        return const Center(
-          child: SpinKitRotatingCircle(
-            color: Colors.blue,
-            size: 50.0,
-          ),
-        );
+    return BlocProvider(
+      create: (context) {
+        return LoginBloc();
       },
-      child: BlocProvider(
-        create: (context) {
-          return LoginBloc();
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: theme.light(),
+        darkTheme: theme.dark(),
+        initialRoute: token != null ? '/home' : '/login',
+        routes: {
+          '/login': (context) => LoginScreen(),
+          '/home': (context) => const MainView(),
         },
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: brightness == Brightness.light ? theme.light() : theme.dark(),
-          initialRoute: token != null ? '/home' : '/login',
-          routes: {
-            '/login': (context) => LoginScreen(),
-            '/home': (context) => const MainView(),
-          },
-        ),
       ),
     );
   }
@@ -66,9 +53,9 @@ class _MainViewState extends State<MainView> {
   // This widget is the root of your application.
   final _controller = SidebarXController(selectedIndex: 0);
   int _selectIndex = 0;
-  List<Widget> _widgetOptions = <Widget>[
-    Home(),
-    FinancesView(),
+  final List<Widget> _widgetOptions = <Widget>[
+    const Home(),
+    const FinancesView(),
     GeminiChatView(),
   ];
 
@@ -95,7 +82,7 @@ class _MainViewState extends State<MainView> {
                     icon: Icon(Icons.local_fire_department), label: 'FireIA')
               ],
             )
-          : Container(),
+          : null,
       body: Platform.isAndroid
           ? Center(
               child: _widgetOptions.elementAt(_selectIndex),

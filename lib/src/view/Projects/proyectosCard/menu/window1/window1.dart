@@ -96,7 +96,7 @@ class PDFViewerPage extends StatelessWidget {
         title: const Text('Vista previa del PDF'),
         actions: [
           IconButton(
-            icon: Icon(Icons.print),
+            icon: const Icon(Icons.print),
             onPressed: () => _printPDF(context),
           ),
         ],

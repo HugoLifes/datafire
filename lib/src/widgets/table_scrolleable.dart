@@ -2,8 +2,6 @@ import 'package:datafire/src/model/flujo_caja_model.dart';
 import 'package:datafire/src/model/ingresos_model.dart';
 import 'package:datafire/src/model/nominas_semanales.dart';
 import 'package:datafire/src/model/workers_model.dart';
-import 'package:datafire/src/widgets/colors.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:two_dimensional_scrollables/two_dimensional_scrollables.dart';
 
@@ -72,9 +70,9 @@ class _TableTemplateState extends State<TableTemplate> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final decoration = TableSpanDecoration(
+    const decoration = TableSpanDecoration(
         border:
-            TableSpanBorder(trailing: const BorderSide(color: Colors.black)));
+            TableSpanBorder(trailing: BorderSide(color: Colors.black)));
     return Scaffold(
       body: widget.isFlujo!
           ? Card(

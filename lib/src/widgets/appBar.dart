@@ -1,4 +1,3 @@
-import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class AppBarDatafire extends StatelessWidget {

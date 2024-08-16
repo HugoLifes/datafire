@@ -1,5 +1,4 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:datafire/src/services/abonos.service.dart';
 import 'package:datafire/src/view/Projects/proyectosCard/menu/window6Adjustemns/form_agregar_ajuste.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/Ajustes.service.dart';
@@ -33,7 +32,7 @@ class _Tab6ContentState extends State<Tab6Content> {
                 Center(
                   child: IconButton.filled(
                     style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                      padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
                         const EdgeInsets.symmetric(horizontal: 24.0),
                       ),
                     ),
@@ -120,7 +119,7 @@ class _Tab6ContentState extends State<Tab6Content> {
                         child: IconButton.filled(
                           style: ButtonStyle(
                             padding:
-                                MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                WidgetStateProperty.all<EdgeInsetsGeometry>(
                               const EdgeInsets.symmetric(horizontal: 24.0),
                             ),
                           ),

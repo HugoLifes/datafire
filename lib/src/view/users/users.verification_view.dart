@@ -1,6 +1,5 @@
 import 'package:datafire/src/view/users/alta_users(admin).dart';
 import 'package:datafire/src/widgets/appBar.dart';
-import 'package:datafire/src/widgets/card.dart';
 import 'package:flutter/material.dart';
 
 class UserVerificationView extends StatefulWidget {
@@ -25,7 +24,7 @@ class _UserVerificationViewState extends State<UserVerificationView> {
                 "Aquí podras dar acceso a mas usuarios para administrar"),
       ),
       body: Center(
-        child: Container(
+        child: SizedBox(
           width: size.width * 0.5,
           height: size.height * 0.5,
           child: Card(
@@ -43,7 +42,7 @@ class _UserVerificationViewState extends State<UserVerificationView> {
                   TextField(
                     controller: _passwordController,
                     obscureText: true,
-                    style: TextStyle(fontFamily: 'GoogleSans'),
+                    style: const TextStyle(fontFamily: 'GoogleSans'),
                     decoration: const InputDecoration(
                       labelText: 'Contraseña',
                     ),

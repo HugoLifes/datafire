@@ -29,7 +29,7 @@ class _SideBarState extends State<SideBar> {
               borderRadius: BorderRadius.circular(10),
               border: Border.all(color: materialPColor2.withOpacity(0.5)),
               color: materialPColor,
-              boxShadow: [BoxShadow(color: materialPColor, blurRadius: 15)]),
+              boxShadow: const [BoxShadow(color: materialPColor, blurRadius: 15)]),
           iconTheme: const IconThemeData(color: unselectColor, size: 20),
           selectedIconTheme: const IconThemeData(color: materialPColor2)),
       extendedTheme: const SidebarXTheme(
@@ -57,7 +57,7 @@ class _SideBarState extends State<SideBar> {
               hoverColor: unselectColor.withOpacity(0.10),
               //cambiar Boton Perfil
               child: IconButton(
-                icon: Icon(Icons.person),
+                icon: const Icon(Icons.person),
                 onPressed: () {},
               ),
             ),

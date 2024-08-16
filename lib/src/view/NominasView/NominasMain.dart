@@ -1,16 +1,13 @@
-import 'dart:io';
 
 import 'package:datafire/src/model/proyectos_model.dart';
 import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:datafire/src/widgets/cache_image.dart';
-import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import "./NominasView.dart";
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 class NominasMain extends StatefulWidget {
   const NominasMain({Key? key}) : super(key: key);
@@ -112,7 +109,7 @@ class _NominasMainState extends State<NominasMain> {
                     ],
                   ),
                 )
-              : Center(child: CircularProgressIndicator()),
+              : const Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -188,7 +185,7 @@ class _NominasMainState extends State<NominasMain> {
                 fontFamily: 'GoogleSans', fontWeight: FontWeight.bold)),
         subtitle: Text(
           "Salario: \$${nomina['salary']}",
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'GoogleSans',
           ),
         ),
@@ -242,7 +239,7 @@ class _NominasMainState extends State<NominasMain> {
       leading: Icon(icon, color: Theme.of(context).primaryColor),
       title: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
           fontFamily: 'GoogleSans',
         ),
       ),

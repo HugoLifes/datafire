@@ -93,7 +93,7 @@ class FlujoWidget extends StatelessWidget {
             label: const Row(
               children: [
                 Icon(Icons.add),
-                const SizedBox(width: 5),
+                SizedBox(width: 5),
                 Text('Agregar Préstamo'),
               ],
             )));

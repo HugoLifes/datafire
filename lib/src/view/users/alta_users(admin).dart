@@ -87,16 +87,16 @@ class _UsersViewState extends State<UsersView> {
                               cells: [
                                 DataCell(Text(user["id"].toString(),
                                     style:
-                                        TextStyle(fontFamily: 'GoogleSans'))),
+                                        const TextStyle(fontFamily: 'GoogleSans'))),
                                 DataCell(Text(user['name'].toString(),
                                     style:
-                                        TextStyle(fontFamily: 'GoogleSans'))),
+                                        const TextStyle(fontFamily: 'GoogleSans'))),
                                 DataCell(Text(user["email"].toString(),
                                     style:
-                                        TextStyle(fontFamily: 'GoogleSans'))),
+                                        const TextStyle(fontFamily: 'GoogleSans'))),
                                 DataCell(Text(user["role"].toString(),
                                     style:
-                                        TextStyle(fontFamily: 'GoogleSans'))),
+                                        const TextStyle(fontFamily: 'GoogleSans'))),
                                 DataCell(
                                   SizedBox(
                                     width: 50,
@@ -106,9 +106,9 @@ class _UsersViewState extends State<UsersView> {
                                       onPressed: () async {
                                         AwesomeDialog(
                                           context: context,
-                                          titleTextStyle: TextStyle(
+                                          titleTextStyle: const TextStyle(
                                               fontFamily: 'GoogleSans'),
-                                          descTextStyle: TextStyle(
+                                          descTextStyle: const TextStyle(
                                               fontFamily: 'GoogleSans'),
                                           dialogType: DialogType.warning,
                                           animType: AnimType.bottomSlide,
@@ -159,7 +159,7 @@ class _UsersViewState extends State<UsersView> {
                               children: [
                                 TextFormField(
                                   controller: nameController,
-                                  style: TextStyle(fontFamily: 'GoogleSans'),
+                                  style: const TextStyle(fontFamily: 'GoogleSans'),
                                   decoration: const InputDecoration(
                                       floatingLabelStyle:
                                           TextStyle(fontFamily: 'GoogleSans'),
@@ -175,7 +175,7 @@ class _UsersViewState extends State<UsersView> {
                                 ),
                                 TextFormField(
                                   controller: emailController,
-                                  style: TextStyle(fontFamily: 'GoogleSans'),
+                                  style: const TextStyle(fontFamily: 'GoogleSans'),
                                   decoration: const InputDecoration(
                                       floatingLabelStyle:
                                           TextStyle(fontFamily: 'GoogleSans'),
@@ -191,7 +191,7 @@ class _UsersViewState extends State<UsersView> {
                                 ),
                                 TextFormField(
                                   controller: passwordController,
-                                  style: TextStyle(fontFamily: 'GoogleSans'),
+                                  style: const TextStyle(fontFamily: 'GoogleSans'),
                                   decoration: const InputDecoration(
                                       floatingLabelStyle:
                                           TextStyle(fontFamily: 'GoogleSans'),
@@ -207,13 +207,13 @@ class _UsersViewState extends State<UsersView> {
                                 ),
                                 DropdownButtonFormField<String>(
                                   value: selectedRole,
-                                  style: TextStyle(fontFamily: 'GoogleSans'),
+                                  style: const TextStyle(fontFamily: 'GoogleSans'),
                                   items: roles.map((String role) {
                                     return DropdownMenuItem<String>(
                                       value: role,
                                       child: Text(
                                         role,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontFamily: 'GoogleSans',
                                             color: Colors.black),
                                       ),

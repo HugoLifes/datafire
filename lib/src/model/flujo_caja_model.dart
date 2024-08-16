@@ -13,14 +13,14 @@ String flujoCajaToJson(List<FlujoCaja> data) =>
 class FlujoCaja {
   DateTime? startDate;
   DateTime? endDate;
-  dynamic? caja;
-  dynamic? ingresos;
-  dynamic? egresos;
-  dynamic? nomina;
-  dynamic? impuestos;
-  dynamic? balanceDeFlujo;
-  dynamic? prestamo;
-  dynamic? balanceTotal;
+  dynamic caja;
+  dynamic ingresos;
+  dynamic egresos;
+  dynamic nomina;
+  dynamic impuestos;
+  dynamic balanceDeFlujo;
+  dynamic prestamo;
+  dynamic balanceTotal;
 
   FlujoCaja({
     this.startDate,

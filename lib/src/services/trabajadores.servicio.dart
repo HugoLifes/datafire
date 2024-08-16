@@ -128,8 +128,8 @@ Future<List<dynamic>> fetchWorkerToolsById(String projectId) async {
   }
 }
 
-Future<void> postTools(String tool_name, String cost, String workerId,
-    String fecha_adquisicion) async {
+Future<void> postTools(String toolName, String cost, String workerId,
+    String fechaAdquisicion) async {
   const url =
       "https://data-fire-product.up.railway.app/Api/v1/trabajadores/tools";
 
@@ -140,10 +140,10 @@ Future<void> postTools(String tool_name, String cost, String workerId,
       Uri.parse(url),
       headers: {"Content-Type": "application/json", ...headers},
       body: jsonEncode({
-        "tool_name": tool_name,
+        "tool_name": toolName,
         "cost": cost,
         "worker_id": workerId,
-        "fecha_adquisicion": fecha_adquisicion
+        "fecha_adquisicion": fechaAdquisicion
       }),
     );
     if (res.statusCode == 200) {

@@ -1,6 +1,5 @@
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:rxdart/rxdart.dart';
 
 class ChatMessage extends StatefulWidget {
   final String? text;
@@ -10,6 +9,7 @@ class ChatMessage extends StatefulWidget {
   List<String>? fullText = [];
 
   ChatMessage({
+    super.key,
     this.text,
     this.isUser,
     this.stream,
@@ -30,29 +30,33 @@ class _ChatMessageState extends State<ChatMessage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
+      margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 15.0),
       child: Row(
         mainAxisAlignment:
             widget.isUser! ? MainAxisAlignment.end : MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-            margin: EdgeInsets.only(right: widget.isUser! ? 10.0 : 0.0),
+            margin:
+                EdgeInsets.only(right: widget.isUser! ? 10.0 : 0.0, top: 5.0),
             child: CircleAvatar(
               child: widget.isUser!
-                  ? Text('Tú')
-                  : Text('G'), // Avatar del usuario o Gemini
+                  ? const Text('Tú')
+                  : const Text('F'), // Avatar del usuario o Gemini
             ),
           ),
           widget.isUser!
               ? Container()
-              : SizedBox(
+              : const SizedBox(
                   width: 10,
                 ),
           Flexible(
             child: Container(
-              padding: EdgeInsets.all(15.0),
+              padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                color: widget.isUser! ? Colors.blue[100] : Colors.grey[200],
+                color: Theme.of(context).brightness.isLight
+                    ? Theme.of(context).primaryColorLight
+                    : Theme.of(context).primaryColorDark,
                 borderRadius: BorderRadius.circular(20.0),
               ),
               child: Text(

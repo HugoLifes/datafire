@@ -36,7 +36,7 @@ class MotherView extends StatelessWidget {
             case 6:
               return const UserVerificationView();
             case 7:
-              return GeminiChatView();
+              return const GeminiChatView();
             default:
               return const Center(
                 child: Text(

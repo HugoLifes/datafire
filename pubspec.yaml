@@ -66,8 +66,10 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   window_manager: ^0.3.8
   google_generative_ai: ^0.4.0
-  
+  fluent_ui: ^4.4.0
+  flutter_acrylic: ^1.1.4
 
+  file: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

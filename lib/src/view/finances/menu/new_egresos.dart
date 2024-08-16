@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:datafire/src/model/nominas_semanales.dart';
 import 'package:datafire/src/model/prestamos_model.dart';
 import 'package:datafire/src/model/workers_model.dart';
@@ -34,91 +36,112 @@ class _NewEgresosState extends State<NewEgresos> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          cardXtable(),
-          Flexible(
-            child: Column(
-              children: [
-                Container(
-                  width: 600,
-                  child: IncomeCard(
-                    title: 'Division Egresos',
-                    amount: '',
-                    descripcion: 'Tipos de division de egresos',
-                    isChart: true,
-                    chartdata: chartdata2,
-                  ),
-                ),
-                Container(
-                  width: 600,
-                  child: IncomeCard(
-                    title: 'Pago de Impuestos',
-                    amount: '',
-                    descripcion: 'Gastos en pago de impuestos',
-                    isChart: true,
-                    chartdata: chartdata,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ]);
+    return Platform.isAndroid ? viewAndroid() : viewWindows();
   }
 
-  cardXtable() {
-    return Container(
+  Row viewWindows() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        cardXtable(false),
+        Column(
+          children: [
+            SizedBox(
+              width: 600,
+              child: IncomeCard(
+                title: 'Division Egresos',
+                amount: '',
+                descripcion: 'Tipos de division de egresos',
+                isChart: true,
+                chartdata: chartdata2,
+              ),
+            ),
+            SizedBox(
+              width: 600,
+              child: IncomeCard(
+                title: 'Pago de Impuestos',
+                amount: '',
+                descripcion: 'Gastos en pago de impuestos',
+                isChart: true,
+                chartdata: chartdata,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  cardXtable(bool isAndroid) {
+    return SizedBox(
       width: 800,
       //height: 900,
       // color: Colors.red,,
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IncomeCard(
-                title: 'Total Impuestos',
-                amount: '\$ ${numberFormat.format(impustosTotal)} MXN',
-                descripcion: 'Otros gastos de la empresa',
-                isChart: false,
-              ),
-              IncomeCard(
-                title: 'Nomina de trabajadores',
-                amount: '\$ ${numberFormat.format(totalSueldos)} MXN',
-                descripcion: 'Gastos en nomina de trabajadores',
-                isChart: false,
-              ),
-            ],
-          ),
-          Container(
-            width: 900,
-            height: 500,
-            child: GridView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.vertical,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 1,
-                childAspectRatio: 1.6,
-                crossAxisSpacing: 20,
-                mainAxisSpacing: 15,
-              ),
-              itemCount: widget.nominasWeek!.length,
-              itemBuilder: (_, int data) {
-                return TableTemplate(
-                  isEgresos: isEgresos,
-                  verticalController: verrticalController,
-                  workerScheme: widget.workersScheme!,
-                  payroll: widget.nominasWeek![data].nominas,
-                  isFlujo: false,
-                );
-              },
-            ),
-          ),
+          Platform.isAndroid
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IncomeCard(
+                      title: 'Total Impuestos',
+                      amount: '\$ ${numberFormat.format(impustosTotal)} MXN',
+                      descripcion: 'Otros gastos de la empresa',
+                      isChart: false,
+                    ),
+                    IncomeCard(
+                      title: 'Nomina de trabajadores',
+                      amount: '\$ ${numberFormat.format(totalSueldos)} MXN',
+                      descripcion: 'Gastos en nomina de trabajadores',
+                      isChart: false,
+                    ),
+                  ],
+                )
+              : Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IncomeCard(
+                      title: 'Total Impuestos',
+                      amount: '\$ ${numberFormat.format(impustosTotal)} MXN',
+                      descripcion: 'Otros gastos de la empresa',
+                      isChart: false,
+                    ),
+                    IncomeCard(
+                      title: 'Nomina de trabajadores',
+                      amount: '\$ ${numberFormat.format(totalSueldos)} MXN',
+                      descripcion: 'Gastos en nomina de trabajadores',
+                      isChart: false,
+                    ),
+                  ],
+                ),
+          isAndroid
+              ? Container()
+              : SizedBox(
+                  width: 900,
+                  height: 500,
+                  child: GridView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.vertical,
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 1,
+                      childAspectRatio: 1.6,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 15,
+                    ),
+                    itemCount: widget.nominasWeek!.length,
+                    itemBuilder: (_, int data) {
+                      return TableTemplate(
+                        isEgresos: isEgresos,
+                        verticalController: verrticalController,
+                        workerScheme: widget.workersScheme!,
+                        payroll: widget.nominasWeek![data].nominas,
+                        isFlujo: false,
+                      );
+                    },
+                  ),
+                ),
         ],
       ),
     );
@@ -177,6 +200,45 @@ class _NewEgresosState extends State<NewEgresos> {
             ? double.parse('0.00').toStringAsFixed(1)
             : double.parse(dEgresos.last.egresos!.last.ss.toString())
                 .toStringAsFixed(1)));
+  }
+
+  viewAndroid() {
+    return ListView(
+      shrinkWrap: true,
+      children: [
+        Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            cardXtable(true),
+            Column(
+              children: [
+                SizedBox(
+                  width: 600,
+                  child: IncomeCard(
+                    title: 'Division Egresos',
+                    amount: '',
+                    descripcion: 'Tipos de division de egresos',
+                    isChart: true,
+                    chartdata: chartdata2,
+                  ),
+                ),
+                SizedBox(
+                  width: 600,
+                  child: IncomeCard(
+                    title: 'Pago de Impuestos',
+                    amount: '',
+                    descripcion: 'Gastos en pago de impuestos',
+                    isChart: true,
+                    chartdata: chartdata,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        )
+      ],
+    );
   }
 }
 

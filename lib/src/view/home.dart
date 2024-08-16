@@ -1,14 +1,11 @@
 import 'dart:io';
 
-import 'package:datafire/src/widgets/colors.dart';
-import 'package:datafire/src/widgets/shapes.dart';
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:datafire/src/widgets/appBar.dart';
-import 'package:datafire/src/widgets/card.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class Home extends StatefulWidget {
@@ -179,7 +176,7 @@ class _HomeState extends State<Home> {
                                           title3,
                                           anchoPantalla,
                                           largoPantalla)),
-                                  Container(
+                                  SizedBox(
                                     width: size.width * 1,
                                     height: size.height * 0.33,
                                     child: _buildCard(
@@ -214,7 +211,7 @@ class _HomeState extends State<Home> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Container(
+                                  SizedBox(
                                     width: size.width * 0.3,
                                     height: size.height * 0.41,
                                     child: _buildCard(
@@ -256,12 +253,12 @@ class _HomeState extends State<Home> {
             children: [
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     width: size.width * 1,
                     child: _buildCardInfo("Clientes Recientes", lastCustomer,
                         "Cliente mas actual", size, title1, title2, title3),
                   ),
-                  Container(
+                  SizedBox(
                     width: size.width * 1,
                     child: _buildCardInfo(
                         "Ultimas Ganancias",
@@ -276,12 +273,12 @@ class _HomeState extends State<Home> {
               ),
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     width: size.width * 1,
                     child: _buildCardInfo("Pagos reciente", lastPayment,
                         "Pagos mas recientes", size, title1, title2, title3),
                   ),
-                  Container(
+                  SizedBox(
                     width: size.width * 1,
                     child: _buildCardInfo(
                         "Proyectos recientes",
@@ -300,13 +297,13 @@ class _HomeState extends State<Home> {
             children: [
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     width: size.width * 0.23,
                     height: size.height * 0.26,
                     child: _buildCardInfo("Clientes Recientes", lastCustomer,
                         "Cliente mas actual", size, title1, title2, title3),
                   ),
-                  Container(
+                  SizedBox(
                     width: size.width * 0.23,
                     height: size.height * 0.26,
                     child: _buildCardInfo(
@@ -322,13 +319,13 @@ class _HomeState extends State<Home> {
               ),
               Column(
                 children: [
-                  Container(
+                  SizedBox(
                     width: size.width * 0.23,
                     height: size.height * 0.26,
                     child: _buildCardInfo("Pagos reciente", lastPayment,
                         "Pagos mas recientes", size, title1, title2, title3),
                   ),
-                  Container(
+                  SizedBox(
                     width: size.width * 0.23,
                     height: size.height * 0.26,
                     child: _buildCardInfo(
@@ -350,12 +347,12 @@ class _HomeState extends State<Home> {
   Widget _buildCard(
       String title, Widget chart, Size size, double height, bool circular) {
     return Container(
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       child: Card(
-        borderOnForeground: false,
+        borderOnForeground: true,
         clipBehavior: Clip.antiAlias,
-        elevation: circular == true ? 5 : 3,
-        margin: EdgeInsets.all(11),
+        margin: const EdgeInsets.all(11),
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -375,12 +372,12 @@ class _HomeState extends State<Home> {
             //chart
             circular == true
                 ? Container(
-                    margin: EdgeInsets.all(100),
+                    margin: const EdgeInsets.all(100),
                     height: size.height * 0.0,
                     child: chart,
                   )
                 : Container(
-                    padding: EdgeInsets.all(5),
+                    padding: const EdgeInsets.all(5),
                     height: size.height * 0.3,
                     child: chart,
                   )
@@ -457,7 +454,7 @@ class _HomeState extends State<Home> {
 
   SfCartesianChart _cartesianChart() => SfCartesianChart(
         enableAxisAnimation: true,
-        legend: Legend(isVisible: true, isResponsive: true),
+        legend: const Legend(isVisible: true, isResponsive: true),
         zoomPanBehavior: ZoomPanBehavior(
           enableMouseWheelZooming: true,
           zoomMode: ZoomMode.xy, // Zoom en ambos ejes
@@ -594,9 +591,9 @@ class ChartData {
       this.totalProfit,
       this.totalPayments});
   final String? month;
-  final dynamic? totalExpense;
-  final dynamic? totalProfit;
-  final dynamic? totalPayments;
+  final dynamic totalExpense;
+  final dynamic totalProfit;
+  final dynamic totalPayments;
   final List<Color>? color;
 
   factory ChartData.fromJson(Map<String, dynamic> json) {

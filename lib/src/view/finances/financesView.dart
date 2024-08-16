@@ -9,16 +9,12 @@ import 'package:datafire/src/services/nominas_semanales_service.dart';
 import 'package:datafire/src/services/prestamos.service.dart';
 import 'package:datafire/src/services/trabajadores.servicio.dart';
 import 'package:datafire/src/view/finances/menu/Egresos.dart' as Egresos;
-import 'package:datafire/src/view/finances/menu/Flujo.dart';
 import 'package:datafire/src/view/finances/menu/cuentasPorCobrar.dart';
-import 'package:datafire/src/view/finances/menu/ingresos.dart'
-    hide OrderInfoDataSource;
 import 'package:datafire/src/view/finances/menu/new_egresos.dart';
 import 'package:datafire/src/view/finances/menu/new_flujo.dart';
 import 'package:datafire/src/view/finances/menu/new_ingresos.dart';
 import 'package:datafire/src/widgets/appBar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 
 class FinancesView extends StatefulWidget {
@@ -54,6 +50,7 @@ class _FinancesViewState extends State<FinancesView> {
   List<NominasSemanales> nominasWeek = [];
   List<Prestamos> prestamos = [];
   List<FlujoCaja> flujo = [];
+
   @override
   void initState() {
     super.initState();
@@ -241,7 +238,7 @@ class _FinancesViewState extends State<FinancesView> {
                               abono: abonoScheme,
                             ),
                       isLoading
-                          ? Center(
+                          ? const Center(
                               child: CircularProgressIndicator(),
                             )
                           : NewFlujo(

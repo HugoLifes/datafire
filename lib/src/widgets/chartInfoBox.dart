@@ -21,7 +21,7 @@ class ChartInfoBox extends StatelessWidget {
         ),
         Text(
           title,
-          style: TextStyle(fontFamily: 'GoogleSans'),
+          style: const TextStyle(fontFamily: 'GoogleSans'),
         )
       ],
     );

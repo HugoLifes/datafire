@@ -1,5 +1,4 @@
 import 'package:datafire/src/view/workers/trabajadores/editarTrabajadores.dart';
-import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 
 class TrabajadorCard extends StatefulWidget {
@@ -27,7 +26,7 @@ class _TrabajadorCardState extends State<TrabajadorCard> {
                       trabajador: widget.trabajador)));
         },
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

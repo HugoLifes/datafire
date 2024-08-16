@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:datafire/src/app.dart';
 import 'package:datafire/src/model/proyectos_model.dart';
 import 'package:datafire/src/model/workers_model.dart';
 import 'package:flutter/material.dart';
@@ -39,16 +38,14 @@ class _NominasViewState extends State<NominasView> {
         setState(() {
           trabajadores = List<String>.from(data.map((trabajador) =>
               "${trabajador['id']} ${trabajador['name']} ${trabajador['last_name']} "));
-          trabajadoresDatos = Map.fromIterable(data,
-              key: (trabajador) => trabajador['id'].toString(),
-              value: (trabajador) => {
+          trabajadoresDatos = { for (var trabajador in data) trabajador['id'].toString() : {
                     'completado': false,
                     'horasTrabajadas': 0,
                     'horasExtra': 0,
                     'salary_hour':
                         double.tryParse(trabajador['salary_hour'].toString()) ??
                             0.0,
-                  });
+                  } };
         });
       } else {
         throw Exception('Failed to load trabajadores');

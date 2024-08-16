@@ -7,6 +7,8 @@ Future<List<NominasSemanales>> loadNominas() async {
   final response = await http.get(url);
   if (response.statusCode == 200) {
     return nominasSemanalesFromJson(response.body);
+  } else if (response.statusCode == 405) {
+    throw Exception('No hay nominas disponibles');
   } else {
     throw Exception('Failed to load nominas');
   }

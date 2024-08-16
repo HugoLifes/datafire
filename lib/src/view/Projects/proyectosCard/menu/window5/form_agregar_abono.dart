@@ -3,7 +3,6 @@ import 'package:datafire/src/widgets/TextField.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 import 'package:datafire/src/services/proyectos-clientes.service.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 class AddAbonoForm extends StatefulWidget {
   final String idProyecto;
@@ -24,7 +23,7 @@ class _AddAbonoFormState extends State<AddAbonoForm> {
   int? selectedCustomerId;
   List<Map<String, dynamic>> customerData = [];
   DateTime selectedDate = DateTime.now();
-  bool _isLoaderVisible = false;
+  final bool _isLoaderVisible = false;
   @override
   void initState() {
     super.initState();

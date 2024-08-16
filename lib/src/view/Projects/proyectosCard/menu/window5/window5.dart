@@ -34,7 +34,7 @@ class _Tab5ContentState extends State<Tab5Content> {
                 Center(
                   child: IconButton.filled(
                     style: ButtonStyle(
-                      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+                      padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
                         const EdgeInsets.symmetric(horizontal: 24.0),
                       ),
                     ),
@@ -136,7 +136,7 @@ class _Tab5ContentState extends State<Tab5Content> {
                         child: IconButton.filled(
                           style: ButtonStyle(
                             padding:
-                                MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                WidgetStateProperty.all<EdgeInsetsGeometry>(
                               const EdgeInsets.symmetric(horizontal: 24.0),
                             ),
                           ),

@@ -68,18 +68,18 @@ class WorkerScheme {
   String? lastName;
   int? age;
   String? position;
-  dynamic? salaryHour;
-  dynamic? semanalHours;
+  dynamic salaryHour;
+  dynamic semanalHours;
   int? salary;
   int? workerCost;
   int? monthCosts;
   int? yearsWorked;
   double? payxDay;
   double? payxhr;
-  dynamic? salarioBrutoAnual;
+  dynamic salarioBrutoAnual;
   DateTime? createdAt;
-  dynamic? seguroSocial;
-  dynamic? isr;
+  dynamic seguroSocial;
+  dynamic isr;
   List<double> isrBrackets = [
     0,
     6000,

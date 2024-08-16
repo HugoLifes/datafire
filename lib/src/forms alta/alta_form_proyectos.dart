@@ -4,7 +4,6 @@ import 'package:datafire/src/services/proyectos.service.dart';
 import 'package:datafire/src/view/successScreen.dart';
 import 'package:datafire/src/widgets/TextField.dart';
 import 'package:flutter/material.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 
 class AltaProyectoPage extends StatefulWidget {
   const AltaProyectoPage({super.key});
@@ -21,7 +20,7 @@ class _AltaProyectoPageState extends State<AltaProyectoPage> {
   final _initialCostController = TextEditingController();
   final _presupuestoController = TextEditingController();
   final _anticipoController = TextEditingController();
-  bool _isLoaderVisible = false;
+  final bool _isLoaderVisible = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

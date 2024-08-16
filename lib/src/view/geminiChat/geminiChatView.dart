@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
 
 class GeminiChatView extends StatefulWidget {
+  const GeminiChatView({super.key});
+
   @override
   _GeminiChatViewState createState() => _GeminiChatViewState();
 }
@@ -30,9 +32,7 @@ class _GeminiChatViewState extends State<GeminiChatView> {
       appBar: const PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: AppBarDatafire(
-            title: "Gemini",
-            description:
-                "Si tienes dudas sobre tus datos, pide ayuda a un bot"),
+            title: "Flame IA", description: "Consulta a la IA para asistencia"),
       ),
       body: Column(
         children: <Widget>[
@@ -43,7 +43,7 @@ class _GeminiChatViewState extends State<GeminiChatView> {
               itemBuilder: (context, index) => _messages[index],
             ),
           ),
-          Divider(height: 1.0),
+          const Divider(height: 1.0),
           Container(
             decoration: BoxDecoration(color: Theme.of(context).cardColor),
             child: _buildTextComposer(),
@@ -64,12 +64,12 @@ class _GeminiChatViewState extends State<GeminiChatView> {
               child: TextField(
                 controller: _textController,
                 onSubmitted: _handleSubmitted,
-                decoration:
-                    InputDecoration.collapsed(hintText: 'Enviar un mensaje'),
+                decoration: const InputDecoration.collapsed(
+                    hintText: 'Enviar un mensaje'),
               ),
             ),
             IconButton(
-              icon: Icon(Icons.send),
+              icon: const Icon(Icons.send),
               onPressed: () => _handleSubmitted(_textController.text),
             ),
           ],
@@ -103,7 +103,7 @@ class _GeminiChatViewState extends State<GeminiChatView> {
 
       print('Tokens count ${totalTokens.totalTokens}');
       var res = await chat.sendMessage(message);
-
+      print(res.text);
       setState(() {
         _messages.insert(0, ChatMessage(text: res.text, isUser: false));
       });

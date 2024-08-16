@@ -16,7 +16,7 @@ class CobrarWidget extends StatelessWidget {
         } else if (snapshot.hasError) {
           return Text(
             'Error: ${snapshot.error}',
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: 'GoogleSans',
             ),
           );
@@ -106,7 +106,7 @@ class ProjectInfoDataSource extends DataGridSource {
             child: Text(
               e.value.toString(),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontFamily: 'GoogleSans',
               ),
             ),

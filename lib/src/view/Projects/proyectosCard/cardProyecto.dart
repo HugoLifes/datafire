@@ -1,5 +1,4 @@
 import 'package:datafire/src/view/Projects/proyectosCard/projectsMainView.dart';
-import 'package:datafire/src/widgets/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -39,7 +38,7 @@ class _ProyectoCardState extends State<ProyectoCard> {
           );
         },
         child: Container(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

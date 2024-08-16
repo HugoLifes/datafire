@@ -116,7 +116,7 @@ class _WorkerCostsTabState extends State<WorkerCostsTab> {
                         child: IconButton.filled(
                           style: ButtonStyle(
                             padding:
-                                MaterialStateProperty.all<EdgeInsetsGeometry>(
+                                WidgetStateProperty.all<EdgeInsetsGeometry>(
                               const EdgeInsets.symmetric(horizontal: 24.0),
                             ),
                           ),

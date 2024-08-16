@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      style: TextStyle(
+      style: const TextStyle(
         fontFamily: 'GoogleSans',
       ),
       controller: controller,
