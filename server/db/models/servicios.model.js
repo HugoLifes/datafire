@@ -2,6 +2,7 @@ const { Model, DataTypes, Sequelize } = require('sequelize');
 
 const { PROJECT_TABLE } = require('./proyectos.model');
 
+
 const SERVICES_TABLE = 'services';
 
 const ServiceSchema = {
@@ -34,6 +35,11 @@ const ServiceSchema = {
     allowNull: false,
     type: DataTypes.INTEGER,
   },
+  fecha_costo: {
+    allowNull: true,
+    type: DataTypes.DATE,
+    default: '2019-01-12T08:28:24.762Z',
+  },
   createdAt: {
     allowNull: false,
     type: DataTypes.DATE,
@@ -58,18 +64,29 @@ class Service extends Model {
       tableName: SERVICES_TABLE,
       modelName: 'Service',
       timestamps: false,
+      hooks: {
+        afterCreate: async (service) => {
+          const project = await this.sequelize.models.Project.findByPk(
+            service.project_id,
+          );
+          if (project) {
+            project.ganancia = project.abonado - project.costo;
+            await project.save();
+          }
+        },
+        afterDestroy: async (service) => {
+          const project = await this.sequelize.models.Project.findByPk(
+            service.project_id,
+          );
+          if (project) {
+            project.ganancia = project.abonado - project.costo; // Actualizar la ganancia
+            await project.save();
+          }
+        },
+      },
     };
   }
-
-  static async afterCreate(serviceInstance, options) {
-    const project = await serviceInstance.getProject();
-    if (project) {
-      const totalCost = project.costo + serviceInstance.cost;
-      await project.update({ costo: totalCost }, options);
-    }
-  }
 }
-
 module.exports = {
   SERVICES_TABLE,
   ServiceSchema,

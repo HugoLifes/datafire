@@ -25,9 +25,31 @@ const WorkerSchema = {
     allowNull: false,
     type: DataTypes.STRING,
   },
+  salary_hour: {
+    allowNull: true,
+    type: DataTypes.FLOAT,
+    defaultValue: 0,
+  },
+  semanal_hours: {
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
+  years_worked: {
+    allowNull: true,
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
+  // Columna de salario que almacena el resultado de salary_hour * hours_worked
   salary: {
     allowNull: false,
+    type: DataTypes.FLOAT,
+    defaultValue: 0, // Asegura que siempre haya un valor por defecto
+  },
+  WorkerCost: {
+    allowNull: false,
     type: DataTypes.INTEGER,
+    defaultValue: 0,
   },
   createdAt: {
     allowNull: false,
@@ -38,11 +60,19 @@ const WorkerSchema = {
 };
 
 class Worker extends Model {
-  static static(models) {
+  static associate(models) {
     this.hasMany(models.ProjectWorker, {
       as: 'projectWorkers',
       foreignKey: 'worker_id',
       include: [{ model: models.Project, as: 'project', attributes: ['name'] }],
+    });
+    this.hasMany(models.NominasSemanales, {
+      as: 'NominasSemanales',
+      foreignKey: 'worker_id',
+    });
+    this.hasMany(models.WorkerCost, {
+      as: 'WorkerCosts',
+      foreignKey: 'worker_id',
     });
   }
 
@@ -50,8 +80,19 @@ class Worker extends Model {
     return {
       sequelize,
       tableName: WORKER_TABLE,
-      modelname: 'worker',
+      modelName: 'Worker',
       timestamps: false,
+      hooks: {
+        beforeSave: (worker) => {
+          worker.salary
+          if(worker.salary != 0){
+            var salarioMensual = worker.salary * 4
+            var diario = salarioMensual / worker.semanal_hours
+            worker.salary_hour = diario
+          }
+ 
+        },
+      },
     };
   }
 }
